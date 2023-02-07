@@ -650,6 +650,14 @@ void drawDebugWindow() {
 }
 
 void drawLunaKit() {
+    if(!Statics::showWindow) {
+        ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+        return;
+    } else if(Statics::isFirstShowFrame) {
+        ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+        Statics::isFirstShowFrame = false;
+    }
+    
     DevGuiManager::instance()->updateDisplay();
 }
 

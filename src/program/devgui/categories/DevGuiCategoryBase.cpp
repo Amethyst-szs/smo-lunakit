@@ -1,18 +1,17 @@
 #include "program/devgui/categories/DevGuiCategoryBase.h"
 
-#include "imgui.h"
-
-void DevGuiCategoryBase::init()
+DevGuiCategoryBase::DevGuiCategoryBase(const char* catName, const char* catDesc)
 {
-    // Blah
+    mCatName = catName;
+    mCatDesc = catDesc;
 }
 
-void DevGuiCategoryBase::updateWin()
+void DevGuiCategoryBase::updateCat()
 {
     // Run code for the game here
 }
 
-void DevGuiCategoryBase::updateWinDisplay()
+void DevGuiCategoryBase::updateCatDisplay()
 {
-    ImGui::BulletText(mCatName);
+    ImGui::TextColored(ImVec4(0.784f, 0.419f, 0.98f, 1.0f), mCatDesc);
 }

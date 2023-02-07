@@ -1,4 +1,5 @@
 #include "program/devgui/DevGuiManager.h"
+
 #include "program/devgui/windows/DevGuiWindowBase.h"
 
 SEAD_SINGLETON_DISPOSER_IMPL(DevGuiManager)
@@ -10,13 +11,9 @@ void DevGuiManager::init(sead::Heap *heap)
     mWindows.allocBuffer(0x10, heap);
     mDevGuiHeap = heap;
     mIsActive = false;
-
-    DevGuiWindowBase* newWindow = new DevGuiWindowBase("Temp Name");
+    
+    DevGuiWindowBase* newWindow = new (heap) DevGuiWindowBase("Temp Name", heap);
     mWindows.pushBack(newWindow);
-
-    for(DevGuiWindowBase entry : mWindows) {
-        entry.init(heap);
-    }
 }
 
 void DevGuiManager::update()
@@ -28,11 +25,7 @@ void DevGuiManager::update()
 
 void DevGuiManager::updateDisplay()
 {
-    // ImGui::start();
-
     for(DevGuiWindowBase entry : mWindows) {
         entry.updateWinDisplay();
     }
-
-    // ImGui::end();
 }

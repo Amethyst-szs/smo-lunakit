@@ -1,17 +1,18 @@
 #pragma once
 
+#include "imgui.h"
 #include "game/HakoniwaSequence/HakoniwaSequence.h"
 
 class DevGuiCategoryBase {
 public:
-    DevGuiCategoryBase(const char* catName) { mCatName = catName; };
-    virtual void init();
+    DevGuiCategoryBase(const char* catName, const char* catDesc);
 
-    virtual void updateWin();
-    virtual void updateWinDisplay();
+    virtual void updateCat();
+    virtual void updateCatDisplay();
+
+    virtual const char* getCategoryName() { return mCatName; };
 
 private:
-    HakoniwaSequence* mSequence;
-    
-    const char* mCatName;
+    const char* mCatName = nullptr;
+    const char* mCatDesc = nullptr;
 };

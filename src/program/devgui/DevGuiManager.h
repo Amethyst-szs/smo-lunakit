@@ -1,5 +1,7 @@
 #pragma once
 
+#include "imgui.h"
+
 #include "al/scene/Scene.h"
 
 #include "game/HakoniwaSequence/HakoniwaSequence.h"

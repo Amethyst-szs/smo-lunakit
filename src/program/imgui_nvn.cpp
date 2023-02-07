@@ -4,7 +4,6 @@
 #include "lib.hpp"
 #include "helpers/InputHelper.h"
 #include "nvn_CppFuncPtrImpl.h"
-#include "ImGuiUtils.h"
 
 #include "statics.h"
 
@@ -215,8 +214,6 @@ bool nvnImGui::InitImGui() {
         InputHelper::initKBM();
 
         InputHelper::setPort(0); // set input helpers default port to zero
-
-        ImGui::SetupImGuiStyle(true, 0.85f);
 
 
 #if IMGUI_USEEXAMPLE_DRAW
