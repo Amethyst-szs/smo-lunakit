@@ -403,7 +403,7 @@ void drawDebugWindow() {
 
             if(isOverrideHealth) {
                 ImGui::SliderInt("Health", &playerHealth, 1, 9);
-                gameSeq->mGameDataHolder.mData->mGameDataFile->mPlayerHintPointData->mCurrentHit = playerHealth;
+                gameSeq->mGameDataHolder.mData->mGameDataFile->mPlayerHitPointData->mCurrentHit = playerHealth;
             }
             
             if(isInGame) {

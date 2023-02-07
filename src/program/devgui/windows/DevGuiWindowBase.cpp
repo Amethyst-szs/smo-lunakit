@@ -11,23 +11,15 @@ DevGuiWindowBase::DevGuiWindowBase(const char* winName, sead::Heap* heap)
     // Set members from parameters
     mWinName = winName;
     mDevGuiHeap = heap;
-    
-    //Setup config options
-    mConfig.mSize = ImVec2(500, 300);
-
-    // Test Category 1
-    DevGuiCategoryBase* newCat = new (heap) DevGuiCategoryBase("Header 1", "This is the first header");
-    mCategories.pushBack(newCat);
-
-    // Test Category 2
-    DevGuiCategoryBase* newCat2 = new (heap) DevGuiCategoryBase("Header 2", "This is the OTHER HEADER!!!!!");
-    mCategories.pushBack(newCat2);
 }
 
 void DevGuiWindowBase::updateWin()
 {
-    for(DevGuiCategoryBase entry : mCategories) {
-        entry.updateCat();
+    if(mCategories.size() > 0) {
+        for(int i = 0; i < mCategories.size(); i++) {
+            auto* entry = mCategories.at(i);
+            entry->updateCat();
+        }
     }
 }
 
@@ -44,10 +36,11 @@ void DevGuiWindowBase::updateWinDisplay()
     if(mCategories.size() > 0) {
         if (ImGui::BeginTabBar("Categories", mConfig.mTabFlags)) {
 
-            for (DevGuiCategoryBase entry : mCategories) {
+            for(int i = 0; i < mCategories.size(); i++) {
+                auto* entry = mCategories.at(i);
 
-                if (ImGui::BeginTabItem(entry.getCategoryName(), NULL, mConfig.mTabItemFlags)) {
-                    entry.updateCatDisplay();
+                if (ImGui::BeginTabItem(entry->getCategoryName(), NULL, mConfig.mTabItemFlags)) {
+                    entry->updateCatDisplay();
                     ImGui::EndTabItem();
                 }
 

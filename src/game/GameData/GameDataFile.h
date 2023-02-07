@@ -454,7 +454,7 @@ class GameDataFile
         bool byte848;
         GameDataHolder *mGameDataHolder;
         void *qword858;
-        PlayerHitPointData *mPlayerHintPointData;
+        PlayerHitPointData *mPlayerHitPointData;
         sead::FixedSafeString<0x80> char868;
         bool byte900;
         bool byte901;

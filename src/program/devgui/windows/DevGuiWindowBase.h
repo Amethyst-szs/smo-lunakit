@@ -8,6 +8,7 @@
 #include "heap/seadHeap.h"
 #include "math/seadVector.h"
 
+#include "program/SequenceUtil.h"
 #include "program/devgui/DevGuiWindowConfig.h"
 #include "program/devgui/categories/DevGuiCategoryBase.h"
 
@@ -22,7 +23,7 @@ public:
     virtual const char* getWindowName() { return mWinName; };
     virtual int getCategoryCount() { return mCategories.size(); };
 
-private:
+protected:
     sead::Heap* mDevGuiHeap;
     DevGuiWindowConfig mConfig;
     const char* mWinName = "null";

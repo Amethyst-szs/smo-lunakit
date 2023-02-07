@@ -1,5 +1,6 @@
 #pragma once
 
+#include "program/SequenceUtil.h"
 #include "heap/seadDisposer.h"
 
 struct PrimitivePlayerSettings {

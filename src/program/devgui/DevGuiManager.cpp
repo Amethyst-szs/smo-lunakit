@@ -1,7 +1,5 @@
 #include "program/devgui/DevGuiManager.h"
 
-#include "program/devgui/windows/DevGuiWindowBase.h"
-
 SEAD_SINGLETON_DISPOSER_IMPL(DevGuiManager)
 DevGuiManager::DevGuiManager() = default;
 DevGuiManager::~DevGuiManager() = default;
@@ -12,8 +10,8 @@ void DevGuiManager::init(sead::Heap *heap)
     mDevGuiHeap = heap;
     mIsActive = false;
     
-    DevGuiWindowBase* newWindow = new (heap) DevGuiWindowBase("Temp Name", heap);
-    mWindows.pushBack(newWindow);
+    DevGuiWindowEditor* editorWindow = new (heap) DevGuiWindowEditor("LunaKit Editor", heap);
+    mWindows.pushBack(editorWindow);
 }
 
 void DevGuiManager::update()
@@ -26,8 +24,9 @@ void DevGuiManager::update()
     }
 
     // Note: Each window's update function runs even with the menu closed/inactive!
-    for(DevGuiWindowBase entry : mWindows) {
-        entry.updateWin();
+    for(int i = 0; i < mWindows.size(); i++) {
+        auto* entry = mWindows.at(i);
+        entry->updateWin();
     }
 }
 
@@ -43,8 +42,9 @@ void DevGuiManager::updateDisplay()
         ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
     
     // Load and draw all windows
-    for(DevGuiWindowBase entry : mWindows) {
-        entry.updateWinDisplay();
+    for(int i = 0; i < mWindows.size(); i++) {
+        auto* entry = mWindows.at(i);
+        entry->updateWinDisplay();
     }
 
     // Reset the first step flag when complete!

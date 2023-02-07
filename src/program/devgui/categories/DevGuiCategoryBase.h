@@ -1,7 +1,7 @@
 #pragma once
 
+#include "program/SequenceUtil.h"
 #include "imgui.h"
-#include "game/HakoniwaSequence/HakoniwaSequence.h"
 
 class DevGuiCategoryBase {
 public:
@@ -12,7 +12,7 @@ public:
 
     virtual const char* getCategoryName() { return mCatName; };
 
-private:
+protected:
     const char* mCatName = nullptr;
     const char* mCatDesc = nullptr;
 };

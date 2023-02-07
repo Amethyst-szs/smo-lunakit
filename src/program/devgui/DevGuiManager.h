@@ -11,7 +11,9 @@
 #include "heap/seadDisposer.h"
 #include "heap/seadHeap.h"
 
+#include "program/SequenceUtil.h"
 #include "program/devgui/windows/DevGuiWindowBase.h"
+#include "program/devgui/windows/DevGuiWindowEditor.h"
 
 class DevGuiManager {
     SEAD_SINGLETON_DISPOSER(DevGuiManager);
