@@ -13,7 +13,7 @@ bool NinSDFileDevice::doIsAvailable_() const
 
 bool NinSDFileDevice::formatPathForFS_(BufferedSafeString* out, const SafeString& path) const
 {
-    out->format("%s:/smo/%s", mMountPoint.cstr(), path.cstr());
+    out->format("%s:/LunaKit/%s", mMountPoint.cstr(), path.cstr());
     Path::changeDelimiter(out, '/');
     return true;
 }

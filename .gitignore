@@ -38,3 +38,4 @@ build/
 
 # specific files
 compile_commands.json
+imgui/

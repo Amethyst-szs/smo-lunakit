@@ -214,7 +214,7 @@ namespace ImguiNvnBackend {
         } else {
 
             FsHelper::LoadData loadData = {
-                    .path = "sd:/smo/shaders/imgui.bin"
+                    .path = "sd:/LunaKit/ImGuiData/imgui.bin"
             };
 
             FsHelper::loadFileFromPath(loadData);

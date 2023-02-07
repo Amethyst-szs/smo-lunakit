@@ -1,0 +1,656 @@
+Atmosphère Crash Report (v1.7):
+Result:                          0xCA8 (2168-0006)
+
+Process Info:
+    Process Name:                Application
+    Program ID:                  0100000000010000
+    Process ID:                  00000000000000cc
+    Process Flags:               00000077
+    User Exception Address:      00000063e7c30000
+Exception Info:
+    Type:                        User Break
+    Address:                     0000000e45a67190 (subsdk9 + 0x190)
+    Break Reason:                0x6942021
+    Break Address:               0000000000000069
+    Break Size:                  0x0
+Crashed Thread Info:
+    Thread ID:                   00000000000013d3
+    Thread Name:                 MainThread
+    Stack Region:                0000007efe917000-0000007efea17000
+    Registers:
+        X[00]:                   0000000006942021
+        X[01]:                   0000000000000069
+        X[02]:                   0000000000000000
+        X[03]:                   0000000e45ae9140
+        X[04]:                   0000000000000069
+        X[05]:                   0000007efea16ae4
+        X[06]:                   0000007efea16885
+        X[07]:                   0000000000000007
+        X[08]:                   0000000000000000
+        X[09]:                   0000000000000000
+        X[10]:                   0000000000000000
+        X[11]:                   0000000000000000
+        X[12]:                   0000000000000000
+        X[13]:                   0000000000000000
+        X[14]:                   0000000000000000
+        X[15]:                   0000000000000000
+        X[16]:                   0000000000000000
+        X[17]:                   0000000000000000
+        X[18]:                   0000000000000000
+        X[19]:                   0000000000000000
+        X[20]:                   0000000000000000
+        X[21]:                   0000000000000000
+        X[22]:                   0000000000000000
+        X[23]:                   0000000000000000
+        X[24]:                   0000000000000000
+        X[25]:                   0000000000000000
+        X[26]:                   0000000000000000
+        X[27]:                   0000000000000000
+        X[28]:                   0000000000000000
+        FP:                      0000007efea16ab0
+        LR:                      0000000e45a69b8c (subsdk9 + 0x2b8c)
+        SP:                      0000007efea16ab0
+        PC:                      0000000e45a6718c (subsdk9 + 0x18c)
+    Stack Trace:
+        ReturnAddress[00]:       0000000e45a69ce0 (subsdk9 + 0x2ce0)
+        ReturnAddress[01]:       0000000e45a71f34 (subsdk9 + 0xaf34)
+        ReturnAddress[02]:       0000000e4333d330 (RedStar.nss + 0x539330) (_ZN8RootTask4calcEv + 0x68)
+        ReturnAddress[03]:       0000000e4353813c (RedStar.nss + 0x73413c) (_ZN4sead14MethodTreeNode8callRec_Ev + 0x28)
+        ReturnAddress[04]:       0000000e43538154 (RedStar.nss + 0x734154) (_ZN4sead14MethodTreeNode8callRec_Ev + 0x40)
+        ReturnAddress[05]:       0000000e43538154 (RedStar.nss + 0x734154) (_ZN4sead14MethodTreeNode8callRec_Ev + 0x40)
+        ReturnAddress[06]:       0000000e435380f4 (RedStar.nss + 0x7340f4) (_ZN4sead14MethodTreeNode4callEv + 0x24)
+        ReturnAddress[07]:       0000000e436aac3c (RedStar.nss + 0x8a6c3c) (_ZN2al15GameFrameworkNx10procFrame_Ev + 0x188)
+        ReturnAddress[08]:       0000000e43535c04 (RedStar.nss + 0x731c04) (_ZN4sead15GameFrameworkNx9mainLoop_Ev + 0x20)
+        ReturnAddress[09]:       0000000e43536dfc (RedStar.nss + 0x732dfc) (_ZN4sead9Framework3runEPNS_4HeapERKNS_8TaskBase9CreateArgERKNS0_6RunArgE + 0xe4)
+        ReturnAddress[10]:       0000000e43319730 (RedStar.nss + 0x515730) (_ZN11Application3runEv + 0x68)
+        ReturnAddress[11]:       0000000e45b7d6b4 (nnSdk + 0x686b4) (_ZN2nn4init5StartEmmPFvvES2_ + 0x4c)
+        ReturnAddress[12]:       0000000e42e000ac (nnrtld + 0xac)
+        ReturnAddress[13]:       0000000e43538a9c (RedStar.nss + 0x734a9c) (_ZN4sead25SingleScreenMethodTreeMgr8pauseAllEb + 0xb4)
+        ReturnAddress[14]:       0000000000000000
+        ReturnAddress[15]:       0000000e43535c04 (RedStar.nss + 0x731c04) (_ZN4sead15GameFrameworkNx9mainLoop_Ev + 0x20)
+        ReturnAddress[16]:       0000000e43536dfc (RedStar.nss + 0x732dfc) (_ZN4sead9Framework3runEPNS_4HeapERKNS_8TaskBase9CreateArgERKNS0_6RunArgE + 0xe4)
+        ReturnAddress[17]:       0000000e43319730 (RedStar.nss + 0x515730) (_ZN11Application3runEv + 0x68)
+        ReturnAddress[18]:       0000000e45b7d6b4 (nnSdk + 0x686b4) (_ZN2nn4init5StartEmmPFvvES2_ + 0x4c)
+        ReturnAddress[19]:       0000000e42e000ac (nnrtld + 0xac)
+        ReturnAddress[20]:       0000000e43538a9c (RedStar.nss + 0x734a9c) (_ZN4sead25SingleScreenMethodTreeMgr8pauseAllEb + 0xb4)
+        ReturnAddress[21]:       0000000000000000
+        ReturnAddress[22]:       0000000e43535c04 (RedStar.nss + 0x731c04) (_ZN4sead15GameFrameworkNx9mainLoop_Ev + 0x20)
+        ReturnAddress[23]:       0000000e43536dfc (RedStar.nss + 0x732dfc) (_ZN4sead9Framework3runEPNS_4HeapERKNS_8TaskBase9CreateArgERKNS0_6RunArgE + 0xe4)
+        ReturnAddress[24]:       0000000e43319730 (RedStar.nss + 0x515730) (_ZN11Application3runEv + 0x68)
+        ReturnAddress[25]:       0000000e45b7d6b4 (nnSdk + 0x686b4) (_ZN2nn4init5StartEmmPFvvES2_ + 0x4c)
+        ReturnAddress[26]:       0000000e42e000ac (nnrtld + 0xac)
+        ReturnAddress[27]:       0000000e43538a9c (RedStar.nss + 0x734a9c) (_ZN4sead25SingleScreenMethodTreeMgr8pauseAllEb + 0xb4)
+        ReturnAddress[28]:       0000000000000000
+        ReturnAddress[29]:       0000000e43535c04 (RedStar.nss + 0x731c04) (_ZN4sead15GameFrameworkNx9mainLoop_Ev + 0x20)
+        ReturnAddress[30]:       0000000e43536dfc (RedStar.nss + 0x732dfc) (_ZN4sead9Framework3runEPNS_4HeapERKNS_8TaskBase9CreateArgERKNS0_6RunArgE + 0xe4)
+        ReturnAddress[31]:       0000000e43319730 (RedStar.nss + 0x515730) (_ZN11Application3runEv + 0x68)
+    Stack Dump:                               00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 007efea16ab0 c0 6a a1 fe 7e 00 00 00 e0 9c a6 45 0e 00 00 00
+                                 007efea16ac0 20 6b a1 fe 7e 00 00 00 34 1f a7 45 0e 00 00 00
+                                 007efea16ad0 69 00 00 00 00 00 00 00 f0 48 ae 45 0e 00 00 00
+                                 007efea16ae0 fb 02 00 00 00 00 00 00 b8 48 ae 45 0e 00 00 00
+                                 007efea16af0 40 91 ae 45 0e 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b20 d0 6b a1 fe 7e 00 00 00 30 d3 33 43 0e 00 00 00
+                                 007efea16b30 70 24 50 9f 35 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b40 10 1d 3d 31 35 00 00 00 e8 6e a1 fe 7e 00 00 00
+                                 007efea16b50 88 14 3d 31 35 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b60 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b70 00 00 00 00 00 00 00 00 88 14 3d 31 35 00 00 00
+                                 007efea16b80 88 90 b0 45 0e 00 00 00 28 48 ae 45 0e 00 00 00
+                                 007efea16b90 88 90 b0 45 0e 00 00 00 50 48 ae 45 0e 00 00 00
+                                 007efea16ba0 88 90 b0 45 0e 00 00 00 a0 48 ae 45 0e 00 00 00
+    TLS Address:                 00000063e7c30200
+    TLS Dump:                                 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 0063e7c30200 00 00 00 00 0c 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30210 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30220 53 46 43 4f 00 00 00 00 02 02 00 00 e7 59 ea d4
+                                 0063e7c30230 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00
+                                 0063e7c30240 01 00 81 01 06 41 28 c0 00 00 00 00 00 00 00 00
+                                 0063e7c30250 28 00 00 00 48 67 a1 fe 7e 00 28 00 00 00 00 00
+                                 0063e7c30260 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30270 00 00 00 00 00 00 00 00 cc 00 00 00 00 00 00 00
+                                 0063e7c30280 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30290 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302a0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302b0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302c0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302d0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302e0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302f0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Module Info:
+    Number of Modules:           5
+    Module 00:
+        Address:                 0000000e42e00000-0000000e42e02000
+        Name:                    nnrtld
+        Module Id:               A75512BE30BB2A8C880177505D7A0B3E24E9D642000000000000000000000000
+    Module 01:
+        Address:                 0000000e42e04000-0000000e439f6000
+        Name:                    RedStar.nss
+        Module Id:               3CA12DFAAF9C82DA064D1698DF79CDA153444B204D572B4E696E74656E646F2B
+    Module 02:
+        Address:                 0000000e453ac000-0000000e456a1000
+        Name:                    multimedia
+        Module Id:               798C30E126697F2222CF843F78F5C1406287619A53444B204D572B4E696E7465
+    Module 03:
+        Address:                 0000000e45a67000-0000000e45adf000
+        Name:                    subsdk9
+        Module Id:               405BC84A49642B920B35361CC0D0B334D782CD3C000000000000000000000000
+    Module 04:
+        Address:                 0000000e45b15000-0000000e45ef4000
+        Name:                    nnSdk
+        Module Id:               AE34E75D02925F4417B24499AD80C39412FC76DB53444B204D572B4E696E7465
+Thread Report:
+Number of Threads:               06
+Threads[00]:
+    Thread ID:                   00000000000013d3
+    Thread Name:                 MainThread
+    Stack Region:                0000007efe917000-0000007efea17000
+    Registers:
+        X[00]:                   0000000006942021
+        X[01]:                   0000000000000069
+        X[02]:                   0000000000000000
+        X[03]:                   0000000e45ae9140
+        X[04]:                   0000000000000069
+        X[05]:                   0000007efea16ae4
+        X[06]:                   0000007efea16885
+        X[07]:                   0000000000000007
+        X[08]:                   0000000000000000
+        X[09]:                   0000000000000000
+        X[10]:                   0000000000000000
+        X[11]:                   0000000000000000
+        X[12]:                   0000000000000000
+        X[13]:                   0000000000000000
+        X[14]:                   0000000000000000
+        X[15]:                   0000000000000000
+        X[16]:                   0000000000000000
+        X[17]:                   0000000000000000
+        X[18]:                   0000000000000000
+        X[19]:                   0000000000000000
+        X[20]:                   0000000000000000
+        X[21]:                   0000000000000000
+        X[22]:                   0000000000000000
+        X[23]:                   0000000000000000
+        X[24]:                   0000000000000000
+        X[25]:                   0000000000000000
+        X[26]:                   0000000000000000
+        X[27]:                   0000000000000000
+        X[28]:                   0000000000000000
+        FP:                      0000007efea16ab0
+        LR:                      0000000e45a69b8c (subsdk9 + 0x2b8c)
+        SP:                      0000007efea16ab0
+        PC:                      0000000e45a6718c (subsdk9 + 0x18c)
+    Stack Trace:
+        ReturnAddress[00]:       0000000e45a69ce0 (subsdk9 + 0x2ce0)
+        ReturnAddress[01]:       0000000e45a71f34 (subsdk9 + 0xaf34)
+        ReturnAddress[02]:       0000000e4333d330 (RedStar.nss + 0x539330) (_ZN8RootTask4calcEv + 0x68)
+        ReturnAddress[03]:       0000000e4353813c (RedStar.nss + 0x73413c) (_ZN4sead14MethodTreeNode8callRec_Ev + 0x28)
+        ReturnAddress[04]:       0000000e43538154 (RedStar.nss + 0x734154) (_ZN4sead14MethodTreeNode8callRec_Ev + 0x40)
+        ReturnAddress[05]:       0000000e43538154 (RedStar.nss + 0x734154) (_ZN4sead14MethodTreeNode8callRec_Ev + 0x40)
+        ReturnAddress[06]:       0000000e435380f4 (RedStar.nss + 0x7340f4) (_ZN4sead14MethodTreeNode4callEv + 0x24)
+        ReturnAddress[07]:       0000000e436aac3c (RedStar.nss + 0x8a6c3c) (_ZN2al15GameFrameworkNx10procFrame_Ev + 0x188)
+        ReturnAddress[08]:       0000000e43535c04 (RedStar.nss + 0x731c04) (_ZN4sead15GameFrameworkNx9mainLoop_Ev + 0x20)
+        ReturnAddress[09]:       0000000e43536dfc (RedStar.nss + 0x732dfc) (_ZN4sead9Framework3runEPNS_4HeapERKNS_8TaskBase9CreateArgERKNS0_6RunArgE + 0xe4)
+        ReturnAddress[10]:       0000000e43319730 (RedStar.nss + 0x515730) (_ZN11Application3runEv + 0x68)
+        ReturnAddress[11]:       0000000e45b7d6b4 (nnSdk + 0x686b4) (_ZN2nn4init5StartEmmPFvvES2_ + 0x4c)
+        ReturnAddress[12]:       0000000e42e000ac (nnrtld + 0xac)
+        ReturnAddress[13]:       0000000e43538a9c (RedStar.nss + 0x734a9c) (_ZN4sead25SingleScreenMethodTreeMgr8pauseAllEb + 0xb4)
+        ReturnAddress[14]:       0000000000000000
+        ReturnAddress[15]:       0000000e43535c04 (RedStar.nss + 0x731c04) (_ZN4sead15GameFrameworkNx9mainLoop_Ev + 0x20)
+        ReturnAddress[16]:       0000000e43536dfc (RedStar.nss + 0x732dfc) (_ZN4sead9Framework3runEPNS_4HeapERKNS_8TaskBase9CreateArgERKNS0_6RunArgE + 0xe4)
+        ReturnAddress[17]:       0000000e43319730 (RedStar.nss + 0x515730) (_ZN11Application3runEv + 0x68)
+        ReturnAddress[18]:       0000000e45b7d6b4 (nnSdk + 0x686b4) (_ZN2nn4init5StartEmmPFvvES2_ + 0x4c)
+        ReturnAddress[19]:       0000000e42e000ac (nnrtld + 0xac)
+        ReturnAddress[20]:       0000000e43538a9c (RedStar.nss + 0x734a9c) (_ZN4sead25SingleScreenMethodTreeMgr8pauseAllEb + 0xb4)
+        ReturnAddress[21]:       0000000000000000
+        ReturnAddress[22]:       0000000e43535c04 (RedStar.nss + 0x731c04) (_ZN4sead15GameFrameworkNx9mainLoop_Ev + 0x20)
+        ReturnAddress[23]:       0000000e43536dfc (RedStar.nss + 0x732dfc) (_ZN4sead9Framework3runEPNS_4HeapERKNS_8TaskBase9CreateArgERKNS0_6RunArgE + 0xe4)
+        ReturnAddress[24]:       0000000e43319730 (RedStar.nss + 0x515730) (_ZN11Application3runEv + 0x68)
+        ReturnAddress[25]:       0000000e45b7d6b4 (nnSdk + 0x686b4) (_ZN2nn4init5StartEmmPFvvES2_ + 0x4c)
+        ReturnAddress[26]:       0000000e42e000ac (nnrtld + 0xac)
+        ReturnAddress[27]:       0000000e43538a9c (RedStar.nss + 0x734a9c) (_ZN4sead25SingleScreenMethodTreeMgr8pauseAllEb + 0xb4)
+        ReturnAddress[28]:       0000000000000000
+        ReturnAddress[29]:       0000000e43535c04 (RedStar.nss + 0x731c04) (_ZN4sead15GameFrameworkNx9mainLoop_Ev + 0x20)
+        ReturnAddress[30]:       0000000e43536dfc (RedStar.nss + 0x732dfc) (_ZN4sead9Framework3runEPNS_4HeapERKNS_8TaskBase9CreateArgERKNS0_6RunArgE + 0xe4)
+        ReturnAddress[31]:       0000000e43319730 (RedStar.nss + 0x515730) (_ZN11Application3runEv + 0x68)
+    Stack Dump:                               00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 007efea16ab0 c0 6a a1 fe 7e 00 00 00 e0 9c a6 45 0e 00 00 00
+                                 007efea16ac0 20 6b a1 fe 7e 00 00 00 34 1f a7 45 0e 00 00 00
+                                 007efea16ad0 69 00 00 00 00 00 00 00 f0 48 ae 45 0e 00 00 00
+                                 007efea16ae0 fb 02 00 00 00 00 00 00 b8 48 ae 45 0e 00 00 00
+                                 007efea16af0 40 91 ae 45 0e 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b20 d0 6b a1 fe 7e 00 00 00 30 d3 33 43 0e 00 00 00
+                                 007efea16b30 70 24 50 9f 35 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b40 10 1d 3d 31 35 00 00 00 e8 6e a1 fe 7e 00 00 00
+                                 007efea16b50 88 14 3d 31 35 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b60 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007efea16b70 00 00 00 00 00 00 00 00 88 14 3d 31 35 00 00 00
+                                 007efea16b80 88 90 b0 45 0e 00 00 00 28 48 ae 45 0e 00 00 00
+                                 007efea16b90 88 90 b0 45 0e 00 00 00 50 48 ae 45 0e 00 00 00
+                                 007efea16ba0 88 90 b0 45 0e 00 00 00 a0 48 ae 45 0e 00 00 00
+    TLS Address:                 00000063e7c30200
+    TLS Dump:                                 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 0063e7c30200 00 00 00 00 0c 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30210 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30220 53 46 43 4f 00 00 00 00 02 02 00 00 e7 59 ea d4
+                                 0063e7c30230 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00
+                                 0063e7c30240 01 00 81 01 06 41 28 c0 00 00 00 00 00 00 00 00
+                                 0063e7c30250 28 00 00 00 48 67 a1 fe 7e 00 28 00 00 00 00 00
+                                 0063e7c30260 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30270 00 00 00 00 00 00 00 00 cc 00 00 00 00 00 00 00
+                                 0063e7c30280 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30290 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302a0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302b0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302c0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302d0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302e0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c302f0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Threads[01]:
+    Thread ID:                   00000000000013df
+    Thread Name:                 Presentation Thread
+    Stack Region:                0000007ef12c1000-0000007ef12c5000
+    Registers:
+        X[00]:                   00000034f5ca3140
+        X[01]:                   00000034f5ca3148
+        X[02]:                   00000000002701e6
+        X[03]:                   ffffffffffffffff
+        X[04]:                   0000000000000000
+        X[05]:                   0000000000000000
+        X[06]:                   0000000000000000
+        X[07]:                   0000000000000000
+        X[08]:                   0000000000000000
+        X[09]:                   0000000000000000
+        X[10]:                   0000000000000000
+        X[11]:                   0000000000000000
+        X[12]:                   0000000000000000
+        X[13]:                   0000000000000000
+        X[14]:                   0000000000000000
+        X[15]:                   0000000000000000
+        X[16]:                   0000000000000000
+        X[17]:                   0000000000000000
+        X[18]:                   0000000000000000
+        X[19]:                   0000000000000000
+        X[20]:                   0000000000000000
+        X[21]:                   0000000000000000
+        X[22]:                   0000000000000000
+        X[23]:                   0000000000000000
+        X[24]:                   0000000000000000
+        X[25]:                   0000000000000000
+        X[26]:                   0000000000000000
+        X[27]:                   0000000000000000
+        X[28]:                   0000000000000000
+        FP:                      0000007ef12c4ee0
+        LR:                      0000000e45ba47c4 (nnSdk + 0x8f7c4) (_ZN2nn2os6detail38InternalConditionVariableImplByHorizon4WaitEPNS1_23InternalCriticalSectionE + 0x30)
+        SP:                      0000007ef12c4ec0
+        PC:                      0000000e45bbed5c (nnSdk + 0xa9d5c) (_ZN2nn3svc7aarch644lp6424WaitProcessWideKeyAtomicEmmjl + 0x0)
+    Stack Trace:
+        ReturnAddress[00]:       0000000e45b9d02c (nnSdk + 0x8802c) (_ZN2nn2os19ReceiveMessageQueueEPmPNS0_16MessageQueueTypeE + 0x3c)
+        ReturnAddress[01]:       0000000e43574ac4 (RedStar.nss + 0x770ac4) (_ZN4sead12MessageQueue3popENS0_9BlockTypeE + 0x38)
+        ReturnAddress[02]:       0000000e4355f04c (RedStar.nss + 0x75b04c) (_ZN4sead6Thread4run_Ev + 0x38)
+        ReturnAddress[03]:       0000000e4355e908 (RedStar.nss + 0x75a908) (_ZN4sead6Thread14ninThreadFunc_EPv + 0x78)
+        ReturnAddress[04]:       0000000e45b9f8a8 (nnSdk + 0x8a8a8)
+        ReturnAddress[05]:       0000000e45ba3958 (nnSdk + 0x8e958)
+        ReturnAddress[06]:       0000000000000000
+    Stack Dump:                               00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 007ef12c4ec0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007ef12c4ed0 40 31 ca f5 34 00 00 00 08 31 ca f5 34 00 00 00
+                                 007ef12c4ee0 10 4f 2c f1 7e 00 00 00 2c d0 b9 45 0e 00 00 00
+                                 007ef12c4ef0 00 00 00 00 00 00 00 00 d4 81 ca f5 34 00 00 00
+                                 007ef12c4f00 08 31 ca f5 34 00 00 00 d0 30 ca f5 34 00 00 00
+                                 007ef12c4f10 30 4f 2c f1 7e 00 00 00 c4 4a 57 43 0e 00 00 00
+                                 007ef12c4f20 08 31 ca f5 34 00 00 00 d0 30 ca f5 34 00 00 00
+                                 007ef12c4f30 50 4f 2c f1 7e 00 00 00 4c f0 55 43 0e 00 00 00
+                                 007ef12c4f40 00 00 00 00 00 00 00 00 d0 30 ca f5 34 00 00 00
+                                 007ef12c4f50 70 4f 2c f1 7e 00 00 00 08 e9 55 43 0e 00 00 00
+                                 007ef12c4f60 d0 81 ca f5 34 00 00 00 20 80 ca f5 34 00 00 00
+                                 007ef12c4f70 a0 4f 2c f1 7e 00 00 00 a8 f8 b9 45 0e 00 00 00
+                                 007ef12c4f80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007ef12c4f90 00 50 2c f1 7e 00 00 00 20 80 ca f5 34 00 00 00
+                                 007ef12c4fa0 d0 4f 2c f1 7e 00 00 00 58 39 ba 45 0e 00 00 00
+                                 007ef12c4fb0 00 00 00 00 00 00 00 00 df 13 00 00 00 00 00 00
+    TLS Address:                 00000063e7c30400
+    TLS Dump:                                 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 0063e7c30400 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30410 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30420 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30430 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30440 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30450 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30460 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30470 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30480 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30490 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c304a0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c304b0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c304c0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c304d0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c304e0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c304f0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Threads[02]:
+    Thread ID:                   00000000000013e0
+    Thread Name:                 セーブデータスレッド
+    Stack Region:                0000007ea578b000-0000007ea578d000
+    Registers:
+        X[00]:                   00000035025ef7d8
+        X[01]:                   00000035025ef7e0
+        X[02]:                   00000000002881e4
+        X[03]:                   ffffffffffffffff
+        X[04]:                   0000000000000000
+        X[05]:                   0000000000000000
+        X[06]:                   0000000000000000
+        X[07]:                   0000000000000000
+        X[08]:                   0000000000000000
+        X[09]:                   0000000000000000
+        X[10]:                   0000000000000000
+        X[11]:                   0000000000000000
+        X[12]:                   0000000000000000
+        X[13]:                   0000000000000000
+        X[14]:                   0000000000000000
+        X[15]:                   0000000000000000
+        X[16]:                   0000000000000000
+        X[17]:                   0000000000000000
+        X[18]:                   0000000000000000
+        X[19]:                   0000000000000000
+        X[20]:                   0000000000000000
+        X[21]:                   0000000000000000
+        X[22]:                   0000000000000000
+        X[23]:                   0000000000000000
+        X[24]:                   0000000000000000
+        X[25]:                   0000000000000000
+        X[26]:                   0000000000000000
+        X[27]:                   0000000000000000
+        X[28]:                   0000000000000000
+        FP:                      0000007ea578cee0
+        LR:                      0000000e45ba47c4 (nnSdk + 0x8f7c4) (_ZN2nn2os6detail38InternalConditionVariableImplByHorizon4WaitEPNS1_23InternalCriticalSectionE + 0x30)
+        SP:                      0000007ea578cec0
+        PC:                      0000000e45bbed5c (nnSdk + 0xa9d5c) (_ZN2nn3svc7aarch644lp6424WaitProcessWideKeyAtomicEmmjl + 0x0)
+    Stack Trace:
+        ReturnAddress[00]:       0000000e45b9d02c (nnSdk + 0x8802c) (_ZN2nn2os19ReceiveMessageQueueEPmPNS0_16MessageQueueTypeE + 0x3c)
+        ReturnAddress[01]:       0000000e43574ac4 (RedStar.nss + 0x770ac4) (_ZN4sead12MessageQueue3popENS0_9BlockTypeE + 0x38)
+        ReturnAddress[02]:       0000000e4355f04c (RedStar.nss + 0x75b04c) (_ZN4sead6Thread4run_Ev + 0x38)
+        ReturnAddress[03]:       0000000e4355e908 (RedStar.nss + 0x75a908) (_ZN4sead6Thread14ninThreadFunc_EPv + 0x78)
+        ReturnAddress[04]:       0000000e45b9f8a8 (nnSdk + 0x8a8a8)
+        ReturnAddress[05]:       0000000e45ba3958 (nnSdk + 0x8e958)
+        ReturnAddress[06]:       0000000000000000
+    Stack Dump:                               00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 007ea578cec0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007ea578ced0 d8 f7 5e 02 35 00 00 00 a0 f7 5e 02 35 00 00 00
+                                 007ea578cee0 10 cf 78 a5 7e 00 00 00 2c d0 b9 45 0e 00 00 00
+                                 007ea578cef0 00 00 00 00 00 00 00 00 d4 21 5f 02 35 00 00 00
+                                 007ea578cf00 a0 f7 5e 02 35 00 00 00 68 f7 5e 02 35 00 00 00
+                                 007ea578cf10 30 cf 78 a5 7e 00 00 00 c4 4a 57 43 0e 00 00 00
+                                 007ea578cf20 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007ea578cf30 50 cf 78 a5 7e 00 00 00 4c f0 55 43 0e 00 00 00
+                                 007ea578cf40 00 00 00 00 00 00 00 00 68 f7 5e 02 35 00 00 00
+                                 007ea578cf50 70 cf 78 a5 7e 00 00 00 08 e9 55 43 0e 00 00 00
+                                 007ea578cf60 d0 21 5f 02 35 00 00 00 20 20 5f 02 35 00 00 00
+                                 007ea578cf70 a0 cf 78 a5 7e 00 00 00 a8 f8 b9 45 0e 00 00 00
+                                 007ea578cf80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007ea578cf90 00 d0 78 a5 7e 00 00 00 20 20 5f 02 35 00 00 00
+                                 007ea578cfa0 d0 cf 78 a5 7e 00 00 00 58 39 ba 45 0e 00 00 00
+                                 007ea578cfb0 00 00 00 00 00 00 00 00 e0 13 00 00 00 00 00 00
+    TLS Address:                 00000063e7c30600
+    TLS Dump:                                 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 0063e7c30600 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30610 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30620 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30630 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30640 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30650 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30660 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30670 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30680 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30690 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c306a0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c306b0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c306c0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c306d0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c306e0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c306f0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Threads[03]:
+    Thread ID:                   00000000000013e1
+    Thread Name:                 FileLoadThread
+    Stack Region:                0000007ea92fe000-0000007ea9302000
+    Registers:
+        X[00]:                   00000035025f2360
+        X[01]:                   00000035025f2368
+        X[02]:                   00000000002901e3
+        X[03]:                   ffffffffffffffff
+        X[04]:                   0000000000000000
+        X[05]:                   0000000000000000
+        X[06]:                   0000000000000000
+        X[07]:                   0000000000000000
+        X[08]:                   0000000000000000
+        X[09]:                   0000000000000000
+        X[10]:                   0000000000000000
+        X[11]:                   0000000000000000
+        X[12]:                   0000000000000000
+        X[13]:                   0000000000000000
+        X[14]:                   0000000000000000
+        X[15]:                   0000000000000000
+        X[16]:                   0000000000000000
+        X[17]:                   0000000000000000
+        X[18]:                   0000000000000000
+        X[19]:                   0000000000000000
+        X[20]:                   0000000000000000
+        X[21]:                   0000000000000000
+        X[22]:                   0000000000000000
+        X[23]:                   0000000000000000
+        X[24]:                   0000000000000000
+        X[25]:                   0000000000000000
+        X[26]:                   0000000000000000
+        X[27]:                   0000000000000000
+        X[28]:                   0000000000000000
+        FP:                      0000007ea9301ee0
+        LR:                      0000000e45ba47c4 (nnSdk + 0x8f7c4) (_ZN2nn2os6detail38InternalConditionVariableImplByHorizon4WaitEPNS1_23InternalCriticalSectionE + 0x30)
+        SP:                      0000007ea9301ec0
+        PC:                      0000000e45bbed5c (nnSdk + 0xa9d5c) (_ZN2nn3svc7aarch644lp6424WaitProcessWideKeyAtomicEmmjl + 0x0)
+    Stack Trace:
+        ReturnAddress[00]:       0000000e45b9d02c (nnSdk + 0x8802c) (_ZN2nn2os19ReceiveMessageQueueEPmPNS0_16MessageQueueTypeE + 0x3c)
+        ReturnAddress[01]:       0000000e43574ac4 (RedStar.nss + 0x770ac4) (_ZN4sead12MessageQueue3popENS0_9BlockTypeE + 0x38)
+        ReturnAddress[02]:       0000000e4355f04c (RedStar.nss + 0x75b04c) (_ZN4sead6Thread4run_Ev + 0x38)
+        ReturnAddress[03]:       0000000e4355e908 (RedStar.nss + 0x75a908) (_ZN4sead6Thread14ninThreadFunc_EPv + 0x78)
+        ReturnAddress[04]:       0000000e45b9f8a8 (nnSdk + 0x8a8a8)
+        ReturnAddress[05]:       0000000e45ba3958 (nnSdk + 0x8e958)
+        ReturnAddress[06]:       0000000000000000
+    Stack Dump:                               00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 007ea9301ec0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007ea9301ed0 60 23 5f 02 35 00 00 00 28 23 5f 02 35 00 00 00
+                                 007ea9301ee0 10 1f 30 a9 7e 00 00 00 2c d0 b9 45 0e 00 00 00
+                                 007ea9301ef0 00 00 00 00 00 00 00 00 d4 b1 5f 02 35 00 00 00
+                                 007ea9301f00 28 23 5f 02 35 00 00 00 f0 22 5f 02 35 00 00 00
+                                 007ea9301f10 30 1f 30 a9 7e 00 00 00 c4 4a 57 43 0e 00 00 00
+                                 007ea9301f20 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007ea9301f30 50 1f 30 a9 7e 00 00 00 4c f0 55 43 0e 00 00 00
+                                 007ea9301f40 00 00 00 00 00 00 00 00 f0 22 5f 02 35 00 00 00
+                                 007ea9301f50 70 1f 30 a9 7e 00 00 00 08 e9 55 43 0e 00 00 00
+                                 007ea9301f60 d0 b1 5f 02 35 00 00 00 20 b0 5f 02 35 00 00 00
+                                 007ea9301f70 a0 1f 30 a9 7e 00 00 00 a8 f8 b9 45 0e 00 00 00
+                                 007ea9301f80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007ea9301f90 00 20 30 a9 7e 00 00 00 20 b0 5f 02 35 00 00 00
+                                 007ea9301fa0 d0 1f 30 a9 7e 00 00 00 58 39 ba 45 0e 00 00 00
+                                 007ea9301fb0 00 00 00 00 00 00 00 00 e1 13 00 00 00 00 00 00
+    TLS Address:                 00000063e7c30800
+    TLS Dump:                                 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 0063e7c30800 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30810 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30820 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30830 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30840 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30850 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30860 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30870 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30880 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30890 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c308a0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c308b0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c308c0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c308d0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c308e0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c308f0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Threads[04]:
+    Thread ID:                   00000000000013e2
+    Thread Name:                 DecompThread
+    Stack Region:                0000007eedea4000-0000007eedea5000
+    Registers:
+        X[00]:                   0000003502ac2118
+        X[01]:                   0000003502ac2120
+        X[02]:                   00000000002981e2
+        X[03]:                   ffffffffffffffff
+        X[04]:                   0000000000000000
+        X[05]:                   0000000000000000
+        X[06]:                   0000000000000000
+        X[07]:                   0000000000000000
+        X[08]:                   0000000000000000
+        X[09]:                   0000000000000000
+        X[10]:                   0000000000000000
+        X[11]:                   0000000000000000
+        X[12]:                   0000000000000000
+        X[13]:                   0000000000000000
+        X[14]:                   0000000000000000
+        X[15]:                   0000000000000000
+        X[16]:                   0000000000000000
+        X[17]:                   0000000000000000
+        X[18]:                   0000000000000000
+        X[19]:                   0000000000000000
+        X[20]:                   0000000000000000
+        X[21]:                   0000000000000000
+        X[22]:                   0000000000000000
+        X[23]:                   0000000000000000
+        X[24]:                   0000000000000000
+        X[25]:                   0000000000000000
+        X[26]:                   0000000000000000
+        X[27]:                   0000000000000000
+        X[28]:                   0000000000000000
+        FP:                      0000007eedea4ee0
+        LR:                      0000000e45ba47c4 (nnSdk + 0x8f7c4) (_ZN2nn2os6detail38InternalConditionVariableImplByHorizon4WaitEPNS1_23InternalCriticalSectionE + 0x30)
+        SP:                      0000007eedea4ec0
+        PC:                      0000000e45bbed5c (nnSdk + 0xa9d5c) (_ZN2nn3svc7aarch644lp6424WaitProcessWideKeyAtomicEmmjl + 0x0)
+    Stack Trace:
+        ReturnAddress[00]:       0000000e45b9d02c (nnSdk + 0x8802c) (_ZN2nn2os19ReceiveMessageQueueEPmPNS0_16MessageQueueTypeE + 0x3c)
+        ReturnAddress[01]:       0000000e43574ac4 (RedStar.nss + 0x770ac4) (_ZN4sead12MessageQueue3popENS0_9BlockTypeE + 0x38)
+        ReturnAddress[02]:       0000000e4355f04c (RedStar.nss + 0x75b04c) (_ZN4sead6Thread4run_Ev + 0x38)
+        ReturnAddress[03]:       0000000e4355e908 (RedStar.nss + 0x75a908) (_ZN4sead6Thread14ninThreadFunc_EPv + 0x78)
+        ReturnAddress[04]:       0000000e45b9f8a8 (nnSdk + 0x8a8a8)
+        ReturnAddress[05]:       0000000e45ba3958 (nnSdk + 0x8e958)
+        ReturnAddress[06]:       0000000000000000
+    Stack Dump:                               00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 007eedea4ec0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007eedea4ed0 18 21 ac 02 35 00 00 00 e0 20 ac 02 35 00 00 00
+                                 007eedea4ee0 10 4f ea ed 7e 00 00 00 2c d0 b9 45 0e 00 00 00
+                                 007eedea4ef0 00 00 00 00 00 00 00 00 d4 41 ac 02 35 00 00 00
+                                 007eedea4f00 e0 20 ac 02 35 00 00 00 a8 20 ac 02 35 00 00 00
+                                 007eedea4f10 30 4f ea ed 7e 00 00 00 c4 4a 57 43 0e 00 00 00
+                                 007eedea4f20 e0 20 ac 02 35 00 00 00 a8 20 ac 02 35 00 00 00
+                                 007eedea4f30 50 4f ea ed 7e 00 00 00 4c f0 55 43 0e 00 00 00
+                                 007eedea4f40 00 00 00 00 00 00 00 00 a8 20 ac 02 35 00 00 00
+                                 007eedea4f50 70 4f ea ed 7e 00 00 00 08 e9 55 43 0e 00 00 00
+                                 007eedea4f60 d0 41 ac 02 35 00 00 00 20 40 ac 02 35 00 00 00
+                                 007eedea4f70 a0 4f ea ed 7e 00 00 00 a8 f8 b9 45 0e 00 00 00
+                                 007eedea4f80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007eedea4f90 00 50 ea ed 7e 00 00 00 20 40 ac 02 35 00 00 00
+                                 007eedea4fa0 d0 4f ea ed 7e 00 00 00 58 39 ba 45 0e 00 00 00
+                                 007eedea4fb0 00 00 00 00 00 00 00 00 e2 13 00 00 00 00 00 00
+    TLS Address:                 00000063e7c30a00
+    TLS Dump:                                 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 0063e7c30a00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30a10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30a20 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30a30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30a40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30a50 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30a60 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30a70 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30a80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30a90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30aa0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30ab0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30ac0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30ad0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30ae0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30af0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+Threads[05]:
+    Thread ID:                   00000000000013e4
+    Thread Name:                 VibrationThread
+    Stack Region:                0000007eff2b5000-0000007eff2b6000
+    Registers:
+        X[00]:                   000000359f50aef8
+        X[01]:                   000000359f50af00
+        X[02]:                   00000000002a01e1
+        X[03]:                   ffffffffffffffff
+        X[04]:                   0000000000000000
+        X[05]:                   0000000000000000
+        X[06]:                   0000000000000000
+        X[07]:                   0000000000000000
+        X[08]:                   0000000000000000
+        X[09]:                   0000000000000000
+        X[10]:                   0000000000000000
+        X[11]:                   0000000000000000
+        X[12]:                   0000000000000000
+        X[13]:                   0000000000000000
+        X[14]:                   0000000000000000
+        X[15]:                   0000000000000000
+        X[16]:                   0000000000000000
+        X[17]:                   0000000000000000
+        X[18]:                   0000000000000000
+        X[19]:                   0000000000000000
+        X[20]:                   0000000000000000
+        X[21]:                   0000000000000000
+        X[22]:                   0000000000000000
+        X[23]:                   0000000000000000
+        X[24]:                   0000000000000000
+        X[25]:                   0000000000000000
+        X[26]:                   0000000000000000
+        X[27]:                   0000000000000000
+        X[28]:                   0000000000000000
+        FP:                      0000007eff2b5ee0
+        LR:                      0000000e45ba47c4 (nnSdk + 0x8f7c4) (_ZN2nn2os6detail38InternalConditionVariableImplByHorizon4WaitEPNS1_23InternalCriticalSectionE + 0x30)
+        SP:                      0000007eff2b5ec0
+        PC:                      0000000e45bbed5c (nnSdk + 0xa9d5c) (_ZN2nn3svc7aarch644lp6424WaitProcessWideKeyAtomicEmmjl + 0x0)
+    Stack Trace:
+        ReturnAddress[00]:       0000000e45b9d02c (nnSdk + 0x8802c) (_ZN2nn2os19ReceiveMessageQueueEPmPNS0_16MessageQueueTypeE + 0x3c)
+        ReturnAddress[01]:       0000000e43574ac4 (RedStar.nss + 0x770ac4) (_ZN4sead12MessageQueue3popENS0_9BlockTypeE + 0x38)
+        ReturnAddress[02]:       0000000e4355f04c (RedStar.nss + 0x75b04c) (_ZN4sead6Thread4run_Ev + 0x38)
+        ReturnAddress[03]:       0000000e4355e908 (RedStar.nss + 0x75a908) (_ZN4sead6Thread14ninThreadFunc_EPv + 0x78)
+        ReturnAddress[04]:       0000000e45b9f8a8 (nnSdk + 0x8a8a8)
+        ReturnAddress[05]:       0000000e45ba3958 (nnSdk + 0x8e958)
+        ReturnAddress[06]:       0000000000000000
+    Stack Dump:                               00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 007eff2b5ec0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007eff2b5ed0 f8 ae 50 9f 35 00 00 00 c0 ae 50 9f 35 00 00 00
+                                 007eff2b5ee0 10 5f 2b ff 7e 00 00 00 2c d0 b9 45 0e 00 00 00
+                                 007eff2b5ef0 00 00 00 00 00 00 00 00 d4 d1 50 9f 35 00 00 00
+                                 007eff2b5f00 c0 ae 50 9f 35 00 00 00 88 ae 50 9f 35 00 00 00
+                                 007eff2b5f10 30 5f 2b ff 7e 00 00 00 c4 4a 57 43 0e 00 00 00
+                                 007eff2b5f20 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007eff2b5f30 50 5f 2b ff 7e 00 00 00 4c f0 55 43 0e 00 00 00
+                                 007eff2b5f40 00 00 00 00 00 00 00 00 88 ae 50 9f 35 00 00 00
+                                 007eff2b5f50 70 5f 2b ff 7e 00 00 00 08 e9 55 43 0e 00 00 00
+                                 007eff2b5f60 d0 d1 50 9f 35 00 00 00 20 d0 50 9f 35 00 00 00
+                                 007eff2b5f70 a0 5f 2b ff 7e 00 00 00 a8 f8 b9 45 0e 00 00 00
+                                 007eff2b5f80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 007eff2b5f90 00 60 2b ff 7e 00 00 00 20 d0 50 9f 35 00 00 00
+                                 007eff2b5fa0 d0 5f 2b ff 7e 00 00 00 58 39 ba 45 0e 00 00 00
+                                 007eff2b5fb0 00 00 00 00 00 00 00 00 e4 13 00 00 00 00 00 00
+    TLS Address:                 00000063e7c30c00
+    TLS Dump:                                 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
+                                 0063e7c30c00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30c10 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30c20 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30c30 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30c40 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30c50 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30c60 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30c70 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30c80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30c90 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30ca0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30cb0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30cc0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30cd0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30ce0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                                 0063e7c30cf0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00

@@ -47,10 +47,10 @@
 
 #include <typeinfo>
 
-static const char* DBG_FONT_PATH = "DebugData/Font/nvn_font_jis1.ntx";
-static const char* DBG_SHADER_PATH = "DebugData/Font/nvn_font_shader_jis1.bin";
-static const char* DBG_TBL_PATH = "DebugData/Font/nvn_font_jis1_tbl.bin";
-static const char* DEV_WORLD_LIST_PATH = "system/DevWorldList";
+static const char* DBG_FONT_PATH = "ImGuiData/Font/nvn_font_jis1.ntx";
+static const char* DBG_SHADER_PATH = "ImGuiData/Font/nvn_font_shader_jis1.bin";
+static const char* DBG_TBL_PATH = "ImGuiData/Font/nvn_font_jis1_tbl.bin";
+static const char* DEV_WORLD_LIST_PATH = "LunaKitData/CustomWorldList";
 
 #define IMGUI_ENABLED true
 
