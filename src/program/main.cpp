@@ -45,6 +45,9 @@
 
 #include "statics.h"
 
+#include "program/devgui/DevGuiManager.h"
+#include "program/devgui/DevGuiPrimitive.h"
+
 #include <typeinfo>
 
 static const char* DBG_FONT_PATH = "ImGuiData/Font/nvn_font_jis1.ntx";
@@ -646,6 +649,10 @@ void drawDebugWindow() {
     ImGui::End();
 }
 
+void drawLunaKit() {
+    DevGuiManager::instance()->updateDisplay();
+}
+
 HOOK_DEFINE_TRAMPOLINE(ControlHook) {
     static void Callback(StageScene *scene) {
         controlLol(scene);
@@ -758,6 +765,11 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
             sead::DebugFontMgrJis1Nvn::instance()->initialize(curHeap, DBG_SHADER_PATH, DBG_FONT_PATH, DBG_TBL_PATH,
                                                               0x100000);
         }
+
+        DevGuiManager::createInstance(curHeap);
+        DevGuiPrimitive::createInstance(curHeap);
+
+        DevGuiManager::instance()->init(curHeap);
 
         if (!al::isExistArchive(DEV_WORLD_LIST_PATH))
             EXL_ABORT(0x69);
@@ -1070,6 +1082,7 @@ extern "C" void exl_main(void *x0, void *x1) {
     nvnImGui::InstallHooks();
 
     nvnImGui::addDrawFunc(drawDebugWindow);
+    nvnImGui::addDrawFunc(drawLunaKit);
 #endif
 
 }
