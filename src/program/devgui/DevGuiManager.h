@@ -25,6 +25,7 @@ public:
     void updateDisplay();
 
     bool isMenuActive() { return mIsActive; };
+    bool isFirstStep() { return mIsFirstStep; };
 
     sead::Heap* getHeap() { return mDevGuiHeap; }
     int getWindowCount() { return mWindows.size(); }
@@ -33,5 +34,7 @@ private:
     sead::Heap* mDevGuiHeap = nullptr; // Uses the game system heap
 
     bool mIsActive = false;
+    bool mIsFirstStep = false;
+
     sead::PtrArray<DevGuiWindowBase> mWindows;
 };

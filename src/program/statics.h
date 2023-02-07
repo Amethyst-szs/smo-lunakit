@@ -3,8 +3,6 @@
 
 namespace Statics {
 
-static bool showWindow = false;
-static bool isFirstShowFrame = false;
 static bool isNoclip = false;
 static bool isHUD = true;
 static bool isPlayMusic = true;

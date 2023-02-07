@@ -35,14 +35,9 @@ void DevGuiWindowBase::updateWinDisplay()
 {
     ImGui::Begin(mWinName, NULL, mConfig.mWindowFlags);
 
-    // First time ever displaying window, run setup style
-    if(ImGuiCond_FirstUseEver) {
-        configImGuiStyle();
-
-        ImGui::SetWindowPos(mConfig.mTrans, ImGuiCond_FirstUseEver);
-        ImGui::SetWindowSize(mConfig.mSize, ImGuiCond_FirstUseEver);
-    }
-
+    configImGuiStyle();
+    ImGui::SetWindowPos(mConfig.mTrans, ImGuiCond_FirstUseEver);
+    ImGui::SetWindowSize(mConfig.mSize, ImGuiCond_FirstUseEver);
     ImGui::SetWindowFontScale(mConfig.mFontSize);
 
     // If this window contains categories, load in the tabs

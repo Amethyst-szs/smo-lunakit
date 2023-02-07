@@ -247,13 +247,13 @@ static void drawImGuiBranchInfo(){
 }
 
 void drawDebugWindow() {
-    if(!Statics::showWindow) {
+    if(!DevGuiManager::instance()->isMenuActive()) {
         ImGui::SetMouseCursor(ImGuiMouseCursor_None);
         return;
-    } else if(Statics::isFirstShowFrame) {
-        ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-        Statics::isFirstShowFrame = false;
     }
+    
+    if(DevGuiManager::instance()->isFirstStep())
+        ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
 
     al::Sequence *curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
 
@@ -650,14 +650,6 @@ void drawDebugWindow() {
 }
 
 void drawLunaKit() {
-    if(!Statics::showWindow) {
-        ImGui::SetMouseCursor(ImGuiMouseCursor_None);
-        return;
-    } else if(Statics::isFirstShowFrame) {
-        ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
-        Statics::isFirstShowFrame = false;
-    }
-    
     DevGuiManager::instance()->updateDisplay();
 }
 
@@ -882,18 +874,15 @@ HOOK_DEFINE_TRAMPOLINE(DrawDebugMenu) {
     static void Callback(HakoniwaSequence *thisPtr) {
         Orig(thisPtr);
 
+        DevGuiManager::instance()->update();
+
         if(Statics::isOverrideOutfit) {
             GameDataFile* gameFile = thisPtr->mGameDataHolder.mData->mGameDataFile;
             gameFile->mBodyName = Statics::outfitOverrideBodyName;
             gameFile->mCapName = Statics::outfitOverrideCapName;
         }
 
-        if(al::isPadHoldR(-1) && al::isPadHoldZR(-1) && al::isPadTriggerL(-1)) {
-            Statics::showWindow = !Statics::showWindow;
-            Statics::isFirstShowFrame = true;
-        }
-
-        if(!Statics::showWindow)
+        if(!DevGuiManager::instance()->isMenuActive())
             return;
         
         agl::DrawContext* drawContext = thisPtr->getDrawInfo()->mDrawContext;

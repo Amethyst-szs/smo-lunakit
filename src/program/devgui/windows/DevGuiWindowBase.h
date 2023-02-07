@@ -17,7 +17,6 @@ public:
 
     virtual void updateWin();
     virtual void updateWinDisplay();
-
     virtual void configImGuiStyle();
 
     virtual const char* getWindowName() { return mWinName; };

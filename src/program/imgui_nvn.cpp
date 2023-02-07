@@ -163,9 +163,6 @@ void nvnImGui::addDrawFunc(ProcDrawFunc func) {
 }
 
 void nvnImGui::procDraw() {
-    // if(!Statics::showWindow)
-    //     return;
-
     ImguiNvnBackend::newFrame();
     ImGui::NewFrame();
 

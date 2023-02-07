@@ -13,5 +13,5 @@ void DevGuiCategoryBase::updateCat()
 
 void DevGuiCategoryBase::updateCatDisplay()
 {
-    ImGui::TextColored(ImVec4(0.784f, 0.419f, 0.98f, 1.0f), mCatDesc);
+    ImGui::TextColored(ImVec4(0.884f, 0.619f, 1.f, 1.0f), mCatDesc);
 }

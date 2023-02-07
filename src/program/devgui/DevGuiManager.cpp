@@ -18,6 +18,14 @@ void DevGuiManager::init(sead::Heap *heap)
 
 void DevGuiManager::update()
 {
+    // Check for enabling and disabling the window
+    if(al::isPadHoldR(-1) && al::isPadHoldZR(-1) && al::isPadTriggerL(-1)) {
+        mIsActive = !mIsActive;
+        if(mIsActive)
+            mIsFirstStep = true;
+    }
+
+    // Note: Each window's update function runs even with the menu closed/inactive!
     for(DevGuiWindowBase entry : mWindows) {
         entry.updateWin();
     }
@@ -25,7 +33,21 @@ void DevGuiManager::update()
 
 void DevGuiManager::updateDisplay()
 {
+    //Setup mouse cursor state
+    if(!mIsActive) {
+        ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+        return;
+    }
+    
+    if(mIsFirstStep)
+        ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+    
+    // Load and draw all windows
     for(DevGuiWindowBase entry : mWindows) {
         entry.updateWinDisplay();
     }
+
+    // Reset the first step flag when complete!
+    if(mIsFirstStep)
+        mIsFirstStep = false;
 }
