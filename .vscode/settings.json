@@ -1,0 +1,20 @@
+{
+    "liveshare.sharedTerminalWidth": 300,
+    "files.associations": {
+        "type_traits": "cpp",
+        "*.tcc": "cpp",
+        "functional": "cpp",
+        "optional": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "ratio": "cpp",
+        "system_error": "cpp",
+        "array": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "atomic": "cpp",
+        "cstdarg": "cpp"
+    },
+    "cmake.configureOnOpen": false,
+    "C_Cpp.errorSquiggles": "Enabled"
+}

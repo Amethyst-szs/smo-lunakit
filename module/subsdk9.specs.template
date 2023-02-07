@@ -1,0 +1,7 @@
+%rename link old_link_
+
+*link:
+%(old_link_) -T @SUBSDK_LD_PATH@ --shared --export-dynamic --gc-sections --build-id=sha1 --nx-module-name -init=exl_module_init --exclude-libs=ALL
+
+*startfile:
+crti%O%s crtbegin%O%s
