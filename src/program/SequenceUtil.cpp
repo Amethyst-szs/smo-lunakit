@@ -126,7 +126,7 @@ PlayerActorBase* tryGetPlayerActor(HakoniwaSequence* curSequence)
     return nullptr;
 }
 
-PlayerActorBase* tryGetPlayerActor(StageScene* scene)
+PlayerActorBase* tryGetPlayerActor(al::Scene* scene)
 {
     PlayerActorBase *playerBase = rs::getPlayerActor(scene);
     return playerBase;

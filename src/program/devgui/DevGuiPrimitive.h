@@ -1,26 +1,34 @@
 #pragma once
 
 #include "program/SequenceUtil.h"
+
+#include "al/collision/alCollisionUtil.h"
+#include "al/scene/Scene.h"
+
+#include "game/StageScene/StageScene.h"
+
 #include "heap/seadDisposer.h"
+#include <gfx/seadPrimitiveRenderer.h>
 
 struct PrimitivePlayerSettings {
-    bool mDrawAxis = true;
+    bool mDrawWorldAxis = true;
+    bool mDrawPlayerAxis = true;
     bool mDrawFront = true;
-    bool mDrawHackCap = true;
+    bool mDrawHackCap = false;
 };
 
 struct PrimitiveTriangleSettings {
-    bool mDrawTriangle = true;
+    bool mDrawTriangle = false;
     bool mDrawComplexTriangle = false;
 };
 
 struct PrimitiveAreaSettings {
     bool mDrawAreas = true;
 
-    bool mDrawAreaDeath = false;
     bool mDrawAreaStage = true;
-    bool mDrawAreaWater = true;
-    bool mDrawArea2D = true;
+    bool mDrawAreaDeath = false;
+    bool mDrawAreaWater = false;
+    bool mDrawArea2D = false;
 };
 
 class DevGuiPrimitive {
@@ -29,11 +37,22 @@ class DevGuiPrimitive {
     ~DevGuiPrimitive();
 
 public:
-    void draw(); // Take parameters for renderer (likely draw context, scene, and renderer?)
-    void drawAreaGroup(const char* areaName);
+    void draw(agl::DrawContext* drawContext);
+    void drawPlayerCategory();
+    void drawColliderCategory();
+    void drawAreaCategory();
     
     bool mIsDrawPrimitives = true;
     PrimitivePlayerSettings mSettingsPlayer;
     PrimitiveTriangleSettings mSettingsTriangle;
     PrimitiveAreaSettings mSettingsArea;
+
+private:
+    // Area rendering functions
+    void drawAreaGroup(const char* areaName, sead::Color4f wire, sead::Color4f solid);
+
+    // Triangle rendering functions
+    void drawSingleTri(al::Triangle* tri);
+    void drawTrianglesSimple();
+    void drawTrianglesComplex();
 };

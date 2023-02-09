@@ -7,6 +7,7 @@
 
 #include "program/devgui/categories/DevGuiCategoryBase.h"
 #include "program/devgui/categories/DevGuiCategoryHealth.h"
+#include "program/devgui/categories/DevGuiCategoryPrimitive.h"
 
 class DevGuiWindowEditor : public DevGuiWindowBase {
 public:

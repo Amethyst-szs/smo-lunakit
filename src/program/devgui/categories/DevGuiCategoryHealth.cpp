@@ -7,8 +7,6 @@ DevGuiCategoryHealth::DevGuiCategoryHealth(const char* catName, const char* catD
 
 void DevGuiCategoryHealth::updateCat()
 {
-    DevGuiCategoryBase::updateCat();
-
     // Get the player's hit point data pointer if it doesn't exist already
     if(!mHitData) {
         HakoniwaSequence* gameSeq = tryGetHakoniwaSequence();

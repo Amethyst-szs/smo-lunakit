@@ -45,6 +45,7 @@
 
 #include "statics.h"
 
+#include "program/SequenceUtil.h"
 #include "program/devgui/DevGuiManager.h"
 #include "program/devgui/DevGuiPrimitive.h"
 
@@ -381,19 +382,6 @@ void drawDebugWindow() {
                 ImGui::BulletText("Trigger - ZL");
             if(al::isPadHoldZR(-1))
                 ImGui::BulletText("Trigger - ZR");
-        }
-
-        if(ImGui::CollapsingHeader("Primitive Rendering")) {
-            ImGui::Checkbox("Draw Primitives", &Statics::primitiveDraw);
-            if(Statics::primitiveDraw) {
-                ImGui::Checkbox("Draw Nearby Triangles", &Statics::primitiveDrawIsCollision);
-                if(Statics::primitiveDrawIsCollision)
-                    ImGui::Checkbox("Use Complex Triangle Finder", &Statics::primitiveDrawIsCollisionComplex);
-                ImGui::Checkbox("Draw Death Areas", &Statics::primitiveDrawIsDeath);
-                ImGui::Checkbox("Draw Stage Change Areas", &Statics::primitiveDrawIsStage);
-                ImGui::Checkbox("Draw Water Areas", &Statics::primitiveDrawIsWater);
-                ImGui::Checkbox("Draw 2D Areas", &Statics::primitiveDrawIs2D);
-            }
         }
 
         if (ImGui::CollapsingHeader("PlayerHitPointData Editor")) {
@@ -801,75 +789,6 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
     }
 };
 
-static void drawTriangle(sead::PrimitiveRenderer* renderer, al::Triangle* tri)
-{
-    renderer->drawLine(tri->mPosition1, tri->mPosition2, {0.f, 0.3f, 1.f, 0.7f});
-    renderer->drawLine(tri->mPosition2, tri->mPosition3, {0.f, 0.3f, 1.f, 0.7f});
-    renderer->drawLine(tri->mPosition3, tri->mPosition1, {0.f, 0.3f, 1.f, 0.7f});
-    
-    renderer->drawSphere4x8(tri->mPosition1, 6.f, {0.5f, 0.3f, 1.f, 0.6f});
-    renderer->drawSphere4x8(tri->mPosition2, 6.f, {0.5f, 0.3f, 1.f, 0.6f});
-    renderer->drawSphere4x8(tri->mPosition3, 6.f, {0.5f, 0.3f, 1.f, 0.6f});
-}
-
-static void drawAreaGroup(al::Scene* curScene, sead::PrimitiveRenderer* renderer, al::AreaObjGroup* group, sead::Color4f wire = sead::Color4f(0, 255, 0, .1), sead::Color4f solid = sead::Color4f(0, 255, 0, .1))
-{
-    if(!group)
-        return;
-    
-    sead::Color4f cyl = wire;
-    cyl.a *= 0.15f;
-    
-    for (int i = 0; i < group->mMaxCount; i++) {
-        al::AreaObj* area = group->mAreas[i];
-        const char* shapeType;
-        al::tryGetAreaObjStringArg(&shapeType, area, "ModelName");
-
-        sead::Vector3f scale = area->mAreaShape->mScale;
-        sead::Vector3f pos;
-        pos.x = area->mAreaMtx.m[0][3];
-        pos.y = area->mAreaMtx.m[1][3];
-        pos.z = area->mAreaMtx.m[2][3];
-        renderer->setModelMatrix(area->mAreaMtx);
-
-        PlayerActorBase* player = rs::getPlayerActor(curScene);
-
-        if (al::isEqualString(shapeType, "AreaCubeBase")) { // origin is at the bottom
-            sead::PrimitiveDrawer::CubeArg shapeAreaSolid(sead::Vector3f(0, (scale.y / 2 * 1000), 0), scale * 1000.0f, solid);
-            sead::PrimitiveDrawer::CubeArg shapeAreaWire(sead::Vector3f(0, (scale.y / 2 * 1000), 0), scale * 1000.0f, wire);
-            renderer->drawCube(shapeAreaSolid);
-            renderer->drawWireCube(shapeAreaWire);
-        }
-
-        if (al::isEqualString(shapeType, "AreaCubeCenter")) {
-            sead::PrimitiveDrawer::CubeArg shapeAreaSolid(sead::Vector3f(0, 0, 0), scale * 1000.0f, solid);
-            sead::PrimitiveDrawer::CubeArg shapeAreaWire(sead::Vector3f(0, 0, 0), scale * 1000.0f, wire);
-            renderer->drawCube(shapeAreaSolid);
-            renderer->drawWireCube(shapeAreaWire);
-        }
-
-        if (al::isEqualString(shapeType, "AreaCubeTop")) {
-            sead::PrimitiveDrawer::CubeArg shapeAreaSolid(sead::Vector3f(0, -(scale.y / 2 * 1000), 0), scale * 1000.0f, solid);
-            sead::PrimitiveDrawer::CubeArg shapeAreaWire(sead::Vector3f(0, -(scale.y / 2 * 1000), 0), scale * 1000.0f, wire);
-            renderer->drawCube(shapeAreaSolid);
-            renderer->drawWireCube(shapeAreaWire);
-        }
-
-        if (al::isEqualString(shapeType, "AreaSphere")) {
-            renderer->drawSphere8x16(sead::Vector3f(0, 0, 0), scale.x * 1000, cyl);
-        }
-        if (al::isEqualString(shapeType, "AreaCylinder")) { // origin is at the bottom
-            renderer->drawCylinder32(sead::Vector3f(0, (scale.y / 2 * 1000), 0), scale.x * 1000, scale.y * 1000, cyl);
-        }
-        if (al::isEqualString(shapeType, "AreaCylinderCenter")) {
-            renderer->drawCylinder32(sead::Vector3f(0, 0, 0), scale.x * 1000, scale.y * 1000, cyl);
-        }
-        if (al::isEqualString(shapeType, "AreaCylinderTop")) {
-            renderer->drawCylinder32(sead::Vector3f(0, -(scale.y / 2 * 1000), 0), scale.x * 1000, scale.y * 1000, cyl);
-        }
-    }
-}
-
 HOOK_DEFINE_TRAMPOLINE(DrawDebugMenu) {
     static void Callback(HakoniwaSequence *thisPtr) {
         Orig(thisPtr);
@@ -886,167 +805,7 @@ HOOK_DEFINE_TRAMPOLINE(DrawDebugMenu) {
             return;
         
         agl::DrawContext* drawContext = thisPtr->getDrawInfo()->mDrawContext;
-
-        sead::Vector3f p1 = {-1.f, -0.85f, 0.f}; // top left
-        sead::Vector3f p2 = {-0.5f, -0.85f, 0.f}; // top right
-        sead::Vector3f p3 = {-1.f, -1.f, 0.f}; // bottom left
-        sead::Vector3f p4 = {-0.5f, -1.f, 0.f}; // bottom right
-        sead::Color4f c = {0.f, 0.f, 0.f, 0.7f};
-
-        agl::utl::DevTools::beginDrawImm(drawContext, sead::Matrix34<float>::ident, sead::Matrix44<float>::ident);
-        agl::utl::DevTools::drawTriangleImm(drawContext, p1, p2, p3, c);
-        agl::utl::DevTools::drawTriangleImm(drawContext, p3, p4, p2, c);
-
-        gTextWriter->beginDraw();
-
-        gTextWriter->setCursorFromTopLeft(sead::Vector2f(10.f, 10.f));
-        gTextWriter->printf("FPS: %d\n", static_cast<int>(round(Application::instance()->mFramework->calcFps())));
-
-        gTextWriter->setCursorFromTopLeft(sead::Vector2f(10.f, 674.f));
-        gTextWriter->setScaleFromFontHeight(19.5f);
-        gTextWriter->printf("Sequence: %s\n", thisPtr->getName().cstr());
-
-        al::Scene* curScene = thisPtr->curScene;
-
-        bool isInGame = curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene");
-        if(isInGame && !strstr(typeid(*al::getCurrentNerve(thisPtr)).name(), "Destroy") && Statics::primitiveDraw) {
-            gTextWriter->printf("Stage: %s\n", GameDataFunction::getCurrentStageName((StageScene*)curScene));
-            gTextWriter->endDraw();
-
-            sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
-            const sead::LookAtCamera* cam = al::getLookAtCamera(curScene, 0);
-            const sead::Projection* proj = al::getProjectionSead(curScene, 0);
-
-            PlayerActorBase* playerBase = rs::getPlayerActor(curScene);
-            PlayerActorHakoniwa* playerHak = nullptr;
-
-            bool isYukimaru = !playerBase->getPlayerInfo();
-            if(!isYukimaru)
-                playerHak = (PlayerActorHakoniwa*)playerBase;
-            
-            sead::Vector3f playerPos = al::getTrans(playerBase);
-
-            renderer->setDrawContext(drawContext);
-            renderer->setCamera(*cam);
-            renderer->setProjection(*proj);
-            renderer->setModelMatrix(sead::Matrix34f::ident);
-
-            renderer->begin();
-
-            // Draw Areas
-            al::AreaObjGroup* curGroup;
-            
-            if(Statics::primitiveDrawIsDeath) {
-                curGroup = curScene->mLiveActorKit->mAreaObjDirector->getAreaObjGroup("DeathArea");
-                drawAreaGroup(curScene, renderer, curGroup, {1.f, 0.f, 0.f, 0.8f}, {1.f, 0.2f, 0.f, 0.01f});
-            }
-
-            if(Statics::primitiveDrawIsStage) {
-                curGroup = curScene->mLiveActorKit->mAreaObjDirector->getAreaObjGroup("ChangeStageArea");
-                drawAreaGroup(curScene, renderer, curGroup, {0.f, 1.f, 0.2f, 0.85f}, {0.f, 0.8f, 0.f, 0.05f});
-            }
-
-            if(Statics::primitiveDrawIsWater) {
-                curGroup = curScene->mLiveActorKit->mAreaObjDirector->getAreaObjGroup("WaterArea");
-                drawAreaGroup(curScene, renderer, curGroup, {0.f, 0.3f, 1.f, 0.85f}, {0.f, 0.f, 0.8f, 0.02f});
-            }
-
-            if(Statics::primitiveDrawIs2D) {
-                curGroup = curScene->mLiveActorKit->mAreaObjDirector->getAreaObjGroup("2DMoveArea");
-                drawAreaGroup(curScene, renderer, curGroup, {1.f, 1.f, 0.f, 0.75f}, {0.6f, 0.6f, 0.f, 0.01f});
-            }
-            
-            //Origin Point
-            renderer->setModelMatrix(sead::Matrix34f::ident);
-            renderer->drawSphere8x16({0.f ,0.f ,0.f}, 30.f, {1.f, 0.f, 0.f, 0.3f});
-
-            // Player Info
-            renderer->drawAxis(playerPos, 150.f);
-            renderer->drawAxis({0.f, 0.f, 0.f}, 400000.f);
-            
-            sead::Vector3f frontTarget;
-            al::calcFrontDir(&frontTarget, playerBase);
-            frontTarget *= 225.f;
-            frontTarget += playerPos;
-            renderer->drawLine(playerPos, frontTarget, {1.f, 1.f, 1.f, 1.f});
-
-            if(playerHak) {
-                // Draw cappy's current position and velocity direction
-                sead::Vector3f capPos = al::getTrans(playerHak->mHackCap);
-
-                renderer->drawSphere4x8(capPos, 12.f, {1.f, 0.3f, 0.3f, 0.4f});
-                sead::Vector3f capVelocity = al::getVelocity(playerHak->mHackCap);
-                capVelocity *= 20.f;
-
-                capVelocity = capPos + capVelocity;
-                renderer->drawLine(capPos, capVelocity, {0.9f, 0.2f, 0.2f, 1.f});
-            }
-
-            // Collision Info
-            if(Statics::primitiveDrawIsCollision) {
-                if(!Statics::primitiveDrawIsCollisionComplex) {
-                    sead::Vector3f rayOrg = playerPos;
-                    rayOrg.y += 30.f;
-                    sead::Vector3f downRay = { 0.f, -500.f, 0.f };
-                    sead::Vector3f frontRay;
-                    al::calcFrontDir(&frontRay, playerBase);
-                    frontRay *= 400.f;
-
-                    al::Triangle downTri;
-                    al::Triangle frontTri;
-
-                    bool isDown = alCollisionUtil::getFirstPolyOnArrow(playerBase, nullptr, &downTri, rayOrg, downRay, nullptr, nullptr);
-                    bool isFront = alCollisionUtil::getFirstPolyOnArrow(playerBase, nullptr, &frontTri, rayOrg, frontRay, nullptr, nullptr);
-
-                    if(isDown)
-                        drawTriangle(renderer, &downTri);
-                    if(isFront)
-                        drawTriangle(renderer, &frontTri);
-                } else {
-                    float checkRange = 450.f;
-                    float checkInterval = 50.f;
-                    sead::Vector3f downRay = { 0.f, -600.f, 0.f };
-
-                    sead::Vector3f frontRay;
-                    al::calcFrontDir(&frontRay, playerBase);
-                    frontRay *= 600.f;
-
-                    sead::Vector3f rightRay = frontRay;
-                    al::rotateVectorDegreeY(&rightRay, 90.f);
-                    
-                    // Calc downward tris
-                    for (float xLoop = -checkRange; xLoop < checkRange; xLoop += checkInterval) {
-                        for (float zLoop = -checkRange; zLoop < checkRange; zLoop += checkInterval) {
-                            sead::Vector3f origin = playerPos;
-                            origin.x += xLoop;
-                            origin.y += 250.f;
-                            origin.z += zLoop;
-
-                            al::Triangle downTri;
-                            bool downFind = alCollisionUtil::getFirstPolyOnArrow(playerBase, nullptr, &downTri, origin, downRay, nullptr, nullptr);
-                            if (downFind)
-                                drawTriangle(renderer, &downTri);
-                        } // Z loop
-                    } //X loop
-
-                    // Calc front tris
-                    for (float relLoop = -checkRange; relLoop < checkRange; relLoop += checkInterval) {
-                        for (float yLoop = -checkRange; yLoop < checkRange; yLoop += checkInterval) {
-                            sead::Vector3f origin = playerPos;
-                            origin += (rightRay * (relLoop / checkRange));
-                            origin.y += yLoop;
-
-                            al::Triangle frontTri;
-                            bool frontFind = alCollisionUtil::getFirstPolyOnArrow(playerBase, nullptr, &frontTri, origin, frontRay, nullptr, nullptr);
-                            if (frontFind)
-                                drawTriangle(renderer, &frontTri);
-                        }
-                    }
-                }
-            }
-
-            renderer->end();
-        }
+        DevGuiPrimitive::instance()->draw(drawContext);
     }
 };
 
