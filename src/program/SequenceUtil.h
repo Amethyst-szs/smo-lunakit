@@ -7,6 +7,7 @@
 #include "game/System/Application.h"
 #include "game/HakoniwaSequence/HakoniwaSequence.h"
 #include "game/StageScene/StageScene.h"
+#include "game/GameData/GameDataHolder.h"
 #include "game/Player/PlayerActorBase.h"
 #include "game/Player/PlayerActorHakoniwa.h"
 
@@ -24,6 +25,9 @@ al::Scene* tryGetScene();
 al::Scene* tryGetScene(HakoniwaSequence* curSequence);
 StageScene* tryGetStageScene();
 StageScene* tryGetStageScene(HakoniwaSequence* curSequence);
+
+GameDataHolder* tryGetGameDataHolder();
+GameDataHolder* tryGetGameDataHolder(HakoniwaSequence* curSequence);
 
 PlayerActorBase* tryGetPlayerActor();
 PlayerActorBase* tryGetPlayerActor(HakoniwaSequence* curSequence);

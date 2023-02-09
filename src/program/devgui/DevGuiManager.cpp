@@ -10,7 +10,7 @@ void DevGuiManager::init(sead::Heap *heap)
     mDevGuiHeap = heap;
     mIsActive = false;
     
-    DevGuiWindowEditor* editorWindow = new (heap) DevGuiWindowEditor("LunaKit Editor", heap);
+    DevGuiWindowEditor* editorWindow = new (heap) DevGuiWindowEditor("LunaKit Param Editor", heap);
     mWindows.pushBack(editorWindow);
 }
 

@@ -59,6 +59,9 @@ namespace rs
 
     bool is2D(IUseDimension const *);
 
+    bool isKidsMode(al::Scene const*);
+    bool isKidsMode(GameDataHolder const*);
+
     void calcGroundNormalOrGravityDir(sead::Vector3f *result, al::LiveActor const *actor, IUsePlayerCollision const *col);
     void calcGroundNormalOrUpDir(sead::Vector3f *result, al::LiveActor const *actor, IUsePlayerCollision const *col);
 

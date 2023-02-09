@@ -11,7 +11,9 @@ public:
 
 protected:
     PlayerHitPointData* mHitData;
-    bool mIsOverrideHealth = false;
+    bool mIsOverride = false;
+    bool mIsKidsMode = false;
+
     bool mIsKillPlayer = false;
     int mTargetHealth = 3;
 };

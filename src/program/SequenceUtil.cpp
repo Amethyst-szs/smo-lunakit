@@ -80,6 +80,22 @@ StageScene* tryGetStageScene(HakoniwaSequence* curSequence)
     return nullptr;
 }
 
+GameDataHolder* tryGetGameDataHolder()
+{
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
+        HakoniwaSequence* gameSequence = (HakoniwaSequence*)curSequence;
+        return gameSequence->mGameDataHolder.mData;
+    }
+
+    return nullptr;
+}
+
+GameDataHolder* tryGetGameDataHolder(HakoniwaSequence* curSequence)
+{
+    return curSequence->mGameDataHolder.mData;
+}
+
 PlayerActorBase* tryGetPlayerActor()
 {
     al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;

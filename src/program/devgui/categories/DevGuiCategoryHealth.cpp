@@ -25,8 +25,9 @@ void DevGuiCategoryHealth::updateCat()
     bool isPlayerDead = PlayerFunction::isPlayerDeadStatus(player);
 
     // Override the player's health if they exist and are alive
-    if(mIsOverrideHealth && !isPlayerDead) {
+    if(mIsOverride && !isPlayerDead) {
         mHitData->mCurrentHit = mTargetHealth;
+        mHitData->mIsKidsMode = mIsKidsMode;
     }
     
     // Try killing the player if the kill button is pressed
@@ -40,11 +41,18 @@ void DevGuiCategoryHealth::updateCat()
 void DevGuiCategoryHealth::updateCatDisplay()
 {
     DevGuiCategoryBase::updateCatDisplay();
-    
-    ImGui::Checkbox("Override Health", &mIsOverrideHealth);
 
-    if(mIsOverrideHealth)
+    if (ImGui::Checkbox("Override Data", &mIsOverride) && mHitData) {
+        mTargetHealth = mHitData->mCurrentHit;
+        mIsKidsMode = mHitData->mIsKidsMode;
+    }
+
+    if(mIsOverride) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Is Kids Mode", &mIsKidsMode);
+
         ImGui::SliderInt("Health", &mTargetHealth, 1, 9);
+    }
     
     if (isInStageScene() && ImGui::Button("Kill Player"))
         mIsKillPlayer = true;
