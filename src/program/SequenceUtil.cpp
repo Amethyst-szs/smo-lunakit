@@ -9,6 +9,8 @@ bool isInStageScene()
 
         return curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene");
     }
+
+    return false;
 }
 
 bool isInStageScene(StageScene* curScene)
@@ -94,6 +96,11 @@ GameDataHolder* tryGetGameDataHolder()
 GameDataHolder* tryGetGameDataHolder(HakoniwaSequence* curSequence)
 {
     return curSequence->mGameDataHolder.mData;
+}
+
+GameDataHolder* tryGetGameDataHolder(StageScene* scene)
+{
+    return scene->mHolder.mData;
 }
 
 PlayerActorBase* tryGetPlayerActor()

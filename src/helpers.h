@@ -3,11 +3,6 @@
 #include "helpers/fsHelper.h"
 #include "helpers/InputHelper.h"
 
-__attribute__((used)) static const char* devWorlds[] = {
-    "DevTestShapesStage",
-    "Entry1"
-};
-
 __attribute__((used)) static const char* bodyNames[] = {
     "Mario",
     "Mario64",

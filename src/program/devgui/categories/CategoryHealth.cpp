@@ -43,7 +43,7 @@ void CategoryHealth::updateCatDisplay()
 {
     CategoryBase::updateCatDisplay();
 
-    if (ImGui::Checkbox("Override Data", &mIsOverride) && mHitData) {
+    if (ImGui::Checkbox("Edit Health", &mIsOverride) && mHitData) {
         mTargetHealth = mHitData->mCurrentHit;
         mIsKidsMode = mHitData->mIsKidsMode;
     }

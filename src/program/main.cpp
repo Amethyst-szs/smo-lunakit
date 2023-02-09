@@ -384,47 +384,6 @@ void drawDebugWindow() {
                 ImGui::BulletText("Trigger - ZR");
         }
 
-        if(ImGui::CollapsingHeader("Outfit Editor")) {
-            ImGui::Checkbox("Override Player Outfit", &Statics::isOverrideOutfit);
-            if(Statics::isOverrideOutfit) {
-                // Select player body
-                if(ImGui::BeginCombo("Body", Statics::outfitOverrideBodyName)) {
-                    for(int n = 0; n < IM_ARRAYSIZE(bodyNames); n++) {
-                        bool is_selected = (Statics::outfitOverrideBodyName == bodyNames[n]); // You can store your selection however you want, outside or inside your objects
-                        if (ImGui::Selectable(bodyNames[n], is_selected))
-                            Statics::outfitOverrideBodyName = bodyNames[n];
-                        if (is_selected)
-                            ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-                    }
-
-                    ImGui::EndCombo();
-                }
-
-                //Select player cap
-                if(ImGui::BeginCombo("Cap", Statics::outfitOverrideCapName)) {
-                    for(int n = 0; n < IM_ARRAYSIZE(capNames); n++) {
-                        bool is_selected = (Statics::outfitOverrideCapName == capNames[n]); // You can store your selection however you want, outside or inside your objects
-                        if (ImGui::Selectable(capNames[n], is_selected))
-                            Statics::outfitOverrideCapName = capNames[n];
-                        if (is_selected)
-                            ImGui::SetItemDefaultFocus();   // You may set the initial focus when opening the combo (scrolling + for keyboard navigation support)
-                    }
-
-                    ImGui::EndCombo();
-                }
-                
-                if(isInGame) {
-                    if(ImGui::Button("Reload Scene")) {
-                        StageScene *stageScene = (StageScene *) gameSeq->curScene;
-                        ChangeStageInfo stageInfo(gameSeq->mGameDataHolder.mData, "start",
-                            GameDataFunction::getCurrentStageName(stageScene), false, -1, ChangeStageInfo::SubScenarioType::UNK);
-                            
-                        GameDataFunction::tryChangeNextStage(gameSeq->mGameDataHolder, &stageInfo);
-                    }
-                }
-            }
-        }
-
         if (ImGui::CollapsingHeader("Game Progress Editor")) {
             GameProgressData* progressData = gameSeq->mGameDataHolder.mData->mGameDataFile->mProgressData;
             if(ImGui::TreeNode("Waterfall World Progress")) {
@@ -775,12 +734,6 @@ HOOK_DEFINE_TRAMPOLINE(DrawDebugMenu) {
         Orig(thisPtr);
 
         DevGuiManager::instance()->update();
-
-        if(Statics::isOverrideOutfit) {
-            GameDataFile* gameFile = thisPtr->mGameDataHolder.mData->mGameDataFile;
-            gameFile->mBodyName = Statics::outfitOverrideBodyName;
-            gameFile->mCapName = Statics::outfitOverrideCapName;
-        }
 
         if(!DevGuiManager::instance()->isMenuActive())
             return;

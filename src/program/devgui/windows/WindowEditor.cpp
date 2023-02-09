@@ -10,13 +10,17 @@ WindowEditor::WindowEditor(const char* winName, sead::Heap* heap)
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
 
+    // Primitive renderer category
+    CategoryPrimitive* primitiveCat = new (heap) CategoryPrimitive("Prims", "Customize primitive rendering");
+    mCategories.pushBack(primitiveCat);
+
     // Player health edtior category
     CategoryHealth* healthCat = new (heap) CategoryHealth("HP", "Edit the player's health");
     mCategories.pushBack(healthCat);
 
-    // Primitive renderer category
-    CategoryPrimitive* primitiveCat = new (heap) CategoryPrimitive("Prims", "Customize primitive rendering");
-    mCategories.pushBack(primitiveCat);
+    // Outfit category
+    CategoryOutfit* outfitCat = new (heap) CategoryOutfit("Outfit", "Change player's outfit quickly");
+    mCategories.pushBack(outfitCat);
 }
 
 void WindowEditor::updateWin()
