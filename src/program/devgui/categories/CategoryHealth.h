@@ -1,10 +1,10 @@
 #pragma once
 
-#include "program/devgui/categories/DevGuiCategoryBase.h"
+#include "program/devgui/categories/CategoryBase.h"
 
-class DevGuiCategoryHealth : public DevGuiCategoryBase {
+class CategoryHealth : public CategoryBase {
 public:
-    DevGuiCategoryHealth(const char* catName, const char* catDesc);
+    CategoryHealth(const char* catName, const char* catDesc);
 
     void updateCat() override;
     void updateCatDisplay() override;

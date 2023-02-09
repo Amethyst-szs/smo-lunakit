@@ -1,11 +1,11 @@
 #pragma once
 
-#include "program/devgui/categories/DevGuiCategoryBase.h"
 #include "program/devgui/DevGuiPrimitive.h"
+#include "program/devgui/categories/CategoryBase.h"
 
-class DevGuiCategoryPrimitive : public DevGuiCategoryBase {
+class CategoryPrimitive : public CategoryBase {
 public:
-    DevGuiCategoryPrimitive(const char* catName, const char* catDesc);
+    CategoryPrimitive(const char* catName, const char* catDesc);
 
     /*
     updateCat is not implemented here because all functionality is handled by singleton DevGuiPrimitive

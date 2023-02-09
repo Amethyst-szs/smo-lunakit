@@ -1,9 +1,9 @@
-#include "program/devgui/windows/DevGuiWindowBase.h"
-#include "program/devgui/categories/DevGuiCategoryBase.h"
+#include "program/devgui/windows/WindowBase.h"
+#include "program/devgui/categories/CategoryBase.h"
 
 #include "types.h"
 
-DevGuiWindowBase::DevGuiWindowBase(const char* winName, sead::Heap* heap)
+WindowBase::WindowBase(const char* winName, sead::Heap* heap)
 {
     // Preare PtrArray
     mCategories.allocBuffer(0x10, heap);
@@ -13,17 +13,17 @@ DevGuiWindowBase::DevGuiWindowBase(const char* winName, sead::Heap* heap)
     mDevGuiHeap = heap;
 }
 
-void DevGuiWindowBase::updateWin()
+void WindowBase::updateWin()
 {
-    if(mCategories.size() > 0) {
-        for(int i = 0; i < mCategories.size(); i++) {
+    if (mCategories.size() > 0) {
+        for (int i = 0; i < mCategories.size(); i++) {
             auto* entry = mCategories.at(i);
             entry->updateCat();
         }
     }
 }
 
-void DevGuiWindowBase::updateWinDisplay()
+void WindowBase::updateWinDisplay()
 {
     ImGui::Begin(mWinName, NULL, mConfig.mWindowFlags);
 
@@ -33,17 +33,16 @@ void DevGuiWindowBase::updateWinDisplay()
     ImGui::SetWindowFontScale(mConfig.mFontSize);
 
     // If this window contains categories, load in the tabs
-    if(mCategories.size() > 0) {
+    if (mCategories.size() > 0) {
         if (ImGui::BeginTabBar("Categories", mConfig.mTabFlags)) {
 
-            for(int i = 0; i < mCategories.size(); i++) {
+            for (int i = 0; i < mCategories.size(); i++) {
                 auto* entry = mCategories.at(i);
 
                 if (ImGui::BeginTabItem(entry->getCategoryName(), NULL, mConfig.mTabItemFlags)) {
                     entry->updateCatDisplay();
                     ImGui::EndTabItem();
                 }
-
             }
 
             ImGui::EndTabBar();
@@ -53,10 +52,10 @@ void DevGuiWindowBase::updateWinDisplay()
     ImGui::End();
 }
 
-void DevGuiWindowBase::configImGuiStyle()
+void WindowBase::configImGuiStyle()
 {
     ImGuiStyle& style = ImGui::GetStyle();
-    
+
     style.Alpha = 1.0f;
     style.WindowRounding = 7.0f;
     style.FrameRounding = 5.0f;

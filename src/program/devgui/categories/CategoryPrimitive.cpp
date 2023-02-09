@@ -1,15 +1,18 @@
-#include "program/devgui/categories/DevGuiCategoryPrimitive.h"
+#include "program/devgui/categories/CategoryPrimitive.h"
 
-DevGuiCategoryPrimitive::DevGuiCategoryPrimitive(const char* catName, const char* catDesc) : DevGuiCategoryBase(catName, catDesc) { }
+CategoryPrimitive::CategoryPrimitive(const char* catName, const char* catDesc)
+    : CategoryBase(catName, catDesc)
+{
+}
 
-void DevGuiCategoryPrimitive::updateCatDisplay()
+void CategoryPrimitive::updateCatDisplay()
 {
     DevGuiPrimitive* prim = DevGuiPrimitive::instance();
 
     ImGui::Checkbox("Enable Primitive Rendering", &prim->mIsDrawPrimitives);
 
-    if(prim->mIsDrawPrimitives && ImGui::BeginTabBar("Prim Types")) {
-        
+    if (prim->mIsDrawPrimitives && ImGui::BeginTabBar("Prim Types")) {
+
         if (ImGui::BeginTabItem("Player")) {
             ImGui::Checkbox("World Axis", &prim->mSettingsPlayer.mDrawWorldAxis);
             ImGui::SameLine();
@@ -24,7 +27,7 @@ void DevGuiCategoryPrimitive::updateCatDisplay()
 
         if (ImGui::BeginTabItem("Colliders")) {
             ImGui::Checkbox("Triangles", &prim->mSettingsTriangle.mDrawTriangle);
-            if(prim->mSettingsTriangle.mDrawTriangle) {
+            if (prim->mSettingsTriangle.mDrawTriangle) {
                 ImGui::SameLine();
                 ImGui::Checkbox("Complex (LAG)", &prim->mSettingsTriangle.mDrawComplexTriangle);
             }
@@ -35,7 +38,7 @@ void DevGuiCategoryPrimitive::updateCatDisplay()
         if (ImGui::BeginTabItem("Areas")) {
             ImGui::Checkbox("Areas", &prim->mSettingsArea.mDrawAreas);
 
-            if(prim->mSettingsArea.mDrawAreas) {
+            if (prim->mSettingsArea.mDrawAreas) {
                 ImGui::Checkbox("Stage", &prim->mSettingsArea.mDrawAreaStage);
                 ImGui::SameLine();
                 ImGui::Checkbox("Death", &prim->mSettingsArea.mDrawAreaDeath);

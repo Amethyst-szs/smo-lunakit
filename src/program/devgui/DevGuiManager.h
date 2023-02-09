@@ -12,8 +12,8 @@
 #include "heap/seadHeap.h"
 
 #include "program/SequenceUtil.h"
-#include "program/devgui/windows/DevGuiWindowBase.h"
-#include "program/devgui/windows/DevGuiWindowEditor.h"
+#include "program/devgui/windows/WindowBase.h"
+#include "program/devgui/windows/WindowEditor.h"
 
 class DevGuiManager {
     SEAD_SINGLETON_DISPOSER(DevGuiManager);
@@ -38,5 +38,5 @@ private:
     bool mIsActive = false;
     bool mIsFirstStep = false;
 
-    sead::PtrArray<DevGuiWindowBase> mWindows;
+    sead::PtrArray<WindowBase> mWindows;
 };

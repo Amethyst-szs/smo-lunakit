@@ -384,25 +384,6 @@ void drawDebugWindow() {
                 ImGui::BulletText("Trigger - ZR");
         }
 
-        if (ImGui::CollapsingHeader("PlayerHitPointData Editor")) {
-            static bool isOverrideHealth = false;
-            static int playerHealth = 3;
-            ImGui::Checkbox("Override Health", &isOverrideHealth);
-
-            if(isOverrideHealth) {
-                ImGui::SliderInt("Health", &playerHealth, 1, 9);
-                gameSeq->mGameDataHolder.mData->mGameDataFile->mPlayerHitPointData->mCurrentHit = playerHealth;
-            }
-            
-            if(isInGame) {
-                if (ImGui::Button("Kill Player")) {
-                    StageScene *stageScene = (StageScene *) gameSeq->curScene;
-                    PlayerActorBase *playerBase = rs::getPlayerActor(stageScene);
-                    PlayerHelper::killPlayer(playerBase);
-                }
-            }
-        }
-
         if(ImGui::CollapsingHeader("Outfit Editor")) {
             ImGui::Checkbox("Override Player Outfit", &Statics::isOverrideOutfit);
             if(Statics::isOverrideOutfit) {

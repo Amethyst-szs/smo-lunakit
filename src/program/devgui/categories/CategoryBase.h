@@ -1,11 +1,11 @@
 #pragma once
 
-#include "program/SequenceUtil.h"
 #include "imgui.h"
+#include "program/SequenceUtil.h"
 
-class DevGuiCategoryBase {
+class CategoryBase {
 public:
-    DevGuiCategoryBase(const char* catName, const char* catDesc);
+    CategoryBase(const char* catName, const char* catDesc);
 
     virtual void updateCat();
     virtual void updateCatDisplay();

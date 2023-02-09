@@ -10,11 +10,11 @@
 
 #include "program/SequenceUtil.h"
 #include "program/devgui/DevGuiWindowConfig.h"
-#include "program/devgui/categories/DevGuiCategoryBase.h"
+#include "program/devgui/categories/CategoryBase.h"
 
-class DevGuiWindowBase {
+class WindowBase {
 public:
-    DevGuiWindowBase(const char* winName, sead::Heap* heap);
+    WindowBase(const char* winName, sead::Heap* heap);
 
     virtual void updateWin();
     virtual void updateWinDisplay();
@@ -29,5 +29,5 @@ protected:
     const char* mWinName = "null";
 
     int mCategoryIdx = 0;
-    sead::PtrArray<DevGuiCategoryBase> mCategories;
+    sead::PtrArray<CategoryBase> mCategories;
 };
