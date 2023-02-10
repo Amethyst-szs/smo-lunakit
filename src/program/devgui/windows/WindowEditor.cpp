@@ -21,6 +21,10 @@ WindowEditor::WindowEditor(const char* winName, sead::Heap* heap)
     // Outfit category
     CategoryOutfit* outfitCat = new (heap) CategoryOutfit("Outfit", "Change player's outfit quickly");
     mCategories.pushBack(outfitCat);
+
+    // Home ship (Odyssey ship) category
+    CategoryHomeShip* homeShipCat = new (heap) CategoryHomeShip("Ship", "Edit Odyssey ship progression");
+    mCategories.pushBack(homeShipCat);
 }
 
 void WindowEditor::updateWin()

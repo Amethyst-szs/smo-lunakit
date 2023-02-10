@@ -9,6 +9,7 @@
 #include "program/devgui/categories/CategoryHealth.h"
 #include "program/devgui/categories/CategoryPrimitive.h"
 #include "program/devgui/categories/CategoryOutfit.h"
+#include "program/devgui/categories/CategoryHomeShip.h"
 
 class WindowEditor : public WindowBase {
 public:

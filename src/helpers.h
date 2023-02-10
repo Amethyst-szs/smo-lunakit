@@ -3,6 +3,23 @@
 #include "helpers/fsHelper.h"
 #include "helpers/InputHelper.h"
 
+__attribute__((used)) static const char* updateStatusList[] = {
+    "Broken",
+    "Acivated",
+    "First Launch",
+    "Cloud Landing",
+    "Crashed in Lost",
+    "Repaired in Lost",
+    "Crashed in Ruined",
+    "Final"
+};
+
+__attribute__((used)) static const char* updateWaterfallList[] = {
+    "Arrival",
+    "First Moon",
+    "Found Home Ship"
+};
+
 __attribute__((used)) static const char* bodyNames[] = {
     "Mario",
     "Mario64",
