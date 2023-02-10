@@ -47,9 +47,9 @@ void WindowBase::updateWinDisplay()
 
             ImGui::EndTabBar();
         }
+        
+        ImGui::End();
     }
-
-    ImGui::End();
 }
 
 void WindowBase::configImGuiStyle()
@@ -57,13 +57,11 @@ void WindowBase::configImGuiStyle()
     ImGuiStyle& style = ImGui::GetStyle();
 
     style.Alpha = 1.0f;
-    style.WindowRounding = 7.0f;
-    style.FrameRounding = 5.0f;
     style.ScrollbarSize = 18.f;
     style.ScrollbarRounding = 15.f;
     style.GrabRounding = 15.f;
     style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
-    style.MouseCursorScale = 1.2f;
+    style.MouseCursorScale = 1.3f;
 
     // style.Colors[ImGuiCol_Text]                  = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
     // style.Colors[ImGuiCol_TextDisabled]          = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);

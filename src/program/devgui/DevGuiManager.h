@@ -16,6 +16,10 @@
 #include "program/devgui/windows/WindowBase.h"
 #include "program/devgui/windows/WindowEditor.h"
 #include "program/devgui/windows/WindowInfo.h"
+#include "program/devgui/windows/WindowFPS.h"
+
+#include "program/devgui/homemenu/HomeMenuBase.h"
+#include "program/devgui/homemenu/HomeMenuDebugger.h"
 
 class DevGuiManager {
     SEAD_SINGLETON_DISPOSER(DevGuiManager);
@@ -41,4 +45,5 @@ private:
     bool mIsFirstStep = false;
 
     sead::PtrArray<WindowBase> mWindows;
+    sead::PtrArray<HomeMenuBase> mHomeMenuTabs;
 };

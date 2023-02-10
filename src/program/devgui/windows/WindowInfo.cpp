@@ -4,8 +4,8 @@ WindowInfo::WindowInfo(const char* winName, sead::Heap* heap)
     : WindowBase(winName, heap)
 {
     // Setup window config
-    mConfig.mTrans = ImVec2(1280 / 3, 0);
-    mConfig.mSize = ImVec2(1280 / 3, 220);
+    mConfig.mTrans = ImVec2(427, 19);
+    mConfig.mSize = ImVec2(427, 220);
 
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;

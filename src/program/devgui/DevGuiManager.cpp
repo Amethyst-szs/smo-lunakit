@@ -7,14 +7,23 @@ DevGuiManager::~DevGuiManager() = default;
 void DevGuiManager::init(sead::Heap* heap)
 {
     mWindows.allocBuffer(0x10, heap);
+    mHomeMenuTabs.allocBuffer(0x10, heap);
     mDevGuiHeap = heap;
     mIsActive = false;
-
+    
+    // Create all display windows
     WindowEditor* editorWindow = new (heap) WindowEditor("LunaKit Param Editor", heap);
     mWindows.pushBack(editorWindow);
 
     WindowInfo* infoWindow = new (heap) WindowInfo("LunaKit Info Viewer", heap);
     mWindows.pushBack(infoWindow);
+
+    WindowFPS* fpsWindow = new (heap) WindowFPS("FPS Window", heap);
+    mWindows.pushBack(fpsWindow);
+
+    // Create all home menu tabs
+    HomeMenuDebugger* homeDebug = new (heap) HomeMenuDebugger("Debug", heap);
+    mHomeMenuTabs.pushBack(homeDebug);
 }
 
 void DevGuiManager::update()
@@ -49,6 +58,24 @@ void DevGuiManager::updateDisplay()
         auto* entry = mWindows.at(i);
         entry->updateWinDisplay();
     }
+    
+    // Load and draw all home menu tabs
+    if (ImGui::BeginMainMenuBar()) {
+        for (int i = 0; i < mHomeMenuTabs.size(); i++) {
+            auto* entry = mHomeMenuTabs.at(i);
+            if (ImGui::BeginMenu(entry->getMenuName())) {
+                entry->updateMenu();
+
+                ImGui::EndMenu();
+            }
+        }
+
+        ImGui::EndMainMenuBar();
+    }
+
+    // Draw the demo window if the settings class has it enabled
+    if(DevGuiSettings::instance()->mIsDisplayImGuiDemo)
+        ImGui::ShowDemoWindow();
 
     // Reset the first step flag when complete!
     if (mIsFirstStep)

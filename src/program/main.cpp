@@ -320,26 +320,6 @@ void drawDebugWindow() {
 
         if(ImGui::CollapsingHeader("Memory Info")) {
             ImGui::SetWindowFontScale(1.2f);
-
-            // Draw FPS Graph
-            float curFPS = Application::instance()->mFramework->calcFps();
-            
-            static float values[250] = {};
-            static int values_offset = 0;
-            static double refresh_time = 0.0;
-            if (refresh_time == 0.0)
-                refresh_time = ImGui::GetTime();
-
-            while (refresh_time < ImGui::GetTime()) {
-                values[values_offset] = curFPS;
-                values_offset = (values_offset + 1) % IM_ARRAYSIZE(values);
-                refresh_time += 1.0f / 15.0f;
-            }
-
-            char overlay[16];
-            sprintf(overlay, "%.00f FPS", curFPS);
-            ImGui::PlotLines("FPS", values, IM_ARRAYSIZE(values), values_offset, overlay, 0.0f, 60.0f, ImVec2(0, 40.0f));
-
             if(isInGame) {
                 al::LiveActorGroup* actors = curScene->mLiveActorKit->mLiveActorGroup2;
                 ImGui::BulletText("Actor Count %i / %i", actors->mActorCount, actors->mMaxActorCount);
@@ -695,6 +675,7 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
         }
 
         DevGuiManager::createInstance(curHeap);
+        DevGuiSettings::createInstance(curHeap);
         DevGuiPrimitive::createInstance(curHeap);
 
         DevGuiManager::instance()->init(curHeap);
