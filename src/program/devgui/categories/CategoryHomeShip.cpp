@@ -53,7 +53,7 @@ void CategoryHomeShip::updateCatDisplay()
             if(mUpdateWorldIdx == -1)
                 mUpdateWorldIdx = progress->mUnlockWorldNum;
 
-            drawSelectionIndex("Unlocked Worlds", &mUpdateWorldIdx, &mIsUpdateWorld, ImVec2(1, 17));
+            drawSelectionIndex("World Count", &mUpdateWorldIdx, &mIsUpdateWorld, ImVec2(1, 17));
 
             ImGui::EndTabItem();
         }

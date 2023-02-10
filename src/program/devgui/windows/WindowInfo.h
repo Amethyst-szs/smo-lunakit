@@ -1,0 +1,17 @@
+#pragma once
+
+#include "imgui.h"
+
+#include "program/devgui/DevGuiWindowConfig.h"
+#include "program/devgui/windows/WindowBase.h"
+
+#include "program/devgui/categories/CategoryBase.h"
+
+class WindowInfo : public WindowBase {
+public:
+    WindowInfo(const char* winName, sead::Heap* heap);
+
+    void updateWin() override;
+    void updateWinDisplay() override;
+    void configImGuiStyle() override;
+};

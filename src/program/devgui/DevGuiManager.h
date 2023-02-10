@@ -12,8 +12,10 @@
 #include "heap/seadHeap.h"
 
 #include "program/SequenceUtil.h"
+
 #include "program/devgui/windows/WindowBase.h"
 #include "program/devgui/windows/WindowEditor.h"
+#include "program/devgui/windows/WindowInfo.h"
 
 class DevGuiManager {
     SEAD_SINGLETON_DISPOSER(DevGuiManager);

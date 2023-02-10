@@ -12,6 +12,9 @@ void DevGuiManager::init(sead::Heap* heap)
 
     WindowEditor* editorWindow = new (heap) WindowEditor("LunaKit Param Editor", heap);
     mWindows.pushBack(editorWindow);
+
+    WindowInfo* infoWindow = new (heap) WindowInfo("LunaKit Info Viewer", heap);
+    mWindows.pushBack(infoWindow);
 }
 
 void DevGuiManager::update()
