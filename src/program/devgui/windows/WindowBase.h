@@ -8,7 +8,7 @@
 #include "heap/seadHeap.h"
 #include "math/seadVector.h"
 
-#include "program/SequenceUtil.h"
+#include "program/GetterUtil.h"
 #include "program/devgui/DevGuiWindowConfig.h"
 #include "program/devgui/categories/CategoryBase.h"
 

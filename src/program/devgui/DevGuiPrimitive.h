@@ -1,6 +1,6 @@
 #pragma once
 
-#include "program/SequenceUtil.h"
+#include "program/GetterUtil.h"
 
 #include "al/collision/alCollisionUtil.h"
 #include "al/scene/Scene.h"
@@ -41,7 +41,7 @@ public:
     void drawPlayerCategory();
     void drawColliderCategory();
     void drawAreaCategory();
-    
+
     bool mIsDrawPrimitives = true;
     PrimitivePlayerSettings mSettingsPlayer;
     PrimitiveTriangleSettings mSettingsTriangle;

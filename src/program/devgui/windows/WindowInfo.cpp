@@ -12,8 +12,8 @@ WindowInfo::WindowInfo(const char* winName, sead::Heap* heap)
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
 
     // Template category
-    CategoryBase* tempCat = new (heap) CategoryBase("Placeholder", "Pizza Balls");
-    mCategories.pushBack(tempCat);
+    CategoryInfPlayer* playerCat = new (heap) CategoryInfPlayer("Player", "Player Information");
+    mCategories.pushBack(playerCat);
 }
 
 void WindowInfo::updateWin()

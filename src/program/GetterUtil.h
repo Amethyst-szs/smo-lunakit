@@ -2,6 +2,11 @@
 
 #include "al/sequence/Sequence.h"
 #include "al/scene/Scene.h"
+#include "al/LiveActor/LiveActor.h"
+#include "al/nerve/Nerve.h"
+#include "al/nerve/NerveKeeper.h"
+#include "al/nerve/NerveStateBase.h"
+#include "al/nerve/NerveStateCtrl.h"
 
 #include "game/System/GameSystem.h"
 #include "game/System/Application.h"
@@ -12,6 +17,8 @@
 #include "game/Player/PlayerActorHakoniwa.h"
 
 #include "rs/util.hpp"
+
+#include <cxxabi.h>
 
 // Is checks
 bool isInStageScene();

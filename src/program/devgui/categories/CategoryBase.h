@@ -1,7 +1,7 @@
 #pragma once
 
 #include "imgui.h"
-#include "program/SequenceUtil.h"
+#include "program/GetterUtil.h"
 
 class CategoryBase {
 public:

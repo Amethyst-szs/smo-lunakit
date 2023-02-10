@@ -18,8 +18,6 @@ void DevGuiPrimitive::draw(agl::DrawContext* drawContext)
     PlayerActorBase* player = tryGetPlayerActor(curScene);
     if(!player)
         return;
-    
-    sead::Vector3f* playerPos = al::getTransPtr(player);
 
     // Get all important elements for running the primitive renderer
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
@@ -108,18 +106,24 @@ void DevGuiPrimitive::drawAreaCategory()
 
 void DevGuiPrimitive::drawAreaGroup(const char* areaName, sead::Color4f wire, sead::Color4f solid)
 {
-    al::Scene* scene = tryGetScene();
+    StageScene* scene = tryGetStageScene();
+    if(!scene)
+        return;
+    
     PlayerActorBase* player = tryGetPlayerActor(scene);
-    if(!scene || !player)
+    if(!player || !isInStageScene(scene))
+        return;
+
+    al::AreaObjGroup* group = scene->mLiveActorKit->mAreaObjDirector->getAreaObjGroup(areaName);
+    if(group->mCurCount == 0)
         return;
 
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
-    al::AreaObjGroup* group = scene->mLiveActorKit->mAreaObjDirector->getAreaObjGroup(areaName);
     
     sead::Color4f cyl = wire;
     cyl.a *= 0.13f;
     
-    for (int i = 0; i < group->mMaxCount; i++) {
+    for (int i = 0; i < group->mCurCount; i++) {
         al::AreaObj* area = group->mAreas[i];
         const char* shapeType;
         al::tryGetAreaObjStringArg(&shapeType, area, "ModelName");

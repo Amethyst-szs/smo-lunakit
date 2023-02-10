@@ -15,7 +15,7 @@ namespace al
 
         void tryChangeNerve();
         void setNerve(const al::Nerve *);
-        const al::Nerve* getCurrentNerve() const;
+        al::Nerve* getCurrentNerve() const;
 
         al::IUseNerve* mParent; // _0
         const al::Nerve* _8;

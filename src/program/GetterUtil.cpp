@@ -1,4 +1,4 @@
-#include "program/SequenceUtil.h"
+#include "program/GetterUtil.h"
 
 bool isInStageScene()
 {
@@ -71,7 +71,6 @@ StageScene* tryGetStageScene()
     return nullptr;
 }
 
-
 StageScene* tryGetStageScene(HakoniwaSequence* curSequence)
 {
     auto curScene = curSequence->curScene;
@@ -112,7 +111,7 @@ PlayerActorBase* tryGetPlayerActor()
 
         if (curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene")) {
             StageScene* stageScene = (StageScene*)gameSeq->curScene;
-            PlayerActorBase *playerBase = rs::getPlayerActor(stageScene);
+            PlayerActorBase* playerBase = rs::getPlayerActor(stageScene);
             return playerBase;
         }
     }
@@ -126,7 +125,7 @@ PlayerActorBase* tryGetPlayerActor(HakoniwaSequence* curSequence)
 
     if (curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene")) {
         StageScene* stageScene = (StageScene*)curSequence->curScene;
-        PlayerActorBase *playerBase = rs::getPlayerActor(stageScene);
+        PlayerActorBase* playerBase = rs::getPlayerActor(stageScene);
         return playerBase;
     }
 
@@ -135,7 +134,7 @@ PlayerActorBase* tryGetPlayerActor(HakoniwaSequence* curSequence)
 
 PlayerActorBase* tryGetPlayerActor(al::Scene* scene)
 {
-    PlayerActorBase *playerBase = rs::getPlayerActor(scene);
+    PlayerActorBase* playerBase = rs::getPlayerActor(scene);
     return playerBase;
 }
 
@@ -148,11 +147,11 @@ PlayerActorHakoniwa* tryGetPlayerActorHakoniwa()
 
         if (curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene")) {
             StageScene* stageScene = (StageScene*)gameSeq->curScene;
-            PlayerActorBase *playerBase = rs::getPlayerActor(stageScene);
+            PlayerActorBase* playerBase = rs::getPlayerActor(stageScene);
 
             bool isYukimaru = !playerBase->getPlayerInfo();
 
-            if(!isYukimaru)
+            if (!isYukimaru)
                 return (PlayerActorHakoniwa*)playerBase;
         }
     }
@@ -166,11 +165,11 @@ PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(HakoniwaSequence* curSequence)
 
     if (curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene")) {
         StageScene* stageScene = (StageScene*)curSequence->curScene;
-        PlayerActorBase *playerBase = rs::getPlayerActor(stageScene);
+        PlayerActorBase* playerBase = rs::getPlayerActor(stageScene);
 
         bool isYukimaru = !playerBase->getPlayerInfo();
 
-        if(!isYukimaru)
+        if (!isYukimaru)
             return (PlayerActorHakoniwa*)playerBase;
     }
 
@@ -179,10 +178,10 @@ PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(HakoniwaSequence* curSequence)
 
 PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(StageScene* scene)
 {
-    PlayerActorBase *playerBase = rs::getPlayerActor(scene);
+    PlayerActorBase* playerBase = rs::getPlayerActor(scene);
     bool isYukimaru = !playerBase->getPlayerInfo();
 
-    if(!isYukimaru)
+    if (!isYukimaru)
         return (PlayerActorHakoniwa*)playerBase;
 
     return nullptr;

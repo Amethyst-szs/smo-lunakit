@@ -45,7 +45,7 @@
 
 #include "statics.h"
 
-#include "program/SequenceUtil.h"
+#include "program/GetterUtil.h"
 #include "program/devgui/DevGuiManager.h"
 #include "program/devgui/DevGuiPrimitive.h"
 
