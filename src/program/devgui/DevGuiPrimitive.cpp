@@ -115,7 +115,7 @@ void DevGuiPrimitive::drawAreaGroup(const char* areaName, sead::Color4f wire, se
         return;
 
     al::AreaObjGroup* group = scene->mLiveActorKit->mAreaObjDirector->getAreaObjGroup(areaName);
-    if(group->mCurCount == 0)
+    if(!group)
         return;
 
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
