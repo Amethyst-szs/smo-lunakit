@@ -3,8 +3,8 @@
 #include "game/player/PlayerFunction.h"
 #include "helpers/PlayerHelper.h"
 
-CategoryHealth::CategoryHealth(const char* catName, const char* catDesc)
-    : CategoryBase(catName, catDesc)
+CategoryHealth::CategoryHealth(const char* catName, const char* catDesc, sead::Heap* heap)
+    : CategoryBase(catName, catDesc, heap)
 {
 }
 

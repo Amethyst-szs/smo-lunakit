@@ -12,19 +12,19 @@ WindowEditor::WindowEditor(const char* winName, sead::Heap* heap)
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
 
     // Primitive renderer category
-    CategoryPrimitive* primitiveCat = new (heap) CategoryPrimitive("Prims", "Customize primitive rendering");
+    CategoryPrimitive* primitiveCat = new (heap) CategoryPrimitive("Prims", "Customize primitive rendering", heap);
     mCategories.pushBack(primitiveCat);
 
     // Player health edtior category
-    CategoryHealth* healthCat = new (heap) CategoryHealth("HP", "Edit the player's health");
+    CategoryHealth* healthCat = new (heap) CategoryHealth("HP", "Edit the player's health", heap);
     mCategories.pushBack(healthCat);
 
     // Outfit category
-    CategoryOutfit* outfitCat = new (heap) CategoryOutfit("Outfit", "Change player's outfit quickly");
+    CategoryOutfit* outfitCat = new (heap) CategoryOutfit("Outfit", "Change player's outfit quickly", heap);
     mCategories.pushBack(outfitCat);
 
     // Home ship (Odyssey ship) category
-    CategoryHomeShip* homeShipCat = new (heap) CategoryHomeShip("Ship", "Edit Odyssey ship progression");
+    CategoryHomeShip* homeShipCat = new (heap) CategoryHomeShip("Ship", "Edit Odyssey ship progression", heap);
     mCategories.pushBack(homeShipCat);
 }
 

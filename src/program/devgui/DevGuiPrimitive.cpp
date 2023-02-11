@@ -10,8 +10,8 @@ void DevGuiPrimitive::draw(agl::DrawContext* drawContext)
         return;
 
     // Get and safety check the StageScene
-    StageScene* curScene = tryGetStageScene();
-    if(!isInStageScene(curScene) || strstr(typeid(*al::getCurrentNerve(tryGetHakoniwaSequence())).name(), "Destroy"))
+    al::Scene* curScene = tryGetScene();
+    if(!isInScene(curScene) || strstr(typeid(*al::getCurrentNerve(tryGetHakoniwaSequence())).name(), "Destroy"))
         return; // Scene does not exist or is unsafe, return
     
     // Get and check the PlayerActorBase
@@ -106,12 +106,12 @@ void DevGuiPrimitive::drawAreaCategory()
 
 void DevGuiPrimitive::drawAreaGroup(const char* areaName, sead::Color4f wire, sead::Color4f solid)
 {
-    StageScene* scene = tryGetStageScene();
-    if(!scene)
+    al::Scene* scene = tryGetScene();
+    if(!isInScene(scene))
         return;
     
     PlayerActorBase* player = tryGetPlayerActor(scene);
-    if(!player || !isInStageScene(scene))
+    if(!player)
         return;
 
     al::AreaObjGroup* group = scene->mLiveActorKit->mAreaObjDirector->getAreaObjGroup(areaName);

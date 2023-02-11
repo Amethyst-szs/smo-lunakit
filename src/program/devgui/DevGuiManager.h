@@ -9,18 +9,21 @@
 
 #include "container/seadPtrArray.h"
 #include "heap/seadDisposer.h"
+#include "heap/seadExpHeap.h"
 #include "heap/seadHeap.h"
+#include "heap/seadHeapMgr.h"
 
 #include "program/GetterUtil.h"
 
 #include "program/devgui/windows/WindowBase.h"
 #include "program/devgui/windows/WindowEditor.h"
-#include "program/devgui/windows/WindowFPS.h"
 #include "program/devgui/windows/WindowInfo.h"
-
+#include "program/devgui/windows/WindowMemoryManage.h"
+#include "program/devgui/windows/WindowFPS.h"
 
 #include "program/devgui/homemenu/HomeMenuBase.h"
 #include "program/devgui/homemenu/HomeMenuDebugger.h"
+#include "program/devgui/homemenu/HomeMenuCredits.h"
 
 class DevGuiManager {
     SEAD_SINGLETON_DISPOSER(DevGuiManager);

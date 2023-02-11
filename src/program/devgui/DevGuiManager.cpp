@@ -6,24 +6,33 @@ DevGuiManager::~DevGuiManager() = default;
 
 void DevGuiManager::init(sead::Heap* heap)
 {
-    mWindows.allocBuffer(0x10, heap);
-    mHomeMenuTabs.allocBuffer(0x10, heap);
     mDevGuiHeap = heap;
+    sead::ScopedCurrentHeapSetter heapSetter(heap);
+
+    mWindows.allocBuffer(0x10, mDevGuiHeap);
+    mHomeMenuTabs.allocBuffer(0x10, mDevGuiHeap);
     mIsActive = false;
     
     // Create all display windows
-    WindowEditor* editorWindow = new (heap) WindowEditor("LunaKit Param Editor", heap);
+
+    WindowEditor* editorWindow = new WindowEditor("LunaKit Param Editor", mDevGuiHeap);
     mWindows.pushBack(editorWindow);
 
-    WindowInfo* infoWindow = new (heap) WindowInfo("LunaKit Info Viewer", heap);
+    WindowInfo* infoWindow = new WindowInfo("LunaKit Info Viewer", mDevGuiHeap);
     mWindows.pushBack(infoWindow);
 
-    WindowFPS* fpsWindow = new (heap) WindowFPS("FPS Window", heap);
+    WindowMemoryManage* memWindow = new WindowMemoryManage("LunaKit Memory Manager", mDevGuiHeap);
+    mWindows.pushBack(memWindow);
+
+    WindowFPS* fpsWindow = new WindowFPS("FPS Window", mDevGuiHeap);
     mWindows.pushBack(fpsWindow);
 
     // Create all home menu tabs
-    HomeMenuDebugger* homeDebug = new (heap) HomeMenuDebugger("Debug", heap);
+    HomeMenuDebugger* homeDebug = new HomeMenuDebugger("Debug", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeDebug);
+
+    HomeMenuCredits* homeCredits = new HomeMenuCredits("Credits", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeCredits);
 }
 
 void DevGuiManager::update()

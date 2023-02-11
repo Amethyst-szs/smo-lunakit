@@ -12,7 +12,7 @@ WindowInfo::WindowInfo(const char* winName, sead::Heap* heap)
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
 
     // Template category
-    CategoryInfPlayer* playerCat = new (heap) CategoryInfPlayer("Player", "Player Information");
+    CategoryInfPlayer* playerCat = new (heap) CategoryInfPlayer("Player", "Player Information", heap);
     mCategories.pushBack(playerCat);
 }
 

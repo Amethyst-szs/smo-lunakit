@@ -1,5 +1,23 @@
 #include "program/GetterUtil.h"
 
+bool isInScene()
+{
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
+        auto gameSeq = (HakoniwaSequence*)curSequence;
+        auto curScene = gameSeq->curScene;
+
+        return curScene && curScene->mIsAlive;
+    }
+
+    return false;
+}
+
+bool isInScene(al::Scene* curScene)
+{
+    return curScene && curScene->mIsAlive;
+}
+
 bool isInStageScene()
 {
     al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
@@ -109,9 +127,8 @@ PlayerActorBase* tryGetPlayerActor()
         auto gameSeq = (HakoniwaSequence*)curSequence;
         auto curScene = gameSeq->curScene;
 
-        if (curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene")) {
-            StageScene* stageScene = (StageScene*)gameSeq->curScene;
-            PlayerActorBase* playerBase = rs::getPlayerActor(stageScene);
+        if (curScene && curScene->mIsAlive) {
+            PlayerActorBase* playerBase = rs::getPlayerActor(curScene);
             return playerBase;
         }
     }
@@ -123,9 +140,8 @@ PlayerActorBase* tryGetPlayerActor(HakoniwaSequence* curSequence)
 {
     auto curScene = curSequence->curScene;
 
-    if (curScene && curScene->mIsAlive && al::isEqualString(curScene->mName.cstr(), "StageScene")) {
-        StageScene* stageScene = (StageScene*)curSequence->curScene;
-        PlayerActorBase* playerBase = rs::getPlayerActor(stageScene);
+    if (curScene && curScene->mIsAlive) {
+        PlayerActorBase* playerBase = rs::getPlayerActor(curScene);
         return playerBase;
     }
 

@@ -4,7 +4,7 @@
 
 class CategoryOutfit : public CategoryBase {
 public:
-    CategoryOutfit(const char* catName, const char* catDesc);
+    CategoryOutfit(const char* catName, const char* catDesc, sead::Heap* heap);
 
     void updateCat() override;
     void updateCatDisplay() override;

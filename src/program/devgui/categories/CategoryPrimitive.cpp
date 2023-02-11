@@ -1,7 +1,7 @@
 #include "program/devgui/categories/CategoryPrimitive.h"
 
-CategoryPrimitive::CategoryPrimitive(const char* catName, const char* catDesc)
-    : CategoryBase(catName, catDesc)
+CategoryPrimitive::CategoryPrimitive(const char* catName, const char* catDesc, sead::Heap* heap)
+    : CategoryBase(catName, catDesc, heap)
 {
 }
 
