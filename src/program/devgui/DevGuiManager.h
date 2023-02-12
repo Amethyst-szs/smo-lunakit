@@ -24,6 +24,7 @@
 #include "program/devgui/homemenu/HomeMenuBase.h"
 #include "program/devgui/homemenu/HomeMenuDebugger.h"
 #include "program/devgui/homemenu/HomeMenuCredits.h"
+#include "program/devgui/homemenu/HomeMenuWorlds.h"
 
 class DevGuiManager {
     SEAD_SINGLETON_DISPOSER(DevGuiManager);

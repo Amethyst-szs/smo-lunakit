@@ -38,6 +38,9 @@ StageScene* tryGetStageScene(HakoniwaSequence* curSequence);
 GameDataHolder* tryGetGameDataHolder();
 GameDataHolder* tryGetGameDataHolder(HakoniwaSequence* curSequence);
 GameDataHolder* tryGetGameDataHolder(StageScene* scene);
+GameDataHolderAccessor* tryGetGameDataHolderAccess();
+GameDataHolderAccessor* tryGetGameDataHolderAccess(HakoniwaSequence* curSequence);
+GameDataHolderAccessor* tryGetGameDataHolderAccess(StageScene* scene);
 
 PlayerActorBase* tryGetPlayerActor();
 PlayerActorBase* tryGetPlayerActor(HakoniwaSequence* curSequence);

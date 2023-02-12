@@ -28,6 +28,9 @@ void DevGuiManager::init(sead::Heap* heap)
     mWindows.pushBack(fpsWindow);
 
     // Create all home menu tabs
+    HomeMenuWorlds* homeWorld = new HomeMenuWorlds("Worlds", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeWorld);
+
     HomeMenuDebugger* homeDebug = new HomeMenuDebugger("Debug", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeDebug);
 

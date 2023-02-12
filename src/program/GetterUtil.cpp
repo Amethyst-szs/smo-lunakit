@@ -120,6 +120,27 @@ GameDataHolder* tryGetGameDataHolder(StageScene* scene)
     return scene->mHolder.mData;
 }
 
+GameDataHolderAccessor* tryGetGameDataHolderAccess()
+{
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
+        HakoniwaSequence* gameSequence = (HakoniwaSequence*)curSequence;
+        return &gameSequence->mGameDataHolder;
+    }
+
+    return nullptr;
+}
+
+GameDataHolderAccessor* tryGetGameDataHolderAccess(HakoniwaSequence* curSequence)
+{
+    return &curSequence->mGameDataHolder;
+}
+
+GameDataHolderAccessor* tryGetGameDataHolderAccess(StageScene* scene)
+{
+    return &scene->mHolder;
+}
+
 PlayerActorBase* tryGetPlayerActor()
 {
     al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
