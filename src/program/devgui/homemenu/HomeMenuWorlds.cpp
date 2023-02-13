@@ -34,32 +34,89 @@ void HomeMenuWorlds::updateMenu()
                 ImGui::EndMenu();
             }
 
-            // if (ImGui::CollapsingHeader("Database Entries")) {
-            //     for (auto &dbEntry: entry.mStageNames) {
-            //         if (ImGui::TreeNode(dbEntry.mStageName.cstr())) {
-            //             ImGui::BulletText("Stage Category: %s", dbEntry.mStageCategory.cstr());
-            //             ImGui::BulletText("Stage Use Scenario: %d", dbEntry.mUseScenario);
+            if (ImGui::BeginMenu("Sub Areas Stages"))
+                drawDatabaseCategoryEX(holder, &entry);
 
-            //             if (isInGame) {
-            //                 ImGui::Bullet();
-            //                 if (ImGui::SmallButton("Warp to Stage")) {
-            //                     ChangeStageInfo stageInfo(gameSeq->mGameDataHolder.mData, "start", dbEntry.mStageName.cstr(), false, scenarioSlide, ChangeStageInfo::SubScenarioType::UNK);
-            //                     GameDataFunction::tryChangeNextStage(gameSeq->mGameDataHolder, &stageInfo);
-            //                 }
-            //             }
+            if (ImGui::BeginMenu("Zones"))
+                drawDatabaseCategoryZone(holder, &entry);
 
-            //             ImGui::TreePop();
-            //         }
-            //     }
-            // }
+            if (ImGui::BeginMenu("Cutscenes"))
+                drawDatabaseCategoryDemo(holder, &entry);
+
+            if (ImGui::BeginMenu("Other Stages"))
+                drawDatabaseCategoryOther(holder, &entry);
 
             ImGui::EndMenu();
         }
     }
-    // ImGui::MenuItem("Amethyst-szs", "LunaKit Dev", false, false);
-    // ImGui::MenuItem("CraftyBoss", "SMO ExLaunch Base, ImGui, World List", false, false);
-    // ImGui::MenuItem("Mars", "Referenced TAS Mod", false, false);
-    // ImGui::MenuItem("ExLaunch", "", false, false);
+}
+
+// void HomeMenuWorlds::drawDatabaseCategoryEX(GameDataHolderAccessor* data, WorldListEntry* entry)
+// {
+//     for (auto &dbEntry: entry->mStageNames) {
+//         const char* dbCat = dbEntry.mStageCategory.cstr();
+//         if(!isInCategory(dbCat, "ExStage") && !isInCategory(dbCat, "MoonExStage"))
+//             continue;
+
+//         if(ImGui::MenuItem(dbEntry.mStageName.cstr()))
+//             warpToStage(data, dbEntry.mStageName.cstr(), -1);
+//     }
+
+//     ImGui::EndMenu();
+// }
+
+// void HomeMenuWorlds::drawDatabaseCategoryZone(GameDataHolderAccessor* data, WorldListEntry* entry)
+// {
+//     for (auto &dbEntry: entry->mStageNames) {
+//         const char* dbCat = dbEntry.mStageCategory.cstr();
+//         if(!isInCategory(dbCat, "Zone"))
+//             continue;
+
+//         if(ImGui::MenuItem(dbEntry.mStageName.cstr()))
+//             warpToStage(data, dbEntry.mStageName.cstr(), -1);
+//     }
+
+//     ImGui::EndMenu();
+// }
+
+// void HomeMenuWorlds::drawDatabaseCategoryDemo(GameDataHolderAccessor* data, WorldListEntry* entry)
+// {
+//     for (auto &dbEntry: entry->mStageNames) {
+//         const char* dbCat = dbEntry.mStageCategory.cstr();
+//         if(!isInCategory(dbCat, "Demo"))
+//             continue;
+
+//         ImGui::MenuItem(dbEntry.mStageName.cstr(), NULL, false, false);
+//     }
+
+//     ImGui::EndMenu();
+// }
+
+// void HomeMenuWorlds::drawDatabaseCategoryOther(GameDataHolderAccessor* data, WorldListEntry* entry)
+// {
+//     for (auto &dbEntry: entry->mStageNames) {
+//         const char* dbCat = dbEntry.mStageCategory.cstr();
+//         if(isInCategory(dbCat, "ExStage") || isInCategory(dbCat, "MoonExStage") || isInCategory(dbCat, "Zone") || isInCategory(dbCat, "Demo") || isInCategory(dbCat, "MainStage"))
+//             continue;
+
+//         if(ImGui::MenuItem(dbEntry.mStageName.cstr(), dbCat))
+//             warpToStage(data, dbEntry.mStageName.cstr(), -1);
+//     }
+
+//     ImGui::EndMenu();
+// }
+
+bool HomeMenuWorlds::isInCategory(const char* dbCat, const char** compareList)
+{
+    int listSize = IM_ARRAYSIZE(compareList);
+
+    for(int i = 0; i < listSize; i++) {
+        const char* test = compareList[i];
+        if(al::isEqualString(dbCat, test))
+            return true;
+    }
+
+    return false;
 }
 
 void HomeMenuWorlds::drawScenarioPicker(GameDataHolderAccessor* data, WorldListEntry* entry)
