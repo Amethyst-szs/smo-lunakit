@@ -34,9 +34,9 @@ void WindowEditor::updateWin()
     WindowBase::updateWin();
 }
 
-void WindowEditor::updateWinDisplay()
+bool WindowEditor::tryUpdateWinDisplay()
 {
-    WindowBase::updateWinDisplay();
+    return WindowBase::tryUpdateWinDisplay();
 }
 
 void WindowEditor::configImGuiStyle()

@@ -28,10 +28,10 @@ void WindowBase::updateWin()
     }
 }
 
-void WindowBase::updateWinDisplay()
+bool WindowBase::tryUpdateWinDisplay()
 {
     if(!mIsActive)
-        return;
+        return false;
         
     ImGui::Begin(mWinName, NULL, mConfig.mWindowFlags);
 
@@ -58,6 +58,8 @@ void WindowBase::updateWinDisplay()
         
         ImGui::End();
     }
+
+    return true;
 }
 
 void WindowBase::configImGuiStyle()
@@ -108,7 +110,7 @@ void WindowBase::configImGuiStyle()
     // style.Colors[ImGuiCol_TextSelectedBg]        = ImVec4(0.26f, 0.59f, 0.98f, 0.35f);
 }
 
-void WindowBase::setupAnchor()
+void WindowBase::setupAnchor(WinAnchorType type)
 {
     // Setup trans based on anchor
     // Setup scale based on open window count

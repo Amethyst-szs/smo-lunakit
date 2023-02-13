@@ -6,8 +6,6 @@
 #include "heap/seadDisposer.h"
 #include "heap/seadHeap.h"
 
-#include "devgui/DevGuiSettings.h"
-
 class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class HomeMenuBase {

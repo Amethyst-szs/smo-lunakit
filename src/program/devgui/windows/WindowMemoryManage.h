@@ -14,7 +14,7 @@ class WindowMemoryManage : public WindowBase {
 public:
     WindowMemoryManage(DevGuiManager* parent, const char* winName, sead::Heap* heap);
 
-    void updateWinDisplay() override;
+    bool tryUpdateWinDisplay() override;
     void configImGuiStyle() override;
 
 private:

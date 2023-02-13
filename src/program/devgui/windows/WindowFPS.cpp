@@ -21,9 +21,12 @@ void WindowFPS::updateWin()
     WindowBase::updateWin();
 }
 
-void WindowFPS::updateWinDisplay()
+bool WindowFPS::tryUpdateWinDisplay()
 {
-    WindowBase::updateWinDisplay();
+    bool canUpdateDisp = WindowBase::tryUpdateWinDisplay();
+
+    if(!canUpdateDisp)
+        return false;
 
     float curFPS = Application::instance()->mFramework->calcFps();
     
@@ -41,6 +44,8 @@ void WindowFPS::updateWinDisplay()
     ImGui::PlotLines("", mHistory, IM_ARRAYSIZE(mHistory), mHistoryOffset, overlay, 0.0f, 60.0f, ImVec2(mWindowWidth, 70));
 
     ImGui::End();
+
+    return true;
 }
 
 void WindowFPS::configImGuiStyle()

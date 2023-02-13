@@ -13,9 +13,12 @@ WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winNam
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
 }
 
-void WindowMemoryManage::updateWinDisplay()
+bool WindowMemoryManage::tryUpdateWinDisplay()
 {
-    WindowBase::updateWinDisplay();
+    bool canUpdateDisp = WindowBase::tryUpdateWinDisplay();
+
+    if(!canUpdateDisp)
+        return false;
 
     ImGui::SetWindowFontScale(1.2f);
 
@@ -48,6 +51,8 @@ void WindowMemoryManage::updateWinDisplay()
     ImGui::SetWindowFontScale(mConfig.mFontSize);
 
     ImGui::End();
+
+    return true;
 }
 
 float WindowMemoryManage::getHeapPercent(sead::Heap* heap)

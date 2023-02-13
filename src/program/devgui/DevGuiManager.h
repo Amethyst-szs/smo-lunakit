@@ -33,7 +33,7 @@ enum WinAnchorType {
     ANC_TOTAL_SIZE
 };
 
-static const char* WinAnchorTypeName[] = {
+__attribute__((used)) static const char* WinAnchorTypeName[] = {
     "Top",
     "Bottom"
 };
@@ -57,7 +57,7 @@ public:
     bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; };
 
     WinAnchorType getAnchorType() { return mWinAnchor; };
-    void setAnchorType(WinAnchorType type) { mWinAnchor = type; };
+    void setAnchorType(WinAnchorType type) { mIsAnchorChange = true; mWinAnchor = type; };
 
 private:
     // Heap
@@ -66,6 +66,8 @@ private:
     // Manager status
     bool mIsActive = false;
     bool mIsFirstStep = false;
+
+    bool mIsAnchorChange = false;
     WinAnchorType mWinAnchor = WinAnchorType::ANC_TOP;
 
     // Debug info

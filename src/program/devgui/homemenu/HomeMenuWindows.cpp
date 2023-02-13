@@ -8,8 +8,8 @@ HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName, se
 void HomeMenuWindows::updateMenu()
 {
     if (ImGui::BeginMenu("Window Anchor")) {
-        for(int i = 0; i < WinAnchorType::TOTAL_SIZE; i++) {
-            if (ImGui::MenuItem(WinAnchorTypeNames))
+        for(int i = 0; i < WinAnchorType::ANC_TOTAL_SIZE; i++) {
+            if (ImGui::MenuItem(WinAnchorTypeName[i]))
                 mParent->setAnchorType((WinAnchorType)i);
         }
     }

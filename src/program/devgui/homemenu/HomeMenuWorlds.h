@@ -7,7 +7,6 @@
 
 #include "program/GetterUtil.h"
 
-#include "devgui/DevGuiSettings.h"
 #include "devgui/homemenu/HomeMenuBase.h"
 
 class HomeMenuWorlds : public HomeMenuBase {

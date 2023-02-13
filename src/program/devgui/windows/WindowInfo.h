@@ -13,6 +13,6 @@ public:
     WindowInfo(DevGuiManager* parent, const char* winName, sead::Heap* heap);
 
     void updateWin() override;
-    void updateWinDisplay() override;
+    bool tryUpdateWinDisplay() override;
     void configImGuiStyle() override;
 };

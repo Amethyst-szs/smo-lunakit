@@ -9,6 +9,5 @@ static bool isPlayMusic = true;
 static bool isUseAutosaves = true;
 
 static al::ByamlIter devStageListByaml;
-static const char* selectedDevWorld = "OverTest000ExStage";
 
 }

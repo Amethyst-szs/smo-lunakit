@@ -113,9 +113,6 @@ void drawImGuiDebug() {
 }
 
 void graNoclipCode(al::LiveActor *player) {
-
-    static bool isFirst = true;
-
     static float speed = 25.0f;
     static float speedMax = 150.0f;
     static float vspeed = 20.0f;
@@ -675,10 +672,9 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
         }
 
         DevGuiManager::createInstance(curHeap);
-        DevGuiSettings::createInstance(curHeap);
-        DevGuiPrimitive::createInstance(curHeap);
-
         DevGuiManager::instance()->init(curHeap);
+
+        DevGuiPrimitive::createInstance(curHeap);
 
         if (!al::isExistArchive(DEV_WORLD_LIST_PATH))
             EXL_ABORT(0x69);

@@ -22,9 +22,9 @@ void WindowInfo::updateWin()
     WindowBase::updateWin();
 }
 
-void WindowInfo::updateWinDisplay()
+bool WindowInfo::tryUpdateWinDisplay()
 {
-    WindowBase::updateWinDisplay();
+    return WindowBase::tryUpdateWinDisplay();
 }
 
 void WindowInfo::configImGuiStyle()

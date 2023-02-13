@@ -2,8 +2,6 @@
 
 #include "imgui.h"
 
-#include "devgui/DevGuiSettings.h"
-
 #include "devgui/homemenu/HomeMenuBase.h"
 
 class HomeMenuCredits : public HomeMenuBase {

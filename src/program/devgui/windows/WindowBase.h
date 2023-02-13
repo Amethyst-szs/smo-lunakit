@@ -19,10 +19,10 @@ public:
     WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* heap);
 
     virtual void configImGuiStyle();
-    virtual void setupAnchor();
+    virtual void setupAnchor(WinAnchorType type);
 
     virtual void updateWin();
-    virtual void updateWinDisplay();
+    virtual bool tryUpdateWinDisplay();
     
     virtual const char* getWindowName() { return mWinName; };
     virtual int getCategoryCount() { return mCategories.size(); };
