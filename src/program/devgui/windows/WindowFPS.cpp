@@ -1,9 +1,10 @@
-#include "program/devgui/windows/WindowFPS.h"
+#include "devgui/DevGuiManager.h"
+#include "devgui/windows/WindowFPS.h"
 
 #include "game/System/Application.h"
 
-WindowFPS::WindowFPS(const char* winName, sead::Heap* heap)
-    : WindowBase(winName, heap)
+WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, sead::Heap* heap)
+    : WindowBase(parent, winName, heap)
 {
     // Setup window config
     mConfig.mTrans = ImVec2(0, 650);

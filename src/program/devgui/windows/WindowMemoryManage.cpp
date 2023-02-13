@@ -1,7 +1,8 @@
-#include "program/devgui/windows/WindowMemoryManage.h"
+#include "devgui/DevGuiManager.h"
+#include "devgui/windows/WindowMemoryManage.h"
 
-WindowMemoryManage::WindowMemoryManage(const char* winName, sead::Heap* heap)
-    : WindowBase(winName, heap)
+WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, sead::Heap* heap)
+    : WindowBase(parent, winName, heap)
 {
     // Setup window config
     mConfig.mTrans = ImVec2(0, 19);

@@ -1,7 +1,8 @@
-#include "program/devgui/windows/WindowEditor.h"
+#include "devgui/DevGuiManager.h"
+#include "devgui/windows/WindowEditor.h"
 
-WindowEditor::WindowEditor(const char* winName, sead::Heap* heap)
-    : WindowBase(winName, heap)
+WindowEditor::WindowEditor(DevGuiManager* parent, const char* winName, sead::Heap* heap)
+    : WindowBase(parent, winName, heap)
 {
     // Setup window config
     mConfig.mTrans = ImVec2(853, 19);

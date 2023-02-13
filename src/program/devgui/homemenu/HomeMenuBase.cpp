@@ -1,7 +1,9 @@
-#include "program/devgui/homemenu/HomeMenuBase.h"
+#include "devgui/DevGuiManager.h"
+#include "devgui/homemenu/HomeMenuBase.h"
 
-HomeMenuBase::HomeMenuBase(const char* menuName, sead::Heap* heap)
+HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
 {
+    mParent = parent;
     mMenuName = menuName;
     mDevGuiHeap = heap;
 }

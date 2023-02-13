@@ -9,25 +9,32 @@
 #include "math/seadVector.h"
 
 #include "program/GetterUtil.h"
-#include "program/devgui/DevGuiWindowConfig.h"
-#include "program/devgui/categories/CategoryBase.h"
+#include "devgui/DevGuiWindowConfig.h"
+#include "devgui/categories/CategoryBase.h"
+
+class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class WindowBase {
 public:
-    WindowBase(const char* winName, sead::Heap* heap);
+    WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* heap);
+
+    virtual void configImGuiStyle();
+    virtual void setupAnchor();
 
     virtual void updateWin();
     virtual void updateWinDisplay();
-    virtual void configImGuiStyle();
-
+    
     virtual const char* getWindowName() { return mWinName; };
     virtual int getCategoryCount() { return mCategories.size(); };
 
 protected:
-    sead::Heap* mDevGuiHeap;
-    DevGuiWindowConfig mConfig;
     const char* mWinName = "null";
 
-    int mCategoryIdx = 0;
+    DevGuiManager* mParent;
+    DevGuiWindowConfig mConfig;
+    sead::Heap* mDevGuiHeap;
+
+    bool mIsActive = true;
+
     sead::PtrArray<CategoryBase> mCategories;
 };

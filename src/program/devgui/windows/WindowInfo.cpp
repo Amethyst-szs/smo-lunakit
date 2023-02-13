@@ -1,7 +1,8 @@
-#include "program/devgui/windows/WindowInfo.h"
+#include "devgui/DevGuiManager.h"
+#include "devgui/windows/WindowInfo.h"
 
-WindowInfo::WindowInfo(const char* winName, sead::Heap* heap)
-    : WindowBase(winName, heap)
+WindowInfo::WindowInfo(DevGuiManager* parent, const char* winName, sead::Heap* heap)
+    : WindowBase(parent, winName, heap)
 {
     // Setup window config
     mConfig.mTrans = ImVec2(427, 19);

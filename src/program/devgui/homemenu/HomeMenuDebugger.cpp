@@ -1,13 +1,15 @@
-#include "program/devgui/homemenu/HomeMenuDebugger.h"
+#include "devgui/DevGuiManager.h"
+#include "devgui/homemenu/HomeMenuDebugger.h"
 
-HomeMenuDebugger::HomeMenuDebugger(const char* menuName, sead::Heap* heap)
-    : HomeMenuBase(menuName, heap)
+HomeMenuDebugger::HomeMenuDebugger(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
+    : HomeMenuBase(parent, menuName, heap)
 {}
 
 void HomeMenuDebugger::updateMenu()
 {
-    if (ImGui::MenuItem("ImGui Demo Window", "", DevGuiSettings::instance()->mIsDisplayImGuiDemo)) {
-        bool* state = &DevGuiSettings::instance()->mIsDisplayImGuiDemo;
-        *state = !(*state);
+    bool* demoWinState = mParent->getImGuiDemoWindowState();
+
+    if (ImGui::MenuItem("ImGui Demo Window", "", demoWinState)) {
+        *demoWinState = !(*demoWinState);
     }
 }

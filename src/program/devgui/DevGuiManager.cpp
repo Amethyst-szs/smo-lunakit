@@ -28,13 +28,16 @@ void DevGuiManager::init(sead::Heap* heap)
     mWindows.pushBack(fpsWindow);
 
     // Create all home menu tabs
-    HomeMenuWorlds* homeWorld = new HomeMenuWorlds("Worlds", mDevGuiHeap);
+    HomeMenuWorlds* homeWorld = new HomeMenuWorlds(this, "Worlds", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeWorld);
 
-    HomeMenuDebugger* homeDebug = new HomeMenuDebugger("Debug", mDevGuiHeap);
+    HomeMenuWindows* homeWindows = new HomeMenuWindows(this, "Windows", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeWindows);
+
+    HomeMenuDebugger* homeDebug = new HomeMenuDebugger(this, "Debug", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeDebug);
 
-    HomeMenuCredits* homeCredits = new HomeMenuCredits("Credits", mDevGuiHeap);
+    HomeMenuCredits* homeCredits = new HomeMenuCredits(this, "Credits", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeCredits);
 }
 
@@ -86,7 +89,7 @@ void DevGuiManager::updateDisplay()
     }
 
     // Draw the demo window if the settings class has it enabled
-    if(DevGuiSettings::instance()->mIsDisplayImGuiDemo)
+    if(mIsDisplayImGuiDemo)
         ImGui::ShowDemoWindow();
 
     // Reset the first step flag when complete!

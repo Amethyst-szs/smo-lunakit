@@ -1,20 +1,25 @@
-#include "program/devgui/windows/WindowBase.h"
-#include "program/devgui/categories/CategoryBase.h"
+#include "devgui/DevGuiManager.h"
+#include "devgui/windows/WindowBase.h"
+#include "devgui/categories/CategoryBase.h"
 
 #include "types.h"
 
-WindowBase::WindowBase(const char* winName, sead::Heap* heap)
+WindowBase::WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* heap)
 {
     // Preare PtrArray
     mCategories.allocBuffer(0x10, heap);
 
     // Set members from parameters
     mWinName = winName;
+    mParent = parent;
     mDevGuiHeap = heap;
 }
 
 void WindowBase::updateWin()
 {
+    if(!mIsActive)
+        return;
+        
     if (mCategories.size() > 0) {
         for (int i = 0; i < mCategories.size(); i++) {
             auto* entry = mCategories.at(i);
@@ -25,6 +30,9 @@ void WindowBase::updateWin()
 
 void WindowBase::updateWinDisplay()
 {
+    if(!mIsActive)
+        return;
+        
     ImGui::Begin(mWinName, NULL, mConfig.mWindowFlags);
 
     configImGuiStyle();
@@ -98,4 +106,17 @@ void WindowBase::configImGuiStyle()
     // style.Colors[ImGuiCol_PlotHistogram]         = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
     // style.Colors[ImGuiCol_PlotHistogramHovered]  = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
     // style.Colors[ImGuiCol_TextSelectedBg]        = ImVec4(0.26f, 0.59f, 0.98f, 0.35f);
+}
+
+void WindowBase::setupAnchor()
+{
+    // Setup trans based on anchor
+    // Setup scale based on open window count
+    // switch(mParent->getAnchorType()) {
+
+    // };
+
+    ImGui::SetWindowPos(mConfig.mTrans, ImGuiCond_FirstUseEver);
+    ImGui::SetWindowSize(mConfig.mSize, ImGuiCond_FirstUseEver);
+    ImGui::SetWindowFontScale(mConfig.mFontSize);
 }

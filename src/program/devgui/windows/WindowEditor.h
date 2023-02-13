@@ -13,7 +13,7 @@
 
 class WindowEditor : public WindowBase {
 public:
-    WindowEditor(const char* winName, sead::Heap* heap);
+    WindowEditor(DevGuiManager* parent, const char* winName, sead::Heap* heap);
 
     void updateWin() override;
     void updateWinDisplay() override;

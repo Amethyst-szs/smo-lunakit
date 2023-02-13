@@ -1,7 +1,8 @@
-#include "program/devgui/homemenu/HomeMenuWorlds.h"
+#include "devgui/DevGuiManager.h"
+#include "devgui/homemenu/HomeMenuWorlds.h"
 
-HomeMenuWorlds::HomeMenuWorlds(const char* menuName, sead::Heap* heap)
-    : HomeMenuBase(menuName, heap)
+HomeMenuWorlds::HomeMenuWorlds(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
+    : HomeMenuBase(parent, menuName, heap)
 {}
 
 void HomeMenuWorlds::updateMenu()

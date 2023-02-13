@@ -1,7 +1,8 @@
-#include "program/devgui/homemenu/HomeMenuCredits.h"
+#include "devgui/DevGuiManager.h"
+#include "devgui/homemenu/HomeMenuCredits.h"
 
-HomeMenuCredits::HomeMenuCredits(const char* menuName, sead::Heap* heap)
-    : HomeMenuBase(menuName, heap)
+HomeMenuCredits::HomeMenuCredits(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
+    : HomeMenuBase(parent, menuName, heap)
 {}
 
 void HomeMenuCredits::updateMenu()
