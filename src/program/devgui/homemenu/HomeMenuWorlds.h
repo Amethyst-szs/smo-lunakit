@@ -22,7 +22,7 @@ private:
     void drawDatabaseCategoryDemo(GameDataHolderAccessor* data, WorldListEntry* entry);
     void drawDatabaseCategoryOther(GameDataHolderAccessor* data, WorldListEntry* entry);
 
-    bool isInCategory(const char* dbCat, const char** compareList);
+    bool isInCategory(const char* dbCat, const char* compare);
 
     void drawScenarioPicker(GameDataHolderAccessor* data, WorldListEntry* entry);
     void warpToStage(GameDataHolderAccessor* data, const char* stageName, int scenario);

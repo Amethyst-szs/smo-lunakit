@@ -59,21 +59,25 @@ void DevGuiManager::update()
 
 void DevGuiManager::updateDisplay()
 {
-    // Setup mouse cursor state
-    if (!mIsActive) {
-        ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+    updateCursorState();
+
+    if(!mIsActive)
         return;
-    }
 
-    if (mIsFirstStep)
-        ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+    // Load and draw all windows (and update anchors if needed)
+    int totalAnchorWin = -1;
+    int curAnchorWin = 0;
 
-    // Load and draw all windows
+    if (mIsAnchorChange)
+        totalAnchorWin = calcTotalAnchoredWindows();
+
     for (int i = 0; i < mWindows.size(); i++) {
         auto* entry = mWindows.at(i);
 
-        if(mIsAnchorChange)
-            entry->setupAnchor();
+        if(mIsAnchorChange && entry->isInAnchorList()) {
+            entry->setupAnchor(totalAnchorWin, curAnchorWin);
+            curAnchorWin++;
+        }
 
         entry->tryUpdateWinDisplay();
     }
@@ -101,4 +105,26 @@ void DevGuiManager::updateDisplay()
     // Reset the first step flag when complete!
     if (mIsFirstStep)
         mIsFirstStep = false;
+}
+
+void DevGuiManager::updateCursorState()
+{
+    if (!mIsActive)
+        ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+
+    if (mIsFirstStep)
+        ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+}
+
+int DevGuiManager::calcTotalAnchoredWindows()
+{
+    int total = 0;
+    for (int i = 0; i < mWindows.size(); i++) {
+        auto* entry = mWindows.at(i);
+
+        if(entry->isActive() && entry->isInAnchorList())
+            total++;
+    }
+
+    return total;
 }

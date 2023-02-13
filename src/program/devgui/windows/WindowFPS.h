@@ -13,7 +13,9 @@ public:
 
     void updateWin() override;
     bool tryUpdateWinDisplay() override;
+
     void configImGuiStyle() override;
+    void setupAnchor(int totalAnchoredWindows, int anchorIdx) override;
 
 private:
     const int mWindowWidth = 400;

@@ -52,72 +52,64 @@ void HomeMenuWorlds::updateMenu()
     }
 }
 
-// void HomeMenuWorlds::drawDatabaseCategoryEX(GameDataHolderAccessor* data, WorldListEntry* entry)
-// {
-//     for (auto &dbEntry: entry->mStageNames) {
-//         const char* dbCat = dbEntry.mStageCategory.cstr();
-//         if(!isInCategory(dbCat, "ExStage") && !isInCategory(dbCat, "MoonExStage"))
-//             continue;
-
-//         if(ImGui::MenuItem(dbEntry.mStageName.cstr()))
-//             warpToStage(data, dbEntry.mStageName.cstr(), -1);
-//     }
-
-//     ImGui::EndMenu();
-// }
-
-// void HomeMenuWorlds::drawDatabaseCategoryZone(GameDataHolderAccessor* data, WorldListEntry* entry)
-// {
-//     for (auto &dbEntry: entry->mStageNames) {
-//         const char* dbCat = dbEntry.mStageCategory.cstr();
-//         if(!isInCategory(dbCat, "Zone"))
-//             continue;
-
-//         if(ImGui::MenuItem(dbEntry.mStageName.cstr()))
-//             warpToStage(data, dbEntry.mStageName.cstr(), -1);
-//     }
-
-//     ImGui::EndMenu();
-// }
-
-// void HomeMenuWorlds::drawDatabaseCategoryDemo(GameDataHolderAccessor* data, WorldListEntry* entry)
-// {
-//     for (auto &dbEntry: entry->mStageNames) {
-//         const char* dbCat = dbEntry.mStageCategory.cstr();
-//         if(!isInCategory(dbCat, "Demo"))
-//             continue;
-
-//         ImGui::MenuItem(dbEntry.mStageName.cstr(), NULL, false, false);
-//     }
-
-//     ImGui::EndMenu();
-// }
-
-// void HomeMenuWorlds::drawDatabaseCategoryOther(GameDataHolderAccessor* data, WorldListEntry* entry)
-// {
-//     for (auto &dbEntry: entry->mStageNames) {
-//         const char* dbCat = dbEntry.mStageCategory.cstr();
-//         if(isInCategory(dbCat, "ExStage") || isInCategory(dbCat, "MoonExStage") || isInCategory(dbCat, "Zone") || isInCategory(dbCat, "Demo") || isInCategory(dbCat, "MainStage"))
-//             continue;
-
-//         if(ImGui::MenuItem(dbEntry.mStageName.cstr(), dbCat))
-//             warpToStage(data, dbEntry.mStageName.cstr(), -1);
-//     }
-
-//     ImGui::EndMenu();
-// }
-
-bool HomeMenuWorlds::isInCategory(const char* dbCat, const char** compareList)
+void HomeMenuWorlds::drawDatabaseCategoryEX(GameDataHolderAccessor* data, WorldListEntry* entry)
 {
-    int listSize = IM_ARRAYSIZE(compareList);
+    for (auto &dbEntry: entry->mStageNames) {
+        const char* dbCat = dbEntry.mStageCategory.cstr();
+        if(!isInCategory(dbCat, "ExStage") && !isInCategory(dbCat, "MoonExStage"))
+            continue;
 
-    for(int i = 0; i < listSize; i++) {
-        const char* test = compareList[i];
-        if(al::isEqualString(dbCat, test))
-            return true;
+        if(ImGui::MenuItem(dbEntry.mStageName.cstr()))
+            warpToStage(data, dbEntry.mStageName.cstr(), -1);
     }
 
-    return false;
+    ImGui::EndMenu();
+}
+
+void HomeMenuWorlds::drawDatabaseCategoryZone(GameDataHolderAccessor* data, WorldListEntry* entry)
+{
+    for (auto &dbEntry: entry->mStageNames) {
+        const char* dbCat = dbEntry.mStageCategory.cstr();
+        if(!isInCategory(dbCat, "Zone"))
+            continue;
+
+        if(ImGui::MenuItem(dbEntry.mStageName.cstr()))
+            warpToStage(data, dbEntry.mStageName.cstr(), -1);
+    }
+
+    ImGui::EndMenu();
+}
+
+void HomeMenuWorlds::drawDatabaseCategoryDemo(GameDataHolderAccessor* data, WorldListEntry* entry)
+{
+    for (auto &dbEntry: entry->mStageNames) {
+        const char* dbCat = dbEntry.mStageCategory.cstr();
+        if(!isInCategory(dbCat, "Demo"))
+            continue;
+
+        ImGui::MenuItem(dbEntry.mStageName.cstr(), NULL, false, false);
+    }
+
+    ImGui::EndMenu();
+}
+
+void HomeMenuWorlds::drawDatabaseCategoryOther(GameDataHolderAccessor* data, WorldListEntry* entry)
+{
+    for (auto &dbEntry: entry->mStageNames) {
+        const char* dbCat = dbEntry.mStageCategory.cstr();
+        if(isInCategory(dbCat, "ExStage") || isInCategory(dbCat, "MoonExStage") || isInCategory(dbCat, "Zone") || isInCategory(dbCat, "Demo") || isInCategory(dbCat, "MainStage"))
+            continue;
+
+        if(ImGui::MenuItem(dbEntry.mStageName.cstr(), dbCat))
+            warpToStage(data, dbEntry.mStageName.cstr(), -1);
+    }
+
+    ImGui::EndMenu();
+}
+
+bool HomeMenuWorlds::isInCategory(const char* dbCat, const char* compare)
+{
+    return al::isEqualString(dbCat, compare);
 }
 
 void HomeMenuWorlds::drawScenarioPicker(GameDataHolderAccessor* data, WorldListEntry* entry)

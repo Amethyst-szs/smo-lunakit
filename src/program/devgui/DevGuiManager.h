@@ -48,16 +48,20 @@ public:
 
     void update();
     void updateDisplay();
+    void updateCursorState();
 
     bool isMenuActive() { return mIsActive; };
     bool isFirstStep() { return mIsFirstStep; };
 
+    // Generic getters
     sead::Heap* getHeap() { return mDevGuiHeap; };
     int getWindowCount() { return mWindows.size(); };
     bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; };
 
+    // Anchor functions
     WinAnchorType getAnchorType() { return mWinAnchor; };
     void setAnchorType(WinAnchorType type) { mIsAnchorChange = true; mWinAnchor = type; };
+    int calcTotalAnchoredWindows();
 
 private:
     // Heap

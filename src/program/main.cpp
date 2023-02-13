@@ -225,25 +225,6 @@ static void drawPlayerInfo(al::LiveActor* actor) {
     ImGui::DragFloat3("Front", front);
 }
 
-static void drawHeapInfo(sead::Heap* heap, const char* heapName) {
-    size_t freeSize = heap->getFreeSize();
-    size_t maxSize = heap->getSize();
-    float freeSizeF = static_cast<float>(freeSize);
-    float maxSizeF = static_cast<float>(maxSize);
-
-    float percentage = freeSizeF / maxSizeF * 100.f;
-
-    ImGui::BulletText("%s %u/%u (%.02f%%)", heapName, freeSize, maxSize, percentage);
-}
-
-static void drawImGuiBranchInfo(){
-    ImGui::BulletText("0 - Not Selected");
-    ImGui::BulletText("1 - Forest");
-    ImGui::BulletText("2 - Lake");
-    ImGui::BulletText("3 - Sea");
-    ImGui::BulletText("4 - Snow");
-}
-
 void drawDebugWindow() {
     if(!DevGuiManager::instance()->isMenuActive()) {
         ImGui::SetMouseCursor(ImGuiMouseCursor_None);
@@ -259,9 +240,6 @@ void drawDebugWindow() {
     ImGui::SetWindowPos(ImVec2(860, 220), ImGuiCond_FirstUseEver);
     ImGui::SetWindowSize(ImVec2(400, 485), ImGuiCond_FirstUseEver);
     ImGui::SetWindowFontScale(1.5f);
-
-    static bool isOverrideScenario = false;
-    static int scenarioSlide = 1;
 
     if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
         auto gameSeq = (HakoniwaSequence *) curSequence;
@@ -302,33 +280,7 @@ void drawDebugWindow() {
                 }
                 ImGui::SetWindowFontScale(1.5f);
             }
-
-            if (ImGui::CollapsingHeader("Capture Info")) {
-                PlayerActorHakoniwa* playerHak = nullptr;
-                bool isYukimaru = !playerBase->getPlayerInfo();
-                if(isYukimaru) {
-                    ImGui::BulletText("Player is not a PlayerActorHakoniwa!");
-                }// else {
-                //     playerHak = (PlayerActorHakoniwa*)playerBase;
-                //     al::LiveActor* 
-                // }
-            }
         } // Check is in game
-
-        if(ImGui::CollapsingHeader("Memory Info")) {
-            ImGui::SetWindowFontScale(1.2f);
-            if(isInGame) {
-                al::LiveActorGroup* actors = curScene->mLiveActorKit->mLiveActorGroup2;
-                ImGui::BulletText("Actor Count %i / %i", actors->mActorCount, actors->mMaxActorCount);
-
-                drawHeapInfo(al::getSceneHeap(), "Scene");
-                drawHeapInfo(al::getSequenceHeap(), "Sequence");
-                drawHeapInfo(al::getSceneResourceHeap(), "Scene Resource");
-                drawHeapInfo(al::getWorldResourceHeap(), "World Resource");
-            }
-
-            ImGui::SetWindowFontScale(1.5f);
-        }
 
         if(ImGui::CollapsingHeader("Input Info")) {
             sead::Vector2f* lStick = al::getLeftStick(-1);
@@ -361,73 +313,6 @@ void drawDebugWindow() {
                 ImGui::BulletText("Trigger - ZR");
         }
 
-        if (ImGui::CollapsingHeader("Game Progress Editor")) {
-            GameProgressData* progressData = gameSeq->mGameDataHolder.mData->mGameDataFile->mProgressData;
-            if(ImGui::TreeNode("Waterfall World Progress")) {
-                static int waterfallProgress = 0;
-                ImGui::BulletText("0 - Arrive");
-                ImGui::BulletText("1 - First Moon Collected");
-                ImGui::BulletText("2 - Talked to Cappy");
-                
-                ImGui::SliderInt("Progress", &waterfallProgress, 0, 2);
-                if(ImGui::Button("Set Progress"))
-                    progressData->mWaterfallWorldProgress = (WaterfallWorldProgressStates)waterfallProgress;
-
-                ImGui::TreePop();
-            }
-
-            if(ImGui::TreeNode("Home Ship Status")) {
-                static int homeShipState = 0;
-                ImGui::BulletText("0 - Broken");
-                ImGui::BulletText("1 - Activate");
-                ImGui::BulletText("2 - First Launch");
-                ImGui::BulletText("3 - Arrive in Cloud");
-                ImGui::BulletText("4 - Crash in Lost");
-                ImGui::BulletText("5 - Repair");
-                ImGui::BulletText("6 - Crash in Ruined");
-                ImGui::BulletText("7 - Final Repair");
-                
-                ImGui::SliderInt("State", &homeShipState, 0, 7);
-                if(ImGui::Button("Set State"))
-                    progressData->mHomeStatus = (HomeShipStates)homeShipState;
-
-                ImGui::TreePop();
-            }
-
-            if(ImGui::TreeNode("Home Ship Branches")) {
-                static int branch1State = 0;
-                static int branch2State = 0;
-                drawImGuiBranchInfo();
-                
-                ImGui::SliderInt("Branch 1", &branch1State, 0, 4);
-                ImGui::SliderInt("Branch 2", &branch2State, 0, 4);
-                if(ImGui::Button("Set Branches")) {
-                    progressData->mUnlockStateFirstBranch = (UnlockBranchStates)branch1State;
-                    progressData->mUnlockStateSecondBranch = (UnlockBranchStates)branch2State;
-                }
-
-                ImGui::TreePop();
-            }
-
-            if(ImGui::TreeNode("Home Ship Level")) {
-                static int shipLevel = 0;
-                ImGui::SliderInt("Ship Level", &shipLevel, 0, 9);
-                if(ImGui::Button("Set Level"))
-                    progressData->mHomeLevel = shipLevel;
-
-                ImGui::TreePop();
-            }
-
-            if(ImGui::TreeNode("Unlocked Worlds")) {
-                static int unlockWorldNum = 1;
-                ImGui::SliderInt("Worlds", &unlockWorldNum, 1, 17);
-                if(ImGui::Button("Set Unlocked Worlds"))
-                    progressData->mUnlockWorldNum = unlockWorldNum;
-                
-                ImGui::TreePop();
-            }
-        }
-
         if (ImGui::CollapsingHeader("Miscellaneous Save Data")) {
             GameDataFile* file = gameSeq->mGameDataHolder.mData->mGameDataFile;
 
@@ -458,62 +343,10 @@ void drawDebugWindow() {
             }
         }
 
-        if (ImGui::CollapsingHeader("World List")) {
-            ImGui::Checkbox("Override Scenario", &isOverrideScenario);
-            if(isOverrideScenario)
-                ImGui::SliderInt("Scenario", &scenarioSlide, 1, 15);
-            else
-                scenarioSlide = 1;
-
-            for (auto &entry: gameSeq->mGameDataHolder.mData->mWorldList->mWorldList) {
-                if (ImGui::TreeNode(entry.mMainStageName)) {
-
-                    if (isInGame) {
-                        if (ImGui::Button("Warp to World")) {
-                            ChangeStageInfo stageInfo(gameSeq->mGameDataHolder.mData, "start", entry.mMainStageName, false, scenarioSlide, ChangeStageInfo::SubScenarioType::UNK);
-                            GameDataFunction::tryChangeNextStage(gameSeq->mGameDataHolder, &stageInfo);
-                        }
-                    }
-
-                    ImGui::BulletText("Clear Main Scenario: %d", entry.mClearMainScenario);
-                    ImGui::BulletText("Ending Scenario: %d", entry.mEndingScenario);
-                    ImGui::BulletText("Moon Rock Scenario: %d", entry.mMoonRockScenario);
-
-                    if (ImGui::TreeNode("Main Quest Infos")) {
-                        for (int i = 0; i < entry.mQuestInfoCount; ++i) {
-                            ImGui::BulletText("Quest %d Scenario: %d", i, entry.mMainQuestIndexes[i]);
-                        }
-                        ImGui::TreePop();
-                    }
-
-                    if (ImGui::CollapsingHeader("Database Entries")) {
-                        for (auto &dbEntry: entry.mStageNames) {
-                            if (ImGui::TreeNode(dbEntry.mStageName.cstr())) {
-                                ImGui::BulletText("Stage Category: %s", dbEntry.mStageCategory.cstr());
-                                ImGui::BulletText("Stage Use Scenario: %d", dbEntry.mUseScenario);
-
-                                if (isInGame) {
-                                    ImGui::Bullet();
-                                    if (ImGui::SmallButton("Warp to Stage")) {
-                                        ChangeStageInfo stageInfo(gameSeq->mGameDataHolder.mData, "start", dbEntry.mStageName.cstr(), false, scenarioSlide, ChangeStageInfo::SubScenarioType::UNK);
-                                        GameDataFunction::tryChangeNextStage(gameSeq->mGameDataHolder, &stageInfo);
-                                    }
-                                }
-
-                                ImGui::TreePop();
-                            }
-                        }
-                    }
-
-                    ImGui::TreePop();
-                }
-            }
-        }
-
         if (ImGui::CollapsingHeader("Custom World List")) {
             uint catCount = Statics::devStageListByaml.getSize();
 
-            for(int catIdx = 0; catIdx < catCount; catIdx++) {
+            for(uint catIdx = 0; catIdx < catCount; catIdx++) {
                 al::ByamlIter catDict = Statics::devStageListByaml.getIterByIndex(catIdx);
                 const char* catName = "null";
                 const char* catDesc = "null";
@@ -536,7 +369,6 @@ void drawDebugWindow() {
                         stageDict.tryGetStringByIndex(&stageName, stageIdx);
                         
                         if(ImGui::Button(stageName) && isInGame) {
-                            StageScene *stageScene = (StageScene *) gameSeq->curScene;
                             ChangeStageInfo stageInfo(gameSeq->mGameDataHolder.mData, "start",
                                 stageName, false, 1, ChangeStageInfo::SubScenarioType::UNK);
                                 

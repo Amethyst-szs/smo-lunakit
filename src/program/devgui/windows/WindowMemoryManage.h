@@ -15,6 +15,7 @@ public:
     WindowMemoryManage(DevGuiManager* parent, const char* winName, sead::Heap* heap);
 
     bool tryUpdateWinDisplay() override;
+    
     void configImGuiStyle() override;
 
 private:

@@ -52,3 +52,22 @@ void WindowFPS::configImGuiStyle()
 {
     WindowBase::configImGuiStyle();
 }
+
+void WindowFPS::setupAnchor(int totalAnchoredWindows, int anchorIdx)
+{
+    WinAnchorType type = mParent->getAnchorType();
+
+    // Setup window's position based on the anchor type
+    switch(type) {
+        case WinAnchorType::ANC_TOP:
+            mConfig.mTrans.y = 650;
+            break;
+        case WinAnchorType::ANC_BOTTOM:
+            mConfig.mTrans.y = 19;
+            break;
+        default:
+            break;
+    }
+
+    ImGui::SetWindowPos(mConfig.mTrans, ImGuiCond_FirstUseEver);
+}

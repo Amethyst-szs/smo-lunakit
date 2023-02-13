@@ -19,13 +19,16 @@ public:
     WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* heap);
 
     virtual void configImGuiStyle();
-    virtual void setupAnchor(WinAnchorType type);
+    virtual void setupAnchor(int totalAnchoredWindows, int anchorIdx);
 
     virtual void updateWin();
     virtual bool tryUpdateWinDisplay();
     
     virtual const char* getWindowName() { return mWinName; };
     virtual int getCategoryCount() { return mCategories.size(); };
+    
+    virtual bool isActive() { return mIsActive; }
+    virtual bool isInAnchorList() { return mIsAnchorList; }
 
 protected:
     const char* mWinName = "null";
@@ -35,6 +38,7 @@ protected:
     sead::Heap* mDevGuiHeap;
 
     bool mIsActive = true;
+    bool mIsAnchorList = true;
 
     sead::PtrArray<CategoryBase> mCategories;
 };

@@ -34,11 +34,7 @@ bool WindowBase::tryUpdateWinDisplay()
         return false;
         
     ImGui::Begin(mWinName, NULL, mConfig.mWindowFlags);
-
     configImGuiStyle();
-    ImGui::SetWindowPos(mConfig.mTrans, ImGuiCond_FirstUseEver);
-    ImGui::SetWindowSize(mConfig.mSize, ImGuiCond_FirstUseEver);
-    ImGui::SetWindowFontScale(mConfig.mFontSize);
 
     // If this window contains categories, load in the tabs
     if (mCategories.size() > 0) {
@@ -64,6 +60,8 @@ bool WindowBase::tryUpdateWinDisplay()
 
 void WindowBase::configImGuiStyle()
 {
+    ImGui::SetWindowFontScale(mConfig.mFontSize);
+
     ImGuiStyle& style = ImGui::GetStyle();
 
     style.Alpha = 1.0f;
@@ -110,15 +108,30 @@ void WindowBase::configImGuiStyle()
     // style.Colors[ImGuiCol_TextSelectedBg]        = ImVec4(0.26f, 0.59f, 0.98f, 0.35f);
 }
 
-void WindowBase::setupAnchor(WinAnchorType type)
+void WindowBase::setupAnchor(int totalAnchoredWindows, int anchorIdx)
 {
-    // Setup trans based on anchor
-    // Setup scale based on open window count
-    // switch(mParent->getAnchorType()) {
+    if(totalAnchoredWindows == 0)
+        return; // This should never happen, but check just in case to avoid dividing by zero
 
-    // };
+    WinAnchorType type = mParent->getAnchorType();
+
+    // Setup window's position based on the anchor type
+    switch(type) {
+        case WinAnchorType::ANC_TOP:
+            mConfig.mTrans.y = 19;
+            break;
+        case WinAnchorType::ANC_BOTTOM:
+            mConfig.mTrans.y = 300;
+            break;
+        default:
+            mConfig.mTrans = ImVec2(0, 0);
+            mConfig.mTrans = ImVec2(1280, 720);
+            break;
+    }
+
+    // Setup size based on the total anchored windows in this place
+    mConfig.mSize.x = (1280 / totalAnchoredWindows) * anchorIdx;
 
     ImGui::SetWindowPos(mConfig.mTrans, ImGuiCond_FirstUseEver);
     ImGui::SetWindowSize(mConfig.mSize, ImGuiCond_FirstUseEver);
-    ImGui::SetWindowFontScale(mConfig.mFontSize);
 }
