@@ -34,11 +34,8 @@ void DevGuiManager::init(sead::Heap* heap)
     HomeMenuWindows* homeWindows = new HomeMenuWindows(this, "Windows", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeWindows);
 
-    HomeMenuDebugger* homeDebug = new HomeMenuDebugger(this, "Debug", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeDebug);
-
-    HomeMenuCredits* homeCredits = new HomeMenuCredits(this, "Credits", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeCredits);
+    HomeMenuExtra* homeExtra = new HomeMenuExtra(this, "Extras", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeExtra);
 }
 
 void DevGuiManager::update()
@@ -70,6 +67,9 @@ void DevGuiManager::updateDisplay()
 
     for (int i = 0; i < mWindows.size(); i++) {
         auto* entry = mWindows.at(i);
+        if(!entry->isActive())
+            continue;
+            
         ImGui::Begin(entry->getWindowName(), NULL, entry->getWindowConfig()->mWindowFlags);
 
         if(mIsAnchorChange) {
@@ -84,6 +84,7 @@ void DevGuiManager::updateDisplay()
     
     // Load and draw all home menu tabs
     if (ImGui::BeginMainMenuBar()) {
+        ImGui::SetWindowFontScale(1.25f);
         for (int i = 0; i < mHomeMenuTabs.size(); i++) {
             auto* entry = mHomeMenuTabs.at(i);
             if (ImGui::BeginMenu(entry->getMenuName())) {

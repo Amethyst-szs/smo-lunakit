@@ -29,16 +29,17 @@ public:
     virtual int getCategoryCount() { return mCategories.size(); };
     virtual bool* getActiveState() { return &mIsActive; }
     
+    virtual bool isActive() { return mIsActive; }
     virtual bool isInAnchorList() { return mIsAnchorList; }
 
 protected:
+    bool mIsActive = true;
     const char* mWinName = "null";
 
     DevGuiManager* mParent;
     DevGuiWindowConfig mConfig;
     sead::Heap* mDevGuiHeap;
 
-    bool mIsActive = true;
     bool mIsAnchorList = true;
 
     sead::PtrArray<CategoryBase> mCategories;

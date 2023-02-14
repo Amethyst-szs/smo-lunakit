@@ -22,14 +22,15 @@
 #include "devgui/windows/WindowFPS.h"
 
 #include "devgui/homemenu/HomeMenuBase.h"
-#include "devgui/homemenu/HomeMenuDebugger.h"
-#include "devgui/homemenu/HomeMenuCredits.h"
 #include "devgui/homemenu/HomeMenuWorlds.h"
 #include "devgui/homemenu/HomeMenuWindows.h"
+#include "devgui/homemenu/HomeMenuExtra.h"
 
 enum WinAnchorType {
     ANC_TOP,
     ANC_BOTTOM,
+    ANC_LEFT,
+    ANC_RIGHT,
     ANC_TOTAL_SIZE
 };
 

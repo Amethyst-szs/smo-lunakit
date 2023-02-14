@@ -18,8 +18,6 @@ public:
     void setupAnchor(int totalAnchoredWindows, int anchorIdx) override;
 
 private:
-    const int mWindowWidth = 400;
-
     static const int mHistorySize = 200;
     float mHistory[mHistorySize] = {};
     int mHistoryOffset = 0;

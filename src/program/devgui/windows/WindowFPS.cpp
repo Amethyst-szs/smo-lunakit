@@ -6,8 +6,7 @@
 WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, sead::Heap* heap)
     : WindowBase(parent, winName, heap)
 {
-    mConfig.mTrans = ImVec2(0, 650);
-    mConfig.mSize = ImVec2(mWindowWidth, 70);
+    mConfig.mSize = ImVec2(400, 70);
     mIsAnchorList = false;
 
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
@@ -36,12 +35,12 @@ bool WindowFPS::tryUpdateWinDisplay()
     while (mRefreshTime < ImGui::GetTime()) {
         mHistory[mHistoryOffset] = curFPS;
         mHistoryOffset = (mHistoryOffset + 1) % IM_ARRAYSIZE(mHistory);
-        mRefreshTime += 1.0f / 10.0f;
+        mRefreshTime += 1.0f / 30.0f;
     }
 
     char overlay[10];
     sprintf(overlay, "%.00f FPS", curFPS);
-    ImGui::PlotLines("", mHistory, IM_ARRAYSIZE(mHistory), mHistoryOffset, overlay, 0.0f, 60.0f, ImVec2(mWindowWidth, 70));
+    ImGui::PlotLines("", mHistory, IM_ARRAYSIZE(mHistory), mHistoryOffset, overlay, 0.0f, 60.0f, mConfig.mSize);
 
     ImGui::End();
 
@@ -60,10 +59,16 @@ void WindowFPS::setupAnchor(int totalAnchoredWindows, int anchorIdx)
     // Setup window's position based on the anchor type
     switch(type) {
         case WinAnchorType::ANC_TOP:
-            mConfig.mTrans.y = 650;
+            mConfig.mTrans = ImVec2(0, mConfig.mScrSize.y - mConfig.mSize.y);
             break;
         case WinAnchorType::ANC_BOTTOM:
-            mConfig.mTrans.y = 19;
+            mConfig.mTrans = ImVec2(0, mConfig.mMinimumY);
+            break;
+        case WinAnchorType::ANC_LEFT:
+            mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mMinimumY);
+            break;
+        case WinAnchorType::ANC_RIGHT:
+            mConfig.mTrans = ImVec2(0, mConfig.mMinimumY);
             break;
         default:
             break;

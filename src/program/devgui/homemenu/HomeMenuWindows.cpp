@@ -13,6 +13,12 @@ void HomeMenuWindows::updateMenu()
 
         if (ImGui::MenuItem("Bottom"))
             mParent->setAnchorType(WinAnchorType::ANC_BOTTOM);
+
+        if (ImGui::MenuItem("Left"))
+            mParent->setAnchorType(WinAnchorType::ANC_LEFT);
+
+        if (ImGui::MenuItem("Right"))
+            mParent->setAnchorType(WinAnchorType::ANC_RIGHT);
         
         ImGui::EndMenu();
     }
@@ -21,8 +27,8 @@ void HomeMenuWindows::updateMenu()
         bool* isActive = mParent->getWindowActiveStateAtIdx(i);
 
         if(ImGui::MenuItem(mParent->getWindowNameAtIdx(i), NULL, *isActive)) {
-            // *isActive = !(*isActive);
-            // mParent->refreshAnchor();
+            *isActive = !(*isActive);
+            mParent->refreshAnchor();
         }
     }
 }

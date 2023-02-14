@@ -34,9 +34,6 @@ void WindowBase::updateWin()
 
 bool WindowBase::tryUpdateWinDisplay()
 {
-    if(!mIsActive)
-        return false;
-    
     configImGuiStyle();
 
     // If this window contains categories, load in the tabs
@@ -117,24 +114,31 @@ void WindowBase::setupAnchor(int totalAnchoredWindows, int anchorIdx)
         return; // This should never happen, but check just in case to avoid dividing by zero
 
     WinAnchorType type = mParent->getAnchorType();
+    DevGuiWindowConfig* c = &mConfig;
 
     // Setup window's position based on the anchor type
     switch(type) {
         case WinAnchorType::ANC_TOP:
-            mConfig.mTrans.y = 19;
+            c->mTrans = ImVec2(c->mScrSize.x / totalAnchoredWindows * anchorIdx, c->mMinimumY);
+            c->mSize = ImVec2(c->mScrSize.x / totalAnchoredWindows, c->mSizeBase.y);
             break;
         case WinAnchorType::ANC_BOTTOM:
-            mConfig.mTrans.y = 720 - 220;
+            c->mTrans = ImVec2(c->mScrSize.x / totalAnchoredWindows * anchorIdx, c->mScrSize.y - c->mSizeBase.y);
+            c->mSize = ImVec2(c->mScrSize.x / totalAnchoredWindows, c->mSizeBase.y);
+            break;
+        case WinAnchorType::ANC_LEFT:
+            c->mTrans = ImVec2(0, (c->mScrSize.y / totalAnchoredWindows * anchorIdx) + c->mMinimumY);
+            c->mSize = ImVec2(c->mSizeBase.x, c->mScrSize.y / totalAnchoredWindows);
+            break;
+        case WinAnchorType::ANC_RIGHT:
+            c->mTrans = ImVec2(c->mScrSize.x - c->mSizeBase.x, (c->mScrSize.y / totalAnchoredWindows * anchorIdx) + c->mMinimumY);
+            c->mSize = ImVec2(c->mSizeBase.x, c->mScrSize.y / totalAnchoredWindows);
             break;
         default:
             mConfig.mTrans = ImVec2(0, 0);
             mConfig.mTrans = ImVec2(1280, 720);
             break;
     }
-
-    // Setup size based on the total anchored windows in this place
-    mConfig.mTrans.x = (1280 / totalAnchoredWindows) * anchorIdx;
-    mConfig.mSize.x = 1280 / totalAnchoredWindows;
 
     ImGui::SetWindowPos(mConfig.mTrans);
     ImGui::SetWindowSize(mConfig.mSize);
