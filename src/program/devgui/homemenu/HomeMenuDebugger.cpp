@@ -9,7 +9,7 @@ void HomeMenuDebugger::updateMenu()
 {
     bool* demoWinState = mParent->getImGuiDemoWindowState();
 
-    if (ImGui::MenuItem("ImGui Demo Window", "", demoWinState)) {
+    if (ImGui::MenuItem("ImGui Demo Window", NULL, demoWinState)) {
         *demoWinState = !(*demoWinState);
     }
 }

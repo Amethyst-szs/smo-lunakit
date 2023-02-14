@@ -25,9 +25,10 @@ public:
     virtual bool tryUpdateWinDisplay();
     
     virtual const char* getWindowName() { return mWinName; };
+    virtual DevGuiWindowConfig* getWindowConfig() { return &mConfig; };
     virtual int getCategoryCount() { return mCategories.size(); };
+    virtual bool* getActiveState() { return &mIsActive; }
     
-    virtual bool isActive() { return mIsActive; }
     virtual bool isInAnchorList() { return mIsAnchorList; }
 
 protected:

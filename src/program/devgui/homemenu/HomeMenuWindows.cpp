@@ -8,16 +8,21 @@ HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName, se
 void HomeMenuWindows::updateMenu()
 {
     if (ImGui::BeginMenu("Window Anchor")) {
-        for(int i = 0; i < WinAnchorType::ANC_TOTAL_SIZE; i++) {
-            if (ImGui::MenuItem(WinAnchorTypeName[i]))
-                mParent->setAnchorType((WinAnchorType)i);
-        }
+        if (ImGui::MenuItem("Top"))
+            mParent->setAnchorType(WinAnchorType::ANC_TOP);
+
+        if (ImGui::MenuItem("Bottom"))
+            mParent->setAnchorType(WinAnchorType::ANC_BOTTOM);
+        
+        ImGui::EndMenu();
     }
 
-    // Add a selector for what windows are open (idk how the fuck to do this, I should probably find a 
-    // new way to expose data from DevGuiManager to the HomeMenu selectors. :amethy73Shrug:)
+    for (int i = 0; i < mParent->getWindowCount(); i++) {
+        bool* isActive = mParent->getWindowActiveStateAtIdx(i);
 
-    // if (ImGui::MenuItem("ImGui Demo Window", "", DevGuiSettings::instance()->mIsDisplayImGuiDemo)) {
-        
-    // }
+        if(ImGui::MenuItem(mParent->getWindowNameAtIdx(i), NULL, *isActive)) {
+            // *isActive = !(*isActive);
+            // mParent->refreshAnchor();
+        }
+    }
 }

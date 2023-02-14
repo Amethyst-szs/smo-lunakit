@@ -33,11 +33,6 @@ enum WinAnchorType {
     ANC_TOTAL_SIZE
 };
 
-__attribute__((used)) static const char* WinAnchorTypeName[] = {
-    "Top",
-    "Bottom"
-};
-
 class DevGuiManager {
     SEAD_SINGLETON_DISPOSER(DevGuiManager);
     DevGuiManager();
@@ -54,13 +49,17 @@ public:
     bool isFirstStep() { return mIsFirstStep; };
 
     // Generic getters
-    sead::Heap* getHeap() { return mDevGuiHeap; };
     int getWindowCount() { return mWindows.size(); };
+    bool* getWindowActiveStateAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getActiveState(); }
+    const char* getWindowNameAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getWindowName(); }
+
+    sead::Heap* getHeap() { return mDevGuiHeap; };
     bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; };
 
     // Anchor functions
     WinAnchorType getAnchorType() { return mWinAnchor; };
     void setAnchorType(WinAnchorType type) { mIsAnchorChange = true; mWinAnchor = type; };
+    void refreshAnchor() { mIsAnchorChange = true; };
     int calcTotalAnchoredWindows();
 
 private:
@@ -71,7 +70,7 @@ private:
     bool mIsActive = false;
     bool mIsFirstStep = false;
 
-    bool mIsAnchorChange = false;
+    bool mIsAnchorChange = true; // Starts true in order to automatically fire anchor setup on first activation
     WinAnchorType mWinAnchor = WinAnchorType::ANC_TOP;
 
     // Debug info

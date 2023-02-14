@@ -6,10 +6,10 @@
 WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, sead::Heap* heap)
     : WindowBase(parent, winName, heap)
 {
-    // Setup window config
     mConfig.mTrans = ImVec2(0, 650);
     mConfig.mSize = ImVec2(mWindowWidth, 70);
-    
+    mIsAnchorList = false;
+
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoNav;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoDecoration;
@@ -69,5 +69,6 @@ void WindowFPS::setupAnchor(int totalAnchoredWindows, int anchorIdx)
             break;
     }
 
-    ImGui::SetWindowPos(mConfig.mTrans, ImGuiCond_FirstUseEver);
+    ImGui::SetWindowPos(mConfig.mTrans);
+    ImGui::SetWindowSize(mConfig.mSize);
 }

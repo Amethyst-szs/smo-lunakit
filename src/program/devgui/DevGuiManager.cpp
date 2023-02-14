@@ -65,16 +65,14 @@ void DevGuiManager::updateDisplay()
         return;
 
     // Load and draw all windows (and update anchors if needed)
-    int totalAnchorWin = -1;
+    int totalAnchorWin = calcTotalAnchoredWindows();;
     int curAnchorWin = 0;
-
-    if (mIsAnchorChange)
-        totalAnchorWin = calcTotalAnchoredWindows();
 
     for (int i = 0; i < mWindows.size(); i++) {
         auto* entry = mWindows.at(i);
+        ImGui::Begin(entry->getWindowName(), NULL, entry->getWindowConfig()->mWindowFlags);
 
-        if(mIsAnchorChange && entry->isInAnchorList()) {
+        if(mIsAnchorChange) {
             entry->setupAnchor(totalAnchorWin, curAnchorWin);
             curAnchorWin++;
         }
@@ -122,7 +120,7 @@ int DevGuiManager::calcTotalAnchoredWindows()
     for (int i = 0; i < mWindows.size(); i++) {
         auto* entry = mWindows.at(i);
 
-        if(entry->isActive() && entry->isInAnchorList())
+        if(*(entry->getActiveState()) && entry->isInAnchorList())
             total++;
     }
 

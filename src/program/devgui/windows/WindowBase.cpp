@@ -13,6 +13,10 @@ WindowBase::WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* h
     mWinName = winName;
     mParent = parent;
     mDevGuiHeap = heap;
+
+    // Default position and size settings
+    mConfig.mTrans = ImVec2(0, 19);
+    mConfig.mSize = ImVec2(427, 220);
 }
 
 void WindowBase::updateWin()
@@ -32,8 +36,7 @@ bool WindowBase::tryUpdateWinDisplay()
 {
     if(!mIsActive)
         return false;
-        
-    ImGui::Begin(mWinName, NULL, mConfig.mWindowFlags);
+    
     configImGuiStyle();
 
     // If this window contains categories, load in the tabs
@@ -121,7 +124,7 @@ void WindowBase::setupAnchor(int totalAnchoredWindows, int anchorIdx)
             mConfig.mTrans.y = 19;
             break;
         case WinAnchorType::ANC_BOTTOM:
-            mConfig.mTrans.y = 300;
+            mConfig.mTrans.y = 720 - 220;
             break;
         default:
             mConfig.mTrans = ImVec2(0, 0);
@@ -130,8 +133,9 @@ void WindowBase::setupAnchor(int totalAnchoredWindows, int anchorIdx)
     }
 
     // Setup size based on the total anchored windows in this place
-    mConfig.mSize.x = (1280 / totalAnchoredWindows) * anchorIdx;
+    mConfig.mTrans.x = (1280 / totalAnchoredWindows) * anchorIdx;
+    mConfig.mSize.x = 1280 / totalAnchoredWindows;
 
-    ImGui::SetWindowPos(mConfig.mTrans, ImGuiCond_FirstUseEver);
-    ImGui::SetWindowSize(mConfig.mSize, ImGuiCond_FirstUseEver);
+    ImGui::SetWindowPos(mConfig.mTrans);
+    ImGui::SetWindowSize(mConfig.mSize);
 }
