@@ -13,17 +13,13 @@ void HomeMenuWorlds::updateMenu()
         return;
     }
 
-    bool isInGame = isInStageScene();
-
     for (auto &entry: holder->mData->mWorldList->mWorldList) {
-        if (ImGui::BeginMenu(entry.mMainStageName)) {
-            if (isInGame) {
-                if(ImGui::MenuItem("Warp to World (Post-Rock)"))
-                    warpToStage(holder, entry.mMainStageName, entry.mMoonRockScenario);
+        if (addMenu(entry.mMainStageName)) {
+            if(ImGui::MenuItem("Warp to World (Post-Rock)"))
+                warpToStage(holder, entry.mMainStageName, entry.mMoonRockScenario);
 
-                if(ImGui::BeginMenu("Warp to Scenario"))
-                    drawScenarioPicker(holder, &entry);
-            }
+            if(ImGui::BeginMenu("Warp to Scenario"))
+                drawScenarioPicker(holder, &entry);
 
             if (ImGui::BeginMenu("Quest Info")) {
                 for (int i = 0; i < entry.mQuestInfoCount; ++i) {

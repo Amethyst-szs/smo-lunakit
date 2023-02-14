@@ -54,6 +54,8 @@ void CategoryHomeShip::updateCatDisplay()
                 mUpdateWorldIdx = progress->mUnlockWorldNum;
 
             drawSelectionIndex("World Count", &mUpdateWorldIdx, &mIsUpdateWorld, ImVec2(1, 17));
+            if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+                ImGui::SetTooltip("Total unlocked kingdoms that\nthe Odyssey ship can visit");
 
             ImGui::EndTabItem();
         }
@@ -72,6 +74,8 @@ void CategoryHomeShip::updateCatDisplay()
                 mUpdateLevelIdx = progress->mHomeLevel;
 
             drawSelectionIndex("Level", &mUpdateLevelIdx, &mIsUpdateLevel, ImVec2(0, 9));
+            if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+                ImGui::SetTooltip("Total segments of Odyssey's\nlarge balloon");
 
             ImGui::EndTabItem();
         }
@@ -81,6 +85,8 @@ void CategoryHomeShip::updateCatDisplay()
                 mUpdateWaterfallIdx = (int)progress->mWaterfallWorldProgress;
 
             drawSelectionList("Waterfall", &mUpdateWaterfallIdx, &mIsUpdateWaterfall, updateWaterfallList, mUpdateWaterfallListSize);
+            if (ImGui::IsItemHovered(ImGuiHoveredFlags_DelayNormal))
+                ImGui::SetTooltip("Some Cascade Kingdom cutscene\ntriggers use this progression info");
 
             ImGui::EndTabItem();
         }
@@ -91,13 +97,19 @@ void CategoryHomeShip::updateCatDisplay()
 
 void CategoryHomeShip::drawSelectionIndex(const char* header, int* idx, bool* activation, ImVec2 minmax)
 {
+    ImGui::BeginGroup();
+
     ImGui::SliderInt(header, idx, minmax.x, minmax.y);
     if(ImGui::Button("Set Parameter"))
         *activation = true;
+    
+    ImGui::EndGroup();
 }
 
 void CategoryHomeShip::drawSelectionList(const char* header, int* idx, bool* activation, const char* list[], int listSize)
 {
+    ImGui::BeginGroup();
+
     const char* currentString = list[*idx];
 
     if(ImGui::BeginCombo(header, currentString)) {
@@ -116,4 +128,6 @@ void CategoryHomeShip::drawSelectionList(const char* header, int* idx, bool* act
 
     if(ImGui::Button("Set Parameter"))
         *activation = true;
+    
+    ImGui::EndGroup();
 }

@@ -31,6 +31,8 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
         if(kit) {
             al::LiveActorGroup* group = kit->mLiveActorGroup2;
             drawProgressBarFrac(group->mActorCount, group->mMaxActorCount, "Actor Kit");
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("- Live Actor Kit -\nTotal actors in scene\nNever changes after scene init");
         } else {
             ImGui::TextDisabled("Live Actor Kit does not exist");
         }
@@ -39,10 +41,24 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
     }
 
     drawProgressBarPerc(getHeapPercent(mDevGuiHeap), "Station/LK Heap");
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("- Stationed Heap -\nThe earliest existing heap\nLuna Kit is on this heap!");
+
     drawProgressBarPerc(getHeapPercent(al::getSequenceHeap()), "Sequence Heap");
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("- Sequence Heap -\nHolds general game info outside\nthe current stage");
+
     drawProgressBarPerc(getHeapPercent(al::getSceneHeap()), "Scene Heap");
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("- Scene Heap -\nHolds current stage memory\n(or any other type of scene)");
+
     drawProgressBarPerc(getHeapPercent(al::getSceneResourceHeap()), "Scene Res Heap");
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("- Scene Resource Heap -\nAll resources (archives) requested\nby scene, not world loader");
+
     drawProgressBarPerc(getHeapPercent(al::getWorldResourceHeap()), "World Res Heap");
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("- World Resource Heap -\nAll resources requested by the\nWorld List for the current world");
 
     ImGui::SetWindowFontScale(mConfig.mFontSize);
 
@@ -71,9 +87,13 @@ void WindowMemoryManage::drawProgressBarPerc(float percent, const char* header)
         return;
     }
 
+    ImGui::BeginGroup();
+    
     ImGui::ProgressBar(percent, ImVec2(0.0f, 0.0f));
     ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
     ImGui::Text(header);
+
+    ImGui::EndGroup();
 }
 
 void WindowMemoryManage::drawProgressBarFrac(int current, int max, const char* header)
@@ -85,9 +105,13 @@ void WindowMemoryManage::drawProgressBarFrac(int current, int max, const char* h
     char buf[32];
     sprintf(buf, "%d/%d", current, max);
 
+    ImGui::BeginGroup();
+
     ImGui::ProgressBar(perc, ImVec2(0.f, 0.f), buf);
     ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
     ImGui::Text(header);
+
+    ImGui::EndGroup();
 }
 
 void WindowMemoryManage::configImGuiStyle()

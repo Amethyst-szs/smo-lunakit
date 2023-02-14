@@ -14,7 +14,9 @@ void CategoryInfPlayer::updateCatDisplay()
         return;
     }
 
-    // Log generic boolean info about player
+    /*
+        // GENERIC BOOLEAN INFO
+    */
 
     bool isDead = PlayerFunction::isPlayerDeadStatus(player);
     bool isDemo = rs::isActiveDemo(player);
@@ -27,32 +29,59 @@ void CategoryInfPlayer::updateCatDisplay()
     ImGui::Checkbox("Grounded", &isGround);
 
     /*
-        // Log player's nerve and state information
+        // PLAYER CLASS, STATE, AND NERVES
     */
     
     // Actor name and nerve
 
+    char* playerName = nullptr;
+    char* stateName = nullptr;
+    char* stateNrvName = nullptr;
+
     int status;
     al::Nerve* playerNerve = player->getNerveKeeper()->getCurrentNerve();
-    char* playerName = abi::__cxa_demangle(typeid(*player).name(), nullptr, nullptr, &status);
-    char* nrvName = abi::__cxa_demangle(typeid(*playerNerve).name(), nullptr, nullptr, &status);
+    playerName = abi::__cxa_demangle(typeid(*player).name(), nullptr, nullptr, &status);
+    
+    if(player->getNerveKeeper()->mStateCtrl) {
+        al::State* state = player->getNerveKeeper()->mStateCtrl->findStateInfo(playerNerve);
+        if(state) {
+            al::Nerve* stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
+            stateName = abi::__cxa_demangle(typeid(*state->mStateBase).name(), nullptr, nullptr, &status);
+            stateNrvName = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
+        }
+    }
 
-    ImGui::Text("%s - %s", playerName, nrvName + 23 + strlen(playerName) + 3);
+    if(playerName) {
+        ImGui::Text("Class: %s", playerName);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("Type of Player Actor\nHakoniwa is normal Mario\nYukimaru is Shiverian Racer");
+        free(playerName);
+    }
 
-    free(playerName);
-    free(nrvName);
+    if(stateName && stateNrvName) {
+        ImGui::Text("State: %s", stateName);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("Current type of action\nthe player is performing");
 
-    // Log player's state and state nerve
-
-    al::State* state = player->getNerveKeeper()->mStateCtrl->findStateInfo(playerNerve);
-    if(state) {
-        al::Nerve* stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
-        char* stateName = abi::__cxa_demangle(typeid(*state->mStateBase).name(), nullptr, nullptr, &status);
-        char* stateNrvName = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
-
-        ImGui::Text("%s - %s", stateName, stateNrvName + 23 + strlen(stateName) + 3);
+        ImGui::Text("State Nrv: %s", stateNrvName + 23 + strlen(stateName) + 3);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("Basically the sub-action\nCurrent nerve of the state");
 
         free(stateName);
         free(stateNrvName);
     }
+
+    /*
+        // PLAYER ANIMATIONS (ONLY IF PlayerActorHakoniwa)
+    */
+
+    PlayerActorHakoniwa* playerHak = tryGetPlayerActorHakoniwa();
+    if(!playerHak) {
+        ImGui::TextDisabled("Cannot display additional info, not Hakoniwa");
+        return;
+    }
+
+    PlayerAnimator* anim = playerHak->mPlayerAnimator;
+    ImGui::Text("Anim: %s (%.00f/%.00f)", anim->curAnim.cstr(), anim->getAnimFrame(), anim->getAnimFrameMax());
+    ImGui::Text("Sub Anim: %s (%.00f/%.00f)", anim->curSubAnim.cstr(), anim->getSubAnimFrame(), anim->getSubAnimFrameMax());
 }

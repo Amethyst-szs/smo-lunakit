@@ -51,6 +51,8 @@ void CategoryHealth::updateCatDisplay()
     if (mIsOverride) {
         ImGui::SameLine();
         ImGui::Checkbox("Is Kids Mode", &mIsKidsMode);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("Kids Mode is Assist Mode\nOnly overrides health meter,\nnot all of Assist Mode!");
 
         ImGui::SliderInt("Health", &mTargetHealth, 1, 9);
     }

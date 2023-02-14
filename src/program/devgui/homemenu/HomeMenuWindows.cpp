@@ -7,7 +7,7 @@ HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName, se
 
 void HomeMenuWindows::updateMenu()
 {
-    if (ImGui::BeginMenu("Window Anchor")) {
+    if (addMenu("Window Anchor")) {
         if (ImGui::MenuItem("Top"))
             mParent->setAnchorType(WinAnchorType::ANC_TOP);
 

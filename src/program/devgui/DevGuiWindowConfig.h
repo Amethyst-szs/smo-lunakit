@@ -10,7 +10,7 @@ struct DevGuiWindowConfig {
     ImVec2 mTrans = ImVec2(0, 0);
     ImVec2 mSize = ImVec2(100, 100);
 
-    const int mMinimumY = 22;
+    const int mMinimumY = 25;
     const ImVec2 mSizeBase = ImVec2(427, 220);
 
     const ImVec2 mScrSize = ImVec2(1280, 720);

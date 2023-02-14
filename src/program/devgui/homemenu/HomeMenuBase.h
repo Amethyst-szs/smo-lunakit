@@ -18,6 +18,8 @@ public:
     virtual const char* getMenuName() { return mMenuName; };
 
 protected:
+    virtual bool addMenu(const char* name, bool enabled = true);
+
     DevGuiManager* mParent = nullptr;
     sead::Heap* mDevGuiHeap = nullptr;
 

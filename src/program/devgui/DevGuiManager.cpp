@@ -15,14 +15,14 @@ void DevGuiManager::init(sead::Heap* heap)
     
     // Create all display windows
 
+    WindowMemoryManage* memWindow = new WindowMemoryManage(this, "LunaKit Memory Manager", mDevGuiHeap);
+    mWindows.pushBack(memWindow);
+
     WindowEditor* editorWindow = new WindowEditor(this, "LunaKit Param Editor", mDevGuiHeap);
     mWindows.pushBack(editorWindow);
 
     WindowInfo* infoWindow = new WindowInfo(this, "LunaKit Info Viewer", mDevGuiHeap);
     mWindows.pushBack(infoWindow);
-
-    WindowMemoryManage* memWindow = new WindowMemoryManage(this, "LunaKit Memory Manager", mDevGuiHeap);
-    mWindows.pushBack(memWindow);
 
     WindowFPS* fpsWindow = new WindowFPS(this, "FPS Window", mDevGuiHeap);
     mWindows.pushBack(fpsWindow);
@@ -84,7 +84,8 @@ void DevGuiManager::updateDisplay()
     
     // Load and draw all home menu tabs
     if (ImGui::BeginMainMenuBar()) {
-        ImGui::SetWindowFontScale(1.25f);
+        ImGui::SetWindowFontScale(1.5f);
+        
         for (int i = 0; i < mHomeMenuTabs.size(); i++) {
             auto* entry = mHomeMenuTabs.at(i);
             if (ImGui::BeginMenu(entry->getMenuName())) {
