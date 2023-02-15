@@ -9,7 +9,7 @@ void HomeMenuCStages::updateMenu()
 {
     ImGui::MenuItem("ExLaunch Devs", NULL, false, false);
 
-    CustomStageManager* manager = mParent->mCustomList;
+    CustomStageManager* manager = mParent->getCustomStageManager();
 
     for(int i = 0; i < manager->getResourceCount(); i++) {
         CustomStageResource* curRes = manager->getResource(i);
@@ -45,7 +45,7 @@ void HomeMenuCStages::drawResource(CustomStageResource* res)
 void HomeMenuCStages::drawCategory(CustomStageCategory* cat)
 {
     if(ImGui::BeginMenu(cat->getCategoryName())) {
-        ImGui::MenuItem(cat->getCatDesc(), NULL, false, false);
+        ImGui::MenuItem(cat->getCategoryDesc(), NULL, false, false);
 
         for(int i = 0; i < cat->getCategorySize(); i++) {
             CustomStageEntry* curEnt = cat->getEntry(i);

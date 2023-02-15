@@ -24,8 +24,9 @@
 #include "devgui/windows/WindowFPS.h"
 
 #include "devgui/homemenu/HomeMenuBase.h"
+#include "devgui/homemenu/HomeMenuFile.h"
 #include "devgui/homemenu/HomeMenuWorlds.h"
-#include "devgui/homemenu/HomeMenuWCStages.h"
+#include "devgui/homemenu/HomeMenuCStages.h"
 #include "devgui/homemenu/HomeMenuWindows.h"
 #include "devgui/homemenu/HomeMenuExtra.h"
 
@@ -56,6 +57,8 @@ public:
     int getWindowCount() { return mWindows.size(); };
     bool* getWindowActiveStateAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getActiveState(); }
     const char* getWindowNameAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getWindowName(); }
+
+    CustomStageManager* getCustomStageManager() { return mCustomList; }
 
     sead::Heap* getHeap() { return mDevGuiHeap; };
     bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; };
