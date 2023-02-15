@@ -15,6 +15,8 @@
 
 #include "GetterUtil.h"
 
+#include "cstages/CustomStageManager.h"
+
 #include "devgui/windows/WindowBase.h"
 #include "devgui/windows/WindowEditor.h"
 #include "devgui/windows/WindowInfo.h"
@@ -64,15 +66,16 @@ public:
     int calcTotalAnchoredWindows();
 
 private:
-    // Heap
-    sead::Heap* mDevGuiHeap = nullptr; // Uses the game system heap
-
-    // Manager status
+    sead::Heap* mDevGuiHeap = nullptr; // Uses the stationed heap
     bool mIsActive = false;
     bool mIsFirstStep = false;
 
+    // Anchor stuff
     bool mIsAnchorChange = true; // Starts true in order to automatically fire anchor setup on first activation
     WinAnchorType mWinAnchor = WinAnchorType::ANC_TOP;
+
+    // Custom stage information
+    CustomStageManager* mCustomList;
 
     // Debug info
     bool mIsDisplayImGuiDemo = false;

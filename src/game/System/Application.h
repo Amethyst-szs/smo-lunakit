@@ -2,10 +2,10 @@
 
 #include "GameFrameWorkNx.h"
 #include "GameDrawInfo.h"
+#include "SystemKit.h"
 
 namespace al
 {
-    class SystemKit;
     class AccountHolder;
 } // namespace al
 
