@@ -24,5 +24,5 @@ public:
     // Unlike categories, these don't have a seperation between run and display since code is triggered once on input (or sets flags)
 
 private:
-    SaveFileIdx selectSaveFile();
+    SaveFileIdx selectSaveFile(bool isAllowCurrentSave);
 };

@@ -31,11 +31,20 @@ void DevGuiManager::init(sead::Heap* heap)
     mWindows.pushBack(fpsWindow);
 
     // Create all home menu tabs
-    HomeMenuWorlds* homeWorld = new HomeMenuWorlds(this, "Worlds", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeWorld);
+    HomeMenuFile* homeFile = new HomeMenuFile(this, "File", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeFile);
+
+    HomeMenuSettings* homeSetting = new HomeMenuSettings(this, "Settings", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeSetting);
 
     HomeMenuWindows* homeWindows = new HomeMenuWindows(this, "Windows", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeWindows);
+
+    HomeMenuWorlds* homeWorld = new HomeMenuWorlds(this, "Worlds", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeWorld);
+
+    HomeMenuCStages* homeCStages = new HomeMenuCStages(this, "Cust. Maps", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeCStages);
 
     HomeMenuExtra* homeExtra = new HomeMenuExtra(this, "Extras", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeExtra);

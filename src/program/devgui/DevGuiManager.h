@@ -17,6 +17,8 @@
 
 #include "cstages/CustomStageManager.h"
 
+#include "devgui/DevGuiSettings.h"
+
 #include "devgui/windows/WindowBase.h"
 #include "devgui/windows/WindowEditor.h"
 #include "devgui/windows/WindowInfo.h"
@@ -25,9 +27,10 @@
 
 #include "devgui/homemenu/HomeMenuBase.h"
 #include "devgui/homemenu/HomeMenuFile.h"
+#include "devgui/homemenu/HomeMenuSettings.h"
+#include "devgui/homemenu/HomeMenuWindows.h"
 #include "devgui/homemenu/HomeMenuWorlds.h"
 #include "devgui/homemenu/HomeMenuCStages.h"
-#include "devgui/homemenu/HomeMenuWindows.h"
 #include "devgui/homemenu/HomeMenuExtra.h"
 
 enum WinAnchorType {
@@ -58,9 +61,9 @@ public:
     bool* getWindowActiveStateAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getActiveState(); }
     const char* getWindowNameAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getWindowName(); }
 
-    CustomStageManager* getCustomStageManager() { return mCustomList; }
-
     sead::Heap* getHeap() { return mDevGuiHeap; };
+    DevGuiSettings* getSettings() { return &mSettings; }
+    CustomStageManager* getCustomStageManager() { return mCustomList; }
     bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; };
 
     // Anchor functions
@@ -73,6 +76,9 @@ private:
     sead::Heap* mDevGuiHeap = nullptr; // Uses the stationed heap
     bool mIsActive = false;
     bool mIsFirstStep = false;
+
+    // Settings / Cheats
+    DevGuiSettings mSettings;
 
     // Anchor stuff
     bool mIsAnchorChange = true; // Starts true in order to automatically fire anchor setup on first activation
