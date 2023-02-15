@@ -104,20 +104,6 @@ void DevGuiManager::updateDisplay()
     // Draw the demo window if the settings class has it enabled
     if(mIsDisplayImGuiDemo)
         ImGui::ShowDemoWindow();
-    
-    ImGui::Begin("File loader debug test window thing");
-    ImGui::Text("Entry count: %i", mCustomList->getFileCount());
-    for(int i = 0; i < mCustomList->getFileCount(); i++) {
-        ImGui::Text("File: %s", mCustomList->getFileName(i));
-    }
-
-    ImGui::Text("Res %p", mCustomList->getResource(0));
-    ImGui::Text("Res Valid %s", BTOC(mCustomList->getResource(0)->isValid()));
-    ImGui::Text("Res Size %i", mCustomList->getResource(0)->getResourceSize());
-    ImGui::Text("%s (%s)", mCustomList->getEntryName(0, 0, 0), BTOC(mCustomList->getEntryValid(0, 0, 0)));
-    ImGui::Text("%s (%s)", mCustomList->getEntryName(0, 0, 1), BTOC(mCustomList->getEntryValid(0, 0, 1)));
-
-    ImGui::End();
 
     // Reset the first step flag when complete!
     if (mIsFirstStep)

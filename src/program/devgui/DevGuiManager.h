@@ -25,6 +25,7 @@
 
 #include "devgui/homemenu/HomeMenuBase.h"
 #include "devgui/homemenu/HomeMenuWorlds.h"
+#include "devgui/homemenu/HomeMenuWCStages.h"
 #include "devgui/homemenu/HomeMenuWindows.h"
 #include "devgui/homemenu/HomeMenuExtra.h"
 

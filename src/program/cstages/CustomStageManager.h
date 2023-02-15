@@ -34,9 +34,9 @@ public:
 
     sead::PtrArray<CustomStageCategory>* getCategories(int resIdx) { return &mStageResources.at(resIdx)->mCategories; }
     CustomStageCategory* getCategory(int resIdx, int catIdx) { return mStageResources.at(resIdx)->mCategories.at(catIdx); }
-    const char* getCategoryName(int resIdx, int catIdx) { return mStageResources.at(resIdx)->mCategories.at(catIdx)->getCatName(); }
-    const char* getCategoryDesc(int resIdx, int catIdx) { return mStageResources.at(resIdx)->mCategories.at(catIdx)->getCatDesc(); }
-    int getCategorySize(int resIdx, int catIdx) { return mStageResources.at(resIdx)->mCategories.at(catIdx)->getCatSize(); }
+    const char* getCategoryName(int resIdx, int catIdx) { return mStageResources.at(resIdx)->mCategories.at(catIdx)->getCategoryName(); }
+    const char* getCategoryDesc(int resIdx, int catIdx) { return mStageResources.at(resIdx)->mCategories.at(catIdx)->getCategoryDesc(); }
+    int getCategorySize(int resIdx, int catIdx) { return mStageResources.at(resIdx)->mCategories.at(catIdx)->getCategorySize(); }
 
     sead::PtrArray<CustomStageResource>* getResources() { return &mStageResources; }
     CustomStageResource* getResource(int idx) { return mStageResources.at(idx); }

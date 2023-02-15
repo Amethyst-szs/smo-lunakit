@@ -27,9 +27,9 @@ class CustomStageCategory {
 public:
     CustomStageCategory(al::ByamlIter catIter);
 
-    const char* getCatName() { return mCatName; }
-    const char* getCatDesc() { return mCatDesc; }
-    uint getCatSize() { return mCatSize; }
+    const char* getCategoryName() { return mCatName; }
+    const char* getCategoryDesc() { return mCatDesc; }
+    int getCategorySize() { return mEntries.size(); }
 
     sead::PtrArray<CustomStageEntry>* getEntries() { return &mEntries; }
     CustomStageEntry* getEntry(int entIdx) { return mEntries.at(entIdx); }
@@ -60,9 +60,9 @@ public:
 
     sead::PtrArray<CustomStageCategory>* getCategorys() { return &mCategories; }
     CustomStageCategory* getCategory(int catIdx) { return mCategories.at(catIdx); }
-    const char* getCategoryName(int catIdx) { return mCategories.at(catIdx)->getCatName(); }
-    const char* getCategoryDesc(int catIdx) { return mCategories.at(catIdx)->getCatDesc(); }
-    int getCategorySize(int catIdx) { return mCategories.at(catIdx)->getCatSize(); }
+    const char* getCategoryName(int catIdx) { return mCategories.at(catIdx)->getCategoryName(); }
+    const char* getCategoryDesc(int catIdx) { return mCategories.at(catIdx)->getCategoryDesc(); }
+    int getCategorySize(int catIdx) { return mCategories.at(catIdx)->getCategorySize(); }
 
     sead::PtrArray<CustomStageCategory> mCategories;
     
