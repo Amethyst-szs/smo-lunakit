@@ -131,6 +131,13 @@ void HomeMenuWorlds::drawScenarioPicker(GameDataHolderAccessor* data, WorldListE
 
 void HomeMenuWorlds::warpToStage(GameDataHolderAccessor* data, const char* stageName, int scenario)
 {
+    PlayerActorBase* player = tryGetPlayerActor();
+    if(!player)
+        return;
+    
+    if(PlayerFunction::isPlayerDeadStatus(player))
+        return;
+    
     ChangeStageInfo stageInfo(data->mData, "start", stageName, false, scenario, ChangeStageInfo::SubScenarioType::UNK);
     GameDataFunction::tryChangeNextStage(*data, &stageInfo);
 }

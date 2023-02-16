@@ -4,6 +4,7 @@
 
 #include "game/GameData/GameDataHolder.h"
 #include "game/GameData/GameDataFunction.h"
+#include "game/Player/PlayerFunction.h"
 
 #include "program/GetterUtil.h"
 

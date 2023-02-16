@@ -2,6 +2,8 @@
 
 #include "imgui.h"
 
+#include "game/Player/PlayerFunction.h"
+
 #include "cstages/CustomStage.h"
 #include "cstages/CustomStageManager.h"
 

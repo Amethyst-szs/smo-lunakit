@@ -66,6 +66,13 @@ void HomeMenuCStages::drawEntry(CustomStageEntry* ent)
 
 void HomeMenuCStages::warpToStage(GameDataHolderAccessor* data, const char* stageName)
 {
+    PlayerActorBase* player = tryGetPlayerActor();
+    if(!player)
+        return;
+    
+    if(PlayerFunction::isPlayerDeadStatus(player))
+        return;
+
     ChangeStageInfo stageInfo(data->mData, "start", stageName, false, 1, ChangeStageInfo::SubScenarioType::UNK);
     GameDataFunction::tryChangeNextStage(*data, &stageInfo);
 }
