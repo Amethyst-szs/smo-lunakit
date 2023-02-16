@@ -22,6 +22,7 @@ public:
     // virtual al::MessageSystem* getMessageSystem() const;
 
     void setPlayingFileId(s32 file);
+    void requestSetPlayingFileId(int file);
     void intitalizeData();
     void initialzeDataCommon();
     void resetTempSaveData(bool);

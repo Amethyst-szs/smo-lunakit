@@ -2,6 +2,7 @@
 
 #include "imgui.h"
 
+#include "game/GameData/GameDataHolder.h"
 #include "game/SaveData/SaveDataAccessFunction.h"
 
 #include "devgui/homemenu/HomeMenuBase.h"
@@ -24,5 +25,5 @@ public:
     // Unlike categories, these don't have a seperation between run and display since code is triggered once on input (or sets flags)
 
 private:
-    SaveFileIdx selectSaveFile(bool isAllowCurrentSave);
+    SaveFileIdx selectSaveFile(GameDataHolder* holder, bool isAllowCurrentSave);
 };
