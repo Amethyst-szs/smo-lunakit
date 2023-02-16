@@ -40,7 +40,10 @@ bool WindowFPS::tryUpdateWinDisplay()
 
     char overlay[10];
     sprintf(overlay, "%.00f FPS", curFPS);
-    ImGui::PlotLines("", mHistory, IM_ARRAYSIZE(mHistory), mHistoryOffset, overlay, 0.0f, 60.0f, mConfig.mSize);
+
+    ImVec2 lineSize = mConfig.mSize;
+    lineSize.x -= 12;
+    ImGui::PlotLines("", mHistory, IM_ARRAYSIZE(mHistory), mHistoryOffset, overlay, 0.0f, 60.0f, lineSize);
 
     ImGui::End();
 

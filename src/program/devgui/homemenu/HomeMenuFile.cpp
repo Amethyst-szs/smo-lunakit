@@ -12,30 +12,26 @@ void HomeMenuFile::updateMenu()
     if(!holder)
         return;
     
-    // Temporary previewer thing
-    sead::FormatFixedSafeString<0x20> curSave("Current Save %i", holder->getPlayingFileId());
-    ImGui::MenuItem(curSave.cstr(), NULL, false, false);
+    bool isSaved = SaveDataAccessFunction::isDoneSave(holder);
 
     // Quick save file loader (Maybe add custom save archive support?)
-
-    if(addMenu("Load")) {
+    if(addMenu("Load", isSaved)) {
         SaveFileIdx targetIdx = selectSaveFile(holder, true);
         
         if(targetIdx != SaveFileIdx::NONE) {
             holder->requestSetPlayingFileId((int)targetIdx);
+            
         }
 
         ImGui::EndMenu();
     }
     
     // Quick save
-
-    if(ImGui::MenuItem("Save"))
+    if(ImGui::MenuItem("Save", NULL, false, isSaved))
         SaveDataAccessFunction::startSaveDataWrite(holder);
 
     // Write current save into another slot
-
-    if(addMenu("Save As")) {
+    if(addMenu("Save As", isSaved)) {
         int curIdx = holder->getPlayingFileId();
 
         SaveFileIdx targetIdx = selectSaveFile(holder, false);
@@ -48,8 +44,7 @@ void HomeMenuFile::updateMenu()
     }
 
     // Delete a save file.
-
-    if(addMenu("Delete")) {
+    if(addMenu("Delete", isSaved)) {
         SaveFileIdx targetIdx = selectSaveFile(holder, false);
 
         if(targetIdx != SaveFileIdx::NONE)
@@ -64,7 +59,7 @@ SaveFileIdx HomeMenuFile::selectSaveFile(GameDataHolder* holder, bool isAllowCur
     SaveFileIdx sel = SaveFileIdx::NONE;
 
     for(int i = 0; i < SaveFileIdx::MAX_SIZE; i++) {
-        sead::FormatFixedSafeString<0x10> buttonName("File %i", i);
+        sead::FormatFixedSafeString<0x10> buttonName("File %i", i + 1);
 
         if(!isAllowCurrentSave && i == holder->getPlayingFileId()) {
             ImGui::MenuItem(buttonName.cstr(), NULL, false, false);

@@ -55,6 +55,15 @@ public:
 
     void updateNoclip();
 
+    // Theme functions
+    // Migrate theme code from windows to manager
+
+    // Anchor functions
+    WinAnchorType getAnchorType() { return mWinAnchor; };
+    void setAnchorType(WinAnchorType type) { mIsAnchorChange = true; mWinAnchor = type; };
+    void refreshAnchor() { mIsAnchorChange = true; };
+    int calcTotalAnchoredWindows();
+
     bool isMenuActive() { return mIsActive; };
     bool isFirstStep() { return mIsFirstStep; };
 
@@ -67,12 +76,6 @@ public:
     DevGuiSettings* getSettings() { return &mSettings; }
     CustomStageManager* getCustomStageManager() { return mCustomList; }
     bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; };
-
-    // Anchor functions
-    WinAnchorType getAnchorType() { return mWinAnchor; };
-    void setAnchorType(WinAnchorType type) { mIsAnchorChange = true; mWinAnchor = type; };
-    void refreshAnchor() { mIsAnchorChange = true; };
-    int calcTotalAnchoredWindows();
 
 private:
     sead::Heap* mDevGuiHeap = nullptr; // Uses the stationed heap

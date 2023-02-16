@@ -88,8 +88,11 @@ void WindowMemoryManage::drawProgressBarPerc(float percent, const char* header)
     }
 
     ImGui::BeginGroup();
+
+    char buf[16];
+    sprintf(buf, "%.02f%%", percent * 100.f);
     
-    ImGui::ProgressBar(percent, ImVec2(0.0f, 0.0f));
+    ImGui::ProgressBar(percent, ImVec2(0.0f, 0.0f), buf);
     ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
     ImGui::Text(header);
 
