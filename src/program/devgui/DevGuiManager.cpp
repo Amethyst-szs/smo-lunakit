@@ -31,20 +31,20 @@ void DevGuiManager::init(sead::Heap* heap)
     mWindows.pushBack(fpsWindow);
 
     // Create all home menu tabs
-    // HomeMenuFile* homeFile = new HomeMenuFile(this, "File", mDevGuiHeap);
-    // mHomeMenuTabs.pushBack(homeFile);
+    HomeMenuFile* homeFile = new HomeMenuFile(this, "File", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeFile);
 
-    // HomeMenuSettings* homeSetting = new HomeMenuSettings(this, "Settings", mDevGuiHeap);
-    // mHomeMenuTabs.pushBack(homeSetting);
+    HomeMenuSettings* homeSetting = new HomeMenuSettings(this, "Settings", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeSetting);
 
-    // HomeMenuWindows* homeWindows = new HomeMenuWindows(this, "Windows", mDevGuiHeap);
-    // mHomeMenuTabs.pushBack(homeWindows);
+    HomeMenuWindows* homeWindows = new HomeMenuWindows(this, "Windows", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeWindows);
 
-    // HomeMenuWorlds* homeWorld = new HomeMenuWorlds(this, "Worlds", mDevGuiHeap);
-    // mHomeMenuTabs.pushBack(homeWorld);
+    HomeMenuWorlds* homeWorld = new HomeMenuWorlds(this, "Kingdoms", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeWorld);
 
-    // HomeMenuCStages* homeCStages = new HomeMenuCStages(this, "Cust. Maps", mDevGuiHeap);
-    // mHomeMenuTabs.pushBack(homeCStages);
+    HomeMenuCStages* homeCStages = new HomeMenuCStages(this, "Stages", mDevGuiHeap);
+    mHomeMenuTabs.pushBack(homeCStages);
 
     HomeMenuExtra* homeExtra = new HomeMenuExtra(this, "Extras", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeExtra);
@@ -81,7 +81,7 @@ void DevGuiManager::updateDisplay()
         auto* entry = mWindows.at(i);
         if(!entry->isActive())
             continue;
-            
+
         ImGui::Begin(entry->getWindowName(), NULL, entry->getWindowConfig()->mWindowFlags);
 
         if(mIsAnchorChange) {
@@ -91,10 +91,6 @@ void DevGuiManager::updateDisplay()
 
         entry->tryUpdateWinDisplay();
     }
-
-    ImGui::Begin("Test Window");
-    ImGui::Text("What the fuck");
-    ImGui::End();
 
     mIsAnchorChange = false;
     

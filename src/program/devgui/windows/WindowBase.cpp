@@ -136,7 +136,7 @@ void WindowBase::setupAnchor(int totalAnchoredWindows, int anchorIdx)
             break;
         default:
             mConfig.mTrans = ImVec2(0, 0);
-            mConfig.mTrans = ImVec2(1280, 720);
+            mConfig.mSize = ImVec2(1280, 720);
             break;
     }
 

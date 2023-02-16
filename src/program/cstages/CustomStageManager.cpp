@@ -2,25 +2,25 @@
 
 void CustomStageManager::init(sead::Heap* heap)
 {
-    initDirectoryInfo();
+    setupDirectoryInfo();
 
     mStageResources.allocBuffer(mEntryCount, heap);
     for(int i = 0; i < mEntryCount; i++) {
-        sead::FormatFixedSafeString<0xff> filePath("LunaKitData/CustomStages/%s", getFileName(i));
+        sead::FormatFixedSafeString<0xff> filePath("LKData/CustomStages/%s", getFileName(i));
         filePath.chop(4);
 
-        if (!al::isExistArchive(filePath))
-            EXL_ABORT(0x69);
+        // if (!al::isExistArchive(filePath))
+        //     EXL_ABORT(0x69);
 
         CustomStageResource* newRes = new (heap) CustomStageResource(filePath.cstr(), getFileName(i));
         mStageResources.pushBack(newRes);
     }
 }
 
-void CustomStageManager::initDirectoryInfo()
+void CustomStageManager::setupDirectoryInfo()
 {
     nn::fs::DirectoryHandle handle;
-    nn::Result r = nn::fs::OpenDirectory(&handle, "sd:/LunaKit/LunaKitData/CustomStages/", nn::fs::OpenDirectoryMode_File);
+    nn::Result r = nn::fs::OpenDirectory(&handle, "sd:/LunaKit/LKData/CustomStages/", nn::fs::OpenDirectoryMode_File);
     if (R_FAILED(r)) return;
     s64 entryCount;
     r = nn::fs::GetDirectoryEntryCount(&entryCount, handle);

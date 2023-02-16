@@ -54,7 +54,6 @@
 static const char* DBG_FONT_PATH = "ImGuiData/Font/nvn_font_jis1.ntx";
 static const char* DBG_SHADER_PATH = "ImGuiData/Font/nvn_font_shader_jis1.bin";
 static const char* DBG_TBL_PATH = "ImGuiData/Font/nvn_font_jis1_tbl.bin";
-static const char* DEV_WORLD_LIST_PATH = "LunaKitData/CustomWorldList";
 
 #define IMGUI_ENABLED true
 
@@ -313,74 +312,6 @@ void drawDebugWindow() {
                 ImGui::BulletText("Trigger - ZR");
         }
 
-        if (ImGui::CollapsingHeader("Miscellaneous Save Data")) {
-            GameDataFile* file = gameSeq->mGameDataHolder.mData->mGameDataFile;
-
-            if (ImGui::TreeNode("Cappy State")) {
-                static bool isHaveCap = true;
-
-                ImGui::Checkbox("Is Have Cappy?", &isHaveCap);
-                if(ImGui::Button("Set Cappy State"))
-                    file->mIsEnableCap = isHaveCap;
-                ImGui::TreePop();
-            }
-            
-            if (ImGui::TreeNode("Coin Counter")) {
-                static bool isOverrideCoins = false;
-                static int coinCount = 9999;
-
-                ImGui::DragInt("Coins", &coinCount, 25.f, -9999, 99999);
-                ImGui::Checkbox("Override Coins", &isOverrideCoins);
-                if(isOverrideCoins) {
-                    file->mCoinCount = coinCount;
-                    if(isInGame) {
-                        StageScene *stageScene = (StageScene *) gameSeq->curScene;
-                        stageScene->mSceneLayout->coinCounter->updateCountImmidiate();
-                    }
-                }
-
-                ImGui::TreePop();
-            }
-        }
-
-        if (ImGui::CollapsingHeader("Custom World List")) {
-            uint catCount = Statics::devStageListByaml.getSize();
-
-            for(uint catIdx = 0; catIdx < catCount; catIdx++) {
-                al::ByamlIter catDict = Statics::devStageListByaml.getIterByIndex(catIdx);
-                const char* catName = "null";
-                const char* catDesc = "null";
-
-                if(!al::tryGetByamlString(&catName, catDict, "CategoryName"))
-                    ImGui::Text("Category does not have name!");
-
-                if(!al::tryGetByamlString(&catDesc, catDict, "CategoryDesc"))
-                    ImGui::Text("Category does not have description!");
-                
-                if (ImGui::TreeNode(catName)) {
-                    al::ByamlIter stageDict = catDict.getIterByKey("StageList");
-                    uint stageCount = stageDict.getSize();
-
-                    ImGui::Text(catDesc);
-                    ImGui::Text("Category Size - %u", stageCount);
-
-                    for(int stageIdx = 0; stageIdx < stageCount; stageIdx++) {
-                        const char* stageName;
-                        stageDict.tryGetStringByIndex(&stageName, stageIdx);
-                        
-                        if(ImGui::Button(stageName) && isInGame) {
-                            ChangeStageInfo stageInfo(gameSeq->mGameDataHolder.mData, "start",
-                                stageName, false, 1, ChangeStageInfo::SubScenarioType::UNK);
-                                
-                            GameDataFunction::tryChangeNextStage(gameSeq->mGameDataHolder, &stageInfo);
-                        }
-                    } // Stage name loop
-
-                    ImGui::TreePop(); // Pop current category tree
-                } // Exit current category tree
-            } // Exit category loop
-        }
-
     } // Check sequence
 
     ImGui::End();
@@ -507,16 +438,6 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
         DevGuiManager::instance()->init(curHeap);
 
         DevGuiPrimitive::createInstance(curHeap);
-
-        if (!al::isExistArchive(DEV_WORLD_LIST_PATH))
-            EXL_ABORT(0x69);
-
-        al::Resource* res;
-        res = new (curHeap) al::Resource(DEV_WORLD_LIST_PATH);
-        if(res->isExistByml("StageList")) {
-            al::ByamlIter iter = al::ByamlIter(res->tryGetByml("StageList"));
-            Statics::devStageListByaml = iter;
-        }
 
         sead::TextWriter::setDefaultFont(sead::DebugFontMgrJis1Nvn::instance());
 

@@ -9,6 +9,8 @@ void HomeMenuSettings::updateMenu()
 {
     DevGuiSettings* set = mParent->getSettings();
 
+    ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+
     ImGui::MenuItem("Settings:", NULL, false, false);
 
     parameterEdit("Autosaving", &set->mIsAutosave);
@@ -20,6 +22,8 @@ void HomeMenuSettings::updateMenu()
     parameterEdit("Noclip", &set->mIsNoclip);
     parameterEdit("Hyperspeed", &set->mIsHyperspeed);
     parameterEdit("Bonking", &set->mIsBonk);
+
+    ImGui::PopItemFlag();
 }
 
 void HomeMenuSettings::parameterEdit(const char* name, bool* value)

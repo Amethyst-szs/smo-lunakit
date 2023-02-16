@@ -8,6 +8,8 @@ HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName, se
 void HomeMenuWindows::updateMenu()
 {
     if (addMenu("Window Anchor")) {
+        ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+
         if (ImGui::MenuItem("Top"))
             mParent->setAnchorType(WinAnchorType::ANC_TOP);
 
@@ -20,15 +22,21 @@ void HomeMenuWindows::updateMenu()
         if (ImGui::MenuItem("Right"))
             mParent->setAnchorType(WinAnchorType::ANC_RIGHT);
         
+        ImGui::PopItemFlag();
+        
         ImGui::EndMenu();
     }
 
+    ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+
     for (int i = 0; i < mParent->getWindowCount(); i++) {
         bool* isActive = mParent->getWindowActiveStateAtIdx(i);
-
+        
         if(ImGui::MenuItem(mParent->getWindowNameAtIdx(i), NULL, *isActive)) {
             *isActive = !(*isActive);
             mParent->refreshAnchor();
         }
     }
+
+    ImGui::PopItemFlag();
 }

@@ -8,6 +8,8 @@ CustomStageEntry::CustomStageEntry(const char* stageName)
     mIsExist = al::isExistArchive(stageMapPath);
 }
 
+
+
 CustomStageCategory::CustomStageCategory(al::ByamlIter catIter)
 {
     sead::Heap* heap = al::getStationedHeap();

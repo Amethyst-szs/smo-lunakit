@@ -24,8 +24,7 @@ public:
     CustomStageManager() {};
 
     void init(sead::Heap* heap);
-    void initDirectoryInfo();
-
+    void setupDirectoryInfo();
 
     sead::PtrArray<CustomStageEntry>* getEntries(int resIdx, int catIdx) { return &mStageResources.at(resIdx)->mCategories.at(catIdx)->mEntries; }
     CustomStageEntry* getEntry(int resIdx, int catIdx, int entIdx) { return mStageResources.at(resIdx)->mCategories.at(catIdx)->mEntries.at(entIdx); }

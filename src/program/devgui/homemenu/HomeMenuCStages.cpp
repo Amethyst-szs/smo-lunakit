@@ -7,17 +7,11 @@ HomeMenuCStages::HomeMenuCStages(DevGuiManager* parent, const char* menuName, se
 
 void HomeMenuCStages::updateMenu()
 {
-    ImGui::MenuItem("ExLaunch Devs", NULL, false, false);
-
     CustomStageManager* manager = mParent->getCustomStageManager();
 
     for(int i = 0; i < manager->getResourceCount(); i++) {
         CustomStageResource* curRes = manager->getResource(i);
         drawResource(curRes);
-    }
-
-    if (ImGui::MenuItem("Refresh Database")) {
-        // Implement function into CustomStageManager to destroy current database and regenerate
     }
 }
 
