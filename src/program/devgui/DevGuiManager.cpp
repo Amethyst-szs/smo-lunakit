@@ -82,7 +82,7 @@ void DevGuiManager::updateDisplay()
         if(!entry->isActive())
             continue;
 
-        ImGui::Begin(entry->getWindowName(), NULL, entry->getWindowConfig()->mWindowFlags);
+        ImGui::Begin(entry->getWindowName(), entry->getCloseInteractionPtr(), entry->getWindowConfig()->mWindowFlags);
 
         if(mIsAnchorChange) {
             entry->setupAnchor(totalAnchorWin, curAnchorWin);
@@ -126,6 +126,53 @@ void DevGuiManager::updateCursorState()
 
     if (mIsFirstStep)
         ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+}
+
+void DevGuiManager::updateNoclip()
+{
+    PlayerActorBase* player = tryGetPlayerActor();
+
+    if(!mSettings.mIsNoclip && !rs::isActiveDemo(player))
+        al::onCollide(player);
+
+    if(!mSettings.mIsNoclip)
+        return;
+
+    static float speed = 25.0f;
+    static float speedMax = 150.0f;
+    static float vspeed = 20.0f;
+    static float speedGain = 0.0f;
+
+    sead::Vector3f *playerPos = al::getTransPtr(player);
+    sead::Vector3f *cameraPos = al::getCameraPos(player, 0);
+    sead::Vector2f *leftStick = al::getLeftStick(-1);
+
+    // Its better to do this here because loading zones reset this.
+    al::offCollide(player);
+    al::setVelocityZero(player);
+
+    // Mario slightly goes down even when velocity is 0. This is a hacky fix for that.
+    playerPos->y += 1.4553f;
+
+    float d = sqrt(al::powerIn(playerPos->x - cameraPos->x, 2) + (al::powerIn(playerPos->z - cameraPos->z, 2)));
+    float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos->x);
+    float vz = ((speed + speedGain) / d) * (playerPos->z - cameraPos->z);
+
+    if (!al::isPadHoldZR(-1)) {
+        playerPos->x -= leftStick->x * vz;
+        playerPos->z += leftStick->x * vx;
+
+        playerPos->x += leftStick->y * vx;
+        playerPos->z += leftStick->y * vz;
+
+        if (al::isPadHoldX(-1)) speedGain -= 0.5f;
+        if (al::isPadHoldY(-1)) speedGain += 0.5f;
+        if (speedGain <= 0.0f) speedGain = 0.0f;
+        if (speedGain >= speedMax) speedGain = speedMax;
+
+        if (al::isPadHoldZL(-1) || al::isPadHoldA(-1)) playerPos->y -= (vspeed + speedGain / 6);
+        if (al::isPadHoldB(-1)) playerPos->y += (vspeed + speedGain / 6);
+    }
 }
 
 int DevGuiManager::calcTotalAnchoredWindows()

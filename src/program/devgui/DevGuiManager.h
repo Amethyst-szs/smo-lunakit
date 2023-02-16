@@ -53,6 +53,8 @@ public:
     void updateDisplay();
     void updateCursorState();
 
+    void updateNoclip();
+
     bool isMenuActive() { return mIsActive; };
     bool isFirstStep() { return mIsFirstStep; };
 

@@ -21,13 +21,7 @@
 namespace exl::diag {
 
     struct AbortCtx {
-        u64 value;
-        const char* file;
-        int line;
-        const char* func;
-        const char* expr;
-        const char* format;
-        va_list args;
+        Result m_Result;
     };
 
     void NORETURN NOINLINE AssertionFailureImpl(const char *file, int line, const char *func, const char *expr, u64 value, const char *format, ...) __attribute__((format(printf, 6, 7)));

@@ -9,7 +9,12 @@ void enableDebugNvn() {
     p.WriteInst(inst::Nop());
 }
 
+void stubSocketInit() {
+    patch::CodePatcher p(0x95C498);
+    p.WriteInst(inst::Nop());
+}
 
 void runCodePatches() {
     enableDebugNvn();
+    stubSocketInit();
 }

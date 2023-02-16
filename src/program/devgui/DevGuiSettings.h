@@ -8,6 +8,5 @@ struct DevGuiSettings {
 
     // Cheats
     bool mIsNoclip = false;
-    bool mIsHyperspeed = false;
-    bool mIsBonk = true;
+    bool mIsAlwaysAllowCheckpoints = false;
 };

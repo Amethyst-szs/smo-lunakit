@@ -64,7 +64,7 @@ class HakoniwaSequence : public al::Sequence {
         void exeDemoLava();
         void exeFadeToNewGame();
 
-        al::Scene *curScene;                        // 0xB0
+        StageScene *curScene;                        // 0xB0
         GameDataHolderAccessor mGameDataHolder;     // 0xB8
         al::GamePadSystem *mGamepadSys;             // 0xC0
         HakoniwaStateDemoOpening *mDemoOpening;     // 0xC8

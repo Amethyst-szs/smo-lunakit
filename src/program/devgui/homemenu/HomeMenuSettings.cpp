@@ -20,8 +20,7 @@ void HomeMenuSettings::updateMenu()
     ImGui::MenuItem("Cheats:", NULL, false, false);
 
     parameterEdit("Noclip", &set->mIsNoclip);
-    parameterEdit("Hyperspeed", &set->mIsHyperspeed);
-    parameterEdit("Bonking", &set->mIsBonk);
+    parameterEdit("Always Allow Warps", &set->mIsAlwaysAllowCheckpoints);
 
     ImGui::PopItemFlag();
 }

@@ -13,10 +13,6 @@ namespace exl::util::modules {
         return GetMainModuleInfo().m_Total.m_Start + offset;
     }
 
-    inline uintptr_t GetModuleOffset(int index, uintptr_t offset) {
-        return GetModuleInfo(index).m_Total.m_Start + offset;
-    }
-
     inline uintptr_t GetTargetStart() {
         return GetTargetOffset(0);
     }

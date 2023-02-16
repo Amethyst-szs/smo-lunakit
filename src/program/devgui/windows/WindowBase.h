@@ -25,6 +25,7 @@ public:
     virtual bool tryUpdateWinDisplay();
     
     virtual const char* getWindowName() { return mWinName; };
+    virtual bool* getCloseInteractionPtr() { return &mIsCloseUnpressed; }
     virtual DevGuiWindowConfig* getWindowConfig() { return &mConfig; };
     virtual int getCategoryCount() { return mCategories.size(); };
     virtual bool* getActiveState() { return &mIsActive; }
@@ -34,6 +35,7 @@ public:
 
 protected:
     bool mIsActive = true;
+    bool mIsCloseUnpressed = true;
     const char* mWinName = "null";
 
     DevGuiManager* mParent;

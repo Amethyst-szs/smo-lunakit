@@ -67,8 +67,8 @@ namespace al {
         }
 
         const sead::FixedSafeString<0x40> mName;
-        al::Scene *mNextScene;
         al::Scene *mCurrentScene;
+        al::Scene *mNextScene;
         al::SceneCreator *mSceneCreator;
         al::AudioDirector *mAudioDirector;
         al::AudioKeeper *mAudioKeeper;

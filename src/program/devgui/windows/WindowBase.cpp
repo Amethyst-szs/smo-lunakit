@@ -21,6 +21,12 @@ WindowBase::WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* h
 
 void WindowBase::updateWin()
 {
+    if(!mIsCloseUnpressed) {
+        mIsCloseUnpressed = true;
+        mIsActive = false;
+        mParent->refreshAnchor();
+    }
+    
     if(!mIsActive)
         return;
         
