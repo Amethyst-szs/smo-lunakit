@@ -132,6 +132,9 @@ void DevGuiManager::updateNoclip()
 {
     PlayerActorBase* player = tryGetPlayerActor();
 
+    if(!player)
+        return;
+
     if(!mSettings.mIsNoclip && !rs::isActiveDemo(player))
         al::onCollide(player);
 

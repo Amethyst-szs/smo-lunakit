@@ -17,6 +17,9 @@ WindowBase::WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* h
     // Default position and size settings
     mConfig.mTrans = ImVec2(0, 19);
     mConfig.mSize = ImVec2(427, 220);
+    
+    // Window flags
+    mConfig.mWindowFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
 }
 
 void WindowBase::updateWin()
@@ -26,7 +29,7 @@ void WindowBase::updateWin()
         mIsActive = false;
         mParent->refreshAnchor();
     }
-    
+
     if(!mIsActive)
         return;
         

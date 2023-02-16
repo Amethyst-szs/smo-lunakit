@@ -60,7 +60,12 @@ void HomeMenuCStages::drawEntry(CustomStageEntry* ent)
         return;
     }
 
-    if(ImGui::MenuItem(ent->getName())) {
-        // Load stage here, maybe replace this with a sub menu to have a scenario picker like the world list
-    }
+    if(ImGui::MenuItem(ent->getName(), NULL, false, isInStageScene()))
+        warpToStage(tryGetGameDataHolderAccess(), ent->getName());
+}
+
+void HomeMenuCStages::warpToStage(GameDataHolderAccessor* data, const char* stageName)
+{
+    ChangeStageInfo stageInfo(data->mData, "start", stageName, false, 1, ChangeStageInfo::SubScenarioType::UNK);
+    GameDataFunction::tryChangeNextStage(*data, &stageInfo);
 }

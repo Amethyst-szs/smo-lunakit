@@ -67,7 +67,7 @@ HOOK_DEFINE_TRAMPOLINE(ControlHook) {
     static void Callback(StageScene *scene) {
         DevGuiManager::instance()->updateNoclip();
 
-        if(!DevGuiManager::instance()->getSettings()->mIsDisplayHUD && (scene->mSceneLayout->isWait() || scene->mSceneLayout->isActive())) {
+        if(!DevGuiManager::instance()->getSettings()->mIsDisplayHUD && scene->mSceneLayout->isWait()) {
             scene->mSceneLayout->end();
             MapMini* compass = scene->mSceneLayout->mMapMiniLyt;
             if (compass->mIsAlive) compass->end();
@@ -238,11 +238,11 @@ HOOK_DEFINE_TRAMPOLINE(SaveHook) {
 };
 
 HOOK_DEFINE_TRAMPOLINE(CheckpointWarpHook) {
-    static bool Callback() {
+    static bool Callback(void* thisPtr) {
         if (DevGuiManager::instance()->getSettings()->mIsAlwaysAllowCheckpoints)
             return true;
         else
-            return Orig();
+            return Orig(thisPtr);
     }
 };
 

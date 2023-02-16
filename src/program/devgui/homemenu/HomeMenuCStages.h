@@ -18,4 +18,6 @@ private:
     void drawResource(CustomStageResource* res);
     void drawCategory(CustomStageCategory* cat);
     void drawEntry(CustomStageEntry* ent);
+
+    void warpToStage(GameDataHolderAccessor* data, const char* stageName);
 };
