@@ -3,7 +3,7 @@
 #include "imgui.h"
 #include "imgui_internal.h"
 
-#include "devgui/DevGuiSettings.h"
+#include "devgui/savedata/DevGuiSettings.h"
 #include "devgui/homemenu/HomeMenuBase.h"
 
 class HomeMenuSettings : public HomeMenuBase {

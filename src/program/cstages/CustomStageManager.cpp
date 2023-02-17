@@ -6,8 +6,7 @@ void CustomStageManager::init(sead::Heap* heap)
 
     mStageResources.allocBuffer(mEntryCount, heap);
     for(int i = 0; i < mEntryCount; i++) {
-        sead::FormatFixedSafeString<0xff> filePath("LKData/CustomStages/%s", getFileName(i));
-        filePath.chop(4);
+        sead::FormatFixedSafeString<0xff> filePath("sd:/LunaKit/LKData/CustomStages/%s", getFileName(i));
 
         CustomStageResource* newRes = new (heap) CustomStageResource(filePath.cstr(), getFileName(i));
         mStageResources.pushBack(newRes);

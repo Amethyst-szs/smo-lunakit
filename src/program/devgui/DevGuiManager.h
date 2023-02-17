@@ -17,8 +17,8 @@
 
 #include "cstages/CustomStageManager.h"
 
-#include "devgui/DevGuiSettings.h"
-#include "devgui/DevGuiTheme.h"
+#include "devgui/savedata/DevGuiSettings.h"
+#include "devgui/theme/DevGuiTheme.h"
 
 #include "devgui/windows/WindowBase.h"
 #include "devgui/windows/WindowEditor.h"

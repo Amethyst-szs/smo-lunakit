@@ -4,6 +4,13 @@
 #include "al/resource/Resource.h"
 #include "al/util.hpp"
 
+#include "nn/fs/fs_directories.hpp"
+#include "nn/fs/fs_files.hpp"
+#include "nn/result.h"
+#include "nn/init.h"
+
+#include "helpers/fsHelper.h"
+
 #include "sead/heap/seadExpHeap.h"
 #include "sead/heap/seadHeap.h"
 #include "sead/heap/seadHeapMgr.h"
@@ -49,7 +56,6 @@ class CustomStageResource {
 public:
     CustomStageResource(const char* resourcePath, const char* resourceName);
 
-    bool isValid() { return mIsValidResource; }
     const char* getResourceName() { return mResourceName; }
     int getResourceSize() { return mCategories.size(); }
 
@@ -67,9 +73,7 @@ public:
     sead::PtrArray<CustomStageCategory> mCategories;
     
 private:
-    bool mIsValidResource = false;
     const char* mResourceName = "null";
 
-    al::Resource* mRes = nullptr;
     al::ByamlIter mRootByaml;
 };

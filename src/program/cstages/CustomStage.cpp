@@ -35,21 +35,22 @@ CustomStageCategory::CustomStageCategory(al::ByamlIter catIter)
 CustomStageResource::CustomStageResource(const char* resourcePath, const char* resourceName)
 {
     sead::Heap* heap = al::getStationedHeap();
-    
-    mRes = new (heap) al::Resource(resourcePath);
     mResourceName = resourceName;
 
-    if(mRes->isExistByml("StageList")) {
-        mIsValidResource = true;
-        mRootByaml = al::ByamlIter(mRes->tryGetByml("StageList"));
+    FsHelper::LoadData loadData = {
+        .path = resourcePath
+    };
 
-        unsigned int size = mRootByaml.getSize();
-        mCategories.allocBuffer(size, heap);
+    FsHelper::loadFileFromPath(loadData);
 
-        for(unsigned int i = 0; i < size; i++) {
-            al::ByamlIter catIter = mRootByaml.getIterByIndex(i);
-            CustomStageCategory* newCat = new (heap) CustomStageCategory(catIter);
-            mCategories.pushBack(newCat);
-        }
+    mRootByaml = al::ByamlIter((u8*)loadData.buffer);
+
+    unsigned int size = mRootByaml.getSize();
+    mCategories.allocBuffer(size, heap);
+
+    for(unsigned int i = 0; i < size; i++) {
+        al::ByamlIter catIter = mRootByaml.getIterByIndex(i);
+        CustomStageCategory* newCat = new (heap) CustomStageCategory(catIter);
+        mCategories.pushBack(newCat);
     }
 }
