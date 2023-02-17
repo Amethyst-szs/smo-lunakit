@@ -27,6 +27,25 @@ void HomeMenuWindows::updateMenu()
         ImGui::EndMenu();
     }
 
+    if (addMenu("Themes")) {
+        ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+
+        DevGuiTheme* theme = mParent->getTheme();
+
+        for(int i = 0; i < theme->getThemeCount(); i++) {
+            if (ImGui::MenuItem(theme->getThemeName(i)))
+                theme->setWinTheme(i);
+        }
+
+        if(ImGui::MenuItem("Refresh Themes")) {
+            theme->finalize();
+            theme->init();
+        }
+        
+        ImGui::PopItemFlag();
+        ImGui::EndMenu();
+    }
+
     ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 
     for (int i = 0; i < mParent->getWindowCount(); i++) {

@@ -50,11 +50,6 @@ bool WindowFPS::tryUpdateWinDisplay()
     return true;
 }
 
-void WindowFPS::configImGuiStyle()
-{
-    WindowBase::configImGuiStyle();
-}
-
 void WindowFPS::setupAnchor(int totalAnchoredWindows, int anchorIdx)
 {
     WinAnchorType type = mParent->getAnchorType();

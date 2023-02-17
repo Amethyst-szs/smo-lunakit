@@ -13,6 +13,9 @@ void DevGuiManager::init(sead::Heap* heap)
     mHomeMenuTabs.allocBuffer(0x10, mDevGuiHeap);
     mIsActive = false;
 
+    mTheme = new DevGuiTheme(this);
+    mTheme->init();
+
     mCustomList = new CustomStageManager();
     mCustomList->init(heap);
     
@@ -76,6 +79,8 @@ void DevGuiManager::updateDisplay()
     // Load and draw all windows (and update anchors if needed)
     int totalAnchorWin = calcTotalAnchoredWindows();
     int curAnchorWin = 0;
+
+    mTheme->tryUpdateTheme();
 
     for (int i = 0; i < mWindows.size(); i++) {
         auto* entry = mWindows.at(i);

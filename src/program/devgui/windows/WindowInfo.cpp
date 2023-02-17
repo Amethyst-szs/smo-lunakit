@@ -22,8 +22,3 @@ bool WindowInfo::tryUpdateWinDisplay()
 {
     return WindowBase::tryUpdateWinDisplay();
 }
-
-void WindowInfo::configImGuiStyle()
-{
-    WindowBase::configImGuiStyle();
-}

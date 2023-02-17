@@ -18,16 +18,15 @@ class WindowBase {
 public:
     WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* heap);
 
-    virtual void configImGuiStyle();
     virtual void setupAnchor(int totalAnchoredWindows, int anchorIdx);
 
     virtual void updateWin();
     virtual bool tryUpdateWinDisplay();
     
-    virtual const char* getWindowName() { return mWinName; };
+    virtual const char* getWindowName() { return mWinName; }
     virtual bool* getCloseInteractionPtr() { return &mIsCloseUnpressed; }
-    virtual DevGuiWindowConfig* getWindowConfig() { return &mConfig; };
-    virtual int getCategoryCount() { return mCategories.size(); };
+    virtual DevGuiWindowConfig* getWindowConfig() { return &mConfig; }
+    virtual int getCategoryCount() { return mCategories.size(); }
     virtual bool* getActiveState() { return &mIsActive; }
     
     virtual bool isActive() { return mIsActive; }

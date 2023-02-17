@@ -18,6 +18,7 @@
 #include "cstages/CustomStageManager.h"
 
 #include "devgui/DevGuiSettings.h"
+#include "devgui/DevGuiTheme.h"
 
 #include "devgui/windows/WindowBase.h"
 #include "devgui/windows/WindowEditor.h"
@@ -55,14 +56,14 @@ public:
 
     void updateNoclip();
 
-    // Theme functions
-    // Migrate theme code from windows to manager
-
     // Anchor functions
     WinAnchorType getAnchorType() { return mWinAnchor; };
     void setAnchorType(WinAnchorType type) { mIsAnchorChange = true; mWinAnchor = type; };
     void refreshAnchor() { mIsAnchorChange = true; };
     int calcTotalAnchoredWindows();
+
+    // Theme functions
+    DevGuiTheme* getTheme() { return mTheme; }
 
     bool isMenuActive() { return mIsActive; };
     bool isFirstStep() { return mIsFirstStep; };
@@ -85,12 +86,13 @@ private:
     // Settings / Cheats
     DevGuiSettings mSettings;
 
-    // Anchor stuff
+    // Window display stuff
+    DevGuiTheme* mTheme = nullptr;
     bool mIsAnchorChange = true; // Starts true in order to automatically fire anchor setup on first activation
     WinAnchorType mWinAnchor = WinAnchorType::ANC_TOP;
 
     // Custom stage information
-    CustomStageManager* mCustomList;
+    CustomStageManager* mCustomList = nullptr;
 
     // Debug info
     bool mIsDisplayImGuiDemo = false;

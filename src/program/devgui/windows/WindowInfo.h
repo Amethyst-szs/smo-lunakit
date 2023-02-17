@@ -14,6 +14,4 @@ public:
 
     void updateWin() override;
     bool tryUpdateWinDisplay() override;
-    
-    void configImGuiStyle() override;
 };

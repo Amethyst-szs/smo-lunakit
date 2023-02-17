@@ -116,8 +116,3 @@ void WindowMemoryManage::drawProgressBarFrac(int current, int max, const char* h
 
     ImGui::EndGroup();
 }
-
-void WindowMemoryManage::configImGuiStyle()
-{
-    WindowBase::configImGuiStyle();
-}

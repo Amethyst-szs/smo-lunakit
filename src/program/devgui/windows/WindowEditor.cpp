@@ -34,8 +34,3 @@ bool WindowEditor::tryUpdateWinDisplay()
 {
     return WindowBase::tryUpdateWinDisplay();
 }
-
-void WindowEditor::configImGuiStyle()
-{
-    WindowBase::configImGuiStyle();
-}

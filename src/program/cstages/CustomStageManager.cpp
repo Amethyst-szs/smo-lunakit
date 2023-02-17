@@ -9,9 +9,6 @@ void CustomStageManager::init(sead::Heap* heap)
         sead::FormatFixedSafeString<0xff> filePath("LKData/CustomStages/%s", getFileName(i));
         filePath.chop(4);
 
-        // if (!al::isExistArchive(filePath))
-        //     EXL_ABORT(0x69);
-
         CustomStageResource* newRes = new (heap) CustomStageResource(filePath.cstr(), getFileName(i));
         mStageResources.pushBack(newRes);
     }

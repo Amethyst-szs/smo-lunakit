@@ -51,7 +51,7 @@ public:
     bool tryGetBoolByIndex(bool*, int) const;
     bool tryGetInt32ByIndex(int*, int) const;
     bool tryGetUInt32ByIndex(unsigned int*, int) const;
-    bool tryGetFloatByindex(float*, int) const;
+    bool tryGetFloatByIndex(float*, int) const;
     bool tryGetInt64ByIndex(long*, int) const;
     bool tryGetUInt64ByIndex(unsigned long*, int) const;
     bool tryGetDoubleByIndex(double*, int) const;
