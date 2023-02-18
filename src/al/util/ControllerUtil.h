@@ -19,6 +19,9 @@ namespace al {
     bool isPadTriggerL(int port);
     bool isPadTriggerR(int port);
 
+    bool isPadTriggerPressLeftStick(int port);
+    bool isPadTriggerPressRightStick(int port);
+
     bool isPadHoldUp(int port);
     bool isPadHoldDown(int port);
     bool isPadHoldLeft(int port);

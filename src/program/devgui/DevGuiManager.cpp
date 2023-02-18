@@ -51,6 +51,12 @@ void DevGuiManager::init(sead::Heap* heap)
 
     HomeMenuExtra* homeExtra = new HomeMenuExtra(this, "Extras", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeExtra);
+
+    // Load and read save data
+
+    mSaveData = new DevGuiSaveData();
+    mSaveData->init();
+    mSaveData->writeTestFile();
 }
 
 void DevGuiManager::update()
@@ -60,6 +66,10 @@ void DevGuiManager::update()
         mIsActive = !mIsActive;
         if (mIsActive)
             mIsFirstStep = true;
+    }
+
+    if(mIsActive && al::isPadTriggerPressLeftStick(-1)) {
+        mIsDisplayAnchorWindows = !mIsDisplayAnchorWindows;
     }
 
     // Note: Each window's update function runs even with the menu closed/inactive!
@@ -84,7 +94,7 @@ void DevGuiManager::updateDisplay()
 
     for (int i = 0; i < mWindows.size(); i++) {
         auto* entry = mWindows.at(i);
-        if(!entry->isActive())
+        if(!entry->isActive() || (entry->isInAnchorList() && !mIsDisplayAnchorWindows))
             continue;
 
         ImGui::Begin(entry->getWindowName(), entry->getCloseInteractionPtr(), entry->getWindowConfig()->mWindowFlags);
@@ -108,6 +118,12 @@ void DevGuiManager::updateDisplay()
             if (ImGui::BeginMenu(entry->getMenuName())) {
                 entry->updateMenu();
 
+                ImGui::EndMenu();
+            }
+        }
+
+        if(!mIsDisplayAnchorWindows) {
+            if (ImGui::BeginMenu("   Windows Hidden! (Press L-Stick)", false)) {
                 ImGui::EndMenu();
             }
         }

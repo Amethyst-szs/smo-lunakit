@@ -17,6 +17,7 @@
 
 #include "cstages/CustomStageManager.h"
 
+#include "devgui/savedata/DevGuiSaveData.h"
 #include "devgui/savedata/DevGuiSettings.h"
 #include "devgui/theme/DevGuiTheme.h"
 
@@ -79,20 +80,20 @@ public:
     bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; };
 
 private:
-    sead::Heap* mDevGuiHeap = nullptr; // Uses the stationed heap
     bool mIsActive = false;
     bool mIsFirstStep = false;
+    bool mIsDisplayAnchorWindows = true;
 
-    // Settings / Cheats
     DevGuiSettings mSettings;
 
-    // Window display stuff
+    sead::Heap* mDevGuiHeap = nullptr; // Uses the stationed heap
     DevGuiTheme* mTheme = nullptr;
+    DevGuiSaveData* mSaveData = nullptr;
+    CustomStageManager* mCustomList = nullptr;
+
+    // Window anchor stuff
     bool mIsAnchorChange = true; // Starts true in order to automatically fire anchor setup on first activation
     WinAnchorType mWinAnchor = WinAnchorType::ANC_TOP;
-
-    // Custom stage information
-    CustomStageManager* mCustomList = nullptr;
 
     // Debug info
     bool mIsDisplayImGuiDemo = false;
