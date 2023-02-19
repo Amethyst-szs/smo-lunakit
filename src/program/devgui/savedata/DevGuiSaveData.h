@@ -1,5 +1,6 @@
 #pragma once
 
+#include "al/util.hpp"
 #include "al/byaml/ByamlIter.h"
 #include "al/byaml/writer/ByamlWriter.h"
 
@@ -16,9 +17,14 @@
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
 
+class DevGuiWriteStream : public sead::WriteStream {
+public:
+    DevGuiWriteStream(sead::RamStreamSrc* src, sead::Stream::Modes mode);
+};
+
 class DevGuiSaveData {
 public:
-    DevGuiSaveData() {};
+    DevGuiSaveData(sead::Heap* heap) { mHeap = heap; };
     void init();
 
     void read();
@@ -27,7 +33,10 @@ public:
     void writeTestFile();
 
 private:
+    sead::Heap* mHeap = nullptr;
     DevGuiManager* mParent = nullptr;
 
+    sead::RamStreamSrc* mRamStream = nullptr;
+    DevGuiWriteStream* mWriteStream = nullptr;
     u8 mWorkBuf[0x400] = {};
 };

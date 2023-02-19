@@ -54,9 +54,9 @@ void DevGuiManager::init(sead::Heap* heap)
 
     // Load and read save data
 
-    mSaveData = new DevGuiSaveData();
+    mSaveData = new DevGuiSaveData(heap);
     mSaveData->init();
-    mSaveData->writeTestFile();
+    // mSaveData->writeTestFile();
 }
 
 void DevGuiManager::update()

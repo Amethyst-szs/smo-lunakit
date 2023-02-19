@@ -18,6 +18,12 @@ void DevGuiTheme::init()
         FsHelper::loadFileFromPath(loadData);
 
         mThemes[i] = al::ByamlIter((u8*)loadData.buffer);
+
+        if(mThemes[i].isExistKey("Flags")) {
+            al::ByamlIter iterFlags = mThemes[i].getIterByKey("Flags");
+            if(iterFlags.isExistKey("DefaultTheme"))
+                mThemeIdx = i;
+        }
     }
 }
 
