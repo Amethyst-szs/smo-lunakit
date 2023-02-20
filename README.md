@@ -1,3 +1,5 @@
+# LunaKit is still under construction, there is no release build for you yet, nor any resources to navigate your way! Please come back later!
+
 # Super Mario Odyssey - LunaKit
 ![Luna Kit Logo](assets/LunaKitText.png "Logo")
 
