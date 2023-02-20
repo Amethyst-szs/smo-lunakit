@@ -3,8 +3,8 @@
 
 #include "game/System/Application.h"
 
-WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, sead::Heap* heap)
-    : WindowBase(parent, winName, heap)
+WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap)
+    : WindowBase(parent, winName, active, heap)
 {
     mConfig.mSize = ImVec2(400, 70);
     mIsAnchorList = false;

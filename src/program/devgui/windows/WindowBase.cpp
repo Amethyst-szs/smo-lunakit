@@ -4,13 +4,14 @@
 
 #include "types.h"
 
-WindowBase::WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* heap)
+WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap)
 {
     // Preare PtrArray
     mCategories.allocBuffer(0x10, heap);
 
     // Set members from parameters
     mWinName = winName;
+    mIsActive = active;
     mParent = parent;
     mDevGuiHeap = heap;
 
@@ -20,6 +21,7 @@ WindowBase::WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* h
     
     // Window flags
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
+    mConfig.mWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 }
 
 void WindowBase::updateWin()
@@ -28,6 +30,7 @@ void WindowBase::updateWin()
         mIsCloseUnpressed = true;
         mIsActive = false;
         mParent->refreshAnchor();
+        mParent->getSaveData()->queueSaveWrite();
     }
 
     if(!mIsActive)

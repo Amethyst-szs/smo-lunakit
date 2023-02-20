@@ -1,8 +1,8 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/windows/WindowMemoryManage.h"
 
-WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, sead::Heap* heap)
-    : WindowBase(parent, winName, heap)
+WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap)
+    : WindowBase(parent, winName, active, heap)
 {
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;

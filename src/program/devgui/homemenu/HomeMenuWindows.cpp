@@ -11,16 +11,16 @@ void HomeMenuWindows::updateMenu()
         ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 
         if (ImGui::MenuItem("Top"))
-            mParent->setAnchorType(WinAnchorType::ANC_TOP);
+            setAnc((int)WinAnchorType::ANC_TOP);
 
         if (ImGui::MenuItem("Bottom"))
-            mParent->setAnchorType(WinAnchorType::ANC_BOTTOM);
+            setAnc((int)WinAnchorType::ANC_BOTTOM);
 
         if (ImGui::MenuItem("Left"))
-            mParent->setAnchorType(WinAnchorType::ANC_LEFT);
+            setAnc((int)WinAnchorType::ANC_LEFT);
 
         if (ImGui::MenuItem("Right"))
-            mParent->setAnchorType(WinAnchorType::ANC_RIGHT);
+            setAnc((int)WinAnchorType::ANC_RIGHT);
         
         ImGui::PopItemFlag();
         
@@ -33,13 +33,10 @@ void HomeMenuWindows::updateMenu()
         DevGuiTheme* theme = mParent->getTheme();
 
         for(int i = 0; i < theme->getThemeCount(); i++) {
-            if (ImGui::MenuItem(theme->getThemeName(i)))
-                theme->setWinTheme(i);
-        }
-
-        if(ImGui::MenuItem("Refresh Themes")) {
-            theme->finalize();
-            theme->init();
+            if (ImGui::MenuItem(theme->getThemeName(i))) {
+                theme->setWinThemeByIdx(i);
+                mParent->getSaveData()->queueSaveWrite();
+            }
         }
         
         ImGui::PopItemFlag();
@@ -54,8 +51,15 @@ void HomeMenuWindows::updateMenu()
         if(ImGui::MenuItem(mParent->getWindowNameAtIdx(i), NULL, *isActive)) {
             *isActive = !(*isActive);
             mParent->refreshAnchor();
+            mParent->getSaveData()->queueSaveWrite();
         }
     }
 
     ImGui::PopItemFlag();
+}
+
+void HomeMenuWindows::setAnc(int type)
+{
+    mParent->setAnchorType((WinAnchorType)type);
+    mParent->getSaveData()->queueSaveWrite();
 }

@@ -9,7 +9,7 @@
 
 class WindowFPS : public WindowBase {
 public:
-    WindowFPS(DevGuiManager* parent, const char* winName, sead::Heap* heap);
+    WindowFPS(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap);
 
     void updateWin() override;
     bool tryUpdateWinDisplay() override;

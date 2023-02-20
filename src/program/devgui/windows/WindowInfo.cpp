@@ -1,8 +1,8 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/windows/WindowInfo.h"
 
-WindowInfo::WindowInfo(DevGuiManager* parent, const char* winName, sead::Heap* heap)
-    : WindowBase(parent, winName, heap)
+WindowInfo::WindowInfo(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap)
+    : WindowBase(parent, winName, active, heap)
 {
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;

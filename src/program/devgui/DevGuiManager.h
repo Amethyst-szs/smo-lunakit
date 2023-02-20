@@ -35,6 +35,8 @@
 #include "devgui/homemenu/HomeMenuCStages.h"
 #include "devgui/homemenu/HomeMenuExtra.h"
 
+#define LUNAKITVERSION "Beta-2"
+
 enum WinAnchorType {
     ANC_TOP,
     ANC_BOTTOM,
@@ -57,36 +59,35 @@ public:
 
     void updateNoclip();
 
+    bool isMenuActive() { return mIsActive; }
+    bool isFirstStep() { return mIsFirstStep; }
+
     // Anchor functions
-    WinAnchorType getAnchorType() { return mWinAnchor; };
-    void setAnchorType(WinAnchorType type) { mIsAnchorChange = true; mWinAnchor = type; };
-    void refreshAnchor() { mIsAnchorChange = true; };
+    WinAnchorType getAnchorType() { return mWinAnchor; }
+    void setAnchorType(WinAnchorType type) { mIsAnchorChange = true; mWinAnchor = type; }
+    void refreshAnchor() { mIsAnchorChange = true; }
     int calcTotalAnchoredWindows();
 
-    // Theme functions
-    DevGuiTheme* getTheme() { return mTheme; }
-
-    bool isMenuActive() { return mIsActive; };
-    bool isFirstStep() { return mIsFirstStep; };
-
     // Generic getters
-    int getWindowCount() { return mWindows.size(); };
+    WindowBase* getWindow(int windowIdx) { return mWindows.at(windowIdx); }
+    int getWindowCount() { return mWindows.size(); }
     bool* getWindowActiveStateAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getActiveState(); }
     const char* getWindowNameAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getWindowName(); }
 
-    sead::Heap* getHeap() { return mDevGuiHeap; };
-    DevGuiSettings* getSettings() { return &mSettings; }
+    sead::Heap* getHeap() { return mDevGuiHeap; }
+    DevGuiSettings* getSettings() { return mSettings; }
+    DevGuiTheme* getTheme() { return mTheme; }
+    DevGuiSaveData* getSaveData() { return mSaveData; }
     CustomStageManager* getCustomStageManager() { return mCustomList; }
-    bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; };
+    bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; }
 
 private:
     bool mIsActive = false;
     bool mIsFirstStep = false;
     bool mIsDisplayAnchorWindows = true;
 
-    DevGuiSettings mSettings;
-
     sead::Heap* mDevGuiHeap = nullptr; // Uses the stationed heap
+    DevGuiSettings* mSettings = nullptr;
     DevGuiTheme* mTheme = nullptr;
     DevGuiSaveData* mSaveData = nullptr;
     CustomStageManager* mCustomList = nullptr;

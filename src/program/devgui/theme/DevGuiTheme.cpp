@@ -135,6 +135,15 @@ void DevGuiTheme::tryUpdateTheme()
     mIsRefreshTheme = false;
 }
 
+const char* DevGuiTheme::getThemeName()
+{
+    const char* val;
+    if(!mThemes[mThemeIdx].tryGetStringByKey(&val, "ThemeName"))
+        return "Name Missing!";
+
+    return val;
+}
+
 const char* DevGuiTheme::getThemeName(int idx)
 {
     const char* val;
@@ -142,6 +151,22 @@ const char* DevGuiTheme::getThemeName(int idx)
         return "Name Missing!";
 
     return val;
+}
+
+void DevGuiTheme::setWinThemeByName(const char* themeName)
+{
+    for(int i = 0; i < mEntryCount; i++) {
+        const char* compareName;
+        if(!mThemes[i].tryGetStringByKey(&compareName, "ThemeName"))
+            continue;
+
+        if(!al::isEqualString(themeName, compareName))
+            continue;
+
+        mIsRefreshTheme = true;
+        mThemeIdx = i;
+        return;
+    }
 }
 
 void DevGuiTheme::loadColorData(ImVec4* result, al::ByamlIter* colors, const char* colorName)

@@ -13,6 +13,8 @@ void DevGuiManager::init(sead::Heap* heap)
     mHomeMenuTabs.allocBuffer(0x10, mDevGuiHeap);
     mIsActive = false;
 
+    mSettings = new DevGuiSettings(this, heap);
+
     mTheme = new DevGuiTheme(this);
     mTheme->init();
 
@@ -21,16 +23,16 @@ void DevGuiManager::init(sead::Heap* heap)
     
     // Create all display windows
 
-    WindowMemoryManage* memWindow = new WindowMemoryManage(this, "LunaKit Memory Manager", mDevGuiHeap);
+    WindowMemoryManage* memWindow = new WindowMemoryManage(this, "LunaKit Memory Manager", true, mDevGuiHeap);
     mWindows.pushBack(memWindow);
 
-    WindowEditor* editorWindow = new WindowEditor(this, "LunaKit Param Editor", mDevGuiHeap);
+    WindowEditor* editorWindow = new WindowEditor(this, "LunaKit Param Editor", true, mDevGuiHeap);
     mWindows.pushBack(editorWindow);
 
-    WindowInfo* infoWindow = new WindowInfo(this, "LunaKit Info Viewer", mDevGuiHeap);
+    WindowInfo* infoWindow = new WindowInfo(this, "LunaKit Info Viewer", true, mDevGuiHeap);
     mWindows.pushBack(infoWindow);
 
-    WindowFPS* fpsWindow = new WindowFPS(this, "FPS Window", mDevGuiHeap);
+    WindowFPS* fpsWindow = new WindowFPS(this, "FPS Window", true, mDevGuiHeap);
     mWindows.pushBack(fpsWindow);
 
     // Create all home menu tabs
@@ -55,8 +57,8 @@ void DevGuiManager::init(sead::Heap* heap)
     // Load and read save data
 
     mSaveData = new DevGuiSaveData(heap);
-    mSaveData->init();
-    // mSaveData->writeTestFile();
+    mSaveData->init(this);
+    mSaveData->read();
 }
 
 void DevGuiManager::update()
@@ -68,9 +70,12 @@ void DevGuiManager::update()
             mIsFirstStep = true;
     }
 
+    // Toggle display/hide of all anchored windows
     if(mIsActive && al::isPadTriggerPressLeftStick(-1)) {
         mIsDisplayAnchorWindows = !mIsDisplayAnchorWindows;
     }
+
+    mSaveData->trySave();
 
     // Note: Each window's update function runs even with the menu closed/inactive!
     for (int i = 0; i < mWindows.size(); i++) {
@@ -122,11 +127,14 @@ void DevGuiManager::updateDisplay()
             }
         }
 
-        if(!mIsDisplayAnchorWindows) {
-            if (ImGui::BeginMenu("   Windows Hidden! (Press L-Stick)", false)) {
+        if(mSaveData->isSaveQueued()) {
+            sead::FormatFixedSafeString<0x20> display("   Saving Preferences... %.00fs", mSaveData->getSaveQueueTime());
+            if(ImGui::BeginMenu(display.cstr(), false))
                 ImGui::EndMenu();
-            }
         }
+
+        if(!mIsDisplayAnchorWindows && ImGui::BeginMenu("   Hidden! (Press L-Stick)", false))
+            ImGui::EndMenu();
 
         ImGui::EndMainMenuBar();
     }
@@ -155,11 +163,13 @@ void DevGuiManager::updateNoclip()
 
     if(!player)
         return;
+    
+    bool isNoclip = mSettings->getStateByName("Noclip");
 
-    if(!mSettings.mIsNoclip && !rs::isActiveDemo(player))
+    if(!isNoclip && !rs::isActiveDemo(player))
         al::onCollide(player);
 
-    if(!mSettings.mIsNoclip)
+    if(!isNoclip)
         return;
 
     static float speed = 25.0f;

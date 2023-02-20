@@ -8,25 +8,115 @@ DevGuiWriteStream::DevGuiWriteStream(sead::RamStreamSrc* src, sead::Stream::Mode
     setMode(mode);
 }
 
-void DevGuiSaveData::init()
+void DevGuiSaveData::init(DevGuiManager* parent)
 {
+    mParent = parent;
+
     sead::Stream::Modes streamMode = sead::Stream::Modes::Binary;
     mRamStream = new (mHeap) sead::RamStreamSrc(&mWorkBuf, sizeof(mWorkBuf));
     mWriteStream = new (mHeap) DevGuiWriteStream(mRamStream, streamMode);
 
-    Logger::log("Save file init completed!\nRamStream: %p WriteStream: %p\n", mRamStream, mWriteStream);
+    Logger::log("Save file init completed!\n");
 }
 
-void DevGuiSaveData::writeTestFile()
+void DevGuiSaveData::read()
 {
-    al::ByamlWriter file = al::ByamlWriter(mHeap, false);
+    FsHelper::LoadData loadData = {
+        .path = SAVEPATH
+    };
+
+    if(!FsHelper::isFileExist(SAVEPATH)) {
+        Logger::log("LunaKit save does not exist! Creating...\n");
+        write();
+        return;
+    }
+
+    FsHelper::loadFileFromPath(loadData);
+    al::ByamlIter root = al::ByamlIter((u8*)loadData.buffer);
+
+    // Check if the program version matches the save file version, if so wipe the save and write a new one
+    const char* saveVer;
+    if(!root.tryGetStringByKey(&saveVer, "Version") || !al::isEqualString(saveVer, LUNAKITVERSION)) {
+        write();
+        return;
+    }
+
+    const char* theme;
+    if(root.tryGetStringByKey(&theme, "Theme"))
+        mParent->getTheme()->setWinThemeByName(theme);
+
+    int winAnchor;
+    if(root.tryGetIntByKey(&winAnchor, "WinAnchor"))
+        mParent->setAnchorType((WinAnchorType)winAnchor);
+    
+    if(root.isExistKey("ActiveWins")) {
+        al::ByamlIter windows = root.getIterByKey("ActiveWins");
+        for(int i = 0; i < mParent->getWindowCount(); i++) {
+            auto entry = mParent->getWindow(i);
+            windows.tryGetBoolByKey(entry->getActiveState(), entry->getWindowName());
+        }
+    }
+
+    if(root.isExistKey("Settings")) {
+        al::ByamlIter windows = root.getIterByKey("Settings");
+        DevGuiSettings* set = mParent->getSettings();
+
+        for(int i = 0; i < set->getTotalSettings(); i++)
+            windows.tryGetBoolByKey(set->getStatePtrByIdx(i), set->getNameByIdx(i));
+    }
+}
+
+bool DevGuiSaveData::trySave()
+{
+    if(mIsQueueSave) {
+        mSaveTimer += -0.017f; // FIX THIS, THIS SHOULD BE DElTA TIME SO IT IGNORES LAG!!
+        if(mSaveTimer < 0.f) {
+            mIsQueueSave = false;
+            return write().isSuccess();
+        }
+    }
+
+    return false;
+}
+
+nn::Result DevGuiSaveData::write()
+{
+    mWriteStream->rewind();
+
+    al::ByamlWriter file = al::ByamlWriter(al::getSequenceHeap(), false);
     
     file.pushHash();
-    file.addBool("FunnyBool", false);
-    file.addInt("FunnyInt", 69);
+
+    // General information
+    file.addString("Version", LUNAKITVERSION);
+    file.addString("Theme", mParent->getTheme()->getThemeName());
+    file.addInt("WinAnchor", (int)mParent->getAnchorType());
+    Logger::log("Writing:\nTheme: %s\nAnchor %i\n", mParent->getTheme()->getThemeName(mParent->getTheme()->getCurThemeIdx()), (int)mParent->getAnchorType());
+
+    // Open/close state of all windows
+    file.pushHash("ActiveWins");
+
+    for(int i = 0; i < mParent->getWindowCount(); i++) {
+        file.addBool(mParent->getWindowNameAtIdx(i), *mParent->getWindowActiveStateAtIdx(i));
+    }
+
     file.pop();
 
+    // Current settings in the setting menu
+    DevGuiSettings* set = mParent->getSettings();
+    file.pushHash("Settings");
+
+    for(int i = 0; i < set->getTotalSettings(); i++) {
+        file.addBool(set->getNameByIdx(i), set->getStateByIdx(i));
+    }
+
+    file.pop();
+
+    // Close inital hash and write data
+    file.pop();
     file.write(mWriteStream);
 
-    nn::Result fileWrite = FsHelper::writeFileToPath(mWorkBuf, file.calcPackSize(), "sd:/LunaKit/LKData/Save/TestFile.byml");
+    nn::Result result = FsHelper::writeFileToPath(mWorkBuf, file.calcPackSize(), SAVEPATH);
+
+    return result;
 }

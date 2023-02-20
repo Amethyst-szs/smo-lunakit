@@ -29,10 +29,13 @@ public:
 
     void tryUpdateTheme();
 
+    const char* getThemeName();
     const char* getThemeName(int idx);
+    int getCurThemeIdx() { return mThemeIdx; };
     s64 getThemeCount() { return mEntryCount; }
 
-    void setWinTheme(int theme) {mIsRefreshTheme = true; mThemeIdx = theme; }
+    void setWinThemeByIdx(int theme) {mIsRefreshTheme = true; mThemeIdx = theme; }
+    void setWinThemeByName(const char* themeName);
     void refreshTheme() { mIsRefreshTheme = true; }
 
     nn::fs::DirectoryEntry getFile(int idx) const { return mEntries[idx]; }

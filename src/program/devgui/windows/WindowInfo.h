@@ -10,7 +10,7 @@
 
 class WindowInfo : public WindowBase {
 public:
-    WindowInfo(DevGuiManager* parent, const char* winName, sead::Heap* heap);
+    WindowInfo(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap);
 
     void updateWin() override;
     bool tryUpdateWinDisplay() override;

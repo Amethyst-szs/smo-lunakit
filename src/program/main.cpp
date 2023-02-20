@@ -67,13 +67,15 @@ HOOK_DEFINE_TRAMPOLINE(ControlHook) {
     static void Callback(StageScene *scene) {
         DevGuiManager::instance()->updateNoclip();
 
-        if(!DevGuiManager::instance()->getSettings()->mIsDisplayHUD && scene->mSceneLayout->isWait()) {
+        DevGuiSettings* set = DevGuiManager::instance()->getSettings();
+
+        if(!set->getStateByName("Display HUD") && scene->mSceneLayout->isWait()) {
             scene->mSceneLayout->end();
             MapMini* compass = scene->mSceneLayout->mMapMiniLyt;
             if (compass->mIsAlive) compass->end();
         }
 
-        if(!DevGuiManager::instance()->getSettings()->mIsPlayMusic) {
+        if(!set->getStateByName("Play Music")) {
             if (al::isPlayingBgm(scene)) {
                 al::stopAllBgm(scene, 0);
             }
@@ -230,7 +232,7 @@ HOOK_DEFINE_TRAMPOLINE(DrawLunaPrimitives) {
 
 HOOK_DEFINE_TRAMPOLINE(SaveHook) {
     static bool Callback(StageScene* scene) {
-        if (DevGuiManager::instance()->getSettings()->mIsAutosave)
+        if (DevGuiManager::instance()->getSettings()->getStateByName("Autosave"))
             return Orig(scene);
         else
             return false;
@@ -239,7 +241,7 @@ HOOK_DEFINE_TRAMPOLINE(SaveHook) {
 
 HOOK_DEFINE_TRAMPOLINE(CheckpointWarpHook) {
     static bool Callback(void* thisPtr) {
-        if (DevGuiManager::instance()->getSettings()->mIsAlwaysAllowCheckpoints)
+        if (DevGuiManager::instance()->getSettings()->getStateByName("Always Allow Checkpoints"))
             return true;
         else
             return Orig(thisPtr);

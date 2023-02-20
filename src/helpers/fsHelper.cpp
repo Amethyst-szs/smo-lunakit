@@ -66,7 +66,7 @@ namespace FsHelper {
 
     bool isFileExist(const char *path) {
         nn::fs::DirectoryEntryType type;
-        nn::Result result = nn::fs::GetEntryType(&type, path);
+        nn::fs::GetEntryType(&type, path);
 
         return type == nn::fs::DirectoryEntryType_File;
     }

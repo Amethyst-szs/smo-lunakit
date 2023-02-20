@@ -16,7 +16,7 @@ class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class WindowBase {
 public:
-    WindowBase(DevGuiManager* parent, const char* winName, sead::Heap* heap);
+    WindowBase(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap);
 
     virtual void setupAnchor(int totalAnchoredWindows, int anchorIdx);
 
@@ -28,6 +28,8 @@ public:
     virtual DevGuiWindowConfig* getWindowConfig() { return &mConfig; }
     virtual int getCategoryCount() { return mCategories.size(); }
     virtual bool* getActiveState() { return &mIsActive; }
+
+    virtual void setActiveState(bool isActive) { mIsActive = isActive; }
     
     virtual bool isActive() { return mIsActive; }
     virtual bool isInAnchorList() { return mIsAnchorList; }
