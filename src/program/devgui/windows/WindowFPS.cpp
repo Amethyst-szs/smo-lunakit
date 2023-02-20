@@ -43,6 +43,7 @@ bool WindowFPS::tryUpdateWinDisplay()
 
     ImVec2 lineSize = mConfig.mSize;
     lineSize.x -= 12;
+    lineSize.y -= 10;
     ImGui::PlotLines("", mHistory, IM_ARRAYSIZE(mHistory), mHistoryOffset, overlay, 0.0f, 60.0f, lineSize);
 
     ImGui::End();
