@@ -16,6 +16,12 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 - CraftyBoss: ExLaunch, ImGui, WorldList system
 - More here later
 
+## Build from sources:
+- Clone the repository with all the submodules `git clone --recurse-submodules <url> <directory>`
+- Configure the compiler `make configure`
+- Build the mod `make`
+- Mod is available in `build/mod.tar.gz`
+
 
 # Original SMO-Exlaunch-Base Description
 
