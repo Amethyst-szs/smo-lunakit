@@ -22,6 +22,11 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 - Build the mod `make`
 - Mod is available in `build/mod.tar.gz`
 
+## Controls:
+- Open/Close LunaKit interface with `ZR+R+L`
+- Hide/Show windows with `LS (L-stick)`
+- Use a mouse to change the options on a window
+
 
 # Original SMO-Exlaunch-Base Description
 
