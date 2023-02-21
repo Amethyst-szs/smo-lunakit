@@ -35,7 +35,8 @@ build/
 *.out
 *.app
 .idea/
+.vscode/
+.fleet/
 
 # specific files
 compile_commands.json
-imgui/
