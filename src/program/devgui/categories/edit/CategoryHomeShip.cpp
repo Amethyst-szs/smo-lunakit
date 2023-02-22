@@ -1,4 +1,4 @@
-#include "program/devgui/categories/CategoryHomeShip.h"
+#include "program/devgui/categories/edit/CategoryHomeShip.h"
 
 #include "helpers.h"
 

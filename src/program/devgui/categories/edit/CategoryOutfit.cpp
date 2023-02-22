@@ -1,4 +1,4 @@
-#include "program/devgui/categories/CategoryOutfit.h"
+#include "program/devgui/categories/edit/CategoryOutfit.h"
 
 #include "game/GameData/GameDataHolder.h"
 #include "game/GameData/GameDataHolder.h"

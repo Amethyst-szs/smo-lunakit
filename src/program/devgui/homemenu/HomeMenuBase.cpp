@@ -10,7 +10,7 @@ HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName, sead::He
 
 void HomeMenuBase::updateMenu()
 {
-    // Run code for the game here
+    // Run code here, the base class has no code run here
 }
 
 bool HomeMenuBase::addMenu(const char* name, bool enabled)

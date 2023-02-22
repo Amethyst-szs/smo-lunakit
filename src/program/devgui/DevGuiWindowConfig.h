@@ -1,3 +1,14 @@
+/*
+
+    This class is used by each window to configure it's position, size, and flags (regardless of anchored or not)
+    For more information about different flags go these points in the imgui.h header:
+
+    ImGuiWindowFlags: imgui.h line 953
+    ImGuiTabBarFlags: imgui.h line 1093
+    ImGuiTabItemFlags: imgui.h line 1109
+
+*/
+
 #pragma once
 
 #include "imgui.h"

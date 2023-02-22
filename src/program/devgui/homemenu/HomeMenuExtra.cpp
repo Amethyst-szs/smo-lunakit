@@ -14,7 +14,7 @@ void HomeMenuExtra::updateMenu()
     }
 
     ImGui::MenuItem("Amethyst-szs (LunaKit Dev)", NULL, false, false);
-    ImGui::MenuItem("CraftyBoss (SMO ExLaunch, SMO ImGui)", NULL, false, false);
-    ImGui::MenuItem("Mars (Referenced TAS Mod)", NULL, false, false);
+    ImGui::MenuItem("CraftyBoss", NULL, false, false);
+    ImGui::MenuItem("Mars", NULL, false, false);
     ImGui::MenuItem("ExLaunch Devs", NULL, false, false);
 }

@@ -1,5 +1,21 @@
+/*
+    --- Welcome to LunaKit! ---
+This is the LunaKit Manager, the manager class that controls everything in LunaKit
+
+Help:
+    - Head to the wiki at https://github.com/Amethyst-szs/smo-lunakit/wiki if you are:
+    - Using LunaKit as a general user
+    - Looking to make custom themes, add your custom stages, or other general plugin type features
+    - Add new features to LunaKit
+    - Edit features or fix bugs
+    - Or anything else you want to use LunaKit for!
+*/
+
 #include "program/devgui/DevGuiManager.h"
 
+// This class is a singleton! It does not have a typical constructor
+// This is class is created in GameSystemInit in main.cpp
+// Access this class from anywhere using DevGuiManager::instance()->...
 SEAD_SINGLETON_DISPOSER_IMPL(DevGuiManager)
 DevGuiManager::DevGuiManager() = default;
 DevGuiManager::~DevGuiManager() = default;
@@ -8,18 +24,26 @@ void DevGuiManager::init(sead::Heap* heap)
 {
     Logger::log("Initing DevGuiManager... (Version: %s)\n", LUNAKITVERSION);
     
+    // Sets the DevGuiHeap to the heap passed in as an arg, along with setting the current scope to the heap
     mDevGuiHeap = heap;
     sead::ScopedCurrentHeapSetter heapSetter(heap);
 
-    mWindows.allocBuffer(0x10, mDevGuiHeap);
-    mHomeMenuTabs.allocBuffer(0x10, mDevGuiHeap);
+    // LunaKit is not active by default
     mIsActive = false;
 
+    // Allocate 0x10 (16) slots for windows and tabs at the top
+    // Please don't increase these unless you REALLY need more space for some ungodly reason
+    mWindows.allocBuffer(0x10, mDevGuiHeap);
+    mHomeMenuTabs.allocBuffer(0x10, mDevGuiHeap);
+
+    // Creates the settings class, accessed by various functions and set by HomeMenuSettings
     mSettings = new DevGuiSettings(this, heap);
 
+    // Creates a theme class and loads in the themes from the SD card themes folder
     mTheme = new DevGuiTheme(this);
     mTheme->init();
 
+    // Creates the custom stage manager and loads in the custom stage information from the SD card CustomStages folder
     mCustomList = new CustomStageManager();
     mCustomList->init(heap);
     
@@ -56,8 +80,7 @@ void DevGuiManager::init(sead::Heap* heap)
     HomeMenuExtra* homeExtra = new HomeMenuExtra(this, "Extras", mDevGuiHeap);
     mHomeMenuTabs.pushBack(homeExtra);
 
-    // Load and read save data
-
+    // Load and read save data if it already exists
     mSaveData = new DevGuiSaveData(heap);
     mSaveData->init(this);
     mSaveData->read();
@@ -77,6 +100,7 @@ void DevGuiManager::update()
         mIsDisplayAnchorWindows = !mIsDisplayAnchorWindows;
     }
 
+    // This is run every frame, only actually saves if a save is queued and the timer hits zero
     mSaveData->trySave();
 
     // Note: Each window's update function runs even with the menu closed/inactive!
@@ -88,6 +112,7 @@ void DevGuiManager::update()
 
 void DevGuiManager::updateDisplay()
 {
+    // Show/hide the cursor if the window is opened/closed
     updateCursorState();
 
     if(!mIsActive)

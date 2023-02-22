@@ -60,8 +60,12 @@ void DevGuiSaveData::read()
         al::ByamlIter windows = root.getIterByKey("Settings");
         DevGuiSettings* set = mParent->getSettings();
 
-        for(int i = 0; i < set->getTotalSettings(); i++)
+        for(int i = 0; i < set->getTotalSettings(); i++) {
+            if(!set->getSettingEntry(i)->isAllowSave())
+                continue;
+                
             windows.tryGetBoolByKey(set->getStatePtrByIdx(i), set->getNameByIdx(i));
+        }
     }
 
     Logger::log("Successfully read save file information\n");

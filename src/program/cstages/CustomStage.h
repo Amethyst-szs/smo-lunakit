@@ -1,3 +1,16 @@
+
+/*
+    This class is an assistant to CustomStageManager containing:
+    CustomStageResource,
+    CustomStageCategory, and
+    CustomStageEntry
+
+    Each of these classes are at different levels for reading information from plugin files
+    Most likely, you will not need to modify this file or it's source, more general information
+    about the custom stage plugin system can be found in CustomStageManager.h and more importantly,
+    the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki
+*/
+
 #pragma once
 
 #include "al/byaml/ByamlIter.h"
@@ -18,6 +31,8 @@
 
 #include "types.h"
 
+// A specific stage file listed by a plugin
+// Has validity checks to verify the stage actually exists in the game's StageData folder
 class CustomStageEntry {
 public:
     CustomStageEntry(const char* stageName);
@@ -30,14 +45,17 @@ private:
     bool mIsExist = false;
 };
 
+// Category of custom stages within the resource/plugin
 class CustomStageCategory {
 public:
     CustomStageCategory(al::ByamlIter catIter);
 
+    // Access information about the category itself
     const char* getCategoryName() { return mCatName; }
     const char* getCategoryDesc() { return mCatDesc; }
     int getCategorySize() { return mEntries.size(); }
 
+    // Access specific custom stage entries inside this category
     sead::PtrArray<CustomStageEntry>* getEntries() { return &mEntries; }
     CustomStageEntry* getEntry(int entIdx) { return mEntries.at(entIdx); }
     const char* getEntryName(int entIdx) { return mEntries.at(entIdx)->getName(); }
@@ -52,6 +70,7 @@ private:
     const char* mCatDesc = "null";
 };
 
+// Plugin file information, containing the different categories that exist within itself
 class CustomStageResource {
 public:
     CustomStageResource(const char* resourcePath, const char* resourceName);
@@ -59,16 +78,18 @@ public:
     const char* getResourceName() { return mResourceName; }
     int getResourceSize() { return mCategories.size(); }
 
-    sead::PtrArray<CustomStageEntry>* getEntries(int catIdx) { return &mCategories.at(catIdx)->mEntries; }
-    CustomStageEntry* getEntry(int catIdx, int entIdx) { return mCategories.at(catIdx)->mEntries.at(entIdx); }
-    const char* getEntryName(int catIdx, int entIdx) { return mCategories.at(catIdx)->mEntries.at(entIdx)->getName(); }
-    bool getEntryValid(int catIdx, int entIdx) { return mCategories.at(catIdx)->mEntries.at(entIdx)->isStageExist(); }
-
-    sead::PtrArray<CustomStageCategory>* getCategorys() { return &mCategories; }
+    // Access categories of stages inside this resource/plugin file
+    sead::PtrArray<CustomStageCategory>* getCategories() { return &mCategories; }
     CustomStageCategory* getCategory(int catIdx) { return mCategories.at(catIdx); }
     const char* getCategoryName(int catIdx) { return mCategories.at(catIdx)->getCategoryName(); }
     const char* getCategoryDesc(int catIdx) { return mCategories.at(catIdx)->getCategoryDesc(); }
     int getCategorySize(int catIdx) { return mCategories.at(catIdx)->getCategorySize(); }
+
+    // Access custom stage entries
+    sead::PtrArray<CustomStageEntry>* getEntries(int catIdx) { return &mCategories.at(catIdx)->mEntries; }
+    CustomStageEntry* getEntry(int catIdx, int entIdx) { return mCategories.at(catIdx)->mEntries.at(entIdx); }
+    const char* getEntryName(int catIdx, int entIdx) { return mCategories.at(catIdx)->mEntries.at(entIdx)->getName(); }
+    bool getEntryValid(int catIdx, int entIdx) { return mCategories.at(catIdx)->mEntries.at(entIdx)->isStageExist(); }
 
     sead::PtrArray<CustomStageCategory> mCategories;
     

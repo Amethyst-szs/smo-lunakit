@@ -1,4 +1,4 @@
-#include "program/devgui/categories/CategoryHealth.h"
+#include "program/devgui/categories/edit/CategoryHealth.h"
 
 #include "game/player/PlayerFunction.h"
 #include "helpers/PlayerHelper.h"

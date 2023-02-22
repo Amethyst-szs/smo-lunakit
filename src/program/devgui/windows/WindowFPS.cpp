@@ -9,15 +9,9 @@ WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, bool active, se
     mConfig.mSize = ImVec2(400, 70);
     mIsAnchorList = false;
 
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoNav;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoDecoration;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoInputs;
-}
-
-void WindowFPS::updateWin()
-{
-    WindowBase::updateWin();
 }
 
 bool WindowFPS::tryUpdateWinDisplay()

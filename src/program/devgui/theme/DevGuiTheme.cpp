@@ -5,18 +5,13 @@
 void DevGuiTheme::init()
 {
     setupDirectoryInfo();
-
     mThemes = (al::ByamlIter*)nn::init::GetAllocator()->Allocate(sizeof(al::ByamlIter) * mEntryCount);
 
     for(int i = 0; i < mEntryCount; i++) {
         sead::FormatFixedSafeString<0xff> filePath("%s%s", THEMEPATH, getFileName(i));
-
-        FsHelper::LoadData loadData = {
-            .path = filePath.cstr()
-        };
+        FsHelper::LoadData loadData = { .path = filePath.cstr() };
 
         FsHelper::loadFileFromPath(loadData);
-
         mThemes[i] = al::ByamlIter((u8*)loadData.buffer);
 
         if(mThemes[i].isExistKey("Flags")) {
@@ -27,15 +22,6 @@ void DevGuiTheme::init()
     }
 
     Logger::log("Loaded all theme data from %s\n", THEMEPATH);
-}
-
-void DevGuiTheme::finalize()
-{
-    for(int i = 0; i < mEntryCount; i++) {
-        nn::init::GetAllocator()->Free(mThemes[i].mData);
-    }
-
-    nn::init::GetAllocator()->Free(mThemes);
 }
 
 void DevGuiTheme::tryUpdateTheme()

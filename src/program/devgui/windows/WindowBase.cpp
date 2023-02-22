@@ -6,22 +6,21 @@
 
 WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap)
 {
-    // Preare PtrArray
-    mCategories.allocBuffer(0x10, heap);
+    // Prepares up to 8 categories, windows without categories will ignore this
+    mCategories.allocBuffer(0x8, heap);
 
     // Set members from parameters
     mWinName = winName;
     mIsActive = active;
     mParent = parent;
     mDevGuiHeap = heap;
-
-    // Default position and size settings
-    mConfig.mTrans = ImVec2(0, 19);
-    mConfig.mSize = ImVec2(427, 220);
     
-    // Window flags
+    // General window flags that all LunaKit windows will share to avoid bugs with the menu bar and anchoring
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+    mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
+    mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
+    mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
 }
 
 void WindowBase::updateWin()
@@ -96,13 +95,14 @@ void WindowBase::setupAnchor(int totalAnchoredWindows, int anchorIdx)
             c->mTrans = ImVec2(c->mScrSize.x - c->mSizeBase.x, (c->mScrSize.y / totalAnchoredWindows * anchorIdx) + c->mMinimumY);
             c->mSize = ImVec2(c->mSizeBase.x, c->mScrSize.y / totalAnchoredWindows);
             break;
-        default:
+        default: // In no situation should this happen, but if it does fall back on loading over the whole screen
+            Logger::log("Anchoring window in invalid placement type!\n");
             mConfig.mTrans = ImVec2(0, 0);
             mConfig.mSize = ImVec2(1280, 720);
             break;
     }
 
-    c->mSize.x += 1;
+    c->mSize.x += 1; // Fixes small rounding based alignment issues
 
     ImGui::SetWindowPos(mConfig.mTrans);
     ImGui::SetWindowSize(mConfig.mSize);

@@ -1,4 +1,18 @@
+
+/*
+    - LunaKit Theme Loader -
+
+    Themes in LunaKit are loaded through the SD card (folder path determined by THEMEPATH, look below)
+
+    Creating themes:
+    These themes can be created through Switch Toolbox or any other .byml editor
+    For more information on making themes, see the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki
+
+*/
+
 #pragma once
+
+#define THEMEPATH "sd:/LunaKit/LKData/Themes/"
 
 #include "al/byaml/ByamlIter.h"
 #include "al/resource/Resource.h"
@@ -18,33 +32,29 @@
 
 #include "Logger/Logger.hpp"
 
-#define THEMEPATH "sd:/LunaKit/LKData/Themes/"
-
 class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class DevGuiTheme {
 public:
     DevGuiTheme(DevGuiManager* parent) { mParent = parent; }
-
     void init();
-    void finalize();
 
-    void tryUpdateTheme();
+    void tryUpdateTheme(); // Called whenever the theme changes (or first opening LunaKit)
 
-    const char* getThemeName();
-    const char* getThemeName(int idx);
+    const char* getThemeName(); // Gets the current theme name
+    const char* getThemeName(int idx); // Gets the theme name at a specific index (NOTE: Indexes are not consistent between game loads)
     int getCurThemeIdx() { return mThemeIdx; };
     s64 getThemeCount() { return mEntryCount; }
 
-    void setWinThemeByIdx(int theme) {mIsRefreshTheme = true; mThemeIdx = theme; }
-    void setWinThemeByName(const char* themeName);
-    void refreshTheme() { mIsRefreshTheme = true; }
+    void setWinThemeByIdx(int theme) {mIsRefreshTheme = true; mThemeIdx = theme; } // Sets the current theme by index in list of themes
+    void setWinThemeByName(const char* themeName); // Sets the current theme by the name of the theme
+    void refreshTheme() { mIsRefreshTheme = true; } // Reloads the theme without changing the current theme
 
+private:
     nn::fs::DirectoryEntry getFile(int idx) const { return mEntries[idx]; }
     const char* getFileName(int idx) const { return mEntries[idx].m_Name; }
     s64 getFileCount() const { return mEntryCount; }
-
-private:
+    
     void loadColorData(ImVec4* result, al::ByamlIter* colors, const char* colorName);
     void setStyleParam(bool* target, al::ByamlIter* parameters, const char* parameterName);
     void setStyleParam(float* target, al::ByamlIter* parameters, const char* parameterName);

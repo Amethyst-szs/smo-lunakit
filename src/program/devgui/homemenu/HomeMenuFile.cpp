@@ -15,7 +15,7 @@ void HomeMenuFile::updateMenu()
     bool isSaved = SaveDataAccessFunction::isDoneSave(holder);
 
     // Quick save file loader (Maybe add custom save archive support?)
-    if(addMenu("Load", isSaved)) {
+    if(addMenu("Load (WIP)", isSaved)) {
         SaveFileIdx targetIdx = selectSaveFile(holder, true);
         
         if(targetIdx != SaveFileIdx::NONE) {

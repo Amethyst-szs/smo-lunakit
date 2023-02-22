@@ -1,3 +1,11 @@
+
+/*
+    - LunaKit FPS Window -
+
+    This window does not exist in the anchor list, it is a independently placed FPS display
+    Does not use categories!
+*/
+
 #pragma once
 
 #include "imgui.h"
@@ -5,13 +13,10 @@
 #include "program/devgui/DevGuiWindowConfig.h"
 #include "program/devgui/windows/WindowBase.h"
 
-#include "program/devgui/categories/CategoryBase.h"
-
 class WindowFPS : public WindowBase {
 public:
     WindowFPS(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap);
 
-    void updateWin() override;
     bool tryUpdateWinDisplay() override;
 
     void setupAnchor(int totalAnchoredWindows, int anchorIdx) override;

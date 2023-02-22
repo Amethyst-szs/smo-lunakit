@@ -10,6 +10,8 @@
 
 #include "rs/util.hpp"
 
+#include <cxxabi.h>
+
 #include "program/devgui/categories/CategoryBase.h"
 
 class CategoryInfPlayer : public CategoryBase {

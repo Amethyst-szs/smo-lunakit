@@ -4,21 +4,7 @@
 WindowInfo::WindowInfo(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap)
     : WindowBase(parent, winName, active, heap)
 {
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
-
     // Template category
     CategoryInfPlayer* playerCat = new (heap) CategoryInfPlayer("Player", "Player Information", heap);
     mCategories.pushBack(playerCat);
-}
-
-void WindowInfo::updateWin()
-{
-    WindowBase::updateWin();
-}
-
-bool WindowInfo::tryUpdateWinDisplay()
-{
-    return WindowBase::tryUpdateWinDisplay();
 }

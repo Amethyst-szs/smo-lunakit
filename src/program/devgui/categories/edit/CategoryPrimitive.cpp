@@ -1,4 +1,4 @@
-#include "program/devgui/categories/CategoryPrimitive.h"
+#include "program/devgui/categories/edit/CategoryPrimitive.h"
 
 CategoryPrimitive::CategoryPrimitive(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap)

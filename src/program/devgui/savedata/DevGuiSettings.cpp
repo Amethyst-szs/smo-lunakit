@@ -2,27 +2,31 @@
 
 #include "devgui/savedata/DevGuiSettings.h"
 
+// Settings are added and created here
 DevGuiSettings::DevGuiSettings(DevGuiManager* parent, sead::Heap* heap)
 {
+    // Max of 0x20 (32) settings, should never go beyond this but if you do for some reason, increase this number!
     mSettings.allocBuffer(0x20, heap);
 
-    DevGuiSettingsEntry* autosave = new (heap) DevGuiSettingsEntry(true, "Autosave");
+    DevGuiSettingsEntry* autosave = new (heap) DevGuiSettingsEntry(true, true, "Autosave");
     mSettings.pushBack(autosave);
 
-    DevGuiSettingsEntry* hud = new (heap) DevGuiSettingsEntry(true, "Display HUD");
+    DevGuiSettingsEntry* hud = new (heap) DevGuiSettingsEntry(true, true, "Display HUD");
     mSettings.pushBack(hud);
 
-    DevGuiSettingsEntry* music = new (heap) DevGuiSettingsEntry(true, "Play Music");
+    DevGuiSettingsEntry* music = new (heap) DevGuiSettingsEntry(true, true, "Play Music");
     mSettings.pushBack(music);
 
-    DevGuiSettingsEntry* noclip = new (heap) DevGuiSettingsEntry(false, "Noclip");
-    mSettings.pushBack(noclip);
-
-    DevGuiSettingsEntry* checkpoint = new (heap) DevGuiSettingsEntry(false, "Always Allow Checkpoints");
+    DevGuiSettingsEntry* checkpoint = new (heap) DevGuiSettingsEntry(false, true, "Always Allow Checkpoints");
     mSettings.pushBack(checkpoint);
+
+    DevGuiSettingsEntry* noclip = new (heap) DevGuiSettingsEntry(false, false, "Noclip");
+    mSettings.pushBack(noclip);
 
     Logger::log("Created %i settings\n", mSettings.size());
 }
+
+// Everything below this point is general helper functions, likely not what you are looking for!
 
 bool DevGuiSettings::getStateByName(const char* settingName)
 {

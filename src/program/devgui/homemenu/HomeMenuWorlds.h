@@ -15,9 +15,9 @@ public:
     HomeMenuWorlds(DevGuiManager* parent, const char* menuName, sead::Heap* heap);
 
     virtual void updateMenu();
-    // Unlike categories, these don't have a seperation between run and display since code is triggered once on input (or sets flags)
 
 private:
+    // Please clean up this code! There has got to be a cleaner way of implementing this!
     void drawDatabaseCategoryEX(GameDataHolderAccessor* data, WorldListEntry* entry);
     void drawDatabaseCategoryZone(GameDataHolderAccessor* data, WorldListEntry* entry);
     void drawDatabaseCategoryDemo(GameDataHolderAccessor* data, WorldListEntry* entry);

@@ -4,10 +4,6 @@
 WindowEditor::WindowEditor(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap)
     : WindowBase(parent, winName, active, heap)
 {
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
-
     // Primitive renderer category
     CategoryPrimitive* primitiveCat = new (heap) CategoryPrimitive("Prims", "Customize primitive rendering", heap);
     mCategories.pushBack(primitiveCat);
@@ -23,14 +19,4 @@ WindowEditor::WindowEditor(DevGuiManager* parent, const char* winName, bool acti
     // Home ship (Odyssey ship) category
     CategoryHomeShip* homeShipCat = new (heap) CategoryHomeShip("Ship", "Edit Odyssey ship progression", heap);
     mCategories.pushBack(homeShipCat);
-}
-
-void WindowEditor::updateWin()
-{
-    WindowBase::updateWin();
-}
-
-bool WindowEditor::tryUpdateWinDisplay()
-{
-    return WindowBase::tryUpdateWinDisplay();
 }

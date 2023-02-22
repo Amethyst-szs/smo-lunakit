@@ -2,12 +2,7 @@
 #include "devgui/windows/WindowMemoryManage.h"
 
 WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap)
-    : WindowBase(parent, winName, active, heap)
-{
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
-}
+    : WindowBase(parent, winName, active, heap) {}
 
 bool WindowMemoryManage::tryUpdateWinDisplay()
 {

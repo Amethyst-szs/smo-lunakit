@@ -1,3 +1,13 @@
+
+/*
+    - LunaKit Memory Manager Window -
+
+    This window displays current information about most of the game's heaps and the ActorKit
+    More detailed ActorKit information can be found in the Actor Browser Window
+
+    Does not use categories!
+*/
+
 #pragma once
 
 #include "imgui.h"

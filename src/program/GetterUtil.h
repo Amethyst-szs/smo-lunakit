@@ -18,8 +18,6 @@
 
 #include "rs/util.hpp"
 
-#include <cxxabi.h>
-
 // Is checks
 bool isInScene();
 bool isInScene(al::Scene* scene);
