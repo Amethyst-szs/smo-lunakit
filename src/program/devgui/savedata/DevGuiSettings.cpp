@@ -20,6 +20,8 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent, sead::Heap* heap)
 
     DevGuiSettingsEntry* checkpoint = new (heap) DevGuiSettingsEntry(false, "Always Allow Checkpoints");
     mSettings.pushBack(checkpoint);
+
+    Logger::log("Created %i settings\n", mSettings.size());
 }
 
 bool DevGuiSettings::getStateByName(const char* settingName)

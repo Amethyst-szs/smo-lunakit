@@ -6,6 +6,8 @@ DevGuiManager::~DevGuiManager() = default;
 
 void DevGuiManager::init(sead::Heap* heap)
 {
+    Logger::log("Initing DevGuiManager... (Version: %s)\n", LUNAKITVERSION);
+    
     mDevGuiHeap = heap;
     sead::ScopedCurrentHeapSetter heapSetter(heap);
 

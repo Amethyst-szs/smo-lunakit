@@ -15,8 +15,6 @@ void DevGuiSaveData::init(DevGuiManager* parent)
     sead::Stream::Modes streamMode = sead::Stream::Modes::Binary;
     mRamStream = new (mHeap) sead::RamStreamSrc(&mWorkBuf, sizeof(mWorkBuf));
     mWriteStream = new (mHeap) DevGuiWriteStream(mRamStream, streamMode);
-
-    Logger::log("Save file init completed!\n");
 }
 
 void DevGuiSaveData::read()
@@ -37,6 +35,7 @@ void DevGuiSaveData::read()
     // Check if the program version matches the save file version, if so wipe the save and write a new one
     const char* saveVer;
     if(!root.tryGetStringByKey(&saveVer, "Version") || !al::isEqualString(saveVer, LUNAKITVERSION)) {
+        Logger::log("Save file version does not match program version, resetting...\n");
         write();
         return;
     }
@@ -64,6 +63,8 @@ void DevGuiSaveData::read()
         for(int i = 0; i < set->getTotalSettings(); i++)
             windows.tryGetBoolByKey(set->getStatePtrByIdx(i), set->getNameByIdx(i));
     }
+
+    Logger::log("Successfully read save file information\n");
 }
 
 bool DevGuiSaveData::trySave()
@@ -91,7 +92,6 @@ nn::Result DevGuiSaveData::write()
     file.addString("Version", LUNAKITVERSION);
     file.addString("Theme", mParent->getTheme()->getThemeName());
     file.addInt("WinAnchor", (int)mParent->getAnchorType());
-    Logger::log("Writing:\nTheme: %s\nAnchor %i\n", mParent->getTheme()->getThemeName(mParent->getTheme()->getCurThemeIdx()), (int)mParent->getAnchorType());
 
     // Open/close state of all windows
     file.pushHash("ActiveWins");

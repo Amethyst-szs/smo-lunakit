@@ -20,17 +20,14 @@ const char *shaderNames[] = {
 };
 
 extern "C" void *glslc_Alloc(size_t size, size_t alignment, void *user_data = nullptr) {
-//    Logger::log("Allocating ptr with size: %x aligned by %x\n", size, alignment);
     return nn::init::GetAllocator()->Allocate(ALIGN_UP(size, alignment));
 }
 
 extern "C" void glslc_Free(void *ptr, void *user_data = nullptr) {
-//    Logger::log("Freeing ptr: %p\n", ptr);
     nn::init::GetAllocator()->Free(ptr);
 }
 
 extern "C" void *glslc_Realloc(void *ptr, size_t size, void *user_data = nullptr) {
-//    Logger::log("Reallocating ptr: %p to size: %x\n", ptr, size);
     return nn::init::GetAllocator()->Reallocate(ptr, size);
 }
 

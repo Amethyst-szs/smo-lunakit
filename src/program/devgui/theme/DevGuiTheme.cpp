@@ -9,7 +9,7 @@ void DevGuiTheme::init()
     mThemes = (al::ByamlIter*)nn::init::GetAllocator()->Allocate(sizeof(al::ByamlIter) * mEntryCount);
 
     for(int i = 0; i < mEntryCount; i++) {
-        sead::FormatFixedSafeString<0xff> filePath("sd:/LunaKit/LKData/Themes/%s", getFileName(i));
+        sead::FormatFixedSafeString<0xff> filePath("%s%s", THEMEPATH, getFileName(i));
 
         FsHelper::LoadData loadData = {
             .path = filePath.cstr()
@@ -25,6 +25,8 @@ void DevGuiTheme::init()
                 mThemeIdx = i;
         }
     }
+
+    Logger::log("Loaded all theme data from %s\n", THEMEPATH);
 }
 
 void DevGuiTheme::finalize()
@@ -133,6 +135,7 @@ void DevGuiTheme::tryUpdateTheme()
     style.Colors[ImGuiCol_PlotHistogramHovered]= HighlightInteract;
 
     mIsRefreshTheme = false;
+    Logger::log("Setup LunaKit theme: %s\n", getThemeName());
 }
 
 const char* DevGuiTheme::getThemeName()

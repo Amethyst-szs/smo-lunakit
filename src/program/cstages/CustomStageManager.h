@@ -17,7 +17,11 @@
 
 #include "types.h"
 
+#include "logger/Logger.hpp"
+
 #include "CustomStage.h"
+
+#define CUSTOMSTAGEPATH "sd:/LunaKit/LKData/CustomStages/"
 
 class CustomStageManager {
 public:

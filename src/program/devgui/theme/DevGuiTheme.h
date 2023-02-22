@@ -18,6 +18,8 @@
 
 #include "Logger/Logger.hpp"
 
+#define THEMEPATH "sd:/LunaKit/LKData/Themes/"
+
 class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class DevGuiTheme {

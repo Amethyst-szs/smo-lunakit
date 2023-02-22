@@ -1,3 +1,11 @@
+
+/*
+    Looking for LunaKit code?
+    Head to program/devgui/DevGuiManager.h to get started!
+
+    This file mostly contains hooks and general ExLaunch/initalization things
+*/
+
 #include "lib.hpp"
 #include "imgui_backend/imgui_impl_nvn.hpp"
 #include "patches.hpp"
@@ -104,8 +112,6 @@ HOOK_DEFINE_TRAMPOLINE(RedirectFileDevice) {
 
         sead::FixedSafeString<32> driveName;
         sead::FileDevice *device;
-
-        // Logger::log("Path: %s\n", path.cstr());
 
         if (!sead::Path::getDriveName(&driveName, path)) {
 

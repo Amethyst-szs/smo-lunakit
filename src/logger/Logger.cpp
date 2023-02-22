@@ -29,7 +29,8 @@ nn::Result Logger::init(const char *ip, u16 port) {
 
     nn::nifm::Initialize();
 
-    nn::socket::Initialize(socketPool, 0x600000, 0x20000, 0xE);
+    /*s32 initResult = */nn::socket::Initialize(socketPool, 0x600000, 0x20000, 0xE);
+    // nn::socket::SetSockOpt(initResult, 0, 0, nullptr, 0x2);
 
     nn::nifm::SubmitNetworkRequest();
 
@@ -73,11 +74,12 @@ void Logger::log(const char *fmt, ...) {
     char buffer[0x500] = {};
 
     if (nn::util::VSNPrintf(buffer, sizeof(buffer), fmt, args) > 0) {
-
         if (ISEMU) {
             svcOutputDebugString(buffer, strlen(buffer));
         } else {
-            nn::socket::Send(instance().mSocketFd, buffer, strlen(buffer), 0);
+            char prefix[0x510];
+            nn::util::SNPrintf(prefix, sizeof(prefix), "[%s] %s", "LunaKit", buffer);
+            nn::socket::Send(instance().mSocketFd, prefix, strlen(prefix), 0);
         }
     }
 
@@ -92,6 +94,8 @@ void Logger::log(const char *fmt, va_list args) {
     char buffer[0x500] = {};
 
     if (nn::util::VSNPrintf(buffer, sizeof(buffer), fmt, args) > 0) {
-        nn::socket::Send(instance().mSocketFd, buffer, strlen(buffer), 0);
+        char prefix[0x510];
+        nn::util::SNPrintf(prefix, sizeof(prefix), "[%s] %s", "LunaKit", buffer);
+        nn::socket::Send(instance().mSocketFd, prefix, strlen(prefix), 0);
     }
 }

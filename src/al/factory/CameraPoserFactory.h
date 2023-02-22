@@ -28,13 +28,6 @@ namespace al {
                 this->factoryCount = 0;
             };
 
-            // use this to log cameras being created by the camera poser factory
-            // virtual const char *convertName(char const *name) const override
-            // {
-            //     Logger::log("Creating Camera: %s\n", name);
-            //     return name;
-            // };
-
             virtual CameraPoser *createEntranceCameraPoser(void) const;
             // return new al::CameraPoserEntrance(スタート);
 

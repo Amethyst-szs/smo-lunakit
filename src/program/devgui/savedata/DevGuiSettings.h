@@ -47,13 +47,4 @@ public:
 private:
     DevGuiManager* mParent;
     sead::PtrArray<DevGuiSettingsEntry> mSettings;
-    
-    // // Basic game settings
-    // DevGuiSettingsEntry mIsAutosave;
-    // DevGuiSettingsEntry mIsDisplayHUD;
-    // DevGuiSettingsEntry mIsPlayMusic;
-
-    // // Cheats
-    // DevGuiSettingsEntry mIsNoclip;
-    // DevGuiSettingsEntry mIsAlwaysAllowCheckpoints;
 };
