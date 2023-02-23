@@ -6,7 +6,7 @@
 
     Creating themes:
     These themes can be created through Switch Toolbox or any other .byml editor
-    For more information on making themes, see the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki
+    For more information on making themes, see the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki/LunaKit-Theme-Plugins
 
 */
 
