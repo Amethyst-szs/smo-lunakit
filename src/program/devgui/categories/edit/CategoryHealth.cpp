@@ -1,6 +1,6 @@
 #include "program/devgui/categories/edit/CategoryHealth.h"
 
-#include "game/player/PlayerFunction.h"
+#include "game/Player/PlayerFunction.h"
 #include "helpers/PlayerHelper.h"
 
 CategoryHealth::CategoryHealth(const char* catName, const char* catDesc, sead::Heap* heap)

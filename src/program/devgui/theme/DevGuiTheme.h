@@ -30,7 +30,7 @@
 #include "sead/heap/seadHeapMgr.h"
 #include "sead/filedevice/seadFileDeviceMgr.h"
 
-#include "Logger/Logger.hpp"
+#include "logger/Logger.hpp"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
 
