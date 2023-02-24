@@ -36,6 +36,8 @@
 #include "game/HakoniwaSequence/HakoniwaSequence.h"
 #include "game/Player/PlayerFunction.h"
 #include "game/GameData/GameProgressData.h"
+#include "game/GameData/GameDataHolderWriter.h"
+#include "game/GameData/GameDataFile.h"
 
 #include "al/util.hpp"
 #include "al/util/LiveActorUtil.h"
@@ -52,6 +54,11 @@
 #include "helpers/PlayerHelper.h"
 #include "helpers.h"
 #include "game/GameData/GameDataFunction.h"
+#include "al/LiveActor/LiveActor.h"
+#include "game/StageScene/StageScene.h"
+#include "logger/Logger.hpp"
+#include "os/os_tick.hpp"
+#include "patch/code_patcher.hpp"
 
 #include "GetterUtil.h"
 #include "devgui/DevGuiManager.h"
@@ -60,6 +67,11 @@
 #include <typeinfo>
 
 #include "ExceptionHandler.h"
+
+namespace patch = exl::patch;
+namespace inst = exl::armv8::inst;
+namespace reg = exl::armv8::reg;
+
 
 static const char* DBG_FONT_PATH = "ImGuiData/Font/nvn_font_jis1.ntx";
 static const char* DBG_SHADER_PATH = "ImGuiData/Font/nvn_font_shader_jis1.bin";
@@ -255,6 +267,16 @@ HOOK_DEFINE_TRAMPOLINE(CheckpointWarpHook) {
             return Orig(thisPtr);
     }
 };
+HOOK_DEFINE_TRAMPOLINE(GreyShineRefreshHook) {
+    static bool Callback(GameDataHolderWriter writer, ShineInfo const* shineInfo) {
+        if (DevGuiManager::instance()->getSettings()->getStateByName("Grey Moon Refresh"))
+            return false;
+        return Orig(writer, shineInfo);
+
+        
+    }
+};
+
 
 extern "C" void exl_main(void *x0, void *x1) {
     /* Setup hooking enviroment. */
@@ -286,6 +308,7 @@ extern "C" void exl_main(void *x0, void *x1) {
     // DevGui cheats
     SaveHook::InstallAtSymbol("_ZNK10StageScene12isEnableSaveEv");
     CheckpointWarpHook::InstallAtOffset(0x1F2998);
+    GreyShineRefreshHook::InstallAtSymbol("_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo");
 
     // ImGui Hooks
 #if IMGUI_ENABLED
