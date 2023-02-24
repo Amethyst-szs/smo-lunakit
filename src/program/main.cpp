@@ -35,9 +35,11 @@
 #include "game/System/Application.h"
 #include "game/HakoniwaSequence/HakoniwaSequence.h"
 #include "game/Player/PlayerFunction.h"
+#include "game/Player/PlayerTrigger.h"
 #include "game/GameData/GameProgressData.h"
 #include "game/GameData/GameDataHolderWriter.h"
 #include "game/GameData/GameDataFile.h"
+
 
 #include "al/util.hpp"
 #include "al/util/LiveActorUtil.h"
@@ -276,6 +278,23 @@ HOOK_DEFINE_TRAMPOLINE(GreyShineRefreshHook) {
         
     }
 };
+HOOK_DEFINE_TRAMPOLINE(ButtonMotionRollHook) {
+    static bool Callback(void* thisPtr) {
+        if (DevGuiManager::instance()->getSettings()->getStateByName("Button Motion Roll")){
+            return true;
+            }
+        else
+            return Orig(thisPtr);
+    }
+};
+
+HOOK_DEFINE_TRAMPOLINE(NoDamageHook){
+    static void Callback(PlayerHitPointData* hitPointData) {
+        if (!DevGuiManager::instance()->getSettings()->getStateByName("No Damage"))
+            return Orig(hitPointData);
+
+    }
+};
 
 
 extern "C" void exl_main(void *x0, void *x1) {
@@ -309,7 +328,8 @@ extern "C" void exl_main(void *x0, void *x1) {
     SaveHook::InstallAtSymbol("_ZNK10StageScene12isEnableSaveEv");
     CheckpointWarpHook::InstallAtOffset(0x1F2998);
     GreyShineRefreshHook::InstallAtSymbol("_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo");
-
+    ButtonMotionRollHook::InstallAtSymbol("_ZNK23PlayerJudgeStartRolling21isTriggerRestartSwingEv");
+    NoDamageHook::InstallAtSymbol("_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter");
     // ImGui Hooks
 #if IMGUI_ENABLED
     nvnImGui::InstallHooks();
