@@ -1,3 +1,3 @@
 [submodule "imgui"]
 	path = imgui
-	url = https://github.com/ocornut/imgui/tree/5bb287494096461f90eb5d18135f7c4809efd2f5
+	url = https://github.com/ocornut/imgui.git
