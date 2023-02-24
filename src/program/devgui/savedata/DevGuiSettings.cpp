@@ -26,9 +26,6 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent, sead::Heap* heap)
     DevGuiSettingsEntry* gmr = new (heap) DevGuiSettingsEntry(false, false, "Grey Moon Refresh");
     mSettings.pushBack(gmr);
 
-    DevGuiSettingsEntry* mr = new (heap) DevGuiSettingsEntry(false, false, "Moon Refresh");
-    mSettings.pushBack(mr);
-
     Logger::log("Created %i settings\n", mSettings.size());
 }
 
