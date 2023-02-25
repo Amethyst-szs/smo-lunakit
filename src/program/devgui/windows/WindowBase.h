@@ -13,6 +13,8 @@
 
 #include "imgui.h"
 
+#include "al/util.hpp"
+
 #include "container/seadPtrArray.h"
 #include "game/HakoniwaSequence/HakoniwaSequence.h"
 #include "game/System/GameSystem.h"
@@ -29,7 +31,7 @@ class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class WindowBase {
 public:
-    WindowBase(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap);
+    WindowBase(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
 
     // Determines how the window is positioned
     // Most non-anchored windows will override this function with their own placement code
@@ -57,6 +59,7 @@ public:
 
     // If window is not anchored (defined in the constructor code) it will be placed independently from other windows
     virtual bool isInAnchorList() { return mIsAnchorList; }
+    virtual int getAnchorPages() { return mAnchorPages; }
 
 protected:
     bool mIsActive = true;
@@ -68,6 +71,7 @@ protected:
     sead::Heap* mDevGuiHeap;
 
     bool mIsAnchorList = true;
+    int mAnchorPages = 1;
 
     sead::PtrArray<CategoryBase> mCategories;
 };
