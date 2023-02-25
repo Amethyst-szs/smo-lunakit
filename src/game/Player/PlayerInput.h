@@ -8,4 +8,6 @@ class PlayerInput {
         bool isMoveDeepDown(void) const;
         bool isMoveDeepDownNoSnap(void) const;
         bool isNoInput(void) const;
+        bool isTriggerRollingRestartSwing() const;
+
 };

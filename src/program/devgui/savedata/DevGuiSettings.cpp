@@ -23,6 +23,15 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent, sead::Heap* heap)
     DevGuiSettingsEntry* noclip = new (heap) DevGuiSettingsEntry(false, false, "Noclip");
     mSettings.pushBack(noclip);
 
+    DevGuiSettingsEntry* gmr = new (heap) DevGuiSettingsEntry(false, false, "Grey Moon Refresh");
+    mSettings.pushBack(gmr);
+
+    DevGuiSettingsEntry* buttonmotionroll = new (heap) DevGuiSettingsEntry(false, false, "Button Motion Roll");
+    mSettings.pushBack(buttonmotionroll);
+
+    DevGuiSettingsEntry* nodamage = new (heap) DevGuiSettingsEntry(false, false, "No Damage");
+    mSettings.pushBack(nodamage);
+
     Logger::log("Created %i settings\n", mSettings.size());
 }
 
