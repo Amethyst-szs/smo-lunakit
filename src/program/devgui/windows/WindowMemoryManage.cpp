@@ -1,8 +1,8 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/windows/WindowMemoryManage.h"
 
-WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap)
-    : WindowBase(parent, winName, active, heap) {}
+WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
+    : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages) {}
 
 bool WindowMemoryManage::tryUpdateWinDisplay()
 {
@@ -56,8 +56,6 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
         ImGui::SetTooltip("- World Resource Heap -\nAll resources requested by the\nWorld List for the current world");
 
     ImGui::SetWindowFontScale(mConfig.mFontSize);
-
-    ImGui::End();
 
     return true;
 }
