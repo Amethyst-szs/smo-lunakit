@@ -54,7 +54,7 @@ void CategoryHealth::updateCatDisplay()
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("Kids Mode is Assist Mode\nOnly overrides health meter,\nnot all of Assist Mode!");
 
-        ImGui::SliderInt("Health", &mTargetHealth, 1, 9);
+        ImGui::SliderInt("Health", &mTargetHealth, 1, 100);
     }
 
     if (isInStageScene() && ImGui::Button("Kill Player"))
