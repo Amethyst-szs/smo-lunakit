@@ -13,6 +13,7 @@ protected:
     PlayerHitPointData* mHitData;
     bool mIsOverride = false;
     bool mIsKidsMode = false;
+    bool mIsExtendSlider = false;
 
     bool mIsKillPlayer = false;
     int mTargetHealth = 3;

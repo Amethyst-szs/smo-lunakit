@@ -50,11 +50,16 @@ void CategoryHealth::updateCatDisplay()
 
     if (mIsOverride) {
         ImGui::SameLine();
-        ImGui::Checkbox("Is Kids Mode", &mIsKidsMode);
+        ImGui::Checkbox("Kids", &mIsKidsMode);
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("Kids Mode is Assist Mode\nOnly overrides health meter,\nnot all of Assist Mode!");
 
-        ImGui::SliderInt("Health", &mTargetHealth, 1, 100);
+        ImGui::SameLine();
+        ImGui::Checkbox("Extend", &mIsExtendSlider);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("Allows entering higher HP\nvalues than what is possible\nin the base game");
+
+        ImGui::SliderInt("Health", &mTargetHealth, 1, mIsExtendSlider ? 255 : 9);
     }
 
     if (isInStageScene() && ImGui::Button("Kill Player"))
