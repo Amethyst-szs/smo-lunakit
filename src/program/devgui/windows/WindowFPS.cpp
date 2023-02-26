@@ -15,9 +15,7 @@ WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, bool isActiveBy
 
 bool WindowFPS::tryUpdateWinDisplay()
 {
-    bool canUpdateDisp = WindowBase::tryUpdateWinDisplay();
-
-    if(!canUpdateDisp)
+    if(!WindowBase::tryUpdateWinDisplay())
         return false;
 
     float curFPS = Application::instance()->mFramework->calcFps();

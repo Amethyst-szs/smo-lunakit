@@ -12,7 +12,7 @@
 
 #pragma once
 
-#define SAVEPATH "sd:/LunaKit/LKData/Save/Data.byml"
+#define SAVEPATH "sd:/LunaKit/LKData/data.byml"
 
 #include "al/byaml/ByamlIter.h"
 #include "al/byaml/writer/ByamlWriter.h"

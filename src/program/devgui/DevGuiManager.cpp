@@ -55,6 +55,9 @@ void DevGuiManager::init(sead::Heap* heap)
     WindowInfo* infoWindow = new WindowInfo(this, "LunaKit Info Viewer", true, true, 1);
     mWindows.pushBack(infoWindow);
 
+    WindowActorBrowse* actorWindow = new WindowActorBrowse(this, "LunaKit Actor Browser", false, true, 2);
+    mWindows.pushBack(actorWindow);
+
     WindowFPS* fpsWindow = new WindowFPS(this, "FPS Window", true, false, 1);
     mWindows.pushBack(fpsWindow);
 

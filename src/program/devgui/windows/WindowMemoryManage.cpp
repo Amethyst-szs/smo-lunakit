@@ -6,9 +6,7 @@ WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winNam
 
 bool WindowMemoryManage::tryUpdateWinDisplay()
 {
-    bool canUpdateDisp = WindowBase::tryUpdateWinDisplay();
-
-    if(!canUpdateDisp)
+    if(!WindowBase::tryUpdateWinDisplay())
         return false;
 
     ImGui::SetWindowFontScale(1.2f);

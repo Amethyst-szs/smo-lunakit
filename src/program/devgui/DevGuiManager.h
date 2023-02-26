@@ -15,7 +15,7 @@ Help:
 #pragma once
 
 // Current version of the application (change this if you make changes, especially changes that effect the save data!)
-#define LUNAKITVERSION "V1"
+#define LUNAKITVERSION "V2"
 
 // General includes
 #include "imgui.h"
@@ -46,6 +46,7 @@ Help:
 #include "devgui/windows/WindowEditor.h"
 #include "devgui/windows/WindowInfo.h"
 #include "devgui/windows/WindowMemoryManage.h"
+#include "devgui/windows/WindowActorBrowse.h"
 #include "devgui/windows/WindowFPS.h"
 
 // All tabs on the bar the top of the screen
