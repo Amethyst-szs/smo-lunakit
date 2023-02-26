@@ -35,7 +35,11 @@
 #include "game/System/Application.h"
 #include "game/HakoniwaSequence/HakoniwaSequence.h"
 #include "game/Player/PlayerFunction.h"
+#include "game/Player/PlayerTrigger.h"
 #include "game/GameData/GameProgressData.h"
+#include "game/GameData/GameDataHolderWriter.h"
+#include "game/GameData/GameDataFile.h"
+
 
 #include "al/util.hpp"
 #include "al/util/LiveActorUtil.h"
@@ -52,14 +56,25 @@
 #include "helpers/PlayerHelper.h"
 #include "helpers.h"
 #include "game/GameData/GameDataFunction.h"
+#include "al/LiveActor/LiveActor.h"
+#include "game/StageScene/StageScene.h"
+#include "logger/Logger.hpp"
+#include "os/os_tick.hpp"
+#include "patch/code_patcher.hpp"
 
 #include "GetterUtil.h"
 #include "devgui/DevGuiManager.h"
 #include "devgui/DevGuiPrimitive.h"
+#include "devgui/settings/HooksSettings.h"
 
 #include <typeinfo>
 
 #include "ExceptionHandler.h"
+
+namespace patch = exl::patch;
+namespace inst = exl::armv8::inst;
+namespace reg = exl::armv8::reg;
+
 
 static const char* DBG_FONT_PATH = "ImGuiData/Font/nvn_font_jis1.ntx";
 static const char* DBG_SHADER_PATH = "ImGuiData/Font/nvn_font_shader_jis1.bin";
@@ -72,28 +87,6 @@ sead::TextWriter *gTextWriter;
 void drawLunaKit() {
     DevGuiManager::instance()->updateDisplay();
 }
-
-HOOK_DEFINE_TRAMPOLINE(ControlHook) {
-    static void Callback(StageScene *scene) {
-        DevGuiManager::instance()->updateNoclip();
-
-        DevGuiSettings* set = DevGuiManager::instance()->getSettings();
-
-        if(!set->getStateByName("Display HUD") && scene->mSceneLayout->isWait()) {
-            scene->mSceneLayout->end();
-            MapMini* compass = scene->mSceneLayout->mMapMiniLyt;
-            if (compass->mIsAlive) compass->end();
-        }
-
-        if(!set->getStateByName("Play Music")) {
-            if (al::isPlayingBgm(scene)) {
-                al::stopAllBgm(scene, 0);
-            }
-        }
-
-        Orig(scene);
-    }
-};
 
 HOOK_DEFINE_TRAMPOLINE(CreateFileDeviceMgr) {
     static void Callback(sead::FileDeviceMgr *thisPtr) {
@@ -238,24 +231,6 @@ HOOK_DEFINE_TRAMPOLINE(DrawLunaPrimitives) {
     }
 };
 
-HOOK_DEFINE_TRAMPOLINE(SaveHook) {
-    static bool Callback(StageScene* scene) {
-        if (DevGuiManager::instance()->getSettings()->getStateByName("Autosave"))
-            return Orig(scene);
-        else
-            return false;
-    }
-};
-
-HOOK_DEFINE_TRAMPOLINE(CheckpointWarpHook) {
-    static bool Callback(void* thisPtr) {
-        if (DevGuiManager::instance()->getSettings()->getStateByName("Always Allow Checkpoints"))
-            return true;
-        else
-            return Orig(thisPtr);
-    }
-};
-
 extern "C" void exl_main(void *x0, void *x1) {
     /* Setup hooking enviroment. */
     // envSetOwnProcessHandle(exl::util::proc_handle::Get());
@@ -280,12 +255,8 @@ extern "C" void exl_main(void *x0, void *x1) {
     // Debug Text Writer Drawing
     DrawLunaPrimitives::InstallAtOffset(0x50F1D8);
 
-    // General Hooks
-    ControlHook::InstallAtSymbol("_ZN10StageScene7controlEv");
-
     // DevGui cheats
-    SaveHook::InstallAtSymbol("_ZNK10StageScene12isEnableSaveEv");
-    CheckpointWarpHook::InstallAtOffset(0x1F2998);
+    exlSetupSettingsHooks(); // Located in devgui/settings/HooksSettings
 
     // ImGui Hooks
 #if IMGUI_ENABLED

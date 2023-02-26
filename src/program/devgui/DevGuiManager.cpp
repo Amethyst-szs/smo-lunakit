@@ -28,9 +28,6 @@ void DevGuiManager::init(sead::Heap* heap)
     mDevGuiHeap = heap;
     sead::ScopedCurrentHeapSetter heapSetter(heap);
 
-    // LunaKit is not active by default
-    mIsActive = false;
-
     // Allocate 0x10 (16) slots for windows and tabs at the top
     // Please don't increase these unless you REALLY need more space for some ungodly reason
     mWindows.allocBuffer(0x10, mDevGuiHeap);
@@ -49,16 +46,16 @@ void DevGuiManager::init(sead::Heap* heap)
     
     // Create all display windows
 
-    WindowMemoryManage* memWindow = new WindowMemoryManage(this, "LunaKit Memory Manager", true, mDevGuiHeap);
+    WindowMemoryManage* memWindow = new WindowMemoryManage(this, "LunaKit Memory Manager", true, true, 1);
     mWindows.pushBack(memWindow);
 
-    WindowEditor* editorWindow = new WindowEditor(this, "LunaKit Param Editor", true, mDevGuiHeap);
+    WindowEditor* editorWindow = new WindowEditor(this, "LunaKit Param Editor", true, true, 1);
     mWindows.pushBack(editorWindow);
 
-    WindowInfo* infoWindow = new WindowInfo(this, "LunaKit Info Viewer", true, mDevGuiHeap);
+    WindowInfo* infoWindow = new WindowInfo(this, "LunaKit Info Viewer", true, true, 1);
     mWindows.pushBack(infoWindow);
 
-    WindowFPS* fpsWindow = new WindowFPS(this, "FPS Window", true, mDevGuiHeap);
+    WindowFPS* fpsWindow = new WindowFPS(this, "FPS Window", true, false, 1);
     mWindows.pushBack(fpsWindow);
 
     // Create all home menu tabs
@@ -133,10 +130,12 @@ void DevGuiManager::updateDisplay()
 
         if(mIsAnchorChange) {
             entry->setupAnchor(totalAnchorWin, curAnchorWin);
-            curAnchorWin++;
+            curAnchorWin += entry->getAnchorPages();
         }
 
         entry->tryUpdateWinDisplay();
+
+        ImGui::End();
     }
 
     mIsAnchorChange = false;
@@ -243,7 +242,7 @@ int DevGuiManager::calcTotalAnchoredWindows()
         auto* entry = mWindows.at(i);
 
         if(*(entry->getActiveState()) && entry->isInAnchorList())
-            total++;
+            total += entry->getAnchorPages();
     }
 
     return total;

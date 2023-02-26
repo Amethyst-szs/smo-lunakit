@@ -22,7 +22,7 @@
 
 class WindowMemoryManage : public WindowBase {
 public:
-    WindowMemoryManage(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap);
+    WindowMemoryManage(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
 
     bool tryUpdateWinDisplay() override;
 

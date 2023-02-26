@@ -18,5 +18,5 @@
 
 class WindowInfo : public WindowBase {
 public:
-    WindowInfo(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap);
+    WindowInfo(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
 };

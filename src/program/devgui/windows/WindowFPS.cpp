@@ -3,11 +3,10 @@
 
 #include "game/System/Application.h"
 
-WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, bool active, sead::Heap* heap)
-    : WindowBase(parent, winName, active, heap)
+WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
+    : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)
 {
     mConfig.mSize = ImVec2(400, 70);
-    mIsAnchorList = false;
 
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoNav;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoDecoration;
@@ -39,8 +38,6 @@ bool WindowFPS::tryUpdateWinDisplay()
     lineSize.x -= 12;
     lineSize.y -= 10;
     ImGui::PlotLines("", mHistory, IM_ARRAYSIZE(mHistory), mHistoryOffset, overlay, 0.0f, 60.0f, lineSize);
-
-    ImGui::End();
 
     return true;
 }

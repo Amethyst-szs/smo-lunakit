@@ -15,7 +15,7 @@ Help:
 #pragma once
 
 // Current version of the application (change this if you make changes, especially changes that effect the save data!)
-#define LUNAKITVERSION "Beta-2"
+#define LUNAKITVERSION "V1"
 
 // General includes
 #include "imgui.h"
@@ -38,7 +38,7 @@ Help:
 
 // All extra DevGui features included by the manager
 #include "devgui/savedata/DevGuiSaveData.h"
-#include "devgui/savedata/DevGuiSettings.h"
+#include "devgui/settings/DevGuiSettings.h"
 #include "devgui/theme/DevGuiTheme.h"
 
 // All windows

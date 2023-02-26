@@ -1,6 +1,6 @@
 #include "program/devgui/categories/edit/CategoryHealth.h"
 
-#include "game/player/PlayerFunction.h"
+#include "game/Player/PlayerFunction.h"
 #include "helpers/PlayerHelper.h"
 
 CategoryHealth::CategoryHealth(const char* catName, const char* catDesc, sead::Heap* heap)
@@ -50,11 +50,16 @@ void CategoryHealth::updateCatDisplay()
 
     if (mIsOverride) {
         ImGui::SameLine();
-        ImGui::Checkbox("Is Kids Mode", &mIsKidsMode);
+        ImGui::Checkbox("Kids", &mIsKidsMode);
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("Kids Mode is Assist Mode\nOnly overrides health meter,\nnot all of Assist Mode!");
 
-        ImGui::SliderInt("Health", &mTargetHealth, 1, 9);
+        ImGui::SameLine();
+        ImGui::Checkbox("Extend", &mIsExtendSlider);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("Allows entering higher HP\nvalues than what is possible\nin the base game");
+
+        ImGui::SliderInt("Health", &mTargetHealth, 1, mIsExtendSlider ? 255 : 9);
     }
 
     if (isInStageScene() && ImGui::Button("Kill Player"))
