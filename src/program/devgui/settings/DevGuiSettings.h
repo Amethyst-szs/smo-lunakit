@@ -71,6 +71,9 @@ public:
     const char* getNameByIdx(int idx) { return mSettings.at(idx)->getName(); }
 
 private:
+    void registerNewSetting(bool isEnabledByDefault, bool isSave, const char* settingName);
+    
+    sead::Heap* mSettingsHeap;
     DevGuiManager* mParent;
     sead::PtrArray<DevGuiSettingsEntry> mSettings;
 };

@@ -1,4 +1,4 @@
-LOGGER_IP ?= "192.168.178.41" # put log server IP in string
+LOGGER_IP ?= "192.168.0.58" # put log server IP in string
 FTP_IP ?= 192.168.0.9 # put console IP here
 .PHONY: all clean
 

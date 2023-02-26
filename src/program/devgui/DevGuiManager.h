@@ -38,7 +38,7 @@ Help:
 
 // All extra DevGui features included by the manager
 #include "devgui/savedata/DevGuiSaveData.h"
-#include "devgui/savedata/DevGuiSettings.h"
+#include "devgui/settings/DevGuiSettings.h"
 #include "devgui/theme/DevGuiTheme.h"
 
 // All windows
