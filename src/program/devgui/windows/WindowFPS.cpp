@@ -8,6 +8,7 @@ WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, bool isActiveBy
 {
     mConfig.mSize = ImVec2(400, 70);
 
+    mConfig.mWindowFlags |= ImGuiWindowFlags_NoBackground;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoNav;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoDecoration;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoInputs;

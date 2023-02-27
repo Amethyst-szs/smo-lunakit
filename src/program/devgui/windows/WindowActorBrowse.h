@@ -18,5 +18,10 @@ public:
     bool tryUpdateWinDisplay() override;
 
 private:
-    // Data here ig
+    void drawButtonHeader();
+    void drawActorList(al::Scene* scene);
+    void drawActorInfo();
+
+    ImGuiWindowFlags mChildFlags = ImGuiWindowFlags_HorizontalScrollbar;
+    const float mHeaderSize = 20.f;
 };

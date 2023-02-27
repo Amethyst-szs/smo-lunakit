@@ -22,24 +22,33 @@ bool WindowActorBrowse::tryUpdateWinDisplay()
     if(!scene)
         return true;
 
-    al::LiveActorGroup* group = scene->mLiveActorKit->mLiveActorGroup2;
+    drawButtonHeader();
+    drawActorList(scene);
+    ImGui::SameLine();
+    drawActorInfo();
 
-    ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar;
+    return true;
+}
 
+void WindowActorBrowse::drawButtonHeader()
+{
     ImVec2 inputChildSize = ImGui::GetContentRegionAvail();
-    inputChildSize.x *= 0.9f;
-    inputChildSize.y *= 0.1f;
-    ImGui::BeginChild("ActorInputs", inputChildSize, false, window_flags);
+    inputChildSize.y = mHeaderSize;
+    ImGui::BeginChild("ActorInputs", inputChildSize, false, mChildFlags);
     
     ImGui::Text("WIP");
 
     ImGui::EndChild();
+}
 
+void WindowActorBrowse::drawActorList(al::Scene* scene)
+{
+    al::LiveActorGroup* group = scene->mLiveActorKit->mLiveActorGroup2;
 
     ImVec2 listSize = ImGui::GetContentRegionAvail();
-    listSize.x *= 0.485f;
-    listSize.y *= 0.9f;
-    ImGui::BeginChild("ActorList", listSize, true, window_flags);
+    listSize.x *= 0.6f;
+    listSize.y -= mHeaderSize + 8.f;
+    ImGui::BeginChild("ActorList", listSize, true, mChildFlags);
     
     int status;
     for(int i = 0; i < group->mActorCount; i++) {
@@ -54,12 +63,15 @@ bool WindowActorBrowse::tryUpdateWinDisplay()
     }
 
     ImGui::EndChild();
-    ImGui::SameLine();
-    ImGui::BeginChild("ActorInfo", listSize, true, window_flags);
+}
+
+void WindowActorBrowse::drawActorInfo()
+{
+    ImVec2 listSize = ImGui::GetContentRegionAvail();
+    listSize.y -= mHeaderSize + 8.f;
+    ImGui::BeginChild("ActorInfo", listSize, true, mChildFlags);
     
     ImGui::Text("Work in progress!");
 
     ImGui::EndChild();
-
-    return true;
 }
