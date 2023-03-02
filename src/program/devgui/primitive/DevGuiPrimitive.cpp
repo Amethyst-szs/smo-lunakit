@@ -1,11 +1,4 @@
-#include "devgui/DevGuiPrimitive.h"
-
-// This class is a singleton! It does not have a typical constructor
-// This is class is created in GameSystemInit in main.cpp
-// Access this class from anywhere using DevGuiPrimitive::instance()->...
-SEAD_SINGLETON_DISPOSER_IMPL(DevGuiPrimitive)
-DevGuiPrimitive::DevGuiPrimitive() = default;
-DevGuiPrimitive::~DevGuiPrimitive() = default;
+#include "devgui/primitive/DevGuiPrimitive.h"
 
 void DevGuiPrimitive::draw(agl::DrawContext* drawContext)
 {

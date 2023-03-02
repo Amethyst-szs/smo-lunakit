@@ -116,7 +116,6 @@ HOOK_DEFINE_TRAMPOLINE(NoDamageHook){
 void exlSetupSettingsHooks()
 {
     ControlHook::InstallAtSymbol("_ZN10StageScene7controlEv");
-    
     NoclipMovementHook::InstallAtSymbol("_ZN19PlayerActorHakoniwa8movementEv");
     SaveHook::InstallAtSymbol("_ZNK10StageScene12isEnableSaveEv");
     CheckpointWarpHook::InstallAtSymbol("_ZNK9MapLayout22isEnableCheckpointWarpEv");

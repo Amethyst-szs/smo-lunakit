@@ -33,6 +33,9 @@ void DevGuiManager::init(sead::Heap* heap)
     mWindows.allocBuffer(0x10, mDevGuiHeap);
     mHomeMenuTabs.allocBuffer(0x10, mDevGuiHeap);
 
+    // Primitive renderer class & functions
+    mPrimitive = new DevGuiPrimitive();
+
     // Creates the settings class, accessed by various functions and set by HomeMenuSettings
     mSettings = new DevGuiSettings(this, heap);
 

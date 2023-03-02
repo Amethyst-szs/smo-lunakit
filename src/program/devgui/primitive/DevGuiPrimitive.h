@@ -44,14 +44,9 @@ struct PrimitiveAreaSettings {
 // FUTURE FEATURE: Add support for HitSensor rendering in this menu
 
 class DevGuiPrimitive {
-    // This class is a singleton! It does not have a typical constructor
-    // This is class is created in GameSystemInit in main.cpp
-    // Access this class from anywhere using DevGuiPrimitive::instance()->...
-    SEAD_SINGLETON_DISPOSER(DevGuiPrimitive);
-    DevGuiPrimitive();
-    ~DevGuiPrimitive();
-
 public:
+    DevGuiPrimitive() {};
+    
     void draw(agl::DrawContext* drawContext); // Called during the drawMainHook
 
     // All settings related to what is being rendered

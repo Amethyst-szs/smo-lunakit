@@ -1,6 +1,6 @@
 #pragma once
 
-#include "program/devgui/DevGuiPrimitive.h"
+#include "program/devgui/primitive/DevGuiPrimitive.h"
 #include "program/devgui/categories/CategoryBase.h"
 
 class CategoryPrimitive : public CategoryBase {

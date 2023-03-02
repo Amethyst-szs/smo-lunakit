@@ -64,7 +64,7 @@
 
 #include "GetterUtil.h"
 #include "devgui/DevGuiManager.h"
-#include "devgui/DevGuiPrimitive.h"
+#include "devgui/primitive/DevGuiPrimitive.h"
 #include "devgui/settings/HooksSettings.h"
 
 #include <typeinfo>
@@ -74,7 +74,6 @@
 namespace patch = exl::patch;
 namespace inst = exl::armv8::inst;
 namespace reg = exl::armv8::reg;
-
 
 static const char* DBG_FONT_PATH = "ImGuiData/Font/nvn_font_jis1.ntx";
 static const char* DBG_SHADER_PATH = "ImGuiData/Font/nvn_font_shader_jis1.bin";
@@ -195,8 +194,6 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
         DevGuiManager::createInstance(curHeap);
         DevGuiManager::instance()->init(curHeap);
 
-        DevGuiPrimitive::createInstance(curHeap);
-
         sead::TextWriter::setDefaultFont(sead::DebugFontMgrJis1Nvn::instance());
 
         al::GameDrawInfo *drawInfo = Application::instance()->mDrawInfo;
@@ -217,17 +214,16 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
     }
 };
 
-HOOK_DEFINE_TRAMPOLINE(DrawLunaPrimitives) {
+HOOK_DEFINE_TRAMPOLINE(UpdateLunaKit) {
     static void Callback(HakoniwaSequence *thisPtr) {
         Orig(thisPtr);
-
         DevGuiManager::instance()->update();
 
         if(!DevGuiManager::instance()->isMenuActive())
             return;
         
         agl::DrawContext* drawContext = thisPtr->getDrawInfo()->mDrawContext;
-        DevGuiPrimitive::instance()->draw(drawContext);
+        DevGuiManager::instance()->getPrimitive()->draw(drawContext);
     }
 };
 
@@ -253,7 +249,7 @@ extern "C" void exl_main(void *x0, void *x1) {
     FileLoaderIsExistArchive::InstallAtOffset(0xA5ED74);
 
     // Debug Text Writer Drawing
-    DrawLunaPrimitives::InstallAtOffset(0x50F1D8);
+    UpdateLunaKit::InstallAtOffset(0x50F1D8);
 
     // DevGui cheats
     exlSetupSettingsHooks(); // Located in devgui/settings/HooksSettings

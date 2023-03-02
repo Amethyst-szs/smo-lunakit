@@ -37,6 +37,7 @@ Help:
 #include "cstages/CustomStageManager.h"
 
 // All extra DevGui features included by the manager
+#include "devgui/primitive/DevGuiPrimitive.h"
 #include "devgui/savedata/DevGuiSaveData.h"
 #include "devgui/settings/DevGuiSettings.h"
 #include "devgui/theme/DevGuiTheme.h"
@@ -104,6 +105,7 @@ public:
     const char* getWindowNameAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getWindowName(); } // Header name of a window
 
     sead::Heap* getHeap() { return mDevGuiHeap; } // Heap where data is stored (same as the Stationed Heap)
+    DevGuiPrimitive* getPrimitive() { return mPrimitive; } // Primitive Renderer controller
     DevGuiSettings* getSettings() { return mSettings; } // Current settings (used in the settings home menu, written to save file)
     DevGuiTheme* getTheme() { return mTheme; } // Controls the theme, including reading data from the SD card
     DevGuiSaveData* getSaveData() { return mSaveData; } // Preferences and settings, written to the save file
@@ -117,6 +119,7 @@ private:
     bool mIsDisplayAnchorWindows = true; // Are the main windows hidden by pressing L-Stick?
 
     sead::Heap* mDevGuiHeap = nullptr; // Uses the stationed heap
+    DevGuiPrimitive* mPrimitive = nullptr; // Render primitive shapes
     DevGuiSettings* mSettings = nullptr; // Current settings (used in the settings home menu, written to save file)
     DevGuiTheme* mTheme = nullptr; // Controls the theme, including reading data from the SD card
     DevGuiSaveData* mSaveData = nullptr; // Preferences and settings, written to the save file

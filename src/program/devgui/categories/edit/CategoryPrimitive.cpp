@@ -1,4 +1,5 @@
-#include "program/devgui/categories/edit/CategoryPrimitive.h"
+#include "devgui/categories/edit/CategoryPrimitive.h"
+#include "devgui/DevGuiManager.h"
 
 CategoryPrimitive::CategoryPrimitive(const char* catName, const char* catDesc)
     : CategoryBase(catName, catDesc)
@@ -7,7 +8,7 @@ CategoryPrimitive::CategoryPrimitive(const char* catName, const char* catDesc)
 
 void CategoryPrimitive::updateCatDisplay()
 {
-    DevGuiPrimitive* prim = DevGuiPrimitive::instance();
+    DevGuiPrimitive* prim = DevGuiManager::instance()->getPrimitive();
 
     ImGui::Checkbox("Enable Primitive Rendering", &prim->mIsDrawPrimitives);
 
