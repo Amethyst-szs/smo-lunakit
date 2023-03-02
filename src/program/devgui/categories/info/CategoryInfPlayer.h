@@ -16,7 +16,7 @@
 
 class CategoryInfPlayer : public CategoryBase {
 public:
-    CategoryInfPlayer(const char* catName, const char* catDesc, sead::Heap* heap);
+    CategoryInfPlayer(const char* catName, const char* catDesc);
 
     void updateCatDisplay() override;
 };

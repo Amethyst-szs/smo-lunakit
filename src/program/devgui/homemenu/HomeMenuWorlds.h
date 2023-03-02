@@ -12,7 +12,7 @@
 
 class HomeMenuWorlds : public HomeMenuBase {
 public:
-    HomeMenuWorlds(DevGuiManager* parent, const char* menuName, sead::Heap* heap);
+    HomeMenuWorlds(DevGuiManager* parent, const char* menuName);
 
     virtual void updateMenu();
 

@@ -15,7 +15,7 @@ Help:
 #pragma once
 
 // Current version of the application (change this if you make changes, especially changes that effect the save data!)
-#define LUNAKITVERSION "V2"
+#define LUNAKITVERSION "Dev-3"
 
 // General includes
 #include "imgui.h"
@@ -81,7 +81,13 @@ public:
 
     void update(); // Update is always called every frame (on the sequence)
     void updateDisplay(); // Update display is only used when the menu is currently open
+    void updateCursorState(); // Shows/hides the cursor based on if the window is open
     void updateNoclip(); // Controls the player's noclip movement (likely want to move this somewhere else)
+
+    template <class T> // Template function to create and add a new window to the list
+    void createWindow(const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
+    template <class T> // Template function to create and add a new tab to the home bar
+    void createHomeMenuItem(const char* menuName);
 
     bool isMenuActive() { return mIsActive; } // Checks if the menu is open
     bool isFirstStep() { return mIsFirstStep; } // Checks if this is the first frame the window is open
@@ -107,8 +113,6 @@ public:
     bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; } // Is the ImGui Demo Window open (accessible in the extras tab)
 
 private:
-    void updateCursorState(); // Shows/hides the cursor based on if the window is open
-
     bool mIsActive = false; // Is the LunaKit display active
     bool mIsFirstStep = false; // Is this the first frame of the LunaKit display (retriggers each time it is opened)
     bool mIsDisplayAnchorWindows = true; // Are the main windows hidden by pressing L-Stick?

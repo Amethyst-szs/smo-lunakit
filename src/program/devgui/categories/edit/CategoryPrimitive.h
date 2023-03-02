@@ -5,7 +5,7 @@
 
 class CategoryPrimitive : public CategoryBase {
 public:
-    CategoryPrimitive(const char* catName, const char* catDesc, sead::Heap* heap);
+    CategoryPrimitive(const char* catName, const char* catDesc);
 
     /*
     updateCat is not implemented here because all functionality is handled by singleton DevGuiPrimitive

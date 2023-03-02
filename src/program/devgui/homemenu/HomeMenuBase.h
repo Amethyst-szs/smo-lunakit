@@ -13,6 +13,8 @@
 
 #include "imgui.h"
 
+#include "al/util.hpp"
+
 #include "container/seadPtrArray.h"
 #include "heap/seadDisposer.h"
 #include "heap/seadHeap.h"
@@ -21,7 +23,7 @@ class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class HomeMenuBase {
 public:
-    HomeMenuBase(DevGuiManager* parent, const char* menuName, sead::Heap* heap);
+    HomeMenuBase(DevGuiManager* parent, const char* menuName);
 
     virtual void updateMenu(); // Called whenever this menu is open
     // Unlike categories, these don't have a seperation between run and display since code is triggered once on input (or sets flags)

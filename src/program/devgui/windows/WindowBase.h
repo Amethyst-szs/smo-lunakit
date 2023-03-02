@@ -43,6 +43,12 @@ public:
     // updateWinDisplay is only called if the window is open AND the LunaKit display is active
     // If window does not have any categories, the implementation is responsible for running ImGui::End()
     virtual bool tryUpdateWinDisplay();
+
+    template <class T> // Template function to create and add category to list
+    void createCategory(const char* catName, const char* catDesc) {
+        T* cat = new (mDevGuiHeap) T(catName, catDesc);
+        mCategories.pushBack(cat);
+    }
     
     // Generic getter functions, can be accessed from anywhere
     // Not recommended to override unless you have a very specific goal in mind

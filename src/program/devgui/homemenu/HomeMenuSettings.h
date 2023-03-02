@@ -8,7 +8,7 @@
 
 class HomeMenuSettings : public HomeMenuBase {
 public:
-    HomeMenuSettings(DevGuiManager* parent, const char* menuName, sead::Heap* heap);
+    HomeMenuSettings(DevGuiManager* parent, const char* menuName);
 
     virtual void updateMenu();
 private:

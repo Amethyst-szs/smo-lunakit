@@ -2,6 +2,8 @@
 
 #include "imgui.h"
 
+#include "al/util.hpp"
+
 #include "heap/seadDisposer.h"
 #include "heap/seadHeap.h"
 
@@ -9,7 +11,7 @@
 
 class CategoryBase {
 public:
-    CategoryBase(const char* catName, const char* catDesc, sead::Heap* heap);
+    CategoryBase(const char* catName, const char* catDesc);
 
     virtual void updateCat();
     virtual void updateCatDisplay();

@@ -1,8 +1,8 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuWindows.h"
 
-HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
-    : HomeMenuBase(parent, menuName, heap)
+HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName)
+    : HomeMenuBase(parent, menuName)
 {}
 
 void HomeMenuWindows::updateMenu()

@@ -2,8 +2,8 @@
 
 #include "helpers.h"
 
-CategoryHomeShip::CategoryHomeShip(const char* catName, const char* catDesc, sead::Heap* heap)
-    : CategoryBase(catName, catDesc, heap)
+CategoryHomeShip::CategoryHomeShip(const char* catName, const char* catDesc)
+    : CategoryBase(catName, catDesc)
 {
     mUpdateStatusListSize = IM_ARRAYSIZE(updateStatusList);
     mUpdateWaterfallListSize = IM_ARRAYSIZE(updateWaterfallList);

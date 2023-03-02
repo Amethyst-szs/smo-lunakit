@@ -45,40 +45,19 @@ void DevGuiManager::init(sead::Heap* heap)
     mCustomList->init(heap);
     
     // Create all display windows
-
-    WindowMemoryManage* memWindow = new WindowMemoryManage(this, "LunaKit Memory Manager", true, true, 1);
-    mWindows.pushBack(memWindow);
-
-    WindowEditor* editorWindow = new WindowEditor(this, "LunaKit Param Editor", true, true, 1);
-    mWindows.pushBack(editorWindow);
-
-    WindowInfo* infoWindow = new WindowInfo(this, "LunaKit Info Viewer", true, true, 1);
-    mWindows.pushBack(infoWindow);
-
-    WindowActorBrowse* actorWindow = new WindowActorBrowse(this, "LunaKit Actor Browser", false, true, 2);
-    mWindows.pushBack(actorWindow);
-
-    WindowFPS* fpsWindow = new WindowFPS(this, "FPS Window", true, false, 1);
-    mWindows.pushBack(fpsWindow);
+    createWindow<WindowMemoryManage>("Memory Manager", true, true, 1);
+    createWindow<WindowEditor>("Param Editor", true, true, 1);
+    createWindow<WindowInfo>("Info Viewer", true, true, 1);
+    createWindow<WindowActorBrowse>("Actor Browser", false, true, 2);
+    createWindow<WindowFPS>("FPS Window", true, false, 1);
 
     // Create all home menu tabs
-    HomeMenuFile* homeFile = new HomeMenuFile(this, "File", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeFile);
-
-    HomeMenuSettings* homeSetting = new HomeMenuSettings(this, "Settings", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeSetting);
-
-    HomeMenuWindows* homeWindows = new HomeMenuWindows(this, "Windows", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeWindows);
-
-    HomeMenuWorlds* homeWorld = new HomeMenuWorlds(this, "Kingdoms", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeWorld);
-
-    HomeMenuCStages* homeCStages = new HomeMenuCStages(this, "Stages", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeCStages);
-
-    HomeMenuExtra* homeExtra = new HomeMenuExtra(this, "Extras", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeExtra);
+    createHomeMenuItem<HomeMenuFile>("File");
+    createHomeMenuItem<HomeMenuSettings>("Settings");
+    createHomeMenuItem<HomeMenuWindows>("Windows");
+    createHomeMenuItem<HomeMenuWorlds>("Kingdoms");
+    createHomeMenuItem<HomeMenuCStages>("Stages");
+    createHomeMenuItem<HomeMenuExtra>("Extras");
 
     // Load and read save data if it already exists
     mSaveData = new DevGuiSaveData(heap);
@@ -236,6 +215,20 @@ void DevGuiManager::updateNoclip()
         if (al::isPadHoldZL(-1) || al::isPadHoldA(-1)) playerPos->y -= (vspeed + speedGain / 6);
         if (al::isPadHoldB(-1)) playerPos->y += (vspeed + speedGain / 6);
     }
+}
+
+template <class T>
+void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
+{
+    T* window = new (mDevGuiHeap) T(this, winName, isActiveByDefault, isAnchor, windowPages);
+    mWindows.pushBack(window);
+}
+
+template <class T>
+void DevGuiManager::createHomeMenuItem(const char* menuName)
+{
+    T* home = new (mDevGuiHeap) T(this, menuName);
+    mHomeMenuTabs.pushBack(home);
 }
 
 int DevGuiManager::calcTotalAnchoredWindows()

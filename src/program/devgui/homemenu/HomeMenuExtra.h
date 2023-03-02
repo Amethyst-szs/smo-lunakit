@@ -6,7 +6,7 @@
 
 class HomeMenuExtra : public HomeMenuBase {
 public:
-    HomeMenuExtra(DevGuiManager* parent, const char* menuName, sead::Heap* heap);
+    HomeMenuExtra(DevGuiManager* parent, const char* menuName);
 
     virtual void updateMenu();
 };

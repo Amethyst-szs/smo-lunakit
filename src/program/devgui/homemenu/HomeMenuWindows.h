@@ -7,7 +7,7 @@
 
 class HomeMenuWindows : public HomeMenuBase {
 public:
-    HomeMenuWindows(DevGuiManager* parent, const char* menuName, sead::Heap* heap);
+    HomeMenuWindows(DevGuiManager* parent, const char* menuName);
 
     virtual void updateMenu();
 

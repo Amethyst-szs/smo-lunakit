@@ -1,11 +1,11 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuBase.h"
 
-HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
+HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName)
 {
     mParent = parent;
     mMenuName = menuName;
-    mDevGuiHeap = heap;
+    mDevGuiHeap = al::getStationedHeap();
 }
 
 void HomeMenuBase::updateMenu()
