@@ -46,7 +46,7 @@ HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
         al::setVelocityZero(player);
 
         // Mario slightly goes down even when velocity is 0. This is a hacky fix for that.
-        playerPos->y += 1.4553f;
+        playerPos->y += 1.5f;
 
         float d = sqrt(al::powerIn(playerPos->x - cameraPos->x, 2) + (al::powerIn(playerPos->z - cameraPos->z, 2)));
         float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos->x);
