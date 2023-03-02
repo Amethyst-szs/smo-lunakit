@@ -2,8 +2,6 @@
 
 HOOK_DEFINE_TRAMPOLINE(ControlHook) {
     static void Callback(StageScene *scene) {
-        DevGuiManager::instance()->updateNoclip();
-
         DevGuiSettings* set = DevGuiManager::instance()->getSettings();
 
         if(!set->getStateByName("Display HUD") && scene->mSceneLayout->isWait()) {
@@ -19,6 +17,58 @@ HOOK_DEFINE_TRAMPOLINE(ControlHook) {
         }
 
         Orig(scene);
+    }
+};
+
+HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
+    static void Callback(PlayerActorHakoniwa *player) {
+        bool isNoclip = DevGuiManager::instance()->getSettings()->getStateByName("Noclip");
+
+        if(!isNoclip && !rs::isActiveDemo(player))
+            al::onCollide(player);
+
+        if(!isNoclip) {
+            Orig(player);
+            return;
+        }
+
+        static float speed = 25.0f;
+        static float speedMax = 150.0f;
+        static float vspeed = 20.0f;
+        static float speedGain = 0.0f;
+
+        sead::Vector3f *playerPos = al::getTransPtr(player);
+        sead::Vector3f *cameraPos = al::getCameraPos(player, 0);
+        sead::Vector2f *leftStick = al::getLeftStick(-1);
+
+        // Its better to do this here because loading zones reset this.
+        al::offCollide(player);
+        al::setVelocityZero(player);
+
+        // Mario slightly goes down even when velocity is 0. This is a hacky fix for that.
+        playerPos->y += 1.4553f;
+
+        float d = sqrt(al::powerIn(playerPos->x - cameraPos->x, 2) + (al::powerIn(playerPos->z - cameraPos->z, 2)));
+        float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos->x);
+        float vz = ((speed + speedGain) / d) * (playerPos->z - cameraPos->z);
+
+        if (!al::isPadHoldZR(-1)) {
+            playerPos->x -= leftStick->x * vz;
+            playerPos->z += leftStick->x * vx;
+
+            playerPos->x += leftStick->y * vx;
+            playerPos->z += leftStick->y * vz;
+
+            if (al::isPadHoldX(-1)) speedGain -= 0.5f;
+            if (al::isPadHoldY(-1)) speedGain += 0.5f;
+            if (speedGain <= 0.0f) speedGain = 0.0f;
+            if (speedGain >= speedMax) speedGain = speedMax;
+
+            if (al::isPadHoldZL(-1) || al::isPadHoldA(-1)) playerPos->y -= (vspeed + speedGain / 6);
+            if (al::isPadHoldB(-1)) playerPos->y += (vspeed + speedGain / 6);
+        }
+        
+        Orig(player);
     }
 };
 
@@ -67,8 +117,9 @@ void exlSetupSettingsHooks()
 {
     ControlHook::InstallAtSymbol("_ZN10StageScene7controlEv");
     
+    NoclipMovementHook::InstallAtSymbol("_ZN19PlayerActorHakoniwa8movementEv");
     SaveHook::InstallAtSymbol("_ZNK10StageScene12isEnableSaveEv");
-    CheckpointWarpHook::InstallAtOffset(0x1F2998);
+    CheckpointWarpHook::InstallAtSymbol("_ZNK9MapLayout22isEnableCheckpointWarpEv");
     GreyShineRefreshHook::InstallAtSymbol("_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo");
     ButtonMotionRollHook::InstallAtSymbol("_ZNK23PlayerJudgeStartRolling21isTriggerRestartSwingEv");
     NoDamageHook::InstallAtSymbol("_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter");

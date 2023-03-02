@@ -82,7 +82,6 @@ public:
     void update(); // Update is always called every frame (on the sequence)
     void updateDisplay(); // Update display is only used when the menu is currently open
     void updateCursorState(); // Shows/hides the cursor based on if the window is open
-    void updateNoclip(); // Controls the player's noclip movement (likely want to move this somewhere else)
 
     template <class T> // Template function to create and add a new window to the list
     void createWindow(const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
