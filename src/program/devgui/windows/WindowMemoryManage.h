@@ -17,7 +17,6 @@
 #include "game/System/GameSystem.h"
 #include "game/System/Application.h"
 
-#include "program/devgui/DevGuiWindowConfig.h"
 #include "program/devgui/windows/WindowBase.h"
 
 class WindowMemoryManage : public WindowBase {

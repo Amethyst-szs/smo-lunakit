@@ -10,7 +10,6 @@
 
 #include "imgui.h"
 
-#include "program/devgui/DevGuiWindowConfig.h"
 #include "program/devgui/windows/WindowBase.h"
 
 #include "program/devgui/categories/CategoryBase.h"
