@@ -79,6 +79,7 @@ class DevGuiManager {
 public:
     // Create the DevGuiManager, only called once in the GameSystemInit
     void init(sead::Heap* heap);
+    void createElements();
 
     void update(); // Update is always called every frame (on the sequence)
     void updateDisplay(); // Update display is only used when the menu is currently open

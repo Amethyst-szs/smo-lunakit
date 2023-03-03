@@ -20,6 +20,26 @@ SEAD_SINGLETON_DISPOSER_IMPL(DevGuiManager)
 DevGuiManager::DevGuiManager() = default;
 DevGuiManager::~DevGuiManager() = default;
 
+void DevGuiManager::createElements()
+{
+    sead::ScopedCurrentHeapSetter heapSetter(mDevGuiHeap);
+    
+    // Create all display windows
+    createWindow<WindowMemoryManage>("Memory Manager", true, true, 1);
+    createWindow<WindowEditor>("Param Editor", true, true, 1);
+    createWindow<WindowInfo>("Info Viewer", true, true, 1);
+    createWindow<WindowActorBrowse>("Actor Browser", false, true, 2);
+    createWindow<WindowFPS>("FPS Window", true, false, 1);
+
+    // Create all home menu tabs
+    createHomeMenuItem<HomeMenuFile>("File");
+    createHomeMenuItem<HomeMenuSettings>("Settings");
+    createHomeMenuItem<HomeMenuWindows>("Windows");
+    createHomeMenuItem<HomeMenuWorlds>("Kingdoms");
+    createHomeMenuItem<HomeMenuCStages>("Stages");
+    createHomeMenuItem<HomeMenuExtra>("Extras");
+}
+
 void DevGuiManager::init(sead::Heap* heap)
 {
     Logger::log("Initing DevGuiManager... (Version: %s)\n", LUNAKITVERSION);
@@ -46,21 +66,9 @@ void DevGuiManager::init(sead::Heap* heap)
     // Creates the custom stage manager and loads in the custom stage information from the SD card CustomStages folder
     mCustomList = new CustomStageManager();
     mCustomList->init(heap);
-    
-    // Create all display windows
-    createWindow<WindowMemoryManage>("Memory Manager", true, true, 1);
-    createWindow<WindowEditor>("Param Editor", true, true, 1);
-    createWindow<WindowInfo>("Info Viewer", true, true, 1);
-    createWindow<WindowActorBrowse>("Actor Browser", false, true, 2);
-    createWindow<WindowFPS>("FPS Window", true, false, 1);
 
-    // Create all home menu tabs
-    createHomeMenuItem<HomeMenuFile>("File");
-    createHomeMenuItem<HomeMenuSettings>("Settings");
-    createHomeMenuItem<HomeMenuWindows>("Windows");
-    createHomeMenuItem<HomeMenuWorlds>("Kingdoms");
-    createHomeMenuItem<HomeMenuCStages>("Stages");
-    createHomeMenuItem<HomeMenuExtra>("Extras");
+    // Create all windows and home menu items
+    createElements();
 
     // Load and read save data if it already exists
     mSaveData = new DevGuiSaveData(heap);
