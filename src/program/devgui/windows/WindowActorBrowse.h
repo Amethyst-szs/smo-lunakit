@@ -22,6 +22,19 @@ private:
     void drawActorList(al::Scene* scene);
     void drawActorInfo();
 
-    ImGuiWindowFlags mChildFlags = ImGuiWindowFlags_HorizontalScrollbar;
-    const float mHeaderSize = 20.f;
+    char* getActorName(al::LiveActor* actor);
+    sead::FixedSafeString<0x30> calcTrimNameFromRight(char* text);
+    int calcRoundedNum(int numToRound, int multiple);
+
+    bool isActorInFavorites(char* actorName);
+
+    al::LiveActor* mSelectedActor = nullptr;
+
+    static const int mMaxFavs = 32;
+    sead::FixedSafeString<0x40> mFavActors[mMaxFavs];
+
+    float mLineSize = 0;
+    int mMaxCharacters = 1;
+
+    const float mHeaderSize = 30.f;
 };
