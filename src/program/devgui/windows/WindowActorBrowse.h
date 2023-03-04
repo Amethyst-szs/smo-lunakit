@@ -7,7 +7,6 @@
 
 #include "imgui.h"
 
-#include "program/devgui/DevGuiWindowConfig.h"
 #include "program/devgui/windows/WindowBase.h"
 
 class WindowActorBrowse : public WindowBase {
