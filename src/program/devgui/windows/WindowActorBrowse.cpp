@@ -5,6 +5,7 @@ WindowActorBrowse::WindowActorBrowse(DevGuiManager* parent, const char* winName,
     : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)
 {
     mSelectedActor = nullptr;
+    mFilterActorGroup = new (mDevGuiHeap) al::LiveActorGroup("FavActors", 5120);
 }
 
 void WindowActorBrowse::updateWin()
@@ -14,6 +15,8 @@ void WindowActorBrowse::updateWin()
     al::Scene* scene = tryGetScene();
     if(!scene || !mIsActive) {
         mSelectedActor = nullptr;
+        mIsOnlyFavs = false;
+        mFilterActorGroup->removeActorAll();
         return;
     }
     
@@ -31,7 +34,7 @@ bool WindowActorBrowse::tryUpdateWinDisplay()
     
     mLineSize = ImGui::GetTextLineHeightWithSpacing();
 
-    drawButtonHeader();
+    drawButtonHeader(scene);
     drawActorList(scene);
     if(mSelectedActor) {
         ImGui::SameLine();
@@ -41,13 +44,27 @@ bool WindowActorBrowse::tryUpdateWinDisplay()
     return true;
 }
 
-void WindowActorBrowse::drawButtonHeader()
+void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
 {
     ImVec2 inputChildSize = ImGui::GetContentRegionAvail();
     inputChildSize.y = mHeaderSize;
     ImGui::BeginChild("ActorInputs", inputChildSize, false);
 
-    ImGui::SliderInt("Max Chars", &mMaxCharacters, 1, 32);
+    if(ImGui::Checkbox("Favs", &mIsOnlyFavs) && mIsOnlyFavs) {
+        al::LiveActorGroup* sceneGroup = scene->mLiveActorKit->mLiveActorGroup2;
+        mFilterActorGroup->removeActorAll();
+
+        for(int i = 0; i < sceneGroup->mActorCount; i++) {
+            char* actorName = getActorName(sceneGroup->mActors[i]);
+            if(isActorInFavorites(actorName))
+                mFilterActorGroup->registerActor(sceneGroup->mActors[i]);
+            
+            free(actorName);
+        }
+
+        if(mFilterActorGroup->mActorCount == 0)
+            mIsOnlyFavs = false;
+    }
 
     ImGui::EndChild();
 }
@@ -55,6 +72,9 @@ void WindowActorBrowse::drawButtonHeader()
 void WindowActorBrowse::drawActorList(al::Scene* scene)
 {
     al::LiveActorGroup* group = scene->mLiveActorKit->mLiveActorGroup2;
+    
+    if(mIsOnlyFavs)
+        group = mFilterActorGroup;
 
     ImVec2 listSize = ImGui::GetContentRegionAvail();
     if(mSelectedActor)
@@ -64,11 +84,10 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 
     float winWidth = ImGui::GetWindowWidth();
     float winHeight = ImGui::GetWindowHeight();
-
+    float horizFontSize = ImGui::GetFontSize() * 0.63f;
     float curScrollPos = ImGui::GetScrollY();
 
-    float horizFontSize = ImGui::GetFontSize();
-    // int maxCharacters = winWidth / horizFontSize - 4;
+    mMaxCharacters = (winWidth / horizFontSize) - 4;
 
     // Render empty space above the current scroll position
     ImGui::Dummy(ImVec2(50, calcRoundedNum(curScrollPos - mLineSize, mLineSize)));
@@ -80,21 +99,23 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 
         al::LiveActor* actor = group->mActors[i];
         char* actorName = getActorName(actor);
-        bool isFavorite = false;
+        bool isFavorite = isActorInFavorites(actorName);
 
         sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName);
         sead::FormatFixedSafeString<0x9> buttonName("%i", i);
 
         ImGui::Text(trimName.cstr());
         if (ImGui::IsItemHovered())
-            ImGui::SetTooltip("%s\nTest: %s", actorName, buttonName.cstr());
+            ImGui::SetTooltip("%s\nClick to open actor", actorName);
         if (ImGui::IsItemClicked())
             mSelectedActor = actor;
         
         ImGui::SameLine();
+        if(ImGui::ArrowButton(buttonName.cstr(), isFavorite ? ImGuiDir_Down : ImGuiDir_Up))
+            toggleFavorite(actorName);
 
-        if(ImGui::RadioButton(buttonName.cstr(), false))
-            ImGui::Text("blah");
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("%s\n%i/%i Favorites", isFavorite ? "Remove Favorite" : "Favorite", mTotalFavs, mMaxFavs);
 
         free(actorName);
     }
@@ -118,9 +139,45 @@ void WindowActorBrowse::drawActorInfo()
     ImGui::EndChild();
 }
 
+bool WindowActorBrowse::isActorInFavorites(char* actorName)
+{
+    for(int i = 0; i < mMaxFavs; i++) {
+        if(al::isEqualString(actorName, mFavActorNames[i].cstr()))
+            return true;
+    }
+
+    return false;
+}
+
+void WindowActorBrowse::toggleFavorite(char* actorName)
+{
+    // Check for removing a favorite
+    for(int i = 0; i < mMaxFavs; i++) {
+        if(al::isEqualString(actorName, mFavActorNames[i].cstr())) {
+            mTotalFavs--;
+            mFavActorNames[i].clear();
+            return;
+        }
+    }
+
+    // Max favorites, don't allow adding one
+    if(mTotalFavs >= mMaxFavs)
+        return;
+
+    // Add a favorite if not removing a favorite
+    sead::FixedSafeString<0x40> favName(actorName);
+    for(int i = 0; i < mMaxFavs; i++) {
+        if(mFavActorNames[i].isEmpty()) {
+            mTotalFavs++;
+            mFavActorNames[i] = favName;
+            return;
+        }
+    }
+}
+
 char* WindowActorBrowse::getActorName(al::LiveActor* actor)
 {
-    int status;
+    int status = 0;
     char* actName = nullptr;
     actName = abi::__cxa_demangle(typeid(*actor).name(), nullptr, nullptr, &status);
     return actName;
@@ -134,7 +191,7 @@ sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(char* text)
     // If string doesn't need trimming, pad to target length and return
     if(textLen <= mMaxCharacters) {
         trimName.append(text);
-        trimName.append(' ', mMaxCharacters - textLen);
+        trimName.append(' ', (mMaxCharacters - textLen) + 1);
         return trimName;
     }
 
@@ -143,7 +200,6 @@ sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(char* text)
         trimName.append(&text[textLen - trimIdx - 1], 1);
     }
 
-    trimName.chop(1);
     return trimName;
 }
 

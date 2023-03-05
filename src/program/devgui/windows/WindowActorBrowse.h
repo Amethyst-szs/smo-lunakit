@@ -17,20 +17,25 @@ public:
     bool tryUpdateWinDisplay() override;
 
 private:
-    void drawButtonHeader();
+    void drawButtonHeader(al::Scene* scene);
     void drawActorList(al::Scene* scene);
     void drawActorInfo();
+
+    bool isActorInFavorites(char* actorName);
+    void toggleFavorite(char* actorName);
 
     char* getActorName(al::LiveActor* actor);
     sead::FixedSafeString<0x30> calcTrimNameFromRight(char* text);
     int calcRoundedNum(int numToRound, int multiple);
 
-    bool isActorInFavorites(char* actorName);
-
     al::LiveActor* mSelectedActor = nullptr;
+    al::LiveActorGroup* mFilterActorGroup = nullptr;
 
+    // Main values contributing to favorite system
+    bool mIsOnlyFavs = false;
+    int mTotalFavs = 0;
     static const int mMaxFavs = 32;
-    sead::FixedSafeString<0x40> mFavActors[mMaxFavs];
+    sead::FixedSafeString<0x40> mFavActorNames[mMaxFavs];
 
     float mLineSize = 0;
     int mMaxCharacters = 1;
