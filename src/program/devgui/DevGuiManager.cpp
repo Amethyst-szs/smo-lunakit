@@ -53,6 +53,9 @@ void DevGuiManager::init(sead::Heap* heap)
     mWindows.allocBuffer(0x10, mDevGuiHeap);
     mHomeMenuTabs.allocBuffer(0x10, mDevGuiHeap);
 
+    // Create keyboard popup used by other windows and actions
+    mKeyboard = new DevGuiKeyboard();
+
     // Primitive renderer class & functions
     mPrimitive = new DevGuiPrimitive();
 
@@ -112,6 +115,7 @@ void DevGuiManager::updateDisplay()
     int totalAnchorWin = calcTotalAnchoredWindows();
     int curAnchorWin = 0;
 
+    mKeyboard->update();
     mTheme->tryUpdateTheme();
 
     for (int i = 0; i < mWindows.size(); i++) {

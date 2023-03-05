@@ -37,6 +37,7 @@ Help:
 #include "cstages/CustomStageManager.h"
 
 // All extra DevGui features included by the manager
+#include "devgui/popups/DevGuiKeyboard.h"
 #include "devgui/primitive/DevGuiPrimitive.h"
 #include "devgui/savedata/DevGuiSaveData.h"
 #include "devgui/settings/DevGuiSettings.h"
@@ -90,6 +91,9 @@ public:
     template <class T> // Template function to create and add a new tab to the home bar
     void createHomeMenuItem(const char* menuName);
 
+    // Popup requests
+    bool tryOpenKeyboard(uint16_t maxChars, const char* output) { return mKeyboard->tryOpenKeyboard(maxChars, output); }
+
     bool isMenuActive() { return mIsActive; } // Checks if the menu is open
     bool isFirstStep() { return mIsFirstStep; } // Checks if this is the first frame the window is open
 
@@ -120,6 +124,7 @@ private:
     bool mIsDisplayAnchorWindows = true; // Are the main windows hidden by pressing L-Stick?
 
     sead::Heap* mDevGuiHeap = nullptr; // Uses the stationed heap
+    DevGuiKeyboard* mKeyboard = nullptr; // On screen ImGui keyboard used by other modules
     DevGuiPrimitive* mPrimitive = nullptr; // Render primitive shapes
     DevGuiSettings* mSettings = nullptr; // Current settings (used in the settings home menu, written to save file)
     DevGuiTheme* mTheme = nullptr; // Controls the theme, including reading data from the SD card
