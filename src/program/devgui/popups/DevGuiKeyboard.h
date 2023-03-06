@@ -15,13 +15,13 @@ public:
     DevGuiKeyboard(){}
 
     void update();
-    bool tryOpenKeyboard(uint16_t maxChars, const char** output);
+    bool tryOpenKeyboard(uint16_t maxChars, const char** output, bool* isKeyboardOpen);
 
 private:
     void endKeyboard();
     void drawKeyboardLine(const char* keys);
 
-    bool mIsKeyboardOpen = false;
+    bool* mIsKeyboardOpen = nullptr;
     bool mIsFirstStep = false;
 
     bool mIsShift = false;

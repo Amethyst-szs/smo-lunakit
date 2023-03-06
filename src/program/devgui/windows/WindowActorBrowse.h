@@ -49,7 +49,8 @@ private:
     sead::FixedSafeString<0x40> mFavActorNames[mMaxFavs];
 
     // Search filter values
-    const char* mSearchString = "null";
+    bool mIsKeyboardInUse = false;
+    const char* mSearchString = nullptr;
 
     // Actor list rendering
     float mLineSize = 0;

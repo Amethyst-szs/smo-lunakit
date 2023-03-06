@@ -73,10 +73,14 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
     ImGui::SameLine();
 
     if (ImGui::Button("Search"))
-        mParent->tryOpenKeyboard(24, &mSearchString);
+        mParent->tryOpenKeyboard(24, &mSearchString, &mIsKeyboardInUse);
 
     ImGui::SameLine();
-    ImGui::Text(mSearchString);
+    if(mSearchString)
+        ImGui::Text(mSearchString);
+    
+    ImGui::SameLine();
+    ImGui::Text("%s", BTOC(mIsKeyboardInUse));
 
     ImGui::EndChild();
 }
