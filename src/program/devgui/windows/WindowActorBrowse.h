@@ -27,6 +27,8 @@ private:
     void drawActorList(al::Scene* scene);
     void drawActorInfo();
 
+    void drawVectorInfo(const char* prefixName, const char* tooltip, sead::Vector3f* vec, float range);
+
     bool isActorInFavorites(char* actorName);
     void toggleFavorite(char* actorName);
 
@@ -35,6 +37,7 @@ private:
 
     char* getActorName(al::LiveActor* actor);
     sead::FixedSafeString<0x30> calcTrimNameFromRight(char* text);
+    sead::FixedSafeString<0x30> calcTrimNameFromRight(char* text, int maxChars);
     int calcRoundedNum(int numToRound, int multiple);
     
     bool isFilterByNone() { return mFilterType == ActorBrowseFilterType::FILTER_NONE; }

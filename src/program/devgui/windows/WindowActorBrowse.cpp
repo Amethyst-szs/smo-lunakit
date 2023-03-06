@@ -59,6 +59,9 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
     ImGui::SameLine();
 
     if (ImGui::Button("Delete Favs")) {
+        if(isFilterByFavorites())
+            mFilterType = ActorBrowseFilterType::FILTER_NONE;
+
         mTotalFavs = 0;
         for (int i = 0; i < mMaxFavs; i++)
             mFavActorNames[i].clear();
@@ -94,7 +97,7 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
     ImVec2 listSize = ImGui::GetContentRegionAvail();
     if (mSelectedActor)
         listSize.x *= 0.4f;
-    listSize.y -= mHeaderSize + 8.f;
+    listSize.y -= mHeaderSize - 2.f;
     ImGui::BeginChild("ActorList", listSize, true);
 
     float winWidth = ImGui::GetWindowWidth();
@@ -119,10 +122,10 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
         sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName);
         sead::FormatFixedSafeString<0x9> buttonName("%i", i);
 
-        ImGui::Text(trimName.cstr());
+        ImGui::Selectable(trimName.cstr(), &isFavorite, 0, ImVec2((mMaxCharacters - 2) * horizFontSize, mLineSize));
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("%s\nClick to open actor", actorName);
-        if (ImGui::IsItemClicked())
+        if (ImGui::IsItemClicked()) 
             mSelectedActor = actor;
 
         ImGui::SameLine();
@@ -144,14 +147,97 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 void WindowActorBrowse::drawActorInfo()
 {
     ImVec2 listSize = ImGui::GetContentRegionAvail();
-    listSize.y -= mHeaderSize + 8.f;
+    listSize.y -= mHeaderSize - 2.f;
     ImGui::BeginChild("ActorInfo", listSize, true);
 
-    ImGui::Text("Work in progress!");
-    if (ImGui::Button("Close"))
+    float winWidth = ImGui::GetWindowWidth();
+    float horizFontSize = ImGui::GetFontSize() * 0.63f;
+    int maxChars = (winWidth / horizFontSize) - 1;
+
+    char* actorName = getActorName(mSelectedActor);
+    sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName, maxChars);
+
+    ImGui::Text(trimName.cstr());
+    ImGui::SameLine(winWidth - 30);
+    if (ImGui::Button("X")) {
+        ImGui::EndChild();
         mSelectedActor = nullptr;
+        free(actorName);
+        return;
+    }
+    
+    if(mSelectedActor->mPoseKeeper) {
+        al::ActorPoseKeeperBase* pose = mSelectedActor->mPoseKeeper;
+
+        if(ImGui::TreeNode("Actor Pose")) {
+            ImGui::Separator();
+
+            drawVectorInfo("T", "Pose Keeper Translation", &pose->mTranslation, 30000.f);
+
+            sead::Vector3f* r = pose->getRotatePtr();
+            if(r)
+                drawVectorInfo("R", "Pose Keeper Rotation", r, 360.f);
+
+            sead::Vector3f* s = pose->getScalePtr();
+            if(s)
+                drawVectorInfo("S", "Pose Keeper Scale", s, 2.f);
+
+            sead::Vector3f* v = pose->getVelocityPtr();
+            if(v)
+                drawVectorInfo("V", "Pose Keeper Velocity", v, 100.f);
+
+            sead::Vector3f* f = pose->getFrontPtr();
+            if(f) {
+                drawVectorInfo("F", "Pose Keeper Front", v, 1.f);
+                f->normalize();
+            }
+
+            sead::Vector3f* u = pose->getUpPtr();
+            if(u) {
+                drawVectorInfo("U", "Pose Keeper Up", v, 1.f);
+                u->normalize();
+            }
+
+            sead::Vector3f* g = pose->getGravityPtr();
+            if(g) {
+                drawVectorInfo("G", "Pose Keeper Gravity", g, 1.f);
+                g->normalize();
+            }
+
+            ImGui::TreePop();
+        }
+    }
+    
 
     ImGui::EndChild();
+
+    free(actorName);
+}
+
+void WindowActorBrowse::drawVectorInfo(const char* prefixName, const char* tooltip, sead::Vector3f* vec, float range)
+{
+    sead::FixedSafeString<0xf> sliderName(prefixName);
+
+    ImGui::BeginGroup();
+
+    sliderName.append("X");
+    ImGui::SliderFloat(sliderName.cstr(), &vec->x, -range, range, "%.1f", ImGuiSliderFlags_NoRoundToFormat);
+    sliderName.chop(1);
+
+    sliderName.append("Y");
+    ImGui::SliderFloat(sliderName.cstr(), &vec->y, -range, range, "%.1f", ImGuiSliderFlags_NoRoundToFormat);
+    sliderName.chop(1);
+
+    sliderName.append("Z");
+    ImGui::SliderFloat(sliderName.cstr(), &vec->z, -range, range, "%.1f", ImGuiSliderFlags_NoRoundToFormat);
+    sliderName.chop(1);
+
+    ImGui::EndGroup();
+
+    if(ImGui::IsItemHovered())
+        ImGui::SetTooltip(tooltip);
+    
+    ImGui::Separator();
 }
 
 bool WindowActorBrowse::isActorInFavorites(char* actorName)
@@ -258,6 +344,26 @@ sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(char* text)
 
     // Create trimed string
     for (int trimIdx = mMaxCharacters; trimIdx >= 0; trimIdx--) {
+        trimName.append(&text[textLen - trimIdx - 1], 1);
+    }
+
+    return trimName;
+}
+
+sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(char* text, int maxChars)
+{
+    int textLen = strlen(text);
+    sead::FixedSafeString<0x30> trimName;
+
+    // If string doesn't need trimming, pad to target length and return
+    if (textLen <= maxChars) {
+        trimName.append(text);
+        trimName.append(' ', (maxChars - textLen) + 1);
+        return trimName;
+    }
+
+    // Create trimed string
+    for (int trimIdx = maxChars; trimIdx >= 0; trimIdx--) {
         trimName.append(&text[textLen - trimIdx - 1], 1);
     }
 
