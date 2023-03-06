@@ -16,7 +16,12 @@ void DevGuiKeyboard::update()
     winFlags |= ImGuiWindowFlags_NoResize;
 
     ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(.5f, .5f));
-    if(ImGui::BeginPopupModal("Keyboard", mIsKeyboardOpen, winFlags)) {
+
+    bool isPopupOpen = ImGui::BeginPopupModal("Keyboard", mIsKeyboardOpen, winFlags);
+    if(!isPopupOpen && *mIsKeyboardOpen)
+        endKeyboard();
+
+    if(isPopupOpen) {
         ImGui::SetWindowFontScale(2.f);
 
         if(mBuffer.isEmpty())

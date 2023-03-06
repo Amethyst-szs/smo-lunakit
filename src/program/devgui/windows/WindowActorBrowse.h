@@ -30,10 +30,13 @@ private:
     bool isActorInFavorites(char* actorName);
     void toggleFavorite(char* actorName);
 
+    void generateFilterListByFavs(al::Scene* scene);
+    void generateFilterListBySearch(al::Scene* scene);
+
     char* getActorName(al::LiveActor* actor);
     sead::FixedSafeString<0x30> calcTrimNameFromRight(char* text);
     int calcRoundedNum(int numToRound, int multiple);
-
+    
     bool isFilterByNone() { return mFilterType == ActorBrowseFilterType::FILTER_NONE; }
     bool isFilterByFavorites() { return mFilterType == ActorBrowseFilterType::FILTER_FAV; }
     bool isFilterBySearch() { return mFilterType == ActorBrowseFilterType::FILTER_SEARCH; }

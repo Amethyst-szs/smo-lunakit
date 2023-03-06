@@ -1,7 +1,6 @@
 #include "devgui/windows/WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
 
-
 WindowActorBrowse::WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
     : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)
 {
@@ -52,35 +51,32 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
     ImGui::BeginChild("ActorInputs", inputChildSize, false);
 
     bool isFiltFavs = isFilterByFavorites();
-    if (ImGui::Checkbox("Favs", &isFiltFavs)) {
-        mFilterType = ActorBrowseFilterType::FILTER_FAV;
+    if (mTotalFavs == 0)
+        ImGui::Text("No Favorites!");
+    else if (ImGui::Checkbox("Favs", &isFiltFavs))
+        generateFilterListByFavs(scene);
 
-        al::LiveActorGroup* sceneGroup = scene->mLiveActorKit->mLiveActorGroup2;
-        mFilterActorGroup->removeActorAll();
+    ImGui::SameLine();
 
-        for (int i = 0; i < sceneGroup->mActorCount; i++) {
-            char* actorName = getActorName(sceneGroup->mActors[i]);
-            if (isActorInFavorites(actorName))
-                mFilterActorGroup->registerActor(sceneGroup->mActors[i]);
-
-            free(actorName);
-        }
-
-        if (mFilterActorGroup->mActorCount == 0)
-            mFilterType = ActorBrowseFilterType::FILTER_NONE;
+    if (ImGui::Button("Delete Favs")) {
+        mTotalFavs = 0;
+        for (int i = 0; i < mMaxFavs; i++)
+            mFavActorNames[i].clear();
     }
 
     ImGui::SameLine();
 
-    if (ImGui::Button("Search"))
-        mParent->tryOpenKeyboard(24, &mSearchString, &mIsKeyboardInUse);
-
-    ImGui::SameLine();
-    if(mSearchString)
-        ImGui::Text(mSearchString);
-    
-    ImGui::SameLine();
-    ImGui::Text("%s", BTOC(mIsKeyboardInUse));
+    if (!mSearchString) {
+        if (ImGui::Button("Search")) {
+            mFilterType = ActorBrowseFilterType::FILTER_SEARCH;
+            mParent->tryOpenKeyboard(24, &mSearchString, &mIsKeyboardInUse);
+        }
+    } else {
+        if (ImGui::Button("Clear Search")) {
+            mFilterType = ActorBrowseFilterType::FILTER_NONE;
+            mSearchString = nullptr;
+        }
+    }
 
     ImGui::EndChild();
 }
@@ -89,7 +85,10 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 {
     al::LiveActorGroup* group = scene->mLiveActorKit->mLiveActorGroup2;
 
-    if (!isFilterByNone())
+    if (isFilterBySearch() && mIsKeyboardInUse)
+        generateFilterListBySearch(scene);
+
+    if (!isFilterByNone() && mFilterActorGroup->mActorCount > 0)
         group = mFilterActorGroup;
 
     ImVec2 listSize = ImGui::GetContentRegionAvail();
@@ -188,6 +187,52 @@ void WindowActorBrowse::toggleFavorite(char* actorName)
             mFavActorNames[i] = favName;
             return;
         }
+    }
+}
+
+void WindowActorBrowse::generateFilterListByFavs(al::Scene* scene)
+{
+    mFilterActorGroup->removeActorAll();
+
+    if (isFilterByFavorites()) {
+        mFilterType = ActorBrowseFilterType::FILTER_NONE;
+        return;
+    }
+
+    al::LiveActorGroup* sceneGroup = scene->mLiveActorKit->mLiveActorGroup2;
+    mFilterType = ActorBrowseFilterType::FILTER_FAV;
+
+    for (int i = 0; i < sceneGroup->mActorCount; i++) {
+        char* actorName = getActorName(sceneGroup->mActors[i]);
+        if (isActorInFavorites(actorName))
+            mFilterActorGroup->registerActor(sceneGroup->mActors[i]);
+
+        free(actorName);
+    }
+
+    if (mFilterActorGroup->mActorCount == 0)
+        mFilterType = ActorBrowseFilterType::FILTER_NONE;
+}
+
+void WindowActorBrowse::generateFilterListBySearch(al::Scene* scene)
+{
+    mFilterActorGroup->removeActorAll();
+
+    if (!mSearchString)
+        return;
+
+    int searchLength = strlen(mSearchString);
+    if (searchLength <= 1)
+        return;
+
+    al::LiveActorGroup* sceneGroup = scene->mLiveActorKit->mLiveActorGroup2;
+
+    for (int i = 0; i < sceneGroup->mActorCount; i++) {
+        char* actorName = getActorName(sceneGroup->mActors[i]);
+        if (al::isEqualSubString(actorName, mSearchString))
+            mFilterActorGroup->registerActor(sceneGroup->mActors[i]);
+
+        free(actorName);
     }
 }
 
