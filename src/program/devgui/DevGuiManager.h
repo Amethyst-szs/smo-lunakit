@@ -92,7 +92,7 @@ public:
     void createHomeMenuItem(const char* menuName);
 
     // Popup requests
-    bool tryOpenKeyboard(uint16_t maxChars, const char* output) { return mKeyboard->tryOpenKeyboard(maxChars, output); }
+    bool tryOpenKeyboard(uint16_t maxChars, const char** output) { return mKeyboard->tryOpenKeyboard(maxChars, output); }
 
     bool isMenuActive() { return mIsActive; } // Checks if the menu is open
     bool isFirstStep() { return mIsFirstStep; } // Checks if this is the first frame the window is open

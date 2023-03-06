@@ -5,8 +5,16 @@ void DevGuiKeyboard::update()
     if(!mIsKeyboardOpen)
         return;
     
+    if(mIsFirstStep) {
+        mIsFirstStep = false;
+        ImGui::OpenPopup("Keyboard");
+    }
+    
+    ImGuiWindowFlags winFlags = ImGuiWindowFlags_NoMove;
+    winFlags |= ImGuiWindowFlags_NoResize;
+
     ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(.5f, .5f));
-    if(ImGui::BeginPopupModal("Keyboard", NULL)) {
+    if(ImGui::BeginPopupModal("Keyboard", &mIsKeyboardOpen, winFlags)) {
         ImGui::SetWindowFontScale(2.f);
 
         if(mBuffer.isEmpty())
@@ -49,12 +57,13 @@ void DevGuiKeyboard::update()
     }
 }
 
-bool DevGuiKeyboard::tryOpenKeyboard(uint16_t maxChars, const char* output)
+bool DevGuiKeyboard::tryOpenKeyboard(uint16_t maxChars, const char** output)
 {
     if(mIsKeyboardOpen)
         return false;
 
     mIsKeyboardOpen = true;
+    mIsFirstStep = true;
     mIsShift = false;
     mIsCapsLock = false;
 
@@ -62,14 +71,13 @@ bool DevGuiKeyboard::tryOpenKeyboard(uint16_t maxChars, const char* output)
     mBuffer.clear();
     mOutputDest = output;
 
-    ImGui::OpenPopup("Keyboard");
     return true;
 }
 
 void DevGuiKeyboard::endKeyboard()
 {
     mIsKeyboardOpen = false;
-    mOutputDest = mBuffer.cstr();
+    *mOutputDest = mBuffer.cstr();
 }
 
 void DevGuiKeyboard::drawKeyboardLine(const char* keys)
@@ -89,6 +97,7 @@ void DevGuiKeyboard::drawKeyboardLine(const char* keys)
 
         if(ImGui::Button(keyLabel, ImVec2(44,mKeyLineHeight)) && mBuffer.calcLength() < mMaxCharacters) {
             mBuffer.append(keyLabel);
+            *mOutputDest = mBuffer.cstr();
             mIsShift = false;
         }
 
