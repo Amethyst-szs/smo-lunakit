@@ -29,6 +29,8 @@
 
 #include "types.h"
 
+#include "devgui/windows/WindowActorBrowse.h"
+
 class DevGuiManager; // Forward declaration (include is in cpp file)
 
 // This class (DevGuiWriteStream) is not the main class! This is a custom implementation of sead::WriteStream
@@ -51,6 +53,9 @@ public:
         mSaveTimer = 4.f;
     }
 
+    void setActorBrowserFavoriteAtIdx(sead::FixedSafeString<0x40> name, int idx) { mActorBrowserFavorites[idx] = name; }
+    sead::FixedSafeString<0x40> getActorBrowserFavoriteAtIdx(int idx) { return mActorBrowserFavorites[idx]; }
+
     bool isSaveQueued() { return mIsQueueSave; }
     float getSaveQueueTime() { return mSaveTimer; }
 
@@ -63,7 +68,9 @@ private:
     sead::Heap* mHeap = nullptr;
     DevGuiManager* mParent = nullptr;
 
+    sead::FixedSafeString<0x40> mActorBrowserFavorites[MAXFAVS];
+
     sead::RamStreamSrc* mRamStream = nullptr;
     DevGuiWriteStream* mWriteStream = nullptr;
-    u8 mWorkBuf[0x500] = {}; // IMPORTANT - If you are writing a much larger amount of data, may need to expand work buffer size
+    u8 mWorkBuf[0x1000] = {}; // IMPORTANT - If you are writing a much larger amount of data, may need to expand work buffer size
 };

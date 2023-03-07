@@ -15,7 +15,7 @@ Help:
 #pragma once
 
 // Current version of the application (change this if you make changes, especially changes that effect the save data!)
-#define LUNAKITVERSION "Dev-3"
+#define LUNAKITVERSION "Dev-6"
 
 // General includes
 #include "imgui.h"

@@ -31,6 +31,9 @@ bool WindowActorBrowse::tryUpdateWinDisplay()
     al::Scene* scene = tryGetScene();
     if (!scene)
         return true;
+    
+    if(!mIsSaveDataInited)
+        getFavoritesFromSave();
 
     mLineSize = ImGui::GetTextLineHeightWithSpacing();
 
@@ -65,6 +68,8 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
         mTotalFavs = 0;
         for (int i = 0; i < mMaxFavs; i++)
             mFavActorNames[i].clear();
+        
+        publishFavoritesToSave();
     }
 
     ImGui::SameLine();
@@ -166,48 +171,63 @@ void WindowActorBrowse::drawActorInfo()
         return;
     }
     
-    if(mSelectedActor->mPoseKeeper) {
-        al::ActorPoseKeeperBase* pose = mSelectedActor->mPoseKeeper;
+    al::ActorPoseKeeperBase* pose = mSelectedActor->mPoseKeeper;
+    if(pose && ImGui::TreeNode("Actor Pose")) {
+        ImGui::Separator();
 
-        if(ImGui::TreeNode("Actor Pose")) {
-            ImGui::Separator();
+        drawVectorInfo("T", "Pose Keeper Translation", &pose->mTranslation, 30000.f);
 
-            drawVectorInfo("T", "Pose Keeper Translation", &pose->mTranslation, 30000.f);
+        sead::Vector3f* r = pose->getRotatePtr();
+        if(r)
+            drawVectorInfo("R", "Pose Keeper Rotation", r, 360.f);
 
-            sead::Vector3f* r = pose->getRotatePtr();
-            if(r)
-                drawVectorInfo("R", "Pose Keeper Rotation", r, 360.f);
+        sead::Vector3f* s = pose->getScalePtr();
+        if(s)
+            drawVectorInfo("S", "Pose Keeper Scale", s, 2.f);
 
-            sead::Vector3f* s = pose->getScalePtr();
-            if(s)
-                drawVectorInfo("S", "Pose Keeper Scale", s, 2.f);
+        sead::Vector3f* v = pose->getVelocityPtr();
+        if(v)
+            drawVectorInfo("V", "Pose Keeper Velocity", v, 100.f);
 
-            sead::Vector3f* v = pose->getVelocityPtr();
-            if(v)
-                drawVectorInfo("V", "Pose Keeper Velocity", v, 100.f);
-
-            sead::Vector3f* f = pose->getFrontPtr();
-            if(f) {
-                drawVectorInfo("F", "Pose Keeper Front", v, 1.f);
-                f->normalize();
-            }
-
-            sead::Vector3f* u = pose->getUpPtr();
-            if(u) {
-                drawVectorInfo("U", "Pose Keeper Up", v, 1.f);
-                u->normalize();
-            }
-
-            sead::Vector3f* g = pose->getGravityPtr();
-            if(g) {
-                drawVectorInfo("G", "Pose Keeper Gravity", g, 1.f);
-                g->normalize();
-            }
-
-            ImGui::TreePop();
+        sead::Vector3f* f = pose->getFrontPtr();
+        if(f) {
+            drawVectorInfo("F", "Pose Keeper Front", v, 1.f);
+            f->normalize();
         }
+
+        sead::Vector3f* u = pose->getUpPtr();
+        if(u) {
+            drawVectorInfo("U", "Pose Keeper Up", v, 1.f);
+            u->normalize();
+        }
+
+        sead::Vector3f* g = pose->getGravityPtr();
+        if(g) {
+            drawVectorInfo("G", "Pose Keeper Gravity", g, 1.f);
+            g->normalize();
+        }
+
+        ImGui::TreePop();
     }
     
+    al::NerveKeeper* nrvKeep = mSelectedActor->getNerveKeeper();
+    if(nrvKeep && ImGui::TreeNode("Nerves")) {
+        int status = 0;
+        const al::Nerve* pNrv2 = nrvKeep->getCurrentNerve();
+        char* nrvName2 = abi::__cxa_demangle(typeid(*pNrv2).name(), nullptr, nullptr, &status);
+
+        ImGui::Text("Nerve: %s", nrvName2 + 23 + strlen(actorName) + 3);
+        ImGui::Text("Step: %i", nrvKeep->mStep);
+        ImGui::Text("WIP");
+
+        // al::NerveStateCtrl* nrvStateCtrl = nrvKeep->mStateCtrl;
+        // if(nrvStateCtrl) {
+        //     ImGui::Text("States: %i", nrvStateCtrl->mStateCount);
+        // }
+
+        ImGui::TreePop();
+        free(nrvName2);
+    }
 
     ImGui::EndChild();
 
@@ -257,6 +277,7 @@ void WindowActorBrowse::toggleFavorite(char* actorName)
         if (al::isEqualString(actorName, mFavActorNames[i].cstr())) {
             mTotalFavs--;
             mFavActorNames[i].clear();
+            publishFavoritesToSave();
             return;
         }
     }
@@ -271,9 +292,37 @@ void WindowActorBrowse::toggleFavorite(char* actorName)
         if (mFavActorNames[i].isEmpty()) {
             mTotalFavs++;
             mFavActorNames[i] = favName;
+            publishFavoritesToSave();
             return;
         }
     }
+}
+
+void WindowActorBrowse::publishFavoritesToSave()
+{
+    DevGuiSaveData* save = mParent->getSaveData();
+
+    for(int i = 0; i < mMaxFavs; i++) {
+        save->setActorBrowserFavoriteAtIdx(mFavActorNames[i], i);
+    }
+
+    save->queueSaveWrite();
+}
+
+void WindowActorBrowse::getFavoritesFromSave()
+{
+    if(mIsSaveDataInited)
+        return;
+
+    DevGuiSaveData* save = mParent->getSaveData();
+
+    for(int i = 0; i < mMaxFavs; i++) {
+        mFavActorNames[i] = save->getActorBrowserFavoriteAtIdx(i);
+        if(!mFavActorNames[i].isEmpty())
+            mTotalFavs++;
+    }
+
+    mIsSaveDataInited = true;
 }
 
 void WindowActorBrowse::generateFilterListByFavs(al::Scene* scene)

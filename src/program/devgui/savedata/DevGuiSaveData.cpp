@@ -68,6 +68,22 @@ void DevGuiSaveData::read()
         }
     }
 
+    if(root.isExistKey("FavActorBrowser")) {
+        al::ByamlIter favs = root.getIterByKey("FavActorBrowser");
+        for(uint i = 0; i < favs.getSize(); i++) {
+            const char* name = nullptr;
+            sead::FormatFixedSafeString<0x5> idxName("%i", i);
+
+            favs.tryGetStringByKey(&name, idxName.cstr());
+
+            if(!name)
+                continue;
+
+            sead::FormatFixedSafeString<0x40> nameString(name);
+            setActorBrowserFavoriteAtIdx(nameString, i);
+        }
+    }
+
     Logger::log("Successfully read save file information\n");
 }
 
@@ -112,6 +128,21 @@ nn::Result DevGuiSaveData::write()
 
     for(int i = 0; i < set->getTotalSettings(); i++) {
         file.addBool(set->getNameByIdx(i), set->getStateByIdx(i));
+    }
+
+    file.pop();
+
+    // Write the Actor Browser's favorites into array
+
+    file.pushHash("FavActorBrowser");
+
+    for(int i = 0; i < MAXFAVS; i++) {
+        sead::FixedSafeString<0x40> favName = getActorBrowserFavoriteAtIdx(i);
+        if(favName.isEmpty())
+            continue;
+
+        sead::FormatFixedSafeString<0x5> idxName("%i", i);
+        file.addString(idxName.cstr(), favName.cstr());
     }
 
     file.pop();

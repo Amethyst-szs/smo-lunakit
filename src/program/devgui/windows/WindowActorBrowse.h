@@ -5,9 +5,11 @@
 
 #pragma once
 
+#define MAXFAVS 32
+
 #include "imgui.h"
 
-#include "program/devgui/windows/WindowBase.h"
+#include "devgui/windows/WindowBase.h"
 
 enum ActorBrowseFilterType {
     FILTER_NONE,
@@ -32,6 +34,9 @@ private:
     bool isActorInFavorites(char* actorName);
     void toggleFavorite(char* actorName);
 
+    void publishFavoritesToSave();
+    void getFavoritesFromSave();
+
     void generateFilterListByFavs(al::Scene* scene);
     void generateFilterListBySearch(al::Scene* scene);
 
@@ -44,14 +49,16 @@ private:
     bool isFilterByFavorites() { return mFilterType == ActorBrowseFilterType::FILTER_FAV; }
     bool isFilterBySearch() { return mFilterType == ActorBrowseFilterType::FILTER_SEARCH; }
 
+    bool mIsSaveDataInited = false;
+
     al::LiveActor* mSelectedActor = nullptr;
-    al::LiveActorGroup* mFilterActorGroup = nullptr;
 
     ActorBrowseFilterType mFilterType = ActorBrowseFilterType::FILTER_NONE;
+    al::LiveActorGroup* mFilterActorGroup = nullptr;
 
     // Favorite filter values
     int mTotalFavs = 0;
-    static const int mMaxFavs = 32;
+    static const int mMaxFavs = MAXFAVS;
     sead::FixedSafeString<0x40> mFavActorNames[mMaxFavs];
 
     // Search filter values

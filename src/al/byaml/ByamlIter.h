@@ -35,6 +35,7 @@ public:
     bool tryGetIterByKey(al::ByamlIter*, char const*) const;
     
     bool tryGetStringByKey(char const**, char const*) const;
+    bool tryGetStringByIndex(char const**, int) const;
     bool tryConvertString(char const**, al::ByamlData const*) const;
     
     bool tryGetBinaryByIndex(char const**, int*, int) const;
@@ -58,7 +59,6 @@ public:
     bool tryConvertUInt64(unsigned long*, al::ByamlData const*) const;
     bool tryGetDoubleByKey(double*, char const*) const;
     bool tryConvertDouble(double*, al::ByamlData const*) const;
-    bool tryGetStringByIndex(char const**, int) const;
     bool tryGetBoolByIndex(bool*, int) const;
     bool tryGetUInt32ByIndex(unsigned int*, int) const;
     bool tryGetFloatByIndex(float*, int) const;
