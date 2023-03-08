@@ -4,6 +4,8 @@
 
     This window displays general information about various parts of the game
     Uses categories
+
+    https://github.com/Amethyst-szs/smo-lunakit/wiki#info-viewer
 */
 
 #pragma once

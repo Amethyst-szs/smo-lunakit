@@ -1,9 +1,7 @@
 
 /*
     Looking for LunaKit code?
-    Head to program/devgui/DevGuiManager.h to get started!
-
-    This file mostly contains hooks and general ExLaunch/initalization things
+    Head to src/program/devgui/DevGuiManager.h to get started!
 */
 
 

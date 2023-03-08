@@ -1,3 +1,14 @@
+
+/*
+    - LunaKit Window Base -
+
+    This class is the basis for all windows displayed in game
+    All other windows will inherit from this class and call back to this class's functions
+
+    Looking to make new windows or modify existing ones?
+    Check the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#windows
+*/
+
 #pragma once
 
 #include "imgui.h"
@@ -15,17 +26,11 @@
 
 #include "logger/Logger.hpp"
 
-// Forward declaration (include is in cpp file)
-class DevGuiManager;
+class DevGuiManager; // Forward declaration (include is in cpp file)
 
 /*
     This class is used by each window to configure it's position, size, and flags (regardless of anchored or not)
-    For more information about different flags go these points in the imgui.h header:
-
-    ImGuiWindowFlags: imgui.h line 953
-    ImGuiTabBarFlags: imgui.h line 1093
-    ImGuiTabItemFlags: imgui.h line 1109
-
+    For more information about different flags go these points in the imgui.h header
 */
 struct DevGuiWindowConfig {
     // Flags (Find different flag parameters in the imgui.h header)
@@ -51,16 +56,6 @@ struct DevGuiWindowConfig {
     const ImVec2 mScrSize = ImVec2(1280, 720);
 };
 
-/*
-    - LunaKit Window Base -
-
-    This class is the basis for all windows displayed in game
-    All other windows will inherit from this class and call back to this class's functions
-
-    Looking to make new windows or modify existing ones?
-    Check the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki
-*/
-
 class WindowBase {
 public:
     WindowBase(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
@@ -76,6 +71,8 @@ public:
     // If window does not have any categories, the implementation is responsible for running ImGui::End()
     virtual bool tryUpdateWinDisplay();
 
+
+    // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#categories
     template <class T> // Template function to create and add category to list
     void createCategory(const char* catName, const char* catDesc) {
         T* cat = new (mDevGuiHeap) T(catName, catDesc);

@@ -9,7 +9,7 @@
     New settings are added/definied in the DevGuiSettings constructor
 
     You can access settings by name or index in various different ways depending on the situation
-    Read the wiki to learn more! https://github.com/Amethyst-szs/smo-lunakit/wiki
+    Read the wiki to learn more! https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#settings
 */
 
 #pragma once

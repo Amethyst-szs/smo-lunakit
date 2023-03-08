@@ -6,6 +6,8 @@
     More detailed ActorKit information can be found in the Actor Browser Window
 
     Does not use categories!
+
+    https://github.com/Amethyst-szs/smo-lunakit/wiki#memory-manager
 */
 
 #pragma once

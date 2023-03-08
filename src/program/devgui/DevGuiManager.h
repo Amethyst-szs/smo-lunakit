@@ -3,13 +3,15 @@
     --- Welcome to LunaKit! ---
 This is the LunaKit Manager, the manager class that controls everything in LunaKit
 
-Help:
+General Help:
     - Head to the wiki at https://github.com/Amethyst-szs/smo-lunakit/wiki if you are:
     - Using LunaKit as a general user
     - Looking to make custom themes, add your custom stages, or other general plugin type features
     - Add new features to LunaKit
     - Edit features or fix bugs
     - Or anything else you want to use LunaKit for!
+
+Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#manager-devguimanager
 */
 
 #pragma once
@@ -85,20 +87,25 @@ public:
     void init(sead::Heap* heap);
     void createElements();
 
+    // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#update-vs-updatedisplay
     void update(); // Update is always called every frame (on the sequence)
     void updateDisplay(); // Update display is only used when the menu is currently open
-    void updateCursorState(); // Shows/hides the cursor based on if the window is open
 
+    // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#creating-a-window-class
     template <class T> // Template function to create and add a new window to the list
     void createWindow(const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
+
+    // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#adding-a-home-bar-item
     template <class T> // Template function to create and add a new tab to the home bar
     void createHomeMenuItem(const char* menuName);
 
-    // Popup requests
+    // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#popups-and-on-screen-keyboard
     bool tryOpenKeyboard(uint16_t maxChars, const char** output, bool* isKeyboardOpen) { return mKeyboard->tryOpenKeyboard(maxChars, output, isKeyboardOpen); }
 
     bool isMenuActive() { return mIsActive; } // Checks if the menu is open
     bool isFirstStep() { return mIsFirstStep; } // Checks if this is the first frame the window is open
+
+    void updateCursorState(); // Shows/hides the cursor based on if the window is open
 
     // Anchor functions
     WinAnchorType getAnchorType() { return mWinAnchor; } // Current anchor position

@@ -1,3 +1,14 @@
+
+/*
+    - Primitive Queue -
+
+    This system is a simplification of sead's Primitive Renderer class, allowing pushing various objects to
+    the list of objects to rendered that frame using primitive shapes.
+
+    For more information about this class, read the docs:
+    https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#primitives
+*/
+
 #pragma once
 
 #include "al/util.hpp"

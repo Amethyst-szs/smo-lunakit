@@ -1,3 +1,5 @@
+// Determines all different types of render queue objects and their parameters
+
 #pragma once
 
 #include "al/collision/Triangle.h"

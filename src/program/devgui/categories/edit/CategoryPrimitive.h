@@ -1,3 +1,11 @@
+
+/*
+    THIS CLASS IS DEPRICATED
+
+    This is being replaced by the PrimitiveQueue and HomeMenuPrims
+    Please use those for any primitive renderering, this will be removed soon!
+*/
+
 #pragma once
 
 #include "program/devgui/primitive/DevGuiPrimitive.h"

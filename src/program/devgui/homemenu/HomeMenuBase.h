@@ -6,7 +6,7 @@
     Every other HomeMenu class inherits from this class
 
     If you're looking to modify these menus or create new ones:
-    Read the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki
+    Read the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#home-bar-items
 */
 
 #pragma once

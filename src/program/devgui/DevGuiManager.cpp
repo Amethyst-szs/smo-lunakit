@@ -1,16 +1,3 @@
-/*
-    --- Welcome to LunaKit! ---
-This is the LunaKit Manager, the manager class that controls everything in LunaKit
-
-Help:
-    - Head to the wiki at https://github.com/Amethyst-szs/smo-lunakit/wiki if you are:
-    - Using LunaKit as a general user
-    - Looking to make custom themes, add your custom stages, or other general plugin type features
-    - Add new features to LunaKit
-    - Edit features or fix bugs
-    - Or anything else you want to use LunaKit for!
-*/
-
 #include "program/devgui/DevGuiManager.h"
 
 // This class is a singleton! It does not have a typical constructor

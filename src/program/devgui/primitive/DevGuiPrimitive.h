@@ -1,7 +1,9 @@
 
 /*
-    This class is dedicated to drawing primitive shapes in the world
-    The values in this class are edited by CategoryPrimitive in the WindowEditor
+    THIS CLASS IS DEPRICATED
+
+    This is being replaced by the PrimitiveQueue and HomeMenuPrims
+    Please use those for any primitive renderering, this will be removed soon!
 */
 
 #pragma once

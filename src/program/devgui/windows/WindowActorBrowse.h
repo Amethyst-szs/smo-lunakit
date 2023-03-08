@@ -1,6 +1,10 @@
 
 /*
     - LunaKit Actor Browser Window -
+
+    Find, view, and manipulate tevery actor in the stage with search and favorite features
+
+    https://github.com/Amethyst-szs/smo-lunakit/wiki#actor-browser
 */
 
 #pragma once

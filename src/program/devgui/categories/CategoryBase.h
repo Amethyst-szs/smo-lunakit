@@ -1,3 +1,12 @@
+/*
+    - LunaKit Category System -
+
+    Categories exist as a way to simplify and seperate out your window's code into different tabs!
+    For more information, read the docs:
+    
+    https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#categories
+*/
+
 #pragma once
 
 #include "imgui.h"

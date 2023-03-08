@@ -7,7 +7,8 @@
     below by SAVEPATH
 
     Expanding the functionality of the saving system is fairly easy, but with some potential issues!
-    If you are going to edit this class, please read the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki
+    If you are going to edit this class, please read the wiki!
+    https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#save-data
 */
 
 #pragma once

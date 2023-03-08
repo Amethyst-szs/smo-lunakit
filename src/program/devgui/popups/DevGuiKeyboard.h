@@ -1,3 +1,13 @@
+/*
+    - LunaKit On-Screen Keyboard -
+
+    The on screen keyboard exists as a popup modal feature of the Manager class
+    This class is not a base for a generic popup system, at this time that does not exist!
+    For more info, read the docs
+    
+    https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#popups-and-on-screen-keyboard
+*/
+
 #pragma once
 
 #include "imgui.h"
