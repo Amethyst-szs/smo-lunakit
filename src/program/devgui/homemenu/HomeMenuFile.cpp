@@ -5,7 +5,7 @@ HomeMenuFile::HomeMenuFile(DevGuiManager* parent, const char* menuName)
     : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuFile::updateMenu()
+void HomeMenuFile::updateMenuDisplay()
 {
     GameDataHolder* holder = tryGetGameDataHolder();
 

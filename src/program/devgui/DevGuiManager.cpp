@@ -70,6 +70,9 @@ void DevGuiManager::init(sead::Heap* heap)
     mCustomList = new CustomStageManager();
     mCustomList->init(heap);
 
+    // Creates primitive renderer queue used by anything wanting to draw primitives in the game world
+    mPrimQueue = new PrimitiveQueue();
+
     // Create all windows and home menu items
     createElements();
 
@@ -101,6 +104,15 @@ void DevGuiManager::update()
         auto* entry = mWindows.at(i);
         entry->updateWin();
     }
+
+    // Note: Each home menu item's update function runs even with the menu closed/inactive!
+    for (int i = 0; i < mHomeMenuTabs.size(); i++) {
+        auto* entry = mHomeMenuTabs.at(i);
+        entry->updateMenu();
+    }
+
+    // Primitive renderering queue is drawn at this time
+    mPrimQueue->render();
 }
 
 void DevGuiManager::updateDisplay()
@@ -144,19 +156,19 @@ void DevGuiManager::updateDisplay()
         for (int i = 0; i < mHomeMenuTabs.size(); i++) {
             auto* entry = mHomeMenuTabs.at(i);
             if (ImGui::BeginMenu(entry->getMenuName())) {
-                entry->updateMenu();
+                entry->updateMenuDisplay();
 
                 ImGui::EndMenu();
             }
         }
 
         if(mSaveData->isSaveQueued()) {
-            sead::FormatFixedSafeString<0x20> display("   Saving Preferences... %.00fs", mSaveData->getSaveQueueTime());
+            sead::FormatFixedSafeString<0x20> display("   Saving... %.00fs", mSaveData->getSaveQueueTime());
             if(ImGui::BeginMenu(display.cstr(), false))
                 ImGui::EndMenu();
         }
 
-        if(!mIsDisplayAnchorWindows && ImGui::BeginMenu("   Hidden! (Press L-Stick)", false))
+        if(!mIsDisplayAnchorWindows && ImGui::BeginMenu("   Hidden! (L-Stick)", false))
             ImGui::EndMenu();
 
         ImGui::EndMainMenuBar();

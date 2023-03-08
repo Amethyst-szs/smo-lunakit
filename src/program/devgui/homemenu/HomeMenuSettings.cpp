@@ -5,7 +5,7 @@ HomeMenuSettings::HomeMenuSettings(DevGuiManager* parent, const char* menuName)
     : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuSettings::updateMenu()
+void HomeMenuSettings::updateMenuDisplay()
 {
     DevGuiSettings* set = mParent->getSettings();
 

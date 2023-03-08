@@ -10,7 +10,7 @@ class HomeMenuSettings : public HomeMenuBase {
 public:
     HomeMenuSettings(DevGuiManager* parent, const char* menuName);
 
-    virtual void updateMenu();
+    virtual void updateMenuDisplay();
 private:
 
     void parameterEdit(const char* name, bool* value, bool isSave);

@@ -25,8 +25,8 @@ class HomeMenuBase {
 public:
     HomeMenuBase(DevGuiManager* parent, const char* menuName);
 
-    virtual void updateMenu(); // Called whenever this menu is open
-    // Unlike categories, these don't have a seperation between run and display since code is triggered once on input (or sets flags)
+    virtual void updateMenu() {} // Called every frame regardless of if the menu is currently open
+    virtual void updateMenuDisplay() {} // Called whenever this menu is opened
 
     virtual const char* getMenuName() { return mMenuName; };
 

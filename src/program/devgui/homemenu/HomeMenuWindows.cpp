@@ -5,7 +5,7 @@ HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName)
     : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuWindows::updateMenu()
+void HomeMenuWindows::updateMenuDisplay()
 {
     if (addMenu("Window Anchor")) {
         ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);

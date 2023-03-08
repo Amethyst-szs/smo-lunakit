@@ -8,5 +8,5 @@ class HomeMenuExtra : public HomeMenuBase {
 public:
     HomeMenuExtra(DevGuiManager* parent, const char* menuName);
 
-    virtual void updateMenu();
+    virtual void updateMenuDisplay();
 };

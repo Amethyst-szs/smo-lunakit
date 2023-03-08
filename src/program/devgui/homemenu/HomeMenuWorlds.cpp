@@ -5,7 +5,7 @@ HomeMenuWorlds::HomeMenuWorlds(DevGuiManager* parent, const char* menuName)
     : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuWorlds::updateMenu()
+void HomeMenuWorlds::updateMenuDisplay()
 {
     GameDataHolderAccessor* holder = tryGetGameDataHolderAccess();
     if(!holder) {

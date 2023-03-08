@@ -5,7 +5,7 @@ HomeMenuCStages::HomeMenuCStages(DevGuiManager* parent, const char* menuName)
     : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuCStages::updateMenu()
+void HomeMenuCStages::updateMenuDisplay()
 {
     CustomStageManager* manager = mParent->getCustomStageManager();
 

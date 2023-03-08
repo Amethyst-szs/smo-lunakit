@@ -36,6 +36,9 @@ Help:
 // Custom stage plugin support
 #include "cstages/CustomStageManager.h"
 
+// Primitive renderering queue system, allowing LunaKit to push primitive rendering shapes from anywhere
+#include "primitives/PrimitiveQueue.h"
+
 // All extra DevGui features included by the manager
 #include "devgui/popups/DevGuiKeyboard.h"
 #include "devgui/primitive/DevGuiPrimitive.h"
@@ -115,6 +118,7 @@ public:
     DevGuiTheme* getTheme() { return mTheme; } // Controls the theme, including reading data from the SD card
     DevGuiSaveData* getSaveData() { return mSaveData; } // Preferences and settings, written to the save file
     CustomStageManager* getCustomStageManager() { return mCustomList; } // Custom stage plugin support
+    PrimitiveQueue* getPrimitiveQueue() { return mPrimQueue; } // Accessible primitive renderer queueing
 
     bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; } // Is the ImGui Demo Window open (accessible in the extras tab)
 
@@ -130,6 +134,7 @@ private:
     DevGuiTheme* mTheme = nullptr; // Controls the theme, including reading data from the SD card
     DevGuiSaveData* mSaveData = nullptr; // Preferences and settings, written to the save file
     CustomStageManager* mCustomList = nullptr; // Custom stage plugin support
+    PrimitiveQueue* mPrimQueue = nullptr; // Accessible primitive renderer queueing
 
     // Window anchor stuff
     bool mIsAnchorChange = true; // Starts true in order to automatically fire anchor setup on first activation

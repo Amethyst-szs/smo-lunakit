@@ -5,7 +5,7 @@ HomeMenuExtra::HomeMenuExtra(DevGuiManager* parent, const char* menuName)
     : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuExtra::updateMenu()
+void HomeMenuExtra::updateMenuDisplay()
 {
     bool* demoWinState = mParent->getImGuiDemoWindowState();
 
