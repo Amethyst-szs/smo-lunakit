@@ -218,15 +218,25 @@ void WindowActorBrowse::drawActorInfo()
 
         ImGui::Text("Nerve: %s", nrvName2 + 23 + strlen(actorName) + 3);
         ImGui::Text("Step: %i", nrvKeep->mStep);
-        ImGui::Text("WIP");
-
-        // al::NerveStateCtrl* nrvStateCtrl = nrvKeep->mStateCtrl;
-        // if(nrvStateCtrl) {
-        //     ImGui::Text("States: %i", nrvStateCtrl->mStateCount);
-        // }
 
         ImGui::TreePop();
         free(nrvName2);
+    }
+
+    al::LiveActorFlag* flag = mSelectedActor->mLiveActorFlag;
+    if(flag && ImGui::TreeNode("Flags")) {
+        ImGui::Checkbox("Dead", &flag->mIsDead);
+        ImGui::Checkbox("Clipped", &flag->mIsClipped);
+        ImGui::Checkbox("Cannot Clip", &flag->mIsClippingInvalidated);
+        ImGui::Checkbox("Draw Clipped", &flag->mIsDrawClipped);
+        ImGui::Checkbox("Calc Anim On", &flag->mIsCalcAnimOn);
+        ImGui::Checkbox("Model Visible", &flag->mIsModelVisible);
+        ImGui::Checkbox("No Collide", &flag->mIsNoCollide);
+        ImGui::Checkbox("Unknown", &flag->mIsFlag8);
+        ImGui::Checkbox("Material Code Valid", &flag->mIsMaterialCodeValid);
+        ImGui::Checkbox("Area Target", &flag->mIsAreaTarget);
+        ImGui::Checkbox("Update Move FX Sensor", &flag->mIsUpdateMovementEffectAudioCollisionSensor);
+        ImGui::Checkbox("Unknown", &flag->mIsFlag12);
     }
 
     ImGui::EndChild();

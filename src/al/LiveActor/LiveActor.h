@@ -1,5 +1,6 @@
 #pragma once
 
+#include "al/LiveActor/LiveActorFlag.h"
 #include "al/actor/ActorInitInfo.h"
 #include "al/actor/ActorSceneInfo.h"
 #include "al/actor/ActorActionKeeper.h"
@@ -35,7 +36,6 @@ namespace al
     class ActorPrePassLightKeeper;
     class ActorOcclusionKeeper;
     class SubActorKeeper;
-    class LiveActorFlag;
 
     class ActorInitInfo;
     class HitSensor;
