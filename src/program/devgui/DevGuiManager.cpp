@@ -22,6 +22,7 @@ void DevGuiManager::createElements()
     createHomeMenuItem<HomeMenuFile>("File");
     createHomeMenuItem<HomeMenuSettings>("Settings");
     createHomeMenuItem<HomeMenuWindows>("Windows");
+    createHomeMenuItem<HomeMenuPrims>("Prims");
     createHomeMenuItem<HomeMenuWorlds>("Kingdoms");
     createHomeMenuItem<HomeMenuCStages>("Stages");
     createHomeMenuItem<HomeMenuExtra>("Extras");

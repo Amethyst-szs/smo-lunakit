@@ -2,8 +2,7 @@
 
 PrimitiveQueue::PrimitiveQueue()
 {
-    sead::Heap* heap = al::getStationedHeap();
-    mRenderQueue.allocBuffer(0x100, heap);
+    mRenderQueue.allocBuffer(0x100, al::getStationedHeap());
 }
 
 void PrimitiveQueue::render()
@@ -65,7 +64,7 @@ void PrimitiveQueue::render()
                 break;
         }
 
-        delete mRenderQueue.at(i);
+        delete entry;
     }
 
     emptyQueue();
@@ -162,4 +161,17 @@ void PrimitiveQueue::renderTriangle(PrimitiveTypeTriangle* entry)
     renderer->drawSphere4x8(entry->mTriangle.mPosition1, 9.f, entry->mColor);
     renderer->drawSphere4x8(entry->mTriangle.mPosition2, 9.f, entry->mColor);
     renderer->drawSphere4x8(entry->mTriangle.mPosition3, 9.f, entry->mColor);
+}
+
+void PrimitiveQueue::emptyQueue()
+{
+    if(mRenderQueue.isEmpty())
+        return;
+        
+    for(int i = 0; i < mRenderQueue.size(); i++) {
+        auto* entry = mRenderQueue.at(i);
+        delete entry;
+    }
+
+    mRenderQueue.clear();
 }

@@ -61,6 +61,7 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #include "devgui/homemenu/HomeMenuFile.h"
 #include "devgui/homemenu/HomeMenuSettings.h"
 #include "devgui/homemenu/HomeMenuWindows.h"
+#include "devgui/homemenu/HomeMenuPrims.h"
 #include "devgui/homemenu/HomeMenuWorlds.h"
 #include "devgui/homemenu/HomeMenuCStages.h"
 #include "devgui/homemenu/HomeMenuExtra.h"

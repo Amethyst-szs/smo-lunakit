@@ -232,11 +232,13 @@ void WindowActorBrowse::drawActorInfo()
         ImGui::Checkbox("Calc Anim On", &flag->mIsCalcAnimOn);
         ImGui::Checkbox("Model Visible", &flag->mIsModelVisible);
         ImGui::Checkbox("No Collide", &flag->mIsNoCollide);
-        ImGui::Checkbox("Unknown", &flag->mIsFlag8);
+        ImGui::Checkbox("Unknown 8", &flag->mIsFlag8);
         ImGui::Checkbox("Material Code Valid", &flag->mIsMaterialCodeValid);
         ImGui::Checkbox("Area Target", &flag->mIsAreaTarget);
         ImGui::Checkbox("Update Move FX Sensor", &flag->mIsUpdateMovementEffectAudioCollisionSensor);
-        ImGui::Checkbox("Unknown", &flag->mIsFlag12);
+        ImGui::Checkbox("Unknown 12", &flag->mIsFlag12);
+        
+        ImGui::TreePop();
     }
 
     ImGui::EndChild();

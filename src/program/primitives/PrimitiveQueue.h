@@ -45,7 +45,7 @@ private:
     void renderArea(PrimitiveTypeArea* entry);
     void renderTriangle(PrimitiveTypeTriangle* entry);
 
-    void emptyQueue() { mRenderQueue.clear(); }
+    void emptyQueue();
 
     sead::PtrArray<PrimitiveTypeBase> mRenderQueue;
 };
