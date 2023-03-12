@@ -65,8 +65,6 @@ void WindowMemoryManage::drawProgressBarPerc(sead::Heap* heap)
         return;
     }
 
-    const char* header = heap->getName().cstr();
-
     size_t maxSize = heap->getEndAddress() - heap->getStartAddress();
     size_t freeSize = maxSize - heap->getFreeSize();
 
@@ -81,11 +79,11 @@ void WindowMemoryManage::drawProgressBarPerc(sead::Heap* heap)
     ImGui::BeginGroup();
 
     char buf[32];
-    sprintf(buf, "%.01fMB/%.01fMB (%.02f%%)", freeSizeMB, maxSizeMB, percent * 100.f);
+    sprintf(buf, "%.02fMB/%.02fMB %.00f%%", freeSizeMB, maxSizeMB, percent * 100.f);
     
     ImGui::ProgressBar(percent, ImVec2(ImGui::GetWindowWidth() / 1.75f, 0.0f), buf);
     ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
-    ImGui::Text(header);
+    ImGui::Text(heap->getName().cstr());
 
     ImGui::EndGroup();
 }
