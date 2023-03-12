@@ -192,6 +192,8 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
         sead::Heap* lkHeap = sead::ExpHeap::create(256000, "LunaKitHeap", al::getStationedHeap(), 8,
             sead::Heap::HeapDirection::cHeapDirection_Reverse, false);
 
+        Logger::instance().init(lkHeap).value;
+
         DevGuiManager::createInstance(lkHeap);
         DevGuiManager::instance()->init(lkHeap);
 
@@ -234,8 +236,6 @@ extern "C" void exl_main(void *x0, void *x1) {
     exl::hook::Initialize();
 
     nn::os::SetUserExceptionHandler(exception_handler, nullptr, 0, nullptr);
-
-    Logger::instance().init(LOGGER_IP, 3080).value;
 
     runCodePatches();
 

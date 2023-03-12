@@ -2,12 +2,6 @@
 
 #include "DevGuiSaveData.h"
 
-DevGuiWriteStream::DevGuiWriteStream(sead::RamStreamSrc* src, sead::Stream::Modes mode)
-{
-    mSrc = src;
-    setMode(mode);
-}
-
 void DevGuiSaveData::init(DevGuiManager* parent)
 {
     mParent = parent;

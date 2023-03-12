@@ -4,8 +4,6 @@
 #include "util.h"
 #include "lib.hpp"
 
-#define ISEMU false
-
 char socketPool[0x600000 + 0x20000] __attribute__((aligned(0x1000)));
 
 Logger &Logger::instance() {
@@ -13,24 +11,47 @@ Logger &Logger::instance() {
     return instance;
 }
 
-nn::Result Logger::init(const char *ip, u16 port) {
-    in_addr hostAddress = {0};
-    sockaddr serverAddress = {0};
-
+nn::Result Logger::init(sead::Heap* heap) {
     if (mState != LoggerState::UNINITIALIZED)
         return -1;
 
-    mIsEmulator = ISEMU;
+    sead::Stream::Modes streamMode = sead::Stream::Modes::Binary;
+    mRamStream = new sead::RamStreamSrc(&mWorkBuf, sizeof(mWorkBuf));
+    mWriteStream = new DevGuiWriteStream(mRamStream, streamMode);
 
-    if (mIsEmulator) {
+    if(!FsHelper::isFileExist(LOGGERSAVEPATH)) {
+        writeLoggerSave(heap, true, "0", 0);
+        mIsDisabled = true;
         mState = LoggerState::CONNECTED;
         return 0;
     }
 
+    FsHelper::LoadData loadData = {
+        .path = LOGGERSAVEPATH
+    };
+
+    FsHelper::loadFileFromPath(loadData);
+    al::ByamlIter root = al::ByamlIter((u8*)loadData.buffer);
+
+    root.tryGetBoolByKey(&mIsDisabled, "Disable");
+
+    if (mIsDisabled) {
+        mState = LoggerState::CONNECTED;
+        return 0;
+    }
+
+    in_addr hostAddress = {0};
+    sockaddr serverAddress = {0};
+
+    const char* ip = nullptr;
+    u32 port;
+
+    root.tryGetStringByKey(&ip, "IP");
+    root.tryGetUIntByKey(&port, "Port");
+
     nn::nifm::Initialize();
 
     /*s32 initResult = */nn::socket::Initialize(socketPool, 0x600000, 0x20000, 0xE);
-    // nn::socket::SetSockOpt(initResult, 0, 0, nullptr, 0x2);
 
     nn::nifm::SubmitNetworkRequest();
 
@@ -65,7 +86,7 @@ nn::Result Logger::init(const char *ip, u16 port) {
 
 void Logger::log(const char *fmt, ...) {
 
-    if (instance().mState != LoggerState::CONNECTED && !ISEMU)
+    if (instance().mState != LoggerState::CONNECTED && !instance().mIsDisabled)
         return;
 
     va_list args;
@@ -74,7 +95,7 @@ void Logger::log(const char *fmt, ...) {
     char buffer[0x500] = {};
 
     if (nn::util::VSNPrintf(buffer, sizeof(buffer), fmt, args) > 0) {
-        if (ISEMU) {
+        if (instance().mIsDisabled) {
             svcOutputDebugString(buffer, strlen(buffer));
         } else {
             char prefix[0x510];
@@ -98,4 +119,21 @@ void Logger::log(const char *fmt, va_list args) {
         nn::util::SNPrintf(prefix, sizeof(prefix), "[%s] %s", "LunaKit", buffer);
         nn::socket::Send(instance().mSocketFd, prefix, strlen(prefix), 0);
     }
+}
+
+nn::Result Logger::writeLoggerSave(sead::Heap* heap, bool disable, const char* ip, uint port) {
+    mWriteStream->rewind();
+    al::ByamlWriter file = al::ByamlWriter(heap, false);
+    
+    file.pushHash();
+
+    file.addBool("Disable", disable);
+    file.addString("IP", ip);
+    file.addUInt("Port", port);
+
+    file.pop();
+    file.write(mWriteStream);
+
+    nn::Result result = FsHelper::writeFileToPath(mWorkBuf, file.calcPackSize(), LOGGERSAVEPATH);
+    return result;
 }

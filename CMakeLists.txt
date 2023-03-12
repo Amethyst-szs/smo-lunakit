@@ -9,10 +9,6 @@ endif ()
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 23)
 
-if (LOGGER_IP)
-  add_compile_definitions(LOGGER_IP="${LOGGER_IP}")
-endif ()
-
 ## Title Id
 set(TITLE_ID 0100000000010000)
 set(CONFIG_TITLE_ID 0x${TITLE_ID})
