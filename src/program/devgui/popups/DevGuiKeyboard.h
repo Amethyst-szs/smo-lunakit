@@ -19,19 +19,30 @@
 
 #include "types.h"
 
+enum DevGuiKeyboardType {
+    KEYTYPE_QWERTY,
+    KEYTYPE_NUMBER,
+    KEYTYPE_IP
+};
+
 class DevGuiKeyboard {
 public:
     DevGuiKeyboard(){}
 
     void update();
-    bool tryOpenKeyboard(uint16_t maxChars, const char** output, bool* isKeyboardOpen);
+    bool tryOpenKeyboard(uint16_t maxChars, DevGuiKeyboardType keyType, const char** output, bool* isKeyboardOpen);
 
 private:
     void endKeyboard();
+
+    void drawQuertyKeyset();
+    void drawNumberKeyset();
+
     void drawKeyboardLine(const char* keys);
 
     bool* mIsKeyboardOpen = nullptr;
     bool mIsFirstStep = false;
+    DevGuiKeyboardType mKeyboardType = DevGuiKeyboardType::KEYTYPE_QWERTY;
 
     bool mIsShift = false;
     bool mIsCapsLock = false;

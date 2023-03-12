@@ -1,5 +1,6 @@
 #include "devgui/windows/WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
+#include "devgui/popups/DevGuiKeyboard.h"
 
 WindowActorBrowse::WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
     : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)
@@ -77,7 +78,7 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
     if (!mSearchString) {
         if (ImGui::Button("Search")) {
             mFilterType = ActorBrowseFilterType::FILTER_SEARCH;
-            mParent->tryOpenKeyboard(24, &mSearchString, &mIsKeyboardInUse);
+            mParent->tryOpenKeyboard(24, KEYTYPE_QWERTY, &mSearchString, &mIsKeyboardInUse);
         }
     } else {
         if (ImGui::Button("Clear Search")) {

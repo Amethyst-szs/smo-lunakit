@@ -101,7 +101,7 @@ public:
     void createHomeMenuItem(const char* menuName);
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#popups-and-on-screen-keyboard
-    bool tryOpenKeyboard(uint16_t maxChars, const char** output, bool* isKeyboardOpen) { return mKeyboard->tryOpenKeyboard(maxChars, output, isKeyboardOpen); }
+    bool tryOpenKeyboard(uint16_t maxChars, DevGuiKeyboardType keyType, const char** output, bool* isKeyboardOpen) { return mKeyboard->tryOpenKeyboard(maxChars, keyType, output, isKeyboardOpen); }
 
     bool isMenuActive() { return mIsActive; } // Checks if the menu is open
     bool isFirstStep() { return mIsFirstStep; } // Checks if this is the first frame the window is open

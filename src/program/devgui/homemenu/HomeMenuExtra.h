@@ -9,4 +9,8 @@ public:
     HomeMenuExtra(DevGuiManager* parent, const char* menuName);
 
     virtual void updateMenuDisplay();
+
+private:
+    const char* mKeyboardString = nullptr;
+    bool mIsKeyboardOpen = false;
 };
