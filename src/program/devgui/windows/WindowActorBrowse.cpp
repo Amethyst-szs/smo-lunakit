@@ -1,6 +1,6 @@
 #include "devgui/windows/WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
-#include "devgui/popups/DevGuiKeyboard.h"
+#include "devgui/popups/PopupKeyboard.h"
 
 WindowActorBrowse::WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
     : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)

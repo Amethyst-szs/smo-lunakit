@@ -42,7 +42,6 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #include "primitives/PrimitiveQueue.h"
 
 // All extra DevGui features included by the manager
-#include "devgui/popups/DevGuiKeyboard.h"
 #include "devgui/primitive/DevGuiPrimitive.h"
 #include "devgui/savedata/DevGuiSaveData.h"
 #include "devgui/settings/DevGuiSettings.h"
@@ -65,6 +64,9 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #include "devgui/homemenu/HomeMenuWorlds.h"
 #include "devgui/homemenu/HomeMenuCStages.h"
 #include "devgui/homemenu/HomeMenuExtra.h"
+
+// All popups
+#include "devgui/popups/PopupKeyboard.h"
 
 // All positions the windows can be placed on the screen
 enum WinAnchorType {
@@ -101,7 +103,7 @@ public:
     void createHomeMenuItem(const char* menuName);
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#popups-and-on-screen-keyboard
-    bool tryOpenKeyboard(uint16_t maxChars, DevGuiKeyboardType keyType, const char** output, bool* isKeyboardOpen) { return mKeyboard->tryOpenKeyboard(maxChars, keyType, output, isKeyboardOpen); }
+    bool tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType, const char** output, bool* isKeyboardOpen) { return mPopupKeyboard->tryOpenKeyboard(maxChars, keyType, output, isKeyboardOpen); }
 
     bool isMenuActive() { return mIsActive; } // Checks if the menu is open
     bool isFirstStep() { return mIsFirstStep; } // Checks if this is the first frame the window is open
@@ -136,13 +138,16 @@ private:
     bool mIsDisplayAnchorWindows = true; // Are the main windows hidden by pressing L-Stick?
 
     sead::Heap* mHeap = nullptr; // Uses the stationed heap
-    DevGuiKeyboard* mKeyboard = nullptr; // On screen ImGui keyboard used by other modules
     DevGuiPrimitive* mPrimitive = nullptr; // Render primitive shapes
     DevGuiSettings* mSettings = nullptr; // Current settings (used in the settings home menu, written to save file)
     DevGuiTheme* mTheme = nullptr; // Controls the theme, including reading data from the SD card
     DevGuiSaveData* mSaveData = nullptr; // Preferences and settings, written to the save file
+
     CustomStageManager* mCustomList = nullptr; // Custom stage plugin support
     PrimitiveQueue* mPrimQueue = nullptr; // Accessible primitive renderer queueing
+
+    // Popups
+    PopupKeyboard* mPopupKeyboard = nullptr; // On screen ImGui keyboard used by other modules
 
     // Window anchor stuff
     bool mIsAnchorChange = true; // Starts true in order to automatically fire anchor setup on first activation

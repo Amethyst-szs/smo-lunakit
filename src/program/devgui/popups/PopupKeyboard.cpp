@@ -1,6 +1,6 @@
-#include "devgui/popups/DevGuiKeyboard.h"
+#include "devgui/popups/PopupKeyboard.h"
 
-void DevGuiKeyboard::update()
+void PopupKeyboard::update()
 {
     if(!mIsKeyboardOpen)
         return;
@@ -33,16 +33,16 @@ void DevGuiKeyboard::update()
         ImGui::TextDisabled("%i/%u", mBuffer.calcLength(), mMaxCharacters);
         
         switch(mKeyboardType) {
-            case DevGuiKeyboardType::KEYTYPE_QWERTY:
+            case PopupKeyboardType::KEYTYPE_QWERTY:
                 drawQuertyKeyset();
                 break;
-            case DevGuiKeyboardType::KEYTYPE_NUMBER:
+            case PopupKeyboardType::KEYTYPE_NUMBER:
                 drawNumberKeyset();
                 ImGui::Text("   ");
                 ImGui::SameLine();
                 drawKeyboardLine("0");
                 break;
-            case DevGuiKeyboardType::KEYTYPE_IP:
+            case PopupKeyboardType::KEYTYPE_IP:
                 drawNumberKeyset();
                 ImGui::Text("   ");
                 ImGui::SameLine();
@@ -54,7 +54,7 @@ void DevGuiKeyboard::update()
     }
 }
 
-bool DevGuiKeyboard::tryOpenKeyboard(uint16_t maxChars, DevGuiKeyboardType keyType, const char** output, bool* isKeyboardOpen)
+bool PopupKeyboard::tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType, const char** output, bool* isKeyboardOpen)
 {
     if(mIsKeyboardOpen && *mIsKeyboardOpen)
         return false;
@@ -75,13 +75,13 @@ bool DevGuiKeyboard::tryOpenKeyboard(uint16_t maxChars, DevGuiKeyboardType keyTy
     return true;
 }
 
-void DevGuiKeyboard::endKeyboard()
+void PopupKeyboard::endKeyboard()
 {
     *mIsKeyboardOpen = false;
     *mOutputDest = mBuffer.cstr();
 }
 
-void DevGuiKeyboard::drawQuertyKeyset()
+void PopupKeyboard::drawQuertyKeyset()
 {
     drawKeyboardLine("123456789-=");
     ImGui::SameLine();
@@ -112,7 +112,7 @@ void DevGuiKeyboard::drawQuertyKeyset()
         mBuffer.append(" ");
 }
 
-void DevGuiKeyboard::drawNumberKeyset()
+void PopupKeyboard::drawNumberKeyset()
 {
     drawKeyboardLine("123");
     ImGui::SameLine();
@@ -127,7 +127,7 @@ void DevGuiKeyboard::drawNumberKeyset()
     drawKeyboardLine("789");
 }
 
-void DevGuiKeyboard::drawKeyboardLine(const char* keys)
+void PopupKeyboard::drawKeyboardLine(const char* keys)
 {
     int totalKeys = strlen(keys);
 

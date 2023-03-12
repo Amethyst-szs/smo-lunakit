@@ -19,18 +19,18 @@
 
 #include "types.h"
 
-enum DevGuiKeyboardType {
+enum PopupKeyboardType {
     KEYTYPE_QWERTY,
     KEYTYPE_NUMBER,
     KEYTYPE_IP
 };
 
-class DevGuiKeyboard {
+class PopupKeyboard {
 public:
-    DevGuiKeyboard(){}
+    PopupKeyboard() {}
 
     void update();
-    bool tryOpenKeyboard(uint16_t maxChars, DevGuiKeyboardType keyType, const char** output, bool* isKeyboardOpen);
+    bool tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType, const char** output, bool* isKeyboardOpen);
 
 private:
     void endKeyboard();
@@ -42,7 +42,7 @@ private:
 
     bool* mIsKeyboardOpen = nullptr;
     bool mIsFirstStep = false;
-    DevGuiKeyboardType mKeyboardType = DevGuiKeyboardType::KEYTYPE_QWERTY;
+    PopupKeyboardType mKeyboardType = PopupKeyboardType::KEYTYPE_QWERTY;
 
     bool mIsShift = false;
     bool mIsCapsLock = false;

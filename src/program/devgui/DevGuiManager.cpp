@@ -26,6 +26,9 @@ void DevGuiManager::createElements()
     createHomeMenuItem<HomeMenuWorlds>("Kingdoms");
     createHomeMenuItem<HomeMenuCStages>("Stages");
     createHomeMenuItem<HomeMenuExtra>("Extras");
+
+    // Create each popup window
+    mPopupKeyboard = new PopupKeyboard();
 }
 
 void DevGuiManager::init(sead::Heap* heap)
@@ -40,9 +43,6 @@ void DevGuiManager::init(sead::Heap* heap)
     // Please don't increase these unless you REALLY need more space for some ungodly reason
     mWindows.allocBuffer(0x10, heap);
     mHomeMenuTabs.allocBuffer(0x10, heap);
-
-    // Create keyboard popup used by other windows and actions
-    mKeyboard = new DevGuiKeyboard();
 
     // Primitive renderer class & functions (DEPRECATED)
     mPrimitive = new DevGuiPrimitive();
@@ -115,7 +115,8 @@ void DevGuiManager::updateDisplay()
     int totalAnchorWin = calcTotalAnchoredWindows();
     int curAnchorWin = 0;
 
-    mKeyboard->update();
+    mPopupKeyboard->update();
+
     mTheme->tryUpdateTheme();
 
     for (int i = 0; i < mWindows.size(); i++) {
