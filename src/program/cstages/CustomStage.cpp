@@ -10,10 +10,8 @@ CustomStageEntry::CustomStageEntry(const char* stageName)
 
 
 
-CustomStageCategory::CustomStageCategory(al::ByamlIter catIter)
+CustomStageCategory::CustomStageCategory(al::ByamlIter catIter, sead::Heap* heap)
 {
-    sead::Heap* heap = al::getStationedHeap();
-
     mIter = catIter;
     al::tryGetByamlString(&mCatName, catIter, "CategoryName");
     al::tryGetByamlString(&mCatDesc, catIter, "CategoryDesc");
@@ -32,9 +30,8 @@ CustomStageCategory::CustomStageCategory(al::ByamlIter catIter)
     }
 }
 
-CustomStageResource::CustomStageResource(const char* resourcePath, const char* resourceName)
+CustomStageResource::CustomStageResource(const char* resourcePath, const char* resourceName, sead::Heap* heap)
 {
-    sead::Heap* heap = al::getStationedHeap();
     mResourceName = resourceName;
 
     FsHelper::LoadData loadData = {
@@ -50,7 +47,7 @@ CustomStageResource::CustomStageResource(const char* resourcePath, const char* r
 
     for(unsigned int i = 0; i < size; i++) {
         al::ByamlIter catIter = mRootByaml.getIterByIndex(i);
-        CustomStageCategory* newCat = new (heap) CustomStageCategory(catIter);
+        CustomStageCategory* newCat = new (heap) CustomStageCategory(catIter, heap);
         mCategories.pushBack(newCat);
     }
 }

@@ -14,7 +14,6 @@
 
 #include "sead/container/seadPtrArray.h"
 #include "sead/prim/seadSafeString.h"
-#include "sead/heap/seadHeap.h"
 
 #include "logger/Logger.hpp"
 

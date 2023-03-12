@@ -4,7 +4,7 @@
 
 class CategoryHealth : public CategoryBase {
 public:
-    CategoryHealth(const char* catName, const char* catDesc);
+    CategoryHealth(const char* catName, const char* catDesc, sead::Heap* heap);
 
     void updateCat() override;
     void updateCatDisplay() override;

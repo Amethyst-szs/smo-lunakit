@@ -4,7 +4,7 @@
 
 class CategoryHomeShip : public CategoryBase {
 public:
-    CategoryHomeShip(const char* catName, const char* catDesc);
+    CategoryHomeShip(const char* catName, const char* catDesc, sead::Heap* heap);
 
     void init();
     void updateCat() override;

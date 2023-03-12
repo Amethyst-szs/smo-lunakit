@@ -1,8 +1,9 @@
 #include "PrimitiveQueue.h"
 
-PrimitiveQueue::PrimitiveQueue()
+PrimitiveQueue::PrimitiveQueue(sead::Heap* heap)
 {
-    mRenderQueue.allocBuffer(0x100, al::getStationedHeap());
+    mHeap = heap;
+    mRenderQueue.allocBuffer(0x100, heap);
 }
 
 void PrimitiveQueue::render()

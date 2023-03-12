@@ -1,9 +1,7 @@
 #include "program/devgui/categories/info/CategoryInfPlayer.h"
 
-CategoryInfPlayer::CategoryInfPlayer(const char* catName, const char* catDesc)
-    : CategoryBase(catName, catDesc)
-{
-}
+CategoryInfPlayer::CategoryInfPlayer(const char* catName, const char* catDesc, sead::Heap* heap)
+    : CategoryBase(catName, catDesc, heap) {}
 
 void CategoryInfPlayer::updateCatDisplay()
 {

@@ -5,7 +5,7 @@ WindowActorBrowse::WindowActorBrowse(DevGuiManager* parent, const char* winName,
     : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)
 {
     mSelectedActor = nullptr;
-    mFilterActorGroup = new (mDevGuiHeap) al::LiveActorGroup("FavActors", 5120);
+    mFilterActorGroup = new (mHeap) al::LiveActorGroup("FavActors", 5120);
 }
 
 void WindowActorBrowse::updateWin()
@@ -233,9 +233,9 @@ void WindowActorBrowse::drawActorInfo()
         ImGui::Checkbox("Model Visible", &flag->mIsModelVisible);
         ImGui::Checkbox("No Collide", &flag->mIsNoCollide);
         ImGui::Checkbox("Unknown 8", &flag->mIsFlag8);
-        ImGui::Checkbox("Material Code Valid", &flag->mIsMaterialCodeValid);
+        ImGui::Checkbox("Material Code", &flag->mIsMaterialCodeValid);
         ImGui::Checkbox("Area Target", &flag->mIsAreaTarget);
-        ImGui::Checkbox("Update Move FX Sensor", &flag->mIsUpdateMovementEffectAudioCollisionSensor);
+        ImGui::Checkbox("Update Move FX", &flag->mIsUpdateMovementEffectAudioCollisionSensor);
         ImGui::Checkbox("Unknown 12", &flag->mIsFlag12);
         
         ImGui::TreePop();

@@ -8,7 +8,7 @@ void CustomStageManager::init(sead::Heap* heap)
     for(int i = 0; i < mEntryCount; i++) {
         sead::FormatFixedSafeString<0xff> filePath("%s%s", CUSTOMSTAGEPATH, getFileName(i));
 
-        CustomStageResource* newRes = new (heap) CustomStageResource(filePath.cstr(), getFileName(i));
+        CustomStageResource* newRes = new (heap) CustomStageResource(filePath.cstr(), getFileName(i), heap);
         mStageResources.pushBack(newRes);
     }
 

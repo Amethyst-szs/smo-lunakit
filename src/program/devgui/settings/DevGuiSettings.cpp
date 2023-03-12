@@ -3,12 +3,12 @@
 #include "devgui/settings/DevGuiSettings.h"
 
 // Settings are added and created here
-DevGuiSettings::DevGuiSettings(DevGuiManager* parent, sead::Heap* heap)
+DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
 {
-    mSettingsHeap = heap;
+    mParent = parent;
 
     // Max of 0x20 (32) settings, should never go beyond this but if you do for some reason, increase this number!
-    mSettings.allocBuffer(0x20, heap);
+    mSettings.allocBuffer(0x20, parent->getHeap());
 
     registerNewSetting(false, false, "Noclip");
     registerNewSetting(false, true, "Button Motion Roll");
@@ -24,7 +24,7 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent, sead::Heap* heap)
 
 void DevGuiSettings::registerNewSetting(bool isEnabledByDefault, bool isSave, const char* settingName)
 {
-    DevGuiSettingsEntry* newSet = new (mSettingsHeap) DevGuiSettingsEntry(isEnabledByDefault, isSave, settingName);
+    DevGuiSettingsEntry* newSet = new (mParent->getHeap()) DevGuiSettingsEntry(isEnabledByDefault, isSave, settingName);
     mSettings.pushBack(newSet);
 }
 

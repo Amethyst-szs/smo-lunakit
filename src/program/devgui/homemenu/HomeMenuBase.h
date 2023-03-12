@@ -36,7 +36,7 @@ protected:
     virtual bool addMenu(const char* name, bool enabled = true);
 
     DevGuiManager* mParent = nullptr;
-    sead::Heap* mDevGuiHeap = nullptr;
+    sead::Heap* mHeap = nullptr;
 
     const char* mMenuName = nullptr;
 };

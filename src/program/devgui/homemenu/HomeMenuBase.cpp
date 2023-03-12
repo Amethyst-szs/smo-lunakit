@@ -4,8 +4,9 @@
 HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName)
 {
     mParent = parent;
+    mHeap = parent->getHeap();
+    
     mMenuName = menuName;
-    mDevGuiHeap = al::getStationedHeap();
 }
 
 bool HomeMenuBase::addMenu(const char* name, bool enabled)

@@ -1,10 +1,10 @@
 #include "program/devgui/categories/CategoryBase.h"
 
-CategoryBase::CategoryBase(const char* catName, const char* catDesc)
+CategoryBase::CategoryBase(const char* catName, const char* catDesc, sead::Heap* heap)
 {
+    mHeap = heap;
     mCatName = catName;
     mCatDesc = catDesc;
-    mDevGuiHeap = al::getStationedHeap();
 }
 
 void CategoryBase::updateCat()

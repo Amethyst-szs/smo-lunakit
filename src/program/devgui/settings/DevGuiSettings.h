@@ -54,7 +54,7 @@ private:
 // Main class holding all settings
 class DevGuiSettings {
 public:
-    DevGuiSettings(DevGuiManager* parent, sead::Heap* heap);
+    DevGuiSettings(DevGuiManager* parent);
 
     DevGuiSettingsEntry* getSettingEntry(int idx) { return mSettings.at(idx); }
     int getTotalSettings() { return mSettings.size(); }
@@ -73,7 +73,6 @@ public:
 private:
     void registerNewSetting(bool isEnabledByDefault, bool isSave, const char* settingName);
     
-    sead::Heap* mSettingsHeap;
     DevGuiManager* mParent;
     sead::PtrArray<DevGuiSettingsEntry> mSettings;
 };

@@ -6,17 +6,16 @@
 
 WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
 {
-    mDevGuiHeap = al::getStationedHeap();
-
-    // Prepares up to 8 categories, windows without categories will ignore this
-    mCategories.allocBuffer(0x8, mDevGuiHeap);
-
     // Set members from parameters
     mParent = parent;
     mWinName = winName;
+    mHeap = mParent->getHeap();
     mIsActive = isActiveByDefault;
     mIsAnchorList = isAnchor;
     mAnchorPages = windowPages;
+
+    // Prepares up to 8 categories, windows without categories will ignore this
+    mCategories.allocBuffer(0x8, mHeap);
     
     // General window flags that all LunaKit windows will share to avoid bugs with the menu bar and anchoring
     mConfig.mWindowFlags |= ImGuiWindowFlags_HorizontalScrollbar;

@@ -75,7 +75,7 @@ public:
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#categories
     template <class T> // Template function to create and add category to list
     void createCategory(const char* catName, const char* catDesc) {
-        T* cat = new (mDevGuiHeap) T(catName, catDesc);
+        T* cat = new (mHeap) T(catName, catDesc, mHeap);
         mCategories.pushBack(cat);
     }
     
@@ -103,7 +103,7 @@ protected:
 
     DevGuiManager* mParent;
     DevGuiWindowConfig mConfig;
-    sead::Heap* mDevGuiHeap;
+    sead::Heap* mHeap;
 
     bool mIsAnchorList = true;
     int mAnchorPages = 1;

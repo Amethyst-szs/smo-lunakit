@@ -32,7 +32,7 @@
 
 class PrimitiveQueue {
 public:
-    PrimitiveQueue();
+    PrimitiveQueue(sead::Heap* heap);
 
     void render();
 
@@ -47,5 +47,6 @@ private:
 
     void emptyQueue();
 
+    sead::Heap* mHeap = nullptr;
     sead::PtrArray<PrimitiveTypeBase> mRenderQueue;
 };

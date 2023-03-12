@@ -28,7 +28,6 @@ public:
     bool tryUpdateWinDisplay() override;
 
 private:
-    float getHeapPercent(sead::Heap* heap);
-    void drawProgressBarPerc(float percent, const char* header);
+    void drawProgressBarPerc(sead::Heap* heap);
     void drawProgressBarFrac(int current, int max, const char* header);
 };

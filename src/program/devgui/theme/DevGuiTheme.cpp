@@ -117,8 +117,8 @@ void DevGuiTheme::tryUpdateTheme()
     style.Colors[ImGuiCol_TabUnfocusedActive]= PrimaryInteract;
     style.Colors[ImGuiCol_PlotLines]         = Highlight;
     style.Colors[ImGuiCol_PlotLinesHovered]  = HighlightInteract;
-    style.Colors[ImGuiCol_PlotHistogram]     = HighlightInteract;
-    style.Colors[ImGuiCol_PlotHistogramHovered]= HighlightInteract;
+    style.Colors[ImGuiCol_PlotHistogram]     = Highlight;
+    style.Colors[ImGuiCol_PlotHistogramHovered]= Highlight;
     style.Colors[ImGuiCol_ModalWindowDimBg]  = ImVec4(BackgroundMain.x, BackgroundMain.y, BackgroundMain.z, 0.9f);
 
     mIsRefreshTheme = false;

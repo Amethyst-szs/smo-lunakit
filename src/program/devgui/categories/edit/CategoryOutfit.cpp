@@ -5,8 +5,8 @@
 #include "game/GameData/GameDataFunction.h"
 #include "helpers.h"
 
-CategoryOutfit::CategoryOutfit(const char* catName, const char* catDesc)
-    : CategoryBase(catName, catDesc)
+CategoryOutfit::CategoryOutfit(const char* catName, const char* catDesc, sead::Heap* heap)
+    : CategoryBase(catName, catDesc, heap)
 {
     mTotalBody = IM_ARRAYSIZE(bodyNames);
     mTotalCap = IM_ARRAYSIZE(capNames);

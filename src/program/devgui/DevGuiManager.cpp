@@ -9,7 +9,7 @@ DevGuiManager::~DevGuiManager() = default;
 
 void DevGuiManager::createElements()
 {
-    sead::ScopedCurrentHeapSetter heapSetter(mDevGuiHeap);
+    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
     
     // Create all display windows
     createWindow<WindowMemoryManage>("Memory Manager", true, true, 1);
@@ -33,22 +33,22 @@ void DevGuiManager::init(sead::Heap* heap)
     Logger::log("Initing DevGuiManager... (Version: %s)\n", LUNAKITVERSION);
     
     // Sets the DevGuiHeap to the heap passed in as an arg, along with setting the current scope to the heap
-    mDevGuiHeap = heap;
+    mHeap = heap;
     sead::ScopedCurrentHeapSetter heapSetter(heap);
 
     // Allocate 0x10 (16) slots for windows and tabs at the top
     // Please don't increase these unless you REALLY need more space for some ungodly reason
-    mWindows.allocBuffer(0x10, mDevGuiHeap);
-    mHomeMenuTabs.allocBuffer(0x10, mDevGuiHeap);
+    mWindows.allocBuffer(0x10, heap);
+    mHomeMenuTabs.allocBuffer(0x10, heap);
 
     // Create keyboard popup used by other windows and actions
     mKeyboard = new DevGuiKeyboard();
 
-    // Primitive renderer class & functions
+    // Primitive renderer class & functions (DEPRECATED)
     mPrimitive = new DevGuiPrimitive();
 
     // Creates the settings class, accessed by various functions and set by HomeMenuSettings
-    mSettings = new DevGuiSettings(this, heap);
+    mSettings = new DevGuiSettings(this);
 
     // Creates a theme class and loads in the themes from the SD card themes folder
     mTheme = new DevGuiTheme(this);
@@ -59,7 +59,7 @@ void DevGuiManager::init(sead::Heap* heap)
     mCustomList->init(heap);
 
     // Creates primitive renderer queue used by anything wanting to draw primitives in the game world
-    mPrimQueue = new PrimitiveQueue();
+    mPrimQueue = new PrimitiveQueue(heap);
 
     // Create all windows and home menu items
     createElements();
@@ -183,14 +183,14 @@ void DevGuiManager::updateCursorState()
 template <class T>
 void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
 {
-    T* window = new (mDevGuiHeap) T(this, winName, isActiveByDefault, isAnchor, windowPages);
+    T* window = new (mHeap) T(this, winName, isActiveByDefault, isAnchor, windowPages);
     mWindows.pushBack(window);
 }
 
 template <class T>
 void DevGuiManager::createHomeMenuItem(const char* menuName)
 {
-    T* home = new (mDevGuiHeap) T(this, menuName);
+    T* home = new (mHeap) T(this, menuName);
     mHomeMenuTabs.pushBack(home);
 }
 

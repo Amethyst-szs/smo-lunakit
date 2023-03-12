@@ -120,7 +120,7 @@ public:
     bool* getWindowActiveStateAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getActiveState(); } // Open/close state of a window
     const char* getWindowNameAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getWindowName(); } // Header name of a window
 
-    sead::Heap* getHeap() { return mDevGuiHeap; } // Heap where data is stored (same as the Stationed Heap)
+    sead::Heap* getHeap() { return mHeap; } // Heap where data is stored (same as the Stationed Heap)
     DevGuiPrimitive* getPrimitive() { return mPrimitive; } // Primitive Renderer controller
     DevGuiSettings* getSettings() { return mSettings; } // Current settings (used in the settings home menu, written to save file)
     DevGuiTheme* getTheme() { return mTheme; } // Controls the theme, including reading data from the SD card
@@ -135,7 +135,7 @@ private:
     bool mIsFirstStep = false; // Is this the first frame of the LunaKit display (retriggers each time it is opened)
     bool mIsDisplayAnchorWindows = true; // Are the main windows hidden by pressing L-Stick?
 
-    sead::Heap* mDevGuiHeap = nullptr; // Uses the stationed heap
+    sead::Heap* mHeap = nullptr; // Uses the stationed heap
     DevGuiKeyboard* mKeyboard = nullptr; // On screen ImGui keyboard used by other modules
     DevGuiPrimitive* mPrimitive = nullptr; // Render primitive shapes
     DevGuiSettings* mSettings = nullptr; // Current settings (used in the settings home menu, written to save file)

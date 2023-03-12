@@ -20,7 +20,7 @@
 
 class CategoryBase {
 public:
-    CategoryBase(const char* catName, const char* catDesc);
+    CategoryBase(const char* catName, const char* catDesc, sead::Heap* heap);
 
     virtual void updateCat();
     virtual void updateCatDisplay();
@@ -28,8 +28,8 @@ public:
     virtual const char* getCategoryName() { return mCatName; };
 
 protected:
+    sead::Heap* mHeap = nullptr;
+    
     const char* mCatName = nullptr;
     const char* mCatDesc = nullptr;
-
-    sead::Heap* mDevGuiHeap = nullptr;
 };
