@@ -1,38 +1,78 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuExtra.h"
+#include "devgui/popups/PopupKeyboard.h"
 
 HomeMenuExtra::HomeMenuExtra(DevGuiManager* parent, const char* menuName)
     : HomeMenuBase(parent, menuName)
 {}
 
+void HomeMenuExtra::updateMenu()
+{
+    if(!mKeyboardString)
+        return;
+
+    if(mIsIPKeyboardOpen) {
+        mIPString.clear();
+        mIPString.append(mKeyboardString);
+    }
+
+    if(mIsPortKeyboardOpen) {
+        mPortString.clear();
+        mPortString.append(mKeyboardString);
+    }
+}
+
 void HomeMenuExtra::updateMenuDisplay()
 {
-    bool* demoWinState = mParent->getImGuiDemoWindowState();
-
     ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 
-    if (addMenu("Keyboard Test")) {
-        if(mKeyboardString && strlen(mKeyboardString) > 0)
-            ImGui::MenuItem(mKeyboardString, nullptr, false, false);
+    bool isLogDisabled = Logger::getDisabledState();
 
-        if(ImGui::MenuItem("QWERTY"))
-            mParent->tryOpenKeyboard(16, KEYTYPE_QWERTY, &mKeyboardString, &mIsKeyboardOpen);
-        if(ImGui::MenuItem("Number"))
-            mParent->tryOpenKeyboard(16, KEYTYPE_NUMBER, &mKeyboardString, &mIsKeyboardOpen);
-        if(ImGui::MenuItem("IP"))
-            mParent->tryOpenKeyboard(16, KEYTYPE_IP, &mKeyboardString, &mIsKeyboardOpen);
+    if(!isLogDisabled && ImGui::MenuItem("Disable Logger"))
+        Logger::instance().writeLoggerSave(mHeap, true, "0", 0);
+
+    if(isLogDisabled && addMenu("Server Logging")) {
+        if(ImGui::MenuItem("IP", mIPString.cstr())) {
+            mParent->tryOpenKeyboard(15, KEYTYPE_IP, &mKeyboardString, &mIsIPKeyboardOpen);
+        }
+        
+        if(ImGui::MenuItem("Port", mPortString.cstr())) {
+            mParent->tryOpenKeyboard(5, KEYTYPE_NUMBER, &mKeyboardString, &mIsPortKeyboardOpen);
+        }
+        
+        if(!mIPString.isEmpty() && !mPortString.isEmpty()) {
+            ImGui::MenuItem(" ", nullptr, false, false);
+            ImGui::MenuItem("Requires restart", nullptr, false, false);
+            ImGui::MenuItem("Server must run on startup", nullptr, false, false);
+            ImGui::MenuItem(" ", nullptr, false, false);
+            ImGui::MenuItem("Disable via menu or deleting:", nullptr, false, false);
+            ImGui::MenuItem("LunaKit/LKData/logger.byml", nullptr, false, false);
+            if(ImGui::MenuItem("Activate Logger")) {
+                mNewPort = std::__cxx11::stoi(mPortString.cstr());
+                Logger::instance().writeLoggerSave(mHeap, false, mIPString.cstr(), mNewPort);
+
+                mIPString.clear();
+                mPortString.clear();
+                mKeyboardString = nullptr;
+            }
+        }
+
+        ImGui::EndMenu();
+    }
+
+    bool* demoWinState = mParent->getImGuiDemoWindowState();
+    if (ImGui::MenuItem("ImGui Demo Window", NULL, *demoWinState)) {
+        *demoWinState = !(*demoWinState);
+    }
+
+    if(addMenu("Credits")) {
+        ImGui::MenuItem("Amethyst-szs", NULL, false, false);
+        ImGui::MenuItem("CraftyBoss", NULL, false, false);
+        ImGui::MenuItem("Mars", NULL, false, false);
+        ImGui::MenuItem("ExLaunch Devs", NULL, false, false);
 
         ImGui::EndMenu();
     }
 
     ImGui::PopItemFlag();
-
-    if (ImGui::MenuItem("ImGui Demo Window", NULL, *demoWinState)) {
-        *demoWinState = !(*demoWinState);
-    }
-
-    ImGui::MenuItem("Amethyst-szs (LunaKit Dev)", NULL, false, false);
-    ImGui::MenuItem("CraftyBoss", NULL, false, false);
-    ImGui::MenuItem("Mars", NULL, false, false);
-    ImGui::MenuItem("ExLaunch Devs", NULL, false, false);
 }

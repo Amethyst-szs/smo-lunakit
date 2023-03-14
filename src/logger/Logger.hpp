@@ -32,6 +32,8 @@ public:
 
     nn::Result writeLoggerSave(sead::Heap* heap, bool disable, const char* ip, uint port);
 
+    static bool getDisabledState() { return instance().mIsDisabled; }
+
 private:
     LoggerState mState;
     int mSocketFd;

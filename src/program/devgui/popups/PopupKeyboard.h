@@ -31,6 +31,7 @@ public:
 
     void update();
     bool tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType, const char** output, bool* isKeyboardOpen);
+    bool tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType, sead::FixedSafeString<0xff>* output, bool* isKeyboardOpen);
 
 private:
     void endKeyboard();

@@ -1,16 +1,26 @@
 #pragma once
 
 #include "imgui.h"
+#include "imgui_internal.h"
 
 #include "devgui/homemenu/HomeMenuBase.h"
+
+#include "logger/Logger.hpp"
 
 class HomeMenuExtra : public HomeMenuBase {
 public:
     HomeMenuExtra(DevGuiManager* parent, const char* menuName);
 
+    virtual void updateMenu();
     virtual void updateMenuDisplay();
 
 private:
+    bool mIsIPKeyboardOpen = false;
+    bool mIsPortKeyboardOpen = false;
     const char* mKeyboardString = nullptr;
-    bool mIsKeyboardOpen = false;
+
+    sead::FixedSafeString<0x10> mIPString;
+    sead::FixedSafeString<0x6> mPortString;
+    
+    uint mNewPort = 0;
 };

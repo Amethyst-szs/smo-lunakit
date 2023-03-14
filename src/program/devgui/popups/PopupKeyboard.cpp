@@ -75,6 +75,28 @@ bool PopupKeyboard::tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType
     return true;
 }
 
+bool PopupKeyboard::tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType, sead::FixedSafeString<0xff>* output, bool* isKeyboardOpen)
+{
+    if(mIsKeyboardOpen && *mIsKeyboardOpen)
+        return false;
+
+    mOutputDest = nullptr;
+    output = &mBuffer;
+    mIsKeyboardOpen = isKeyboardOpen;
+
+    *mIsKeyboardOpen = true;
+    mIsFirstStep = true;
+    mIsShift = false;
+    mIsCapsLock = false;
+
+    mMaxCharacters = maxChars;
+    mBuffer.clear();
+
+    mKeyboardType = keyType;
+
+    return true;
+}
+
 void PopupKeyboard::endKeyboard()
 {
     *mIsKeyboardOpen = false;
@@ -144,8 +166,9 @@ void PopupKeyboard::drawKeyboardLine(const char* keys)
 
         if(ImGui::Button(keyLabel, ImVec2(44,mKeyLineHeight)) && mBuffer.calcLength() < mMaxCharacters) {
             mBuffer.append(keyLabel);
-            *mOutputDest = mBuffer.cstr();
             mIsShift = false;
+            if(mOutputDest)
+                *mOutputDest = mBuffer.cstr();
         }
 
         ImGui::SameLine();

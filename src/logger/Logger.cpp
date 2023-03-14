@@ -122,6 +122,8 @@ void Logger::log(const char *fmt, va_list args) {
 }
 
 nn::Result Logger::writeLoggerSave(sead::Heap* heap, bool disable, const char* ip, uint port) {
+    mIsDisabled = disable;
+    
     mWriteStream->rewind();
     al::ByamlWriter file = al::ByamlWriter(heap, false);
     
@@ -135,5 +137,6 @@ nn::Result Logger::writeLoggerSave(sead::Heap* heap, bool disable, const char* i
     file.write(mWriteStream);
 
     nn::Result result = FsHelper::writeFileToPath(mWorkBuf, file.calcPackSize(), LOGGERSAVEPATH);
+
     return result;
 }
