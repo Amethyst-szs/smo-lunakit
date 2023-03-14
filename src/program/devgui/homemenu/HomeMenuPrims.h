@@ -2,6 +2,8 @@
 
 #include "imgui.h"
 
+#include "devgui/primsettings/PrimMenuSettings.h"
+
 #include "devgui/homemenu/HomeMenuBase.h"
 
 class HomeMenuPrims : public HomeMenuBase {
@@ -12,5 +14,5 @@ public:
     void updateMenuDisplay() override;
 
 private:
-    bool mIsEnableRendering = false;
+    PrimMenuSettings* mSettings;
 };

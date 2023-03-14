@@ -1,28 +1,37 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuPrims.h"
+#include "imgui.h"
 
 HomeMenuPrims::HomeMenuPrims(DevGuiManager* parent, const char* menuName)
     : HomeMenuBase(parent, menuName)
-{}
+{
+    mSettings = parent->getPrimitiveSettings();
+}
 
 void HomeMenuPrims::updateMenu()
 {
-    if(!mIsEnableRendering)
-        return;
+    // if(!mIsEnableRendering)
+    //     return;
     
-    al::Scene* scene = tryGetScene();
-    if(!scene)
-        return;
+    // al::Scene* scene = tryGetScene();
+    // if(!scene)
+    //     return;
     
-    PrimitiveQueue* queue = mParent->getPrimitiveQueue();
+    // PrimitiveQueue* queue = mParent->getPrimitiveQueue();
 
-    // Logger::log("Pushing entry\n");
-    // PrimitiveTypePoint* point = new (al::getSequenceHeap()) PrimitiveTypePoint({0.f, 0.f, 0.f}, 200.f, {1.f, 1.f, 1.f, 0.75f});
-    // queue->pushEntry(point);
-    // Logger::log("Pushed entry\n");
+
 }
 
 void HomeMenuPrims::updateMenuDisplay()
 {
-    ImGui::MenuItem("All Rendering", nullptr, &mIsEnableRendering);
+    ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+    
+    // Display all non-categorized items
+    for(int i = 0; i < mSettings->getTotalSettingsInCat(PrimMenuCat_NONE); i++) {
+        PrimMenuEntry* entry = mSettings->getSettingEntryInCat(i, PrimMenuCat_NONE);
+        if(ImGui::MenuItem(entry->getName(), nullptr, entry->isTrue()))
+            entry->toggleValue();
+    }
+
+    ImGui::PopItemFlag();
 }

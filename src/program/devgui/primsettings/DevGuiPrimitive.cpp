@@ -1,4 +1,4 @@
-#include "devgui/primitive/DevGuiPrimitive.h"
+#include "devgui/primsettings/DevGuiPrimitive.h"
 
 void DevGuiPrimitive::draw(agl::DrawContext* drawContext)
 {

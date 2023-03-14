@@ -1,5 +1,4 @@
 #include "program/devgui/DevGuiManager.h"
-#include "GetterUtil.h"
 
 // This class is a singleton! It does not have a typical constructor
 // This is class is created in GameSystemInit in main.cpp
@@ -45,22 +44,16 @@ void DevGuiManager::init(sead::Heap* heap)
     mWindows.allocBuffer(0x10, heap);
     mHomeMenuTabs.allocBuffer(0x10, heap);
 
-    // Primitive renderer class & functions (DEPRECATED)
-    mPrimitive = new DevGuiPrimitive();
-
-    // Creates the settings class, accessed by various functions and set by HomeMenuSettings
     mSettings = new DevGuiSettings(this);
 
-    // Creates a theme class and loads in the themes from the SD card themes folder
-    mTheme = new DevGuiTheme(this);
-    mTheme->init();
-
-    // Creates the custom stage manager and loads in the custom stage information from the SD card CustomStages folder
     mCustomList = new CustomStageManager();
     mCustomList->init(heap);
 
-    // Creates primitive renderer queue used by anything wanting to draw primitives in the game world
     mPrimQueue = new PrimitiveQueue(heap);
+    mPrimitiveSettings = new PrimMenuSettings(this);
+
+    mTheme = new DevGuiTheme(this);
+    mTheme->init();
 
     // Create all windows and home menu items
     createElements();
