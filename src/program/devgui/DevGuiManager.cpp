@@ -16,6 +16,7 @@ void DevGuiManager::createElements()
     createWindow<WindowEditor>("Param Editor", true, true, 1);
     createWindow<WindowInfo>("Info Viewer", true, true, 1);
     createWindow<WindowActorBrowse>("Actor Browser", false, true, 2);
+    createWindow<WindowTeleport>("Teleport", false, true, 1);
     createWindow<WindowFPS>("FPS Window", true, false, 1);
 
     // Create all home menu tabs
