@@ -58,6 +58,8 @@ bool PopupKeyboard::tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType
 {
     if(mIsKeyboardOpen && *mIsKeyboardOpen)
         return false;
+    
+    Logger::log("Opened keyboard (Type ID: %i)\n", keyType);
 
     mOutputDest = output;
     mIsKeyboardOpen = isKeyboardOpen;
@@ -79,6 +81,8 @@ bool PopupKeyboard::tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType
 {
     if(mIsKeyboardOpen && *mIsKeyboardOpen)
         return false;
+
+    Logger::log("Opened keyboard (Type ID: %i)\n", keyType);
 
     mOutputDest = nullptr;
     output = &mBuffer;

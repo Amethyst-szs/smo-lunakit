@@ -123,7 +123,7 @@ void Logger::log(const char *fmt, va_list args) {
 
 nn::Result Logger::writeLoggerSave(sead::Heap* heap, bool disable, const char* ip, uint port) {
     if(disable && !mIsDisabled)
-        Logger::log("Logger disabled! Goodbye!");
+        Logger::log("Logger disabled! Goodbye!\n");
     
     mWriteStream->rewind();
     al::ByamlWriter* file = new (heap) al::ByamlWriter(heap, false);

@@ -77,10 +77,13 @@ void DevGuiManager::update()
         mIsActive = !mIsActive;
         if (mIsActive)
             mIsFirstStep = true;
+
+        Logger::log("Active state %s\n", mIsActive ? "enabled" : "disabled");
     }
 
     // Toggle display/hide of all anchored windows
     if(mIsActive && al::isPadTriggerPressLeftStick(-1)) {
+        Logger::log("Anchored window display %s\n", mIsDisplayAnchorWindows ? "enabled" : "disabled");
         mIsDisplayAnchorWindows = !mIsDisplayAnchorWindows;
     }
 
@@ -127,6 +130,7 @@ void DevGuiManager::updateDisplay()
         ImGui::Begin(entry->getWindowName(), entry->getCloseInteractionPtr(), entry->getWindowConfig()->mWindowFlags);
 
         if(mIsAnchorChange) {
+            Logger::log("Anchor calc %s - Size: %i - Page %i/%i\n", entry->getWindowName(), entry->getAnchorPages(), curAnchorWin, totalAnchorWin);
             entry->setupAnchor(totalAnchorWin, curAnchorWin);
             curAnchorWin += entry->getAnchorPages();
         }

@@ -147,5 +147,6 @@ nn::Result DevGuiSaveData::write()
 
     nn::Result result = FsHelper::writeFileToPath(mWorkBuf, file.calcPackSize(), SAVEPATH);
 
+    Logger::log("Saved data to %s\n", SAVEPATH);
     return result;
 }

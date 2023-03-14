@@ -17,7 +17,7 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #pragma once
 
 // Current version of the application (change this if you make changes, especially changes that effect the save data!)
-#define LUNAKITVERSION "Dev-6"
+#define LUNAKITVERSION "v1.0-Dev"
 
 // General includes
 #include "imgui.h"

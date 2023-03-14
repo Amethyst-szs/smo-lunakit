@@ -5,6 +5,8 @@
 // Settings are added and created here
 DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
 {
+    Logger::log("Starting settings menu constructor\n");
+
     mParent = parent;
 
     // Max of 0x20 (32) settings, should never go beyond this but if you do for some reason, increase this number!
@@ -19,11 +21,12 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
     registerNewSetting(true, true, "Display HUD");
     registerNewSetting(true, true, "Play Music");
 
-    Logger::log("Created %i settings\n", mSettings.size());
+    Logger::log("   Created %i settings\n", mSettings.size());
 }
 
 void DevGuiSettings::registerNewSetting(bool isEnabledByDefault, bool isSave, const char* settingName)
 {
+    Logger::log("   Constructing %s - Enabled by Default: %s - Is Save: %s\n", settingName, BTOC(isEnabledByDefault), BTOC(isSave));
     DevGuiSettingsEntry* newSet = new (mParent->getHeap()) DevGuiSettingsEntry(isEnabledByDefault, isSave, settingName);
     mSettings.pushBack(newSet);
 }

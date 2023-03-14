@@ -3,6 +3,8 @@
 
 HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName)
 {
+    Logger::log("Constructing HomeMenu: %s\n", menuName);
+
     mParent = parent;
     mHeap = parent->getHeap();
     

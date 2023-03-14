@@ -18,6 +18,8 @@
 
 #include "program/GetterUtil.h"
 
+#include "logger/Logger.hpp"
+
 class CategoryBase {
 public:
     CategoryBase(const char* catName, const char* catDesc, sead::Heap* heap);

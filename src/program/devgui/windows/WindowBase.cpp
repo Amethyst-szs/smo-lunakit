@@ -24,6 +24,8 @@ WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActive
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
+
+    Logger::log("Constructing Window: %s (Is Anchored: %s)\n", winName, BTOC(isAnchor));
 }
 
 void WindowBase::updateWin()
