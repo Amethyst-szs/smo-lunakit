@@ -15,6 +15,9 @@ public:
     virtual void updateMenuDisplay();
 
 private:
+    bool mIsFirstStep = true;
+    bool mIsLoggerDisabled = false;
+
     bool mIsIPKeyboardOpen = false;
     bool mIsPortKeyboardOpen = false;
     const char* mKeyboardString = nullptr;

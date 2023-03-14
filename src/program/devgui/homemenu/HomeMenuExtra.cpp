@@ -8,6 +8,12 @@ HomeMenuExtra::HomeMenuExtra(DevGuiManager* parent, const char* menuName)
 
 void HomeMenuExtra::updateMenu()
 {
+    if(mIsFirstStep) {
+        mIsLoggerDisabled = Logger::instance().getDisabledState();
+        mIsFirstStep = false;
+        return;
+    }
+
     if(!mKeyboardString)
         return;
 
@@ -26,12 +32,12 @@ void HomeMenuExtra::updateMenuDisplay()
 {
     ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 
-    bool isLogDisabled = Logger::getDisabledState();
-
-    if(!isLogDisabled && ImGui::MenuItem("Disable Logger"))
+    if(!mIsLoggerDisabled && ImGui::MenuItem("Disable Logger")) {
         Logger::instance().writeLoggerSave(mHeap, true, "0", 0);
+        mIsLoggerDisabled = true;
+    }
 
-    if(isLogDisabled && addMenu("Server Logging")) {
+    if(mIsLoggerDisabled && addMenu("Server Logging")) {
         if(ImGui::MenuItem("IP", mIPString.cstr())) {
             mParent->tryOpenKeyboard(15, KEYTYPE_IP, &mKeyboardString, &mIsIPKeyboardOpen);
         }
@@ -51,6 +57,7 @@ void HomeMenuExtra::updateMenuDisplay()
                 mNewPort = std::__cxx11::stoi(mPortString.cstr());
                 Logger::instance().writeLoggerSave(mHeap, false, mIPString.cstr(), mNewPort);
 
+                mIsLoggerDisabled = false;
                 mIPString.clear();
                 mPortString.clear();
                 mKeyboardString = nullptr;
