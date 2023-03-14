@@ -126,19 +126,18 @@ nn::Result Logger::writeLoggerSave(sead::Heap* heap, bool disable, const char* i
         Logger::log("Logger disabled! Goodbye!\n");
     
     mWriteStream->rewind();
-    al::ByamlWriter* file = new (heap) al::ByamlWriter(heap, false);
+    al::ByamlWriter file = al::ByamlWriter(heap, false);
     
-    file->pushHash();
+    file.pushHash();
 
-    file->addBool("Disable", disable);
-    file->addString("IP", ip);
-    file->addUInt("Port", port);
+    file.addBool("Disable", disable);
+    file.addString("IP", ip);
+    file.addUInt("Port", port);
 
-    file->pop();
-    file->write(mWriteStream);
+    file.pop();
+    file.write(mWriteStream);
 
-    nn::Result result = FsHelper::writeFileToPath(mWorkBuf, file->calcPackSize(), LOGGERSAVEPATH);
+    nn::Result result = FsHelper::writeFileToPath(mWorkBuf, file.calcPackSize(), LOGGERSAVEPATH);
 
-    delete file;
     return result;
 }
