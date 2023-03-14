@@ -1,4 +1,5 @@
 #include "program/devgui/DevGuiManager.h"
+#include "GetterUtil.h"
 
 // This class is a singleton! It does not have a typical constructor
 // This is class is created in GameSystemInit in main.cpp

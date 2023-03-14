@@ -38,7 +38,6 @@ namespace al
     class SubActorKeeper;
 
     class ActorInitInfo;
-    class HitSensor;
     class SensorMsg;
     class ScreenPointer;
     class ScreenPointTarget;

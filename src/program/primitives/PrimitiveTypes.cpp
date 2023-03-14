@@ -91,3 +91,84 @@ void PrimitiveTypeTriangle::render()
     renderer->drawSphere4x8(mTriangle.mPosition2, 9.f, mColor);
     renderer->drawSphere4x8(mTriangle.mPosition3, 9.f, mColor);
 }
+
+void PrimitiveTypeHitSensor::render()
+{
+    sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
+
+    al::HitSensorKeeper* sensorKeeper = mActor->mHitSensorKeeper;
+    if (!sensorKeeper)
+        return;
+    
+    for (int i = 0; i < sensorKeeper->mSensorNum; i++) {
+        al::HitSensor* curSensor = sensorKeeper->mSensors[i];
+        if (!curSensor)
+            continue;
+        if (!al::isSensorValid(curSensor))
+            continue;
+
+        sead::Vector3f sensorTrans = al::getSensorPos(curSensor);
+        float sensorRadius = al::getSensorRadius(curSensor);
+        const char* sensorName = curSensor->mName;
+
+        if(mSensorTypes & HitSensorType_ATTACK && al::isEqualSubString(sensorName, "Attack")) {
+            mColor = {0.f, 0.5f, 0.5f, mOpacity}; // Cyan / Light BLue
+            renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
+            continue;
+        }
+
+        if(mSensorTypes & HitSensorType_EYE && (al::isSensorEye(curSensor) || al::isSensorPlayerEye(curSensor))) {
+            mColor = {0.f, 0.f, 1.f, mOpacity * 0.85f}; // Blue
+            renderer->drawCircle32(sensorTrans, sensorRadius, mColor);
+            continue;
+        }
+
+        if(mSensorTypes & HitSensorType_TRAMPLE && al::isEqualSubString("Trample", sensorName)) {
+            mColor = {0.3f, 0.f, 0.75f, mOpacity * 0.5f}; // Deep Purple
+            renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
+            continue;
+        }
+
+        if(mSensorTypes & HitSensorType_NPC && al::isSensorNpc(curSensor)) {
+            mColor = {0.f, 1.f, 0.f, mOpacity}; // Green
+            renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
+            continue;
+        }
+
+        if(mSensorTypes & HitSensorType_BIND && al::isSensorBindableAll(curSensor)) {
+            mColor = {0.5f, 0.5f, 0.f, mOpacity}; // Yellow
+            renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
+            continue;
+        }
+
+        if(mSensorTypes & HitSensorType_ENEMYBODY && al::isSensorEnemyBody(curSensor)) {
+            mColor = {0.9761f, 0.3014f, 0.012f, mOpacity}; // Orange
+            renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
+            continue;
+        }
+
+        if(mSensorTypes & HitSensorType_MAPOBJ && al::isSensorMapObj(curSensor)) {
+            mColor = {0.8f, 0.05f, 0.5f, mOpacity}; // Pink
+            renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
+            continue;
+        }
+
+        if(mSensorTypes & HitSensorType_PLAYERALL && al::isSensorPlayerAll(curSensor)) {
+            mColor = {1.f, 0.f, 0.f, mOpacity * 0.3f}; // Red
+            renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
+            continue;
+        }
+
+        if(mSensorTypes & HitSensorType_HOLDOBJ && al::isSensorHoldObj(curSensor)) {
+            mColor = {0.05f, 0.75f, 0.5f, mOpacity}; // Minty green
+            renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
+            continue;
+        }
+
+        if(mSensorTypes & HitSensorType_MISC) {
+            mColor = {0.85f, 0.85f, 0.85f, mOpacity}; // White
+            renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
+            continue;
+        }
+    }
+}

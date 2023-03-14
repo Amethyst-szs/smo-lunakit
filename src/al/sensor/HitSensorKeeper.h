@@ -23,5 +23,9 @@ namespace al
         void validateBySystem(void);
         void invalidateBySystem(void);
         al::HitSensor *getSensor(char const *sensorName) const;
+
+        int mSensorKeeperNum;
+        int mSensorNum;
+        al::HitSensor** mSensors; // 0x8
     };
 };
