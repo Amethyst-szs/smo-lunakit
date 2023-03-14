@@ -130,7 +130,7 @@ void PrimitiveTypeHitSensor::render()
         }
 
         if(mSensorTypes & HitSensorType_NPC && al::isSensorNpc(curSensor)) {
-            mColor = {0.f, 1.f, 0.f, mOpacity}; // Green
+            mColor = {0.f, 1.f, 0.f, mOpacity * 0.75f}; // Green
             renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
             continue;
         }

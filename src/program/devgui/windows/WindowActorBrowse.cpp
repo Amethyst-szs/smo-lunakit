@@ -1,6 +1,5 @@
 #include "devgui/windows/WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
-#include "devgui/popups/PopupKeyboard.h"
 
 WindowActorBrowse::WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
     : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)
@@ -56,13 +55,13 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
 
     bool isFiltFavs = isFilterByFavorites();
     if (mTotalFavs == 0)
-        ImGui::Text("No Favorites!");
+        ImGui::Text("No Favs!");
     else if (ImGui::Checkbox("Favs", &isFiltFavs))
         generateFilterListByFavs(scene);
 
     ImGui::SameLine();
 
-    if (ImGui::Button("Delete Favs")) {
+    if (ImGui::Button("Del Favs")) {
         if(isFilterByFavorites())
             mFilterType = ActorBrowseFilterType::FILTER_NONE;
 
@@ -81,10 +80,15 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
             mParent->tryOpenKeyboard(24, KEYTYPE_QWERTY, &mSearchString, &mIsKeyboardInUse);
         }
     } else {
-        if (ImGui::Button("Clear Search")) {
+        if (ImGui::Button("Clear")) {
             mFilterType = ActorBrowseFilterType::FILTER_NONE;
             mSearchString = nullptr;
         }
+    }
+
+    if(!isFilterByNone()) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Render List", &mIsPrimDrawFilterGroup);
     }
 
     ImGui::EndChild();
@@ -121,6 +125,7 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
         if (i >= group->mActorCount)
             continue;
 
+        // Prepare name data
         al::LiveActor* actor = group->mActors[i];
         char* actorName = getActorName(actor);
         bool isFavorite = isActorInFavorites(actorName);
@@ -128,9 +133,18 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
         sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName);
         sead::FormatFixedSafeString<0x9> buttonName("%i", i);
 
+        // Draw item and favorite option
         ImGui::Selectable(trimName.cstr(), &isFavorite, 0, ImVec2((mMaxCharacters - 2) * horizFontSize, mLineSize));
-        if (ImGui::IsItemHovered())
+        if (ImGui::IsItemHovered()) {
             ImGui::SetTooltip("%s\nClick to open actor", actorName);
+
+            if(actor->mPoseKeeper)
+                mParent->getPrimitiveQueue()->pushAxis(actor->mPoseKeeper->mTranslation, 400.f);
+
+            if(actor->mHitSensorKeeper)
+                mParent->getPrimitiveQueue()->pushHitSensor(actor, mHitSensorTypes, 0.2f);
+        }
+
         if (ImGui::IsItemClicked()) 
             mSelectedActor = actor;
 
@@ -140,6 +154,10 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("%s\n%i/%i Favorites", isFavorite ? "Remove Favorite" : "Favorite", mTotalFavs, mMaxFavs);
+        
+        // If list is filtered and prim drawing for filter group is on, draw points
+        if(!isFilterByNone() && mIsPrimDrawFilterGroup && mFilterActorGroup->mActorCount < 75 && actor->mPoseKeeper)
+            mParent->getPrimitiveQueue()->pushPoint(actor->mPoseKeeper->mTranslation, 120.f, {0.9f, 0.6f, 0.9f, 0.3f});
 
         free(actorName);
     }
@@ -176,6 +194,7 @@ void WindowActorBrowse::drawActorInfo()
     if(pose && ImGui::TreeNode("Actor Pose")) {
         ImGui::Separator();
 
+        mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
         drawVectorInfo("T", "Pose Keeper Translation", &pose->mTranslation, 30000.f);
 
         sead::Vector3f* r = pose->getRotatePtr();
@@ -187,8 +206,10 @@ void WindowActorBrowse::drawActorInfo()
             drawVectorInfo("S", "Pose Keeper Scale", s, 2.f);
 
         sead::Vector3f* v = pose->getVelocityPtr();
-        if(v)
+        if(v) {
+            mParent->getPrimitiveQueue()->pushLine(pose->mTranslation, pose->mTranslation + *v, {1.f, 1.f, 1.f, 1.f});
             drawVectorInfo("V", "Pose Keeper Velocity", v, 100.f);
+        }
 
         sead::Vector3f* f = pose->getFrontPtr();
         if(f) {
@@ -204,6 +225,7 @@ void WindowActorBrowse::drawActorInfo()
 
         sead::Vector3f* g = pose->getGravityPtr();
         if(g) {
+            mParent->getPrimitiveQueue()->pushLine(pose->mTranslation, pose->mTranslation + (*g * 200.f), {0.f, 0.f, 1.f, 1.f});
             drawVectorInfo("G", "Pose Keeper Gravity", g, 1.f);
             g->normalize();
         }
@@ -241,6 +263,10 @@ void WindowActorBrowse::drawActorInfo()
         
         ImGui::TreePop();
     }
+
+    al::HitSensorKeeper* sensor = mSelectedActor->mHitSensorKeeper;
+    if(sensor)
+        mParent->getPrimitiveQueue()->pushHitSensor(mSelectedActor, mHitSensorTypes, 0.4f);
 
     ImGui::EndChild();
 
