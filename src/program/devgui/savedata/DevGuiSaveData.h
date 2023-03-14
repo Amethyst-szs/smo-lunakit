@@ -65,5 +65,6 @@ private:
 
     sead::RamStreamSrc* mRamStream = nullptr;
     DevGuiWriteStream* mWriteStream = nullptr;
-    u8 mWorkBuf[0x1000] = {}; // IMPORTANT - If you are writing a much larger amount of data, may need to expand work buffer size
+    static const uint mWorkBufSize = 0x1000;
+    u8 mWorkBuf[mWorkBufSize] = {}; // IMPORTANT - If you are writing a much larger amount of data, may need to expand work buffer size
 };

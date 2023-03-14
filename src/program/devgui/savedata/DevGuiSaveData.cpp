@@ -145,8 +145,13 @@ nn::Result DevGuiSaveData::write()
     file.pop();
     file.write(mWriteStream);
 
-    nn::Result result = FsHelper::writeFileToPath(mWorkBuf, file.calcPackSize(), SAVEPATH);
+    uint size = file.calcPackSize();
+    nn::Result result = FsHelper::writeFileToPath(mWorkBuf, size, SAVEPATH);
 
     Logger::log("Saved data to %s\n", SAVEPATH);
+
+    if(static_cast<float>(size) / static_cast<float>(mWorkBufSize) > 0.8f)
+        Logger::log("\n\n ! WARNING !\n The save file is close to the work buffer limit\n Consider increasing buffer size!\n\n");
+
     return result;
 }

@@ -83,8 +83,8 @@ void DevGuiManager::update()
 
     // Toggle display/hide of all anchored windows
     if(mIsActive && al::isPadTriggerPressLeftStick(-1)) {
-        Logger::log("Anchored window display %s\n", mIsDisplayAnchorWindows ? "enabled" : "disabled");
         mIsDisplayAnchorWindows = !mIsDisplayAnchorWindows;
+        Logger::log("Anchored window display %s\n", mIsDisplayAnchorWindows ? "enabled" : "disabled");
     }
 
     // This is run every frame, only actually saves if a save is queued and the timer hits zero
