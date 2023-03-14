@@ -4,7 +4,7 @@
 
 class CategorySpeed : public CategoryBase {
 public:
-    CategorySpeed(const char* catName, const char* catDesc);
+    CategorySpeed(const char* catName, const char* catDesc, sead::Heap* heap);
 
     void updateCat() override;
     void updateCatDisplay() override;

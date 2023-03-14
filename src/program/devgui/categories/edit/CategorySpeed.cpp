@@ -7,8 +7,8 @@
 #include "logger/Logger.hpp"
 
 
-CategorySpeed::CategorySpeed(const char* catName, const char* catDesc)
-    : CategoryBase(catName, catDesc)
+CategorySpeed::CategorySpeed(const char* catName, const char* catDesc, sead::Heap* heap)
+    : CategoryBase(catName, catDesc, heap)
 {
 }
 
