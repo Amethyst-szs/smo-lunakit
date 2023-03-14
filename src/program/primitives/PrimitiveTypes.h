@@ -3,9 +3,18 @@
 #pragma once
 
 #include "al/collision/Triangle.h"
+#include "al/util.hpp"
+#include "al/scene/Scene.h"
 
-#include "sead/math/seadVector.h"
+#include "game/StageScene/StageScene.h"
+
+#include "sead/gfx/seadPrimitiveRenderer.h"
 #include "sead/gfx/seadColor.h"
+#include "sead/math/seadVector.h"
+
+#include "logger/Logger.hpp"
+
+#include "GetterUtil.h"
 
 enum PrimitiveTypes {
     PRIM_NONE = -1,
@@ -20,7 +29,10 @@ enum PrimitiveTypes {
 class PrimitiveTypeBase {
 public:
     PrimitiveTypeBase(PrimitiveTypes type) { mType = type; }
+    virtual ~PrimitiveTypeBase() = default;
 
+    virtual void render() = 0;
+    
     PrimitiveTypes getType() { return mType; }
 
 private:
@@ -37,10 +49,13 @@ public:
         mSize = size;
         mColor = col;
     }
+    ~PrimitiveTypePoint() override {}
 
     sead::Vector3f mTranslation;
     float mSize;
     sead::Color4f mColor;
+
+    void render() override;
 };
 
 
@@ -53,9 +68,12 @@ public:
         mPoints[1] = point2;
         mColor = col;
     }
+    ~PrimitiveTypeLine() override {}
 
     sead::Vector3f mPoints[2];
     sead::Color4f mColor;
+
+    void render() override;
 };
 
 
@@ -67,9 +85,12 @@ public:
         mTranslation = trans;
         mSize = size;
     }
+    ~PrimitiveTypeAxis() override {}
 
     sead::Vector3f mTranslation;
     float mSize;
+
+    void render() override;
 };
 
 
@@ -82,10 +103,13 @@ public:
         mFrameColor = frameColor;
         mFillColor = fillColor;
     }
+    ~PrimitiveTypeArea() override {}
 
     const char* mGroupName;
     sead::Color4f mFrameColor;
     sead::Color4f mFillColor;
+
+    void render() override;
 };
 
 
@@ -97,7 +121,10 @@ public:
         mTriangle = tri;
         mColor = color;
     }
+    ~PrimitiveTypeTriangle() override {}
 
     al::Triangle mTriangle;
     sead::Color4f mColor;
+
+    void render() override;
 };
