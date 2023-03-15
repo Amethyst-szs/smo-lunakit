@@ -11,31 +11,31 @@ PrimMenuSettings::PrimMenuSettings(DevGuiManager* parent)
     mSettings.allocBuffer(0x40, parent->getHeap());
 
     // No category
-    registerNewSetting(false, "Is Enabled", PrimMenuCat_NONE);
+    registerNewSetting(false, "Is Enabled", PrimMenuCat_NONE, false);
     
     // Player category
-    registerNewSetting(false, "Player Axis", PrimMenuCat_PLAYER);
-    registerNewSetting(false, "World Axis", PrimMenuCat_PLAYER);
-    registerNewSetting(false, "Player Front", PrimMenuCat_PLAYER);
-    registerNewSetting(false, "Cappy", PrimMenuCat_PLAYER);
+    registerNewSetting(false, "Player Axis", PrimMenuCat_PLAYER, false);
+    registerNewSetting(false, "World Axis", PrimMenuCat_PLAYER, false);
+    registerNewSetting(false, "Player Front", PrimMenuCat_PLAYER, false);
+    registerNewSetting(false, "Cappy Info", PrimMenuCat_PLAYER, false);
 
     // Collision / Triangle category
-    registerNewSetting(false, "Collision", PrimMenuCat_TRIANGLE);
-    registerNewSetting(false, "Complex Colission", PrimMenuCat_TRIANGLE);
+    registerNewSetting(false, "Collision", PrimMenuCat_TRIANGLE, false);
+    registerNewSetting(false, "Complex Collision", PrimMenuCat_TRIANGLE, true);
 
     // Area category
-    registerNewSetting(false, "Areas", PrimMenuCat_AREA);
-    registerNewSetting(false, "DeathArea", PrimMenuCat_AREA);
-    registerNewSetting(false, "ChangeStageArea", PrimMenuCat_AREA);
-    registerNewSetting(false, "WaterArea", PrimMenuCat_AREA);
-    registerNewSetting(false, "2DMoveArea", PrimMenuCat_AREA);
+    registerNewSetting(false, "Areas", PrimMenuCat_AREA, false);
+    registerNewSetting(false, "DeathArea", PrimMenuCat_AREA, true);
+    registerNewSetting(false, "ChangeStageArea", PrimMenuCat_AREA, true);
+    registerNewSetting(false, "WaterArea", PrimMenuCat_AREA, true);
+    registerNewSetting(false, "2DMoveArea", PrimMenuCat_AREA, true);
 
     Logger::log("   Completed primitive settings constructor with %i items\n", mSettings.size());
 }
-void PrimMenuSettings::registerNewSetting(bool isEnabledByDefault, const char* settingName, PrimMenuCategories category)
+void PrimMenuSettings::registerNewSetting(bool isEnabledByDefault, const char* settingName, PrimMenuCategories category, bool dependency)
 {
     Logger::log("   Constructing %s in cat %i\n", settingName, category);
-    PrimMenuEntry* newSet = new (mParent->getHeap()) PrimMenuEntry(isEnabledByDefault, settingName, category);
+    PrimMenuEntry* newSet = new (mParent->getHeap()) PrimMenuEntry(isEnabledByDefault, settingName, category, dependency);
     mSettings.pushBack(newSet);
 }
 
@@ -63,6 +63,17 @@ PrimMenuEntry* PrimMenuSettings::getSettingEntryInCat(int idx, PrimMenuCategorie
             return mSettings.at(i);
 
         catIdx++;
+    }
+
+    return nullptr;
+}
+
+PrimMenuEntry* PrimMenuSettings::getSettingEntryByName(const char* name)
+{
+    for(int i = 0; i < mSettings.size(); i++) {
+        PrimMenuEntry* entry = mSettings.at(i);
+        if(al::isEqualString(entry->getName(), name))
+            return entry;
     }
 
     return nullptr;

@@ -17,11 +17,12 @@ enum PrimMenuCategories {
 
 class PrimMenuEntry {
 public:
-    PrimMenuEntry(bool initState, const char* name, PrimMenuCategories category)
+    PrimMenuEntry(bool initState, const char* name, PrimMenuCategories category, bool dependency)
     {
         mValue = initState;
         mName = name;
         mCategory = category;
+        mIsDependent = dependency;
     }
 
     // Current state/value related functions
@@ -34,8 +35,11 @@ public:
     const char* getName() { return mName; }
     PrimMenuCategories getCategory() { return mCategory; }
 
+    bool isDependent() { return mIsDependent; }
+
 private:
     bool mValue = false;
+    bool mIsDependent = false;
     const char* mName = nullptr;
     PrimMenuCategories mCategory = PrimMenuCat_NONE;
 };
@@ -46,13 +50,14 @@ public:
     PrimMenuSettings(DevGuiManager* parent);
 
     PrimMenuEntry* getSettingEntry(int idx) { return mSettings.at(idx); }
-    int getTotalSettings() { return mSettings.size(); }
-
     PrimMenuEntry* getSettingEntryInCat(int idx, PrimMenuCategories cat);
+    PrimMenuEntry* getSettingEntryByName(const char* name);
+    
+    int getTotalSettings() { return mSettings.size(); }
     int getTotalSettingsInCat(PrimMenuCategories cat);
 
 private:
-    void registerNewSetting(bool isEnabledByDefault, const char* settingName, PrimMenuCategories cat);
+    void registerNewSetting(bool isEnabledByDefault, const char* settingName, PrimMenuCategories cat, bool dependency);
     
     DevGuiManager* mParent;
     sead::PtrArray<PrimMenuEntry> mSettings;
