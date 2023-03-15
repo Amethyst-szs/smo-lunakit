@@ -3,7 +3,7 @@
 PrimitiveQueue::PrimitiveQueue(sead::Heap* heap)
 {
     mHeap = heap;
-    mRenderQueue.allocBuffer(0x100, heap);
+    mRenderQueue.allocBuffer(mMaxQueueSize, heap);
 }
 
 void PrimitiveQueue::render()

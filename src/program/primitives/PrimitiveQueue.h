@@ -65,4 +65,6 @@ private:
 
     sead::Heap* mHeap = nullptr;
     sead::PtrArray<PrimitiveTypeBase> mRenderQueue;
+
+    const int mMaxQueueSize = 0x100;
 };
