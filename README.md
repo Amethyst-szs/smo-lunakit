@@ -20,17 +20,27 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 ### Controls:
 - Open the interface by holding ZR + R and tapping L
 - Hide windows by pressing L-Stick
-- Navigate interface with a mouse
+
+- Mouse controls
+  - Navigate interface with a mouse
+  - Connect mouse to switch via USB
+- Controller controls
+  - Not yet supported! Check back soon!
 
 ### Building:
-- More detailed building instructions to come!
-- If you don't already know how to compile, download a precompiled build in releases!
+- Requires running Linux (Ubuntu recommended)
+  - If you're running Windows, try [WSL](https://learn.microsoft.com/en-us/windows/wsl/install)!
+- Install [devkitPro](https://devkitpro.org/wiki/Getting_Started) with the switch-dev platform
+- Clone or fork this repository
+  - If using WSL, make sure to clone the repo inside your WSL directories! Using a folder on your windows machine with WSL drastically slows compile times
+- Open bash and run `make`
+  - To send to your switch (requires editing FPT_IP in makefile), run make send
+  - To increase core usage for compile, run make -j# (# for total cores to use)
 
 ## Credits:
 - [Amethyst-szs](https://github.com/Amethyst-szs): LunaKit Creator
 - [CraftyBoss](https://github.com/CraftyBoss): SMO ExLaunch, ImGui, and more
 - [Mars](https://github.com/Mars2032): Referenced TAS Mod, Emotional support
-
 
 
 # Original SMO-Exlaunch-Base Description
