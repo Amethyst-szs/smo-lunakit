@@ -157,7 +157,7 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
         
         // If list is filtered and prim drawing for filter group is on, draw points
         if(!isFilterByNone() && mIsPrimDrawFilterGroup && mFilterActorGroup->mActorCount < 75 && actor->mPoseKeeper)
-            mParent->getPrimitiveQueue()->pushPoint(actor->mPoseKeeper->mTranslation, 120.f, {0.9f, 0.6f, 0.9f, 0.3f});
+            mParent->getPrimitiveQueue()->pushPoint(actor->mPoseKeeper->mTranslation, 80.f, {0.9f, 0.6f, 0.9f, 0.3f});
 
         free(actorName);
     }
@@ -191,10 +191,12 @@ void WindowActorBrowse::drawActorInfo()
     }
     
     al::ActorPoseKeeperBase* pose = mSelectedActor->mPoseKeeper;
+    if(pose)
+        mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
+        
     if(pose && ImGui::TreeNode("Actor Pose")) {
         ImGui::Separator();
 
-        mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
         drawVectorInfo("T", "Pose Keeper Translation", &pose->mTranslation, 30000.f);
 
         sead::Vector3f* r = pose->getRotatePtr();
