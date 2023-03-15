@@ -62,7 +62,6 @@
 
 #include "GetterUtil.h"
 #include "devgui/DevGuiManager.h"
-#include "devgui/primitive/DevGuiPrimitive.h"
 #include "devgui/settings/HooksSettings.h"
 
 #include <typeinfo>
@@ -221,12 +220,6 @@ HOOK_DEFINE_TRAMPOLINE(UpdateLunaKit) {
     static void Callback(HakoniwaSequence *thisPtr) {
         Orig(thisPtr);
         DevGuiManager::instance()->update();
-
-        if(!DevGuiManager::instance()->isMenuActive())
-            return;
-        
-        agl::DrawContext* drawContext = thisPtr->getDrawInfo()->mDrawContext;
-        DevGuiManager::instance()->getPrimitive()->draw(drawContext);
     }
 };
 

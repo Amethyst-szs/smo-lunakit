@@ -26,7 +26,7 @@ public:
     HomeMenuBase(DevGuiManager* parent, const char* menuName);
 
     virtual void updateMenu() {} // Called every frame regardless of if the menu is currently open
-    virtual void updateMenuDisplay() {} // Called whenever this menu is opened
+    virtual void updateMenuDisplay() = 0; // Called whenever this menu is opened
 
     virtual const char* getMenuName() { return mMenuName; };
 

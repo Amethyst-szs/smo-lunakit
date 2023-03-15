@@ -6,7 +6,6 @@
 
 namespace al
 {
-
     class LiveActor;
 
     class HitSensor

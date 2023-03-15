@@ -13,6 +13,9 @@
 
 #include "imgui.h"
 
+#include "primitives/PrimitiveQueue.h"
+
+#include "devgui/popups/PopupKeyboard.h"
 #include "devgui/windows/WindowBase.h"
 
 enum ActorBrowseFilterType {
@@ -54,11 +57,15 @@ private:
     bool isFilterBySearch() { return mFilterType == ActorBrowseFilterType::FILTER_SEARCH; }
 
     bool mIsSaveDataInited = false;
-
+    
+    // Selected actor
     al::LiveActor* mSelectedActor = nullptr;
+    HitSensorRenderTypes mHitSensorTypes = HitSensorType_ALL;
 
+    // Filtering
     ActorBrowseFilterType mFilterType = ActorBrowseFilterType::FILTER_NONE;
     al::LiveActorGroup* mFilterActorGroup = nullptr;
+    bool mIsPrimDrawFilterGroup = false;
 
     // Favorite filter values
     int mTotalFavs = 0;

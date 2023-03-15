@@ -14,7 +14,7 @@
 #include "sead/container/seadPtrArray.h"
 #include "sead/heap/seadExpHeap.h"
 #include "sead/heap/seadHeap.h"
-#include <sead/heap/seadDisposer.h>
+#include "sead/heap/seadDisposer.h"
 
 #include "PrimitiveTypes.h"
 
@@ -53,14 +53,14 @@ public:
         auto* entry = new (mHeap) PrimitiveTypeTriangle(tri, color);
         mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
     }
+    
+    void pushHitSensor(al::LiveActor* actor, HitSensorRenderTypes sensorTypes, float opacity)
+    {   
+        auto* entry = new (mHeap) PrimitiveTypeHitSensor(actor, sensorTypes, opacity);
+        mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
+    }
 
 private:
-    void renderPoint(PrimitiveTypePoint* entry);
-    void renderLine(PrimitiveTypeLine* entry);
-    void renderAxis(PrimitiveTypeAxis* entry);
-    void renderArea(PrimitiveTypeArea* entry);
-    void renderTriangle(PrimitiveTypeTriangle* entry);
-
     void emptyQueue();
 
     sead::Heap* mHeap = nullptr;
