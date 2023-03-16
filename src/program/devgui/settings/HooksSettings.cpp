@@ -117,14 +117,24 @@ HOOK_DEFINE_TRAMPOLINE(NoDamageHook){
     }
 };
 
-HOOK_DEFINE_TRAMPOLINE(CapDivesHook) {
+HOOK_DEFINE_TRAMPOLINE(ASMSettingsHook) {
     static void Callback(StageScene *scene) {
-        patch::CodePatcher p(0x4083ac);
+        patch::CodePatcher p(0x000000);
         if (DevGuiManager::instance()->getSettings()->getStateByName("Infinite Cap Bounces")) {
-            p.WriteInst(0x52800028); // MOV 28, 1
+            p.Seek(0x4083ac);
+            p.WriteInst(0x52800028); // MOV W8, 1
         }
         else{
+            p.Seek(0x4083ac);
             p.WriteInst(0x3940E108);  // LDRB W8, [X8, #0x38]
+        }
+        if(DevGuiManager::instance()->getSettings()->getStateByName("Infinite Rainbow Spins")) {
+            p.Seek(0x458cb8);
+            p.WriteInst(0x52800029); // MOV W8, 1
+        }
+        else{
+            p.Seek(0x458cb8);
+            p.WriteInst(0x3940E508);  // LDRB W8, [X8, #0x39]
         }
         Orig(scene);
     }
@@ -139,5 +149,5 @@ void exlSetupSettingsHooks()
     GreyShineRefreshHook::InstallAtSymbol("_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo");
     ButtonMotionRollHook::InstallAtSymbol("_ZNK23PlayerJudgeStartRolling21isTriggerRestartSwingEv");
     NoDamageHook::InstallAtSymbol("_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter");
-    CapDivesHook::InstallAtSymbol("_ZN10StageScene7controlEv"); // random symbol to update code patches every frame
+    ASMSettingsHook::InstallAtSymbol("_ZN10StageScene7controlEv"); // random symbol to update code patches every frame
 }

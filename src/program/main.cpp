@@ -223,6 +223,19 @@ HOOK_DEFINE_TRAMPOLINE(UpdateLunaKit) {
     }
 };
 
+HOOK_DEFINE_TRAMPOLINE(RainbowSpinsHook) {
+    static void Callback(PlayerActorHakoniwa *player) {
+        /*patch::CodePatcher p(0x4083ac);
+        if (DevGuiManager::instance()->getSettings()->getStateByName("Infinite Cap Bounces")) {
+            p.WriteInst(0x52800028); // MOV W8, 1
+        }
+        else{
+            p.WriteInst(0x3940E108);  // LDRB W8, [X8, #0x38]
+        }*/
+        Orig(player);
+    }
+};
+
 extern "C" void exl_main(void *x0, void *x1) {
     /* Setup hooking enviroment. */
     // envSetOwnProcessHandle(exl::util::proc_handle::Get());
