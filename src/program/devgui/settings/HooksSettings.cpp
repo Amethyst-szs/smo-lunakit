@@ -136,6 +136,14 @@ HOOK_DEFINE_TRAMPOLINE(ASMSettingsHook) {
             p.Seek(0x458cb8);
             p.WriteInst(0x3940E508);  // LDRB W8, [X8, #0x39]
         }
+        if(DevGuiManager::instance()->getSettings()->getStateByName("Cap Bounce after Wall Jump")) {
+            p.Seek(0x407f2c);
+            p.WriteInst(0x2A1F03E8); // MOV W8, WZR
+        }
+        else{
+            p.Seek(0x407f2c);
+            p.WriteInst(0x39400108);  // LDRB W8, [X8]
+        }
         Orig(scene);
     }
 };

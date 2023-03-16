@@ -18,6 +18,7 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
     registerNewSetting(false, true, "No Damage");
     registerNewSetting(false, true, "Infinite Cap Bounces");
     registerNewSetting(false, true, "Infinite Rainbow Spins");
+    registerNewSetting(false, true, "Cap Bounce after Wall Jump");
     registerNewSetting(false, true, "Always Allow Checkpoints");
     registerNewSetting(true, true, "Autosave");
     registerNewSetting(true, true, "Display HUD");
