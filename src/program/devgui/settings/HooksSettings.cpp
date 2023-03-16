@@ -1,4 +1,8 @@
 #include "HooksSettings.h"
+#include "logger/Logger.hpp"
+namespace patch = exl::patch;
+namespace inst = exl::armv8::inst;
+namespace reg = exl::armv8::reg;
 
 HOOK_DEFINE_TRAMPOLINE(ControlHook) {
     static void Callback(StageScene *scene) {
@@ -113,18 +117,18 @@ HOOK_DEFINE_TRAMPOLINE(NoDamageHook){
     }
 };
 
-// failed attempt at making infinite cap bounces (MrKatzenGaming)
-/*HOOK_DEFINE_TRAMPOLINE(CapDivesHook) {
-    static void Callback() {
+HOOK_DEFINE_TRAMPOLINE(CapDivesHook) {
+    static void Callback(StageScene *scene) {
         patch::CodePatcher p(0x4083ac);
         if (DevGuiManager::instance()->getSettings()->getStateByName("Infinite Cap Bounces")) {
-            p.WriteInst(inst::Movk(reg::W8, 1));
+            p.WriteInst(0x52800028); // MOV 28, 1
         }
         else{
-            p.WriteInst(("LDRB reg::W8, reg::X8, 0x37"));  
+            p.WriteInst(0x3940E108);  // LDRB W8, [X8, #0x38]
         }
+        Orig(scene);
     }
-};*/
+};
 
 void exlSetupSettingsHooks()
 {
@@ -135,5 +139,5 @@ void exlSetupSettingsHooks()
     GreyShineRefreshHook::InstallAtSymbol("_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo");
     ButtonMotionRollHook::InstallAtSymbol("_ZNK23PlayerJudgeStartRolling21isTriggerRestartSwingEv");
     NoDamageHook::InstallAtSymbol("_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter");
-    //CapDivesHook::InstallAtOffset(0x4083AC);
+    CapDivesHook::InstallAtSymbol("_ZN10StageScene7controlEv"); // random symbol to update code patches every frame
 }
