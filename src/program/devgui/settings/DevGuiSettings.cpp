@@ -13,6 +13,7 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
     mSettings.allocBuffer(0x20, parent->getHeap());
 
     registerNewSetting(false, false, "Noclip");
+    registerNewSetting(false, false, "Turn Off Collision");
     registerNewSetting(false, true, "Button Motion Roll");
     registerNewSetting(false, true, "Grey Moon Refresh");
     registerNewSetting(false, true, "No Damage");
