@@ -1,6 +1,8 @@
 #include "InputHelper.h"
 #include "diag/assert.hpp"
 
+#include "devgui/DevGuiManager.h"
+
 static const char *styleNames[] = {
         "Pro Controller",
         "Joy-Con controller in handheld mode",
@@ -75,6 +77,9 @@ void InputHelper::updatePadState() {
     if (isHoldR() && isHoldZR() && isPressZL()) {
         toggleInput = !toggleInput;
     }
+
+    if (!DevGuiManager::instance()->isMenuActive())
+        toggleInput = false;
 }
 
 bool InputHelper::tryGetContState(nn::hid::NpadBaseState *state, ulong port) {

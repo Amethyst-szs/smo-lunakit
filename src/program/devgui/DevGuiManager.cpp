@@ -67,7 +67,7 @@ void DevGuiManager::init(sead::Heap* heap)
 void DevGuiManager::update()
 {
     // Check for enabling and disabling the window
-    if (al::isPadHoldR(-1) && al::isPadHoldZR(-1) && al::isPadTriggerL(-1)) {
+    if (InputHelper::isHoldR() && InputHelper::isHoldZR() && InputHelper::isPressL()) {
         mIsActive = !mIsActive;
         if (mIsActive)
             mIsFirstStep = true;
