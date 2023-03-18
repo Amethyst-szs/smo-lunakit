@@ -8,6 +8,7 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 ## Features:
 - Custom in-game GUI built on [Dear ImGui](https://github.com/ocornut/imgui)
 - View and edit large amounts of game info
+- Browse, search, favorite, and manipulate every object in a stage
 - Many game settings and cheats for players and developers alike
 - Primitive Rendering to visually draw additonal game info
 - Extremely fast stage warping, including custom stages using [Custom Stage plugins](https://github.com/Amethyst-szs/smo-lunakit/wiki)
@@ -18,14 +19,16 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 
 ## How to use:
 ### Controls:
-- Open the interface by holding ZR + R and tapping L
-- Hide windows by pressing L-Stick
-
-- Mouse controls
+- Open the interface by holding ZR + R and tapping L  
+- Hide windows by pressing L-Stick  
+- Mouse controls (RECOMMENDED)
   - Navigate interface with a mouse
   - Connect mouse to switch via USB
-- Controller controls
-  - Not yet supported! Check back soon!
+- Controller controls (NOT RECOMMENDED)
+  - Activate or deactivate controller mode by holding ZR + R and tapping ZL
+  - Navigate window with D-Pad
+  - Interact with windows using A or B
+  - Change windows by holding Y and using shoulder buttons
 
 ### Building:
 - Requires running Linux (Ubuntu recommended)
