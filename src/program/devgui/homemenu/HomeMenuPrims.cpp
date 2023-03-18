@@ -154,7 +154,7 @@ void HomeMenuPrims::renderHitSensorCategory(al::Scene* scene, PrimitiveQueue* qu
 
     for(int i = 1; i < mSettings->getTotalSettingsInCat(PrimMenuCat_HITSENSOR); i++) {
         bool isEntryEnabled = mSettings->getSettingEntryInCat(i, PrimMenuCat_HITSENSOR)->isTrue();
-        hitSensorTypes |= isEntryEnabled << i - 1;
+        hitSensorTypes |= isEntryEnabled << (i - 1);
     }
 
     HitSensorRenderTypes hitSensorTypesEnum = (HitSensorRenderTypes)hitSensorTypes;
