@@ -6,7 +6,16 @@ namespace reg = exl::armv8::reg;
 
 HOOK_DEFINE_TRAMPOLINE(ControlHook) {
     static void Callback(StageScene *scene) {
+        PlayerActorHakoniwa* player = tryGetPlayerActorHakoniwa(scene);
         DevGuiSettings* set = DevGuiManager::instance()->getSettings();
+
+        if(player && set->getStateByName("Infinite Cap Bounce")) {
+            player->mHackCap->mCapActionHistory->clearCapJump();
+            player->mHackCap->mCapActionHistory->clearWallAirLimit();
+        }
+
+        if(player && set->getStateByName("Clear Wall Jump Limits"))
+            player->mPlayerWallActionHistory->reset();
 
         if(!set->getStateByName("Display HUD") && scene->mSceneLayout->isWait()) {
             scene->mSceneLayout->end();
@@ -27,18 +36,11 @@ HOOK_DEFINE_TRAMPOLINE(ControlHook) {
 HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
     static void Callback(PlayerActorHakoniwa *player) {
         bool isNoclip = DevGuiManager::instance()->getSettings()->getStateByName("Noclip");
-        bool noCollide = DevGuiManager::instance()->getSettings()->getStateByName("Turn Off Collision");
 
-        if (noCollide) {
-            al::offCollide(player);
-        } else if(!rs::isActiveDemo(player)) {
-            al::onCollide(player);
-        }
-
-        if(!isNoclip && !rs::isActiveDemo(player) && !noCollide)
+        if(!isNoclip && !rs::isActiveDemo(player))
             al::onCollide(player);
 
-        if(!isNoclip && !noCollide) {
+        if(!isNoclip) {
             Orig(player);
             return;
         }
@@ -80,6 +82,7 @@ HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
                 if (al::isPadHoldB(-1)) playerPos->y += (vspeed + speedGain / 6);
             }
         }
+
         Orig(player);
     }
 };
@@ -103,7 +106,7 @@ HOOK_DEFINE_TRAMPOLINE(CheckpointWarpHook) {
 };
 HOOK_DEFINE_TRAMPOLINE(GreyShineRefreshHook) {
     static bool Callback(GameDataHolderWriter writer, ShineInfo const* shineInfo) {
-        if (DevGuiManager::instance()->getSettings()->getStateByName("Grey Moon Refresh"))
+        if (DevGuiManager::instance()->getSettings()->getStateByName("Moon Refresh"))
             return false;
 
         return Orig(writer, shineInfo);
@@ -125,37 +128,6 @@ HOOK_DEFINE_TRAMPOLINE(NoDamageHook){
     }
 };
 
-HOOK_DEFINE_TRAMPOLINE(ASMSettingsHook) {
-    static void Callback(StageScene *scene) {
-        patch::CodePatcher p(0x000000);
-        if (DevGuiManager::instance()->getSettings()->getStateByName("Infinite Cap Bounces")) {
-            p.Seek(0x4083ac);
-            p.WriteInst(0x52800028); // MOV W8, 1
-        }
-        else{
-            p.Seek(0x4083ac);
-            p.WriteInst(0x3940E108);  // LDRB W8, [X8, #0x38]
-        }
-        if(DevGuiManager::instance()->getSettings()->getStateByName("Infinite Rainbow Spins")) {
-            p.Seek(0x458cb8);
-            p.WriteInst(0x52800029); // MOV W8, 1
-        }
-        else{
-            p.Seek(0x458cb8);
-            p.WriteInst(0x3940E508);  // LDRB W8, [X8, #0x39]
-        }
-        if(DevGuiManager::instance()->getSettings()->getStateByName("Cap Bounce after Wall Jump")) {
-            p.Seek(0x407f2c);
-            p.WriteInst(0x2A1F03E8); // MOV W8, WZR
-        }
-        else{
-            p.Seek(0x407f2c);
-            p.WriteInst(0x39400108);  // LDRB W8, [X8]
-        }
-        Orig(scene);
-    }
-};
-
 void exlSetupSettingsHooks()
 {
     ControlHook::InstallAtSymbol("_ZN10StageScene7controlEv");
@@ -165,5 +137,4 @@ void exlSetupSettingsHooks()
     GreyShineRefreshHook::InstallAtSymbol("_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo");
     ButtonMotionRollHook::InstallAtSymbol("_ZNK23PlayerJudgeStartRolling21isTriggerRestartSwingEv");
     NoDamageHook::InstallAtSymbol("_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter");
-    ASMSettingsHook::InstallAtSymbol("_ZN10StageScene7controlEv"); // random symbol to update code patches every frame
 }

@@ -13,13 +13,11 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
     mSettings.allocBuffer(0x20, parent->getHeap());
 
     registerNewSetting(false, false, "Noclip");
-    registerNewSetting(false, false, "Turn Off Collision");
-    registerNewSetting(false, true, "Button Motion Roll");
-    registerNewSetting(false, true, "Grey Moon Refresh");
     registerNewSetting(false, true, "No Damage");
-    registerNewSetting(false, true, "Infinite Cap Bounces");
-    registerNewSetting(false, true, "Infinite Rainbow Spins");
-    registerNewSetting(false, true, "Cap Bounce after Wall Jump");
+    registerNewSetting(false, true, "Infinite Cap Bounce");
+    registerNewSetting(false, true, "Clear Wall Jump Limits");
+    registerNewSetting(false, true, "Button Motion Roll");
+    registerNewSetting(false, true, "Moon Refresh");
     registerNewSetting(false, true, "Always Allow Checkpoints");
     registerNewSetting(true, true, "Autosave");
     registerNewSetting(true, true, "Display HUD");
