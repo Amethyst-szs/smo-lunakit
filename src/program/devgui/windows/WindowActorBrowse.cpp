@@ -29,8 +29,10 @@ bool WindowActorBrowse::tryUpdateWinDisplay()
         return false;
 
     al::Scene* scene = tryGetScene();
-    if (!scene)
+    if (!scene) {
+        ImGui::TextDisabled("No scene!");
         return true;
+    }
     
     if(!mIsSaveDataInited)
         getFavoritesFromSave();
@@ -133,6 +135,11 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
         sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName);
         sead::FormatFixedSafeString<0x9> buttonName("%i", i);
 
+        if(trimName.isEmpty()) {
+            ImGui::TextDisabled("Actor name not found!");
+            continue;
+        }
+
         // Draw item and favorite option
         ImGui::Selectable(trimName.cstr(), &isFavorite, 0, ImVec2((mMaxCharacters - 2) * horizFontSize, mLineSize));
         if (ImGui::IsItemHovered()) {
@@ -151,7 +158,6 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
         ImGui::SameLine();
         if (ImGui::ArrowButton(buttonName.cstr(), isFavorite ? ImGuiDir_Down : ImGuiDir_Up))
             toggleFavorite(actorName);
-
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("%s\n%i/%i Favorites", isFavorite ? "Remove Favorite" : "Favorite", mTotalFavs, mMaxFavs);
         
