@@ -1,6 +1,5 @@
-#include "devgui/DevGuiManager.h"
-
 #include "DevGuiSaveData.h"
+#include "devgui/DevGuiManager.h"
 
 void DevGuiSaveData::init(DevGuiManager* parent)
 {
@@ -57,8 +56,19 @@ void DevGuiSaveData::read()
         for(int i = 0; i < set->getTotalSettings(); i++) {
             if(!set->getSettingEntry(i)->isAllowSave())
                 continue;
-                
-            windows.tryGetBoolByKey(set->getStatePtrByIdx(i), set->getNameByIdx(i));
+            
+            sead::FormatFixedSafeString<0x5> idxName("%X", i);
+            windows.tryGetBoolByKey(set->getStatePtrByIdx(i), idxName.cstr());
+        }
+    }
+
+    if(root.isExistKey("PrimSet")) {
+        al::ByamlIter primIter = root.getIterByKey("PrimSet");
+        PrimMenuSettings* primSet = mParent->getPrimitiveSettings();
+
+        for(int i = 0; i < primSet->getTotalSettings(); i++) {
+            sead::FormatFixedSafeString<0x5> idxName("%X", i);
+            primIter.tryGetBoolByKey(primSet->getSettingEntry(i)->getValuePtr(), idxName.cstr());
         }
     }
 
@@ -121,7 +131,19 @@ nn::Result DevGuiSaveData::write()
     file.pushHash("Settings");
 
     for(int i = 0; i < set->getTotalSettings(); i++) {
-        file.addBool(set->getNameByIdx(i), set->getStateByIdx(i));
+        sead::FormatFixedSafeString<0x5> idxName("%X", i);
+        file.addBool(idxName.cstr(), set->getStateByIdx(i));
+    }
+
+    file.pop();
+
+    // Current primitive menu settings
+    PrimMenuSettings* primSet = mParent->getPrimitiveSettings();
+    file.pushHash("PrimSet");
+
+    for(int i = 0; i < primSet->getTotalSettings(); i++) {
+        sead::FormatFixedSafeString<0x5> idxName("%X", i);
+        file.addBool(idxName.cstr(), primSet->getSettingEntry(i)->isTrue());
     }
 
     file.pop();
@@ -135,7 +157,7 @@ nn::Result DevGuiSaveData::write()
         if(favName.isEmpty())
             continue;
 
-        sead::FormatFixedSafeString<0x5> idxName("%i", i);
+        sead::FormatFixedSafeString<0x5> idxName("%X", i);
         file.addString(idxName.cstr(), favName.cstr());
     }
 

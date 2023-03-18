@@ -21,20 +21,36 @@ PrimMenuSettings::PrimMenuSettings(DevGuiManager* parent)
 
     // Collision / Triangle category
     registerNewSetting(false, "Collision", PrimMenuCat_TRIANGLE, false);
-    registerNewSetting(false, "Complex Collision", PrimMenuCat_TRIANGLE, true);
 
     // Area category
     registerNewSetting(false, "Areas", PrimMenuCat_AREA, false);
     registerNewSetting(false, "DeathArea", PrimMenuCat_AREA, true);
+    registerNewSetting(false, "RecoveryArea", PrimMenuCat_AREA, true);
+    registerNewSetting(false, "CameraArea", PrimMenuCat_AREA, true);
     registerNewSetting(false, "ChangeStageArea", PrimMenuCat_AREA, true);
+    registerNewSetting(false, "WarpArea", PrimMenuCat_AREA, true);
+    registerNewSetting(false, "WorldEndBorderArea", PrimMenuCat_AREA, true);
     registerNewSetting(false, "WaterArea", PrimMenuCat_AREA, true);
     registerNewSetting(false, "2DMoveArea", PrimMenuCat_AREA, true);
+    registerNewSetting(false, "CameraArea2D", PrimMenuCat_AREA, true);
+
+    // Hit sensor category
+    registerNewSetting(false, "Draw Sensors", PrimMenuCat_HITSENSOR, false);
+    registerNewSetting(false, "Attack", PrimMenuCat_HITSENSOR, true);
+    registerNewSetting(false, "Eye", PrimMenuCat_HITSENSOR, true);
+    registerNewSetting(false, "NPC", PrimMenuCat_HITSENSOR, true);
+    registerNewSetting(false, "Trample", PrimMenuCat_HITSENSOR, true);
+    registerNewSetting(false, "Bind", PrimMenuCat_HITSENSOR, true);
+    registerNewSetting(false, "Enemy Body", PrimMenuCat_HITSENSOR, true);
+    registerNewSetting(false, "Map Obj", PrimMenuCat_HITSENSOR, true);
+    registerNewSetting(false, "Player All", PrimMenuCat_HITSENSOR, true);
+    registerNewSetting(false, "Hold Obj", PrimMenuCat_HITSENSOR, true);
+    registerNewSetting(false, "Misc", PrimMenuCat_HITSENSOR, true);
 
     Logger::log("   Completed primitive settings constructor with %i items\n", mSettings.size());
 }
 void PrimMenuSettings::registerNewSetting(bool isEnabledByDefault, const char* settingName, PrimMenuCategories category, bool dependency)
 {
-    Logger::log("   Constructing %s in cat %i\n", settingName, category);
     PrimMenuEntry* newSet = new (mParent->getHeap()) PrimMenuEntry(isEnabledByDefault, settingName, category, dependency);
     mSettings.pushBack(newSet);
 }

@@ -42,9 +42,9 @@ public:
         mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
     }
     
-    void pushArea(const char* groupName, sead::Color4f frameColor, sead::Color4f fillColor)
+    void pushArea(const char* gName, sead::Color4f frame, sead::Color4f fill)
     {   
-        auto* entry = new (mHeap) PrimitiveTypeArea(groupName, frameColor, fillColor);
+        auto* entry = new (mHeap) PrimitiveTypeArea(gName, frame, fill);
         mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
     }
     
@@ -66,5 +66,5 @@ private:
     sead::Heap* mHeap = nullptr;
     sead::PtrArray<PrimitiveTypeBase> mRenderQueue;
 
-    const int mMaxQueueSize = 0x100;
+    const int mMaxQueueSize = 0x400;
 };

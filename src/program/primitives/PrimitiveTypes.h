@@ -94,12 +94,12 @@ public:
 
 class PrimitiveTypeArea : public PrimitiveTypeBase {
 public:
-    PrimitiveTypeArea(const char* groupName, sead::Color4f frameColor, sead::Color4f fillColor)
+    PrimitiveTypeArea(const char* gName, sead::Color4f frame, sead::Color4f fill)
         : PrimitiveTypeBase(PrimitiveTypes::PRIM_AREA)
     {
-        mGroupName = groupName;
-        mFrameColor = frameColor;
-        mFillColor = fillColor;
+        mGroupName = gName;
+        mFrameColor = frame;
+        mFillColor = fill;
     }
     ~PrimitiveTypeArea() override {}
 

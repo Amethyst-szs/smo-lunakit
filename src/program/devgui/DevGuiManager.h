@@ -17,7 +17,7 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #pragma once
 
 // Current version of the application (change this if you make changes, especially changes that effect the save data!)
-#define LUNAKITVERSION "v1.0-Dev"
+#define LUNAKITVERSION "v1.0"
 
 // General includes
 #include "imgui.h"
@@ -42,7 +42,7 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #include "primitives/PrimitiveQueue.h"
 
 // All extra DevGui features included by the manager
-#include "devgui/primsettings/PrimMenuSettings.h"
+#include "devgui/settings/PrimMenuSettings.h"
 #include "devgui/savedata/DevGuiSaveData.h"
 #include "devgui/settings/DevGuiSettings.h"
 #include "devgui/theme/DevGuiTheme.h"
