@@ -6,15 +6,15 @@
 #include "game/GameData/GameDataFunction.h"
 #include "game/Player/PlayerFunction.h"
 
-#include "program/GetterUtil.h"
+#include "helpers/GetHelper.h"
 
 #include "devgui/homemenu/HomeMenuBase.h"
 
 class HomeMenuWorlds : public HomeMenuBase {
 public:
-    HomeMenuWorlds(DevGuiManager* parent, const char* menuName, sead::Heap* heap);
+    HomeMenuWorlds(DevGuiManager* parent, const char* menuName);
 
-    virtual void updateMenu();
+    virtual void updateMenuDisplay();
 
 private:
     // Please clean up this code! There has got to be a cleaner way of implementing this!

@@ -4,9 +4,7 @@
 #include "helpers/PlayerHelper.h"
 
 CategoryHealth::CategoryHealth(const char* catName, const char* catDesc, sead::Heap* heap)
-    : CategoryBase(catName, catDesc, heap)
-{
-}
+    : CategoryBase(catName, catDesc, heap) {}
 
 void CategoryHealth::updateCat()
 {

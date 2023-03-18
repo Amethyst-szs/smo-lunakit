@@ -7,12 +7,13 @@
     below by SAVEPATH
 
     Expanding the functionality of the saving system is fairly easy, but with some potential issues!
-    If you are going to edit this class, please read the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki
+    If you are going to edit this class, please read the wiki!
+    https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#save-data
 */
 
 #pragma once
 
-#define SAVEPATH "sd:/LunaKit/LKData/Save/Data.byml"
+#define SAVEPATH "sd:/LunaKit/LKData/data.byml"
 
 #include "al/byaml/ByamlIter.h"
 #include "al/byaml/writer/ByamlWriter.h"
@@ -24,19 +25,13 @@
 #include "nn/fs/fs_files.hpp"
 #include "nn/fs/fs_types.hpp"
 
-#include "sead/stream/seadRamWriteStream.h"
-#include "sead/stream/seadStream.h"
-
 #include "types.h"
 
-class DevGuiManager; // Forward declaration (include is in cpp file)
+#include "devgui/windows/WindowActorBrowse.h"
 
-// This class (DevGuiWriteStream) is not the main class! This is a custom implementation of sead::WriteStream
-// Which is passed into the al::ByamlWriter to create a buffer which is written to the save file!
-class DevGuiWriteStream : public sead::WriteStream {
-public:
-    DevGuiWriteStream(sead::RamStreamSrc* src, sead::Stream::Modes mode);
-};
+#include "DevGuiWriteStream.h"
+
+class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class DevGuiSaveData {
 public:
@@ -51,6 +46,9 @@ public:
         mSaveTimer = 4.f;
     }
 
+    void setActorBrowserFavoriteAtIdx(sead::FixedSafeString<0x40> name, int idx) { mActorBrowserFavorites[idx] = name; }
+    sead::FixedSafeString<0x40> getActorBrowserFavoriteAtIdx(int idx) { return mActorBrowserFavorites[idx]; }
+
     bool isSaveQueued() { return mIsQueueSave; }
     float getSaveQueueTime() { return mSaveTimer; }
 
@@ -63,7 +61,10 @@ private:
     sead::Heap* mHeap = nullptr;
     DevGuiManager* mParent = nullptr;
 
+    sead::FixedSafeString<0x40> mActorBrowserFavorites[MAXFAVS];
+
     sead::RamStreamSrc* mRamStream = nullptr;
     DevGuiWriteStream* mWriteStream = nullptr;
-    u8 mWorkBuf[0x500] = {}; // IMPORTANT - If you are writing a much larger amount of data, may need to expand work buffer size
+    static const uint mWorkBufSize = 0x1000;
+    u8 mWorkBuf[mWorkBufSize] = {}; // IMPORTANT - If you are writing a much larger amount of data, may need to expand work buffer size
 };

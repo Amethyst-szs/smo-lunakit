@@ -1,12 +1,5 @@
-#include "devgui/DevGuiManager.h"
-
 #include "DevGuiSaveData.h"
-
-DevGuiWriteStream::DevGuiWriteStream(sead::RamStreamSrc* src, sead::Stream::Modes mode)
-{
-    mSrc = src;
-    setMode(mode);
-}
+#include "devgui/DevGuiManager.h"
 
 void DevGuiSaveData::init(DevGuiManager* parent)
 {
@@ -63,8 +56,35 @@ void DevGuiSaveData::read()
         for(int i = 0; i < set->getTotalSettings(); i++) {
             if(!set->getSettingEntry(i)->isAllowSave())
                 continue;
-                
-            windows.tryGetBoolByKey(set->getStatePtrByIdx(i), set->getNameByIdx(i));
+            
+            sead::FormatFixedSafeString<0x5> idxName("%X", i);
+            windows.tryGetBoolByKey(set->getStatePtrByIdx(i), idxName.cstr());
+        }
+    }
+
+    if(root.isExistKey("PrimSet")) {
+        al::ByamlIter primIter = root.getIterByKey("PrimSet");
+        PrimMenuSettings* primSet = mParent->getPrimitiveSettings();
+
+        for(int i = 0; i < primSet->getTotalSettings(); i++) {
+            sead::FormatFixedSafeString<0x5> idxName("%X", i);
+            primIter.tryGetBoolByKey(primSet->getSettingEntry(i)->getValuePtr(), idxName.cstr());
+        }
+    }
+
+    if(root.isExistKey("FavActorBrowser")) {
+        al::ByamlIter favs = root.getIterByKey("FavActorBrowser");
+        for(uint i = 0; i < favs.getSize(); i++) {
+            const char* name = nullptr;
+            sead::FormatFixedSafeString<0x5> idxName("%i", i);
+
+            favs.tryGetStringByKey(&name, idxName.cstr());
+
+            if(!name)
+                continue;
+
+            sead::FormatFixedSafeString<0x40> nameString(name);
+            setActorBrowserFavoriteAtIdx(nameString, i);
         }
     }
 
@@ -111,7 +131,34 @@ nn::Result DevGuiSaveData::write()
     file.pushHash("Settings");
 
     for(int i = 0; i < set->getTotalSettings(); i++) {
-        file.addBool(set->getNameByIdx(i), set->getStateByIdx(i));
+        sead::FormatFixedSafeString<0x5> idxName("%X", i);
+        file.addBool(idxName.cstr(), set->getStateByIdx(i));
+    }
+
+    file.pop();
+
+    // Current primitive menu settings
+    PrimMenuSettings* primSet = mParent->getPrimitiveSettings();
+    file.pushHash("PrimSet");
+
+    for(int i = 0; i < primSet->getTotalSettings(); i++) {
+        sead::FormatFixedSafeString<0x5> idxName("%X", i);
+        file.addBool(idxName.cstr(), primSet->getSettingEntry(i)->isTrue());
+    }
+
+    file.pop();
+
+    // Write the Actor Browser's favorites into array
+
+    file.pushHash("FavActorBrowser");
+
+    for(int i = 0; i < MAXFAVS; i++) {
+        sead::FixedSafeString<0x40> favName = getActorBrowserFavoriteAtIdx(i);
+        if(favName.isEmpty())
+            continue;
+
+        sead::FormatFixedSafeString<0x5> idxName("%X", i);
+        file.addString(idxName.cstr(), favName.cstr());
     }
 
     file.pop();
@@ -120,7 +167,13 @@ nn::Result DevGuiSaveData::write()
     file.pop();
     file.write(mWriteStream);
 
-    nn::Result result = FsHelper::writeFileToPath(mWorkBuf, file.calcPackSize(), SAVEPATH);
+    uint size = file.calcPackSize();
+    nn::Result result = FsHelper::writeFileToPath(mWorkBuf, size, SAVEPATH);
+
+    Logger::log("Saved data to %s\n", SAVEPATH);
+
+    if(static_cast<float>(size) / static_cast<float>(mWorkBufSize) > 0.8f)
+        Logger::log("\n\n ! WARNING !\n The save file is close to the work buffer limit\n Consider increasing buffer size!\n\n");
 
     return result;
 }

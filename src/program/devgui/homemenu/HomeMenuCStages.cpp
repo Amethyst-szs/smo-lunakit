@@ -1,11 +1,11 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuCStages.h"
 
-HomeMenuCStages::HomeMenuCStages(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
-    : HomeMenuBase(parent, menuName, heap)
+HomeMenuCStages::HomeMenuCStages(DevGuiManager* parent, const char* menuName)
+    : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuCStages::updateMenu()
+void HomeMenuCStages::updateMenuDisplay()
 {
     CustomStageManager* manager = mParent->getCustomStageManager();
 

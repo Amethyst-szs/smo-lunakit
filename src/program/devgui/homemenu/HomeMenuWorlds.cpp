@@ -1,11 +1,11 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuWorlds.h"
 
-HomeMenuWorlds::HomeMenuWorlds(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
-    : HomeMenuBase(parent, menuName, heap)
+HomeMenuWorlds::HomeMenuWorlds(DevGuiManager* parent, const char* menuName)
+    : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuWorlds::updateMenu()
+void HomeMenuWorlds::updateMenuDisplay()
 {
     GameDataHolderAccessor* holder = tryGetGameDataHolderAccess();
     if(!holder) {

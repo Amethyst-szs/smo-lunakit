@@ -1,11 +1,11 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuFile.h"
 
-HomeMenuFile::HomeMenuFile(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
-    : HomeMenuBase(parent, menuName, heap)
+HomeMenuFile::HomeMenuFile(DevGuiManager* parent, const char* menuName)
+    : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuFile::updateMenu()
+void HomeMenuFile::updateMenuDisplay()
 {
     GameDataHolder* holder = tryGetGameDataHolder();
 
@@ -15,7 +15,7 @@ void HomeMenuFile::updateMenu()
     bool isSaved = SaveDataAccessFunction::isDoneSave(holder);
 
     // Quick save file loader (Maybe add custom save archive support?)
-    if(addMenu("Load (WIP)", isSaved)) {
+    if(addMenu("Load (Incomplete)", false)) {
         SaveFileIdx targetIdx = selectSaveFile(holder, true);
         
         if(targetIdx != SaveFileIdx::NONE) {

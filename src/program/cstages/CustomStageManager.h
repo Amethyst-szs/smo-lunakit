@@ -10,8 +10,8 @@
     "Stages" header at the top of the LunaKit interface. These files are read in by this class
     and allow instant warping to custom stages on a dime!
 
-    If you're looking to support LunaKit in a custom stage: https://github.com/Amethyst-szs/smo-lunakit/wiki/Custom-Stage-Support
-    If you want to modify the loader, check the docs: https://github.com/Amethyst-szs/smo-lunakit/wiki
+    If you're looking to support LunaKit in a custom stage:
+    https://github.com/Amethyst-szs/smo-lunakit/wiki/Custom-Stage-Support
 
 */
 

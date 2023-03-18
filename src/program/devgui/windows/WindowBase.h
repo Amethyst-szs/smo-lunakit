@@ -6,7 +6,7 @@
     All other windows will inherit from this class and call back to this class's functions
 
     Looking to make new windows or modify existing ones?
-    Check the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki
+    Check the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#windows
 */
 
 #pragma once
@@ -21,13 +21,40 @@
 #include "heap/seadHeap.h"
 #include "math/seadVector.h"
 
-#include "program/GetterUtil.h"
-#include "devgui/DevGuiWindowConfig.h"
+#include "helpers/GetHelper.h"
 #include "devgui/categories/CategoryBase.h"
 
 #include "logger/Logger.hpp"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
+
+/*
+    This class is used by each window to configure it's position, size, and flags (regardless of anchored or not)
+    For more information about different flags go these points in the imgui.h header
+*/
+struct DevGuiWindowConfig {
+    // Flags (Find different flag parameters in the imgui.h header)
+    ImGuiWindowFlags mWindowFlags = ImGuiWindowFlags_None;
+    ImGuiTabBarFlags mTabFlags = ImGuiTabBarFlags_None;
+    ImGuiTabItemFlags mTabItemFlags = ImGuiTabItemFlags_None;
+
+    // Default text size
+    float mFontSize = 1.5f;
+
+    // Controlled by the setupAnchor function of a window, not meant to be set otherwise
+    ImVec2 mTrans = ImVec2(0, 0);
+    ImVec2 mSize = ImVec2(100, 100);
+
+    // Constants
+    // Size of top bar, moves everything down below this point if above
+    const int mMinimumY = 25;
+
+    // Default X and Y size of window used in anchored windows on the perpendicular axis to anchor direction
+    const ImVec2 mSizeBase = ImVec2(427, 220); 
+
+    // Size of the display / resolution of screen
+    const ImVec2 mScrSize = ImVec2(1280, 720);
+};
 
 class WindowBase {
 public:
@@ -43,6 +70,14 @@ public:
     // updateWinDisplay is only called if the window is open AND the LunaKit display is active
     // If window does not have any categories, the implementation is responsible for running ImGui::End()
     virtual bool tryUpdateWinDisplay();
+
+
+    // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#categories
+    template <class T> // Template function to create and add category to list
+    void createCategory(const char* catName, const char* catDesc) {
+        T* cat = new (mHeap) T(catName, catDesc, mHeap);
+        mCategories.pushBack(cat);
+    }
     
     // Generic getter functions, can be accessed from anywhere
     // Not recommended to override unless you have a very specific goal in mind
@@ -68,7 +103,7 @@ protected:
 
     DevGuiManager* mParent;
     DevGuiWindowConfig mConfig;
-    sead::Heap* mDevGuiHeap;
+    sead::Heap* mHeap;
 
     bool mIsAnchorList = true;
     int mAnchorPages = 1;

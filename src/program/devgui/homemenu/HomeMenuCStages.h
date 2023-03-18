@@ -11,9 +11,9 @@
 
 class HomeMenuCStages : public HomeMenuBase {
 public:
-    HomeMenuCStages(DevGuiManager* parent, const char* menuName, sead::Heap* heap);
+    HomeMenuCStages(DevGuiManager* parent, const char* menuName);
 
-    virtual void updateMenu();
+    virtual void updateMenuDisplay();
 
 private:
     void drawResource(CustomStageResource* res);

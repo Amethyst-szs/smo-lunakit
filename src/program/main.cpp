@@ -1,9 +1,7 @@
 
 /*
     Looking for LunaKit code?
-    Head to program/devgui/DevGuiManager.h to get started!
-
-    This file mostly contains hooks and general ExLaunch/initalization things
+    Head to src/program/devgui/DevGuiManager.h to get started!
 */
 
 
@@ -62,9 +60,8 @@
 #include "os/os_tick.hpp"
 #include "patch/code_patcher.hpp"
 
-#include "GetterUtil.h"
+#include "helpers/GetHelper.h"
 #include "devgui/DevGuiManager.h"
-#include "devgui/DevGuiPrimitive.h"
 #include "devgui/settings/HooksSettings.h"
 
 #include <typeinfo>
@@ -74,7 +71,6 @@
 namespace patch = exl::patch;
 namespace inst = exl::armv8::inst;
 namespace reg = exl::armv8::reg;
-
 
 static const char* DBG_FONT_PATH = "ImGuiData/Font/nvn_font_jis1.ntx";
 static const char* DBG_SHADER_PATH = "ImGuiData/Font/nvn_font_shader_jis1.bin";
@@ -192,10 +188,13 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
                                                               0x100000);
         }
 
-        DevGuiManager::createInstance(curHeap);
-        DevGuiManager::instance()->init(curHeap);
+        sead::Heap* lkHeap = sead::ExpHeap::create(256000, "LunaKitHeap", al::getStationedHeap(), 8,
+            sead::Heap::HeapDirection::cHeapDirection_Reverse, false);
 
-        DevGuiPrimitive::createInstance(curHeap);
+        Logger::instance().init(lkHeap).value;
+
+        DevGuiManager::createInstance(lkHeap);
+        DevGuiManager::instance()->init(lkHeap);
 
         sead::TextWriter::setDefaultFont(sead::DebugFontMgrJis1Nvn::instance());
 
@@ -217,17 +216,10 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
     }
 };
 
-HOOK_DEFINE_TRAMPOLINE(DrawLunaPrimitives) {
+HOOK_DEFINE_TRAMPOLINE(UpdateLunaKit) {
     static void Callback(HakoniwaSequence *thisPtr) {
         Orig(thisPtr);
-
         DevGuiManager::instance()->update();
-
-        if(!DevGuiManager::instance()->isMenuActive())
-            return;
-        
-        agl::DrawContext* drawContext = thisPtr->getDrawInfo()->mDrawContext;
-        DevGuiPrimitive::instance()->draw(drawContext);
     }
 };
 
@@ -237,8 +229,6 @@ extern "C" void exl_main(void *x0, void *x1) {
     exl::hook::Initialize();
 
     nn::os::SetUserExceptionHandler(exception_handler, nullptr, 0, nullptr);
-
-    Logger::instance().init(LOGGER_IP, 3080).value;
 
     runCodePatches();
 
@@ -253,7 +243,7 @@ extern "C" void exl_main(void *x0, void *x1) {
     FileLoaderIsExistArchive::InstallAtOffset(0xA5ED74);
 
     // Debug Text Writer Drawing
-    DrawLunaPrimitives::InstallAtOffset(0x50F1D8);
+    UpdateLunaKit::InstallAtOffset(0x50F1D8);
 
     // DevGui cheats
     exlSetupSettingsHooks(); // Located in devgui/settings/HooksSettings

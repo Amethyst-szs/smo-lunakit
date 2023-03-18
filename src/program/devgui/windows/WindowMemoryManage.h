@@ -6,6 +6,8 @@
     More detailed ActorKit information can be found in the Actor Browser Window
 
     Does not use categories!
+
+    https://github.com/Amethyst-szs/smo-lunakit/wiki#memory-manager
 */
 
 #pragma once
@@ -17,7 +19,6 @@
 #include "game/System/GameSystem.h"
 #include "game/System/Application.h"
 
-#include "program/devgui/DevGuiWindowConfig.h"
 #include "program/devgui/windows/WindowBase.h"
 
 class WindowMemoryManage : public WindowBase {
@@ -27,7 +28,6 @@ public:
     bool tryUpdateWinDisplay() override;
 
 private:
-    float getHeapPercent(sead::Heap* heap);
-    void drawProgressBarPerc(float percent, const char* header);
+    void drawProgressBarPerc(sead::Heap* heap);
     void drawProgressBarFrac(int current, int max, const char* header);
 };

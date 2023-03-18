@@ -2,6 +2,7 @@
 
 #include "HackCap.h"
 #include "PlayerAnimator.h"
+#include "PlayerStainControl.h"
 #include "PlayerInput.h"
 #include "al/sensor/HitSensor.h"
 #include "PlayerColliderHakoniwa.h"
@@ -29,7 +30,7 @@ public:
     struct PlayerCarryKeeper *pCarryKeeper; // 0x48
     struct PlayerJointControlKeeper *pJoinControlKeeper; // 0x50
     struct PlayerCounterIceWater *pCounterIceWater; // 0x58
-    struct PlayerStainControl *pStainControl; // 0x60
+    PlayerStainControl *pStainControl; // 0x60
     al::FootPrintHolder *mFootPrintHolder; // 0x68
     al::HitSensor *mHitSensor; // 0x70
     struct PlayerFormSensorCollisionArranger *pSensorCollArranger; // 0x78

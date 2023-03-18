@@ -1,11 +1,11 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuWindows.h"
 
-HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
-    : HomeMenuBase(parent, menuName, heap)
+HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName)
+    : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuWindows::updateMenu()
+void HomeMenuWindows::updateMenuDisplay()
 {
     if (addMenu("Window Anchor")) {
         ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);

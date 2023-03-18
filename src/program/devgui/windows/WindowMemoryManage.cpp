@@ -6,12 +6,10 @@ WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winNam
 
 bool WindowMemoryManage::tryUpdateWinDisplay()
 {
-    bool canUpdateDisp = WindowBase::tryUpdateWinDisplay();
-
-    if(!canUpdateDisp)
+    if(!WindowBase::tryUpdateWinDisplay())
         return false;
 
-    ImGui::SetWindowFontScale(1.2f);
+    ImGui::SetWindowFontScale(1.3f);
 
     al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
     al::Scene* scene = nullptr;
@@ -35,23 +33,23 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
         ImGui::TextDisabled("Scene does not exist");
     }
 
-    drawProgressBarPerc(getHeapPercent(mDevGuiHeap), "Station/LK Heap");
+    drawProgressBarPerc(mHeap);
     if (ImGui::IsItemHovered())
-        ImGui::SetTooltip("- Stationed Heap -\nThe earliest existing heap\nLuna Kit is on this heap!");
-
-    drawProgressBarPerc(getHeapPercent(al::getSequenceHeap()), "Sequence Heap");
+        ImGui::SetTooltip("- Luna Kit Heap -\nA custom heap containing\nLunaKit and it's features");
+    
+    drawProgressBarPerc(al::getSequenceHeap());
     if (ImGui::IsItemHovered())
         ImGui::SetTooltip("- Sequence Heap -\nHolds general game info outside\nthe current stage");
 
-    drawProgressBarPerc(getHeapPercent(al::getSceneHeap()), "Scene Heap");
+    drawProgressBarPerc(al::getSceneHeap());
     if (ImGui::IsItemHovered())
         ImGui::SetTooltip("- Scene Heap -\nHolds current stage memory\n(or any other type of scene)");
 
-    drawProgressBarPerc(getHeapPercent(al::getSceneResourceHeap()), "Scene Res Heap");
+    drawProgressBarPerc(al::getSceneResourceHeap());
     if (ImGui::IsItemHovered())
         ImGui::SetTooltip("- Scene Resource Heap -\nAll resources (archives) requested\nby scene, not world loader");
 
-    drawProgressBarPerc(getHeapPercent(al::getWorldResourceHeap()), "World Res Heap");
+    drawProgressBarPerc(al::getWorldResourceHeap());
     if (ImGui::IsItemHovered())
         ImGui::SetTooltip("- World Resource Heap -\nAll resources requested by the\nWorld List for the current world");
 
@@ -60,34 +58,32 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
     return true;
 }
 
-float WindowMemoryManage::getHeapPercent(sead::Heap* heap)
+void WindowMemoryManage::drawProgressBarPerc(sead::Heap* heap)
 {
-    if(!heap)
-        return -1.f;
-
-    size_t freeSize = heap->getFreeSize();
-    size_t maxSize = heap->getSize();
-    float freeSizeF = static_cast<float>(freeSize);
-    float maxSizeF = static_cast<float>(maxSize);
-
-    return freeSizeF / maxSizeF;
-}
-
-void WindowMemoryManage::drawProgressBarPerc(float percent, const char* header)
-{
-    if(percent == -1.f) {
-        ImGui::TextDisabled("%s does not currently exist", header);
+    if(!heap) {
+        ImGui::TextDisabled("Heap does not exist at this time!");
         return;
     }
 
+    size_t maxSize = heap->getEndAddress() - heap->getStartAddress();
+    size_t freeSize = maxSize - heap->getFreeSize();
+
+    float freeSizeF = static_cast<float>(freeSize);
+    float maxSizeF = static_cast<float>(maxSize);
+    
+    float freeSizeMB = freeSizeF / 1000000.f;
+    float maxSizeMB = maxSizeF / 1000000.f;
+
+    float percent = freeSizeF / maxSizeF;
+
     ImGui::BeginGroup();
 
-    char buf[16];
-    sprintf(buf, "%.02f%%", percent * 100.f);
+    char buf[32];
+    sprintf(buf, "%.02fMB/%.02fMB %.00f%%", freeSizeMB, maxSizeMB, percent * 100.f);
     
-    ImGui::ProgressBar(percent, ImVec2(0.0f, 0.0f), buf);
+    ImGui::ProgressBar(percent, ImVec2(ImGui::GetWindowWidth() / 1.75f, 0.0f), buf);
     ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
-    ImGui::Text(header);
+    ImGui::Text(heap->getName().cstr());
 
     ImGui::EndGroup();
 }
@@ -103,7 +99,7 @@ void WindowMemoryManage::drawProgressBarFrac(int current, int max, const char* h
 
     ImGui::BeginGroup();
 
-    ImGui::ProgressBar(perc, ImVec2(0.f, 0.f), buf);
+    ImGui::ProgressBar(perc, ImVec2(ImGui::GetWindowWidth() / 1.75f, 0.f), buf);
     ImGui::SameLine(0.0f, ImGui::GetStyle().ItemInnerSpacing.x);
     ImGui::Text(header);
 

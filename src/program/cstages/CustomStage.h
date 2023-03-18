@@ -48,7 +48,7 @@ private:
 // Category of custom stages within the resource/plugin
 class CustomStageCategory {
 public:
-    CustomStageCategory(al::ByamlIter catIter);
+    CustomStageCategory(al::ByamlIter catIter, sead::Heap* heap);
 
     // Access information about the category itself
     const char* getCategoryName() { return mCatName; }
@@ -73,7 +73,7 @@ private:
 // Plugin file information, containing the different categories that exist within itself
 class CustomStageResource {
 public:
-    CustomStageResource(const char* resourcePath, const char* resourceName);
+    CustomStageResource(const char* resourcePath, const char* resourceName, sead::Heap* heap);
 
     const char* getResourceName() { return mResourceName; }
     int getResourceSize() { return mCategories.size(); }

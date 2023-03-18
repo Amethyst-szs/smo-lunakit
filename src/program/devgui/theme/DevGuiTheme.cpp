@@ -4,10 +4,13 @@
 
 void DevGuiTheme::init()
 {
+    Logger::log("Starting theme loader from %s\n", THEMEPATH);
+
     setupDirectoryInfo();
     mThemes = (al::ByamlIter*)nn::init::GetAllocator()->Allocate(sizeof(al::ByamlIter) * mEntryCount);
 
     for(int i = 0; i < mEntryCount; i++) {
+        Logger::log("   Loading theme %s\n", getFileName(i));
         sead::FormatFixedSafeString<0xff> filePath("%s%s", THEMEPATH, getFileName(i));
         FsHelper::LoadData loadData = { .path = filePath.cstr() };
 
@@ -21,7 +24,7 @@ void DevGuiTheme::init()
         }
     }
 
-    Logger::log("Loaded all theme data from %s\n", THEMEPATH);
+    Logger::log("   Loaded all theme data - Total %i\n", mEntryCount);
 }
 
 void DevGuiTheme::tryUpdateTheme()
@@ -117,8 +120,9 @@ void DevGuiTheme::tryUpdateTheme()
     style.Colors[ImGuiCol_TabUnfocusedActive]= PrimaryInteract;
     style.Colors[ImGuiCol_PlotLines]         = Highlight;
     style.Colors[ImGuiCol_PlotLinesHovered]  = HighlightInteract;
-    style.Colors[ImGuiCol_PlotHistogram]     = HighlightInteract;
-    style.Colors[ImGuiCol_PlotHistogramHovered]= HighlightInteract;
+    style.Colors[ImGuiCol_PlotHistogram]     = Highlight;
+    style.Colors[ImGuiCol_PlotHistogramHovered]= Highlight;
+    style.Colors[ImGuiCol_ModalWindowDimBg]  = ImVec4(BackgroundMain.x, BackgroundMain.y, BackgroundMain.z, 0.9f);
 
     mIsRefreshTheme = false;
     Logger::log("Setup LunaKit theme: %s\n", getThemeName());

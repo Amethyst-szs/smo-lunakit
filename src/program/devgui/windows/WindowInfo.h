@@ -4,13 +4,14 @@
 
     This window displays general information about various parts of the game
     Uses categories
+
+    https://github.com/Amethyst-szs/smo-lunakit/wiki#info-viewer
 */
 
 #pragma once
 
 #include "imgui.h"
 
-#include "program/devgui/DevGuiWindowConfig.h"
 #include "program/devgui/windows/WindowBase.h"
 
 #include "program/devgui/categories/CategoryBase.h"

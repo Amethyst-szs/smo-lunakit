@@ -1,6 +1,8 @@
 #include "InputHelper.h"
 #include "diag/assert.hpp"
 
+#include "devgui/DevGuiManager.h"
+
 static const char *styleNames[] = {
         "Pro Controller",
         "Joy-Con controller in handheld mode",
@@ -29,7 +31,7 @@ nn::hid::MouseState InputHelper::prevMouseState{};
 
 ulong InputHelper::selectedPort = -1;
 bool InputHelper::isReadInput = true;
-bool InputHelper::toggleInput = true;
+bool InputHelper::toggleInput = false;
 
 const char *getStyleName(nn::hid::NpadStyleSet style) {
 
@@ -72,11 +74,12 @@ void InputHelper::updatePadState() {
     prevMouseState = curMouseState;
     nn::hid::GetMouseState(&curMouseState);
 
-    // if (isHoldZL() && isPressZR()) {
-    //     toggleInput = !toggleInput;
-    // }
+    if (isHoldR() && isHoldZR() && isPressZL()) {
+        toggleInput = !toggleInput;
+    }
 
-    toggleInput = false;
+    if (!DevGuiManager::instance()->isMenuActive())
+        toggleInput = false;
 }
 
 bool InputHelper::tryGetContState(nn::hid::NpadBaseState *state, ulong port) {

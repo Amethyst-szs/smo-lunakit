@@ -1,16 +1,3 @@
-/*
-    --- Welcome to LunaKit! ---
-This is the LunaKit Manager, the manager class that controls everything in LunaKit
-
-Help:
-    - Head to the wiki at https://github.com/Amethyst-szs/smo-lunakit/wiki if you are:
-    - Using LunaKit as a general user
-    - Looking to make custom themes, add your custom stages, or other general plugin type features
-    - Add new features to LunaKit
-    - Edit features or fix bugs
-    - Or anything else you want to use LunaKit for!
-*/
-
 #include "program/devgui/DevGuiManager.h"
 
 // This class is a singleton! It does not have a typical constructor
@@ -20,65 +7,59 @@ SEAD_SINGLETON_DISPOSER_IMPL(DevGuiManager)
 DevGuiManager::DevGuiManager() = default;
 DevGuiManager::~DevGuiManager() = default;
 
+void DevGuiManager::createElements()
+{
+    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
+    
+    // Create all display windows
+    createWindow<WindowMemoryManage>("Memory Manager", true, true, 1);
+    createWindow<WindowEditor>("Param Editor", true, true, 1);
+    createWindow<WindowInfo>("Info Viewer", true, true, 1);
+    createWindow<WindowActorBrowse>("Actor Browser", false, true, 2);
+    createWindow<WindowFPS>("FPS Window", true, false, 1);
+
+    // Create all home menu tabs
+    createHomeMenuItem<HomeMenuFile>("File");
+    createHomeMenuItem<HomeMenuSettings>("Settings");
+    createHomeMenuItem<HomeMenuWindows>("Windows");
+    createHomeMenuItem<HomeMenuPrims>("Prims");
+    createHomeMenuItem<HomeMenuWorlds>("Kingdoms");
+    createHomeMenuItem<HomeMenuCStages>("Stages");
+    createHomeMenuItem<HomeMenuExtra>("Extras");
+
+    // Create each popup window
+    mPopupKeyboard = new PopupKeyboard();
+}
+
 void DevGuiManager::init(sead::Heap* heap)
 {
     Logger::log("Initing DevGuiManager... (Version: %s)\n", LUNAKITVERSION);
     
     // Sets the DevGuiHeap to the heap passed in as an arg, along with setting the current scope to the heap
-    mDevGuiHeap = heap;
+    mHeap = heap;
     sead::ScopedCurrentHeapSetter heapSetter(heap);
 
     // Allocate 0x10 (16) slots for windows and tabs at the top
     // Please don't increase these unless you REALLY need more space for some ungodly reason
-    mWindows.allocBuffer(0x10, mDevGuiHeap);
-    mHomeMenuTabs.allocBuffer(0x10, mDevGuiHeap);
+    mWindows.allocBuffer(0x10, heap);
+    mHomeMenuTabs.allocBuffer(0x10, heap);
 
-    // Creates the settings class, accessed by various functions and set by HomeMenuSettings
-    mSettings = new DevGuiSettings(this, heap);
+    mSettings = new DevGuiSettings(this); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#settings
 
-    // Creates a theme class and loads in the themes from the SD card themes folder
-    mTheme = new DevGuiTheme(this);
+    mCustomList = new CustomStageManager(); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Custom-Stage-Support
+    mCustomList->init(heap);
+
+    mPrimQueue = new PrimitiveQueue(heap); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#primitives
+    mPrimitiveSettings = new PrimMenuSettings(this);
+
+    mTheme = new DevGuiTheme(this); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#themes
     mTheme->init();
 
-    // Creates the custom stage manager and loads in the custom stage information from the SD card CustomStages folder
-    mCustomList = new CustomStageManager();
-    mCustomList->init(heap);
-    
-    // Create all display windows
-
-    WindowMemoryManage* memWindow = new WindowMemoryManage(this, "LunaKit Memory Manager", true, true, 1);
-    mWindows.pushBack(memWindow);
-
-    WindowEditor* editorWindow = new WindowEditor(this, "LunaKit Param Editor", true, true, 1);
-    mWindows.pushBack(editorWindow);
-
-    WindowInfo* infoWindow = new WindowInfo(this, "LunaKit Info Viewer", true, true, 1);
-    mWindows.pushBack(infoWindow);
-
-    WindowFPS* fpsWindow = new WindowFPS(this, "FPS Window", true, false, 1);
-    mWindows.pushBack(fpsWindow);
-
-    // Create all home menu tabs
-    HomeMenuFile* homeFile = new HomeMenuFile(this, "File", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeFile);
-
-    HomeMenuSettings* homeSetting = new HomeMenuSettings(this, "Settings", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeSetting);
-
-    HomeMenuWindows* homeWindows = new HomeMenuWindows(this, "Windows", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeWindows);
-
-    HomeMenuWorlds* homeWorld = new HomeMenuWorlds(this, "Kingdoms", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeWorld);
-
-    HomeMenuCStages* homeCStages = new HomeMenuCStages(this, "Stages", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeCStages);
-
-    HomeMenuExtra* homeExtra = new HomeMenuExtra(this, "Extras", mDevGuiHeap);
-    mHomeMenuTabs.pushBack(homeExtra);
+    // Create all windows and home menu items
+    createElements();
 
     // Load and read save data if it already exists
-    mSaveData = new DevGuiSaveData(heap);
+    mSaveData = new DevGuiSaveData(heap); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#save-data
     mSaveData->init(this);
     mSaveData->read();
 }
@@ -86,15 +67,18 @@ void DevGuiManager::init(sead::Heap* heap)
 void DevGuiManager::update()
 {
     // Check for enabling and disabling the window
-    if (al::isPadHoldR(-1) && al::isPadHoldZR(-1) && al::isPadTriggerL(-1)) {
+    if (InputHelper::isHoldR() && InputHelper::isHoldZR() && InputHelper::isPressL()) {
         mIsActive = !mIsActive;
         if (mIsActive)
             mIsFirstStep = true;
+
+        Logger::log("Active state %s\n", mIsActive ? "enabled" : "disabled");
     }
 
     // Toggle display/hide of all anchored windows
     if(mIsActive && al::isPadTriggerPressLeftStick(-1)) {
         mIsDisplayAnchorWindows = !mIsDisplayAnchorWindows;
+        Logger::log("Anchored window display %s\n", mIsDisplayAnchorWindows ? "enabled" : "disabled");
     }
 
     // This is run every frame, only actually saves if a save is queued and the timer hits zero
@@ -105,6 +89,15 @@ void DevGuiManager::update()
         auto* entry = mWindows.at(i);
         entry->updateWin();
     }
+
+    // Note: Each home menu item's update function runs even with the menu closed/inactive!
+    for (int i = 0; i < mHomeMenuTabs.size(); i++) {
+        auto* entry = mHomeMenuTabs.at(i);
+        entry->updateMenu();
+    }
+
+    // Primitive renderering queue is drawn at this time
+    mPrimQueue->render();
 }
 
 void DevGuiManager::updateDisplay()
@@ -119,6 +112,8 @@ void DevGuiManager::updateDisplay()
     int totalAnchorWin = calcTotalAnchoredWindows();
     int curAnchorWin = 0;
 
+    mPopupKeyboard->update();
+
     mTheme->tryUpdateTheme();
 
     for (int i = 0; i < mWindows.size(); i++) {
@@ -129,6 +124,7 @@ void DevGuiManager::updateDisplay()
         ImGui::Begin(entry->getWindowName(), entry->getCloseInteractionPtr(), entry->getWindowConfig()->mWindowFlags);
 
         if(mIsAnchorChange) {
+            Logger::log("Anchor calc %s - Size: %i - Page %i/%i\n", entry->getWindowName(), entry->getAnchorPages(), curAnchorWin, totalAnchorWin);
             entry->setupAnchor(totalAnchorWin, curAnchorWin);
             curAnchorWin += entry->getAnchorPages();
         }
@@ -147,19 +143,22 @@ void DevGuiManager::updateDisplay()
         for (int i = 0; i < mHomeMenuTabs.size(); i++) {
             auto* entry = mHomeMenuTabs.at(i);
             if (ImGui::BeginMenu(entry->getMenuName())) {
-                entry->updateMenu();
+                entry->updateMenuDisplay();
 
                 ImGui::EndMenu();
             }
         }
 
         if(mSaveData->isSaveQueued()) {
-            sead::FormatFixedSafeString<0x20> display("   Saving Preferences... %.00fs", mSaveData->getSaveQueueTime());
+            sead::FormatFixedSafeString<0x20> display("  Save %.00fs", mSaveData->getSaveQueueTime());
             if(ImGui::BeginMenu(display.cstr(), false))
                 ImGui::EndMenu();
         }
 
-        if(!mIsDisplayAnchorWindows && ImGui::BeginMenu("   Hidden! (Press L-Stick)", false))
+        if(!mIsDisplayAnchorWindows && ImGui::BeginMenu("  Hidden! (L-Stick)", false))
+            ImGui::EndMenu();
+
+        if(InputHelper::isInputToggled() && ImGui::BeginMenu("  Controller (R+ZR+ZL)", false))
             ImGui::EndMenu();
 
         ImGui::EndMainMenuBar();
@@ -183,56 +182,18 @@ void DevGuiManager::updateCursorState()
         ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
 }
 
-void DevGuiManager::updateNoclip()
+template <class T>
+void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
 {
-    PlayerActorBase* player = tryGetPlayerActor();
+    T* window = new (mHeap) T(this, winName, isActiveByDefault, isAnchor, windowPages);
+    mWindows.pushBack(window);
+}
 
-    if(!player)
-        return;
-    
-    bool isNoclip = mSettings->getStateByName("Noclip");
-
-    if(!isNoclip && !rs::isActiveDemo(player))
-        al::onCollide(player);
-
-    if(!isNoclip)
-        return;
-
-    static float speed = 25.0f;
-    static float speedMax = 150.0f;
-    static float vspeed = 20.0f;
-    static float speedGain = 0.0f;
-
-    sead::Vector3f *playerPos = al::getTransPtr(player);
-    sead::Vector3f *cameraPos = al::getCameraPos(player, 0);
-    sead::Vector2f *leftStick = al::getLeftStick(-1);
-
-    // Its better to do this here because loading zones reset this.
-    al::offCollide(player);
-    al::setVelocityZero(player);
-
-    // Mario slightly goes down even when velocity is 0. This is a hacky fix for that.
-    playerPos->y += 1.4553f;
-
-    float d = sqrt(al::powerIn(playerPos->x - cameraPos->x, 2) + (al::powerIn(playerPos->z - cameraPos->z, 2)));
-    float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos->x);
-    float vz = ((speed + speedGain) / d) * (playerPos->z - cameraPos->z);
-
-    if (!al::isPadHoldZR(-1)) {
-        playerPos->x -= leftStick->x * vz;
-        playerPos->z += leftStick->x * vx;
-
-        playerPos->x += leftStick->y * vx;
-        playerPos->z += leftStick->y * vz;
-
-        if (al::isPadHoldX(-1)) speedGain -= 0.5f;
-        if (al::isPadHoldY(-1)) speedGain += 0.5f;
-        if (speedGain <= 0.0f) speedGain = 0.0f;
-        if (speedGain >= speedMax) speedGain = speedMax;
-
-        if (al::isPadHoldZL(-1) || al::isPadHoldA(-1)) playerPos->y -= (vspeed + speedGain / 6);
-        if (al::isPadHoldB(-1)) playerPos->y += (vspeed + speedGain / 6);
-    }
+template <class T>
+void DevGuiManager::createHomeMenuItem(const char* menuName)
+{
+    T* home = new (mHeap) T(this, menuName);
+    mHomeMenuTabs.pushBack(home);
 }
 
 int DevGuiManager::calcTotalAnchoredWindows()

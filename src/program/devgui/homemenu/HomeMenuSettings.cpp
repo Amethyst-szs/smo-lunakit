@@ -1,11 +1,11 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuSettings.h"
 
-HomeMenuSettings::HomeMenuSettings(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
-    : HomeMenuBase(parent, menuName, heap)
+HomeMenuSettings::HomeMenuSettings(DevGuiManager* parent, const char* menuName)
+    : HomeMenuBase(parent, menuName)
 {}
 
-void HomeMenuSettings::updateMenu()
+void HomeMenuSettings::updateMenuDisplay()
 {
     DevGuiSettings* set = mParent->getSettings();
 

@@ -114,6 +114,8 @@ namespace al {
 
     void setQuat(al::LiveActor *, const sead::Quatf &);
 
+    void updatePoseQuat(al::LiveActor*, sead::Quatf const&);
+
     void setVelocityZero(al::LiveActor *);
 
     void setEffectParticleScale(al::IUseEffectKeeper *actor, char const *effectName, float scale);

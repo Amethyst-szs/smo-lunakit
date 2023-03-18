@@ -1,11 +1,24 @@
+/*
+    - LunaKit Category System -
+
+    Categories exist as a way to simplify and seperate out your window's code into different tabs!
+    For more information, read the docs:
+    
+    https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#categories
+*/
+
 #pragma once
 
 #include "imgui.h"
 
+#include "al/util.hpp"
+
 #include "heap/seadDisposer.h"
 #include "heap/seadHeap.h"
 
-#include "program/GetterUtil.h"
+#include "helpers/GetHelper.h"
+
+#include "logger/Logger.hpp"
 
 class CategoryBase {
 public:
@@ -17,8 +30,8 @@ public:
     virtual const char* getCategoryName() { return mCatName; };
 
 protected:
+    sead::Heap* mHeap = nullptr;
+    
     const char* mCatName = nullptr;
     const char* mCatDesc = nullptr;
-
-    sead::Heap* mDevGuiHeap = nullptr;
 };

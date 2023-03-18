@@ -9,10 +9,6 @@ endif ()
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD 23)
 
-if (LOGGER_IP)
-  add_compile_definitions(LOGGER_IP="${LOGGER_IP}")
-endif ()
-
 ## Title Id
 set(TITLE_ID 0100000000010000)
 set(CONFIG_TITLE_ID 0x${TITLE_ID})
@@ -56,12 +52,12 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/module/subsdk9.specs.template ${CMAKE
 add_nso_target_subsdk(subsdk9)
 set_target_properties(subsdk9 PROPERTIES CONFIG_JSON "${CMAKE_CURRENT_BINARY_DIR}/subsdk9.json")
 __generate_npdm(subsdk9)
-set_target_properties(subsdk9 PROPERTIES LINK_FLAGS "-specs ${CMAKE_BINARY_DIR}/subsdk9.specs -g3 ${ARCH} -nostartfiles")
+set_target_properties(subsdk9 PROPERTIES LINK_FLAGS "-specs ${CMAKE_BINARY_DIR}/subsdk9.specs -g3 ${ARCH} -nostartfiles -nostdlib")
 
 add_custom_target(subsdk9_meta DEPENDS create_npdm subsdk9_nso)
 if (FTP_IP)
   ## Upload to target switch
-  add_custom_command(TARGET subsdk9_meta POST_BUILD COMMAND ncftpput -u crafty -p boss -P 5000 ${FTP_IP} /atmosphere/contents/${TITLE_ID}/exefs ${CMAKE_BINARY_DIR}/main.npdm ${CMAKE_BINARY_DIR}/subsdk9)
+  add_custom_command(TARGET subsdk9_meta POST_BUILD COMMAND ncftpput -u crafty -p boss -P 5000 ${FTP_IP} atmosphere/contents/${TITLE_ID}/exefs ${CMAKE_BINARY_DIR}/main.npdm ${CMAKE_BINARY_DIR}/subsdk9)
 endif()
 
 if(RYU_PATH)

@@ -19,9 +19,9 @@ enum SaveFileIdx {
 
 class HomeMenuFile : public HomeMenuBase {
 public:
-    HomeMenuFile(DevGuiManager* parent, const char* menuName, sead::Heap* heap);
+    HomeMenuFile(DevGuiManager* parent, const char* menuName);
 
-    virtual void updateMenu();
+    virtual void updateMenuDisplay();
 
 private:
     SaveFileIdx selectSaveFile(GameDataHolder* holder, bool isAllowCurrentSave);

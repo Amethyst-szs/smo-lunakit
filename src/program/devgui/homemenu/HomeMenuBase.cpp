@@ -1,16 +1,14 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuBase.h"
 
-HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName, sead::Heap* heap)
+HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName)
 {
-    mParent = parent;
-    mMenuName = menuName;
-    mDevGuiHeap = heap;
-}
+    Logger::log("Constructing HomeMenu: %s\n", menuName);
 
-void HomeMenuBase::updateMenu()
-{
-    // Run code here, the base class has no code run here
+    mParent = parent;
+    mHeap = parent->getHeap();
+    
+    mMenuName = menuName;
 }
 
 bool HomeMenuBase::addMenu(const char* name, bool enabled)

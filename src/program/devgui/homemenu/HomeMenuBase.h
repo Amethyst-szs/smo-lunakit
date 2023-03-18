@@ -6,12 +6,14 @@
     Every other HomeMenu class inherits from this class
 
     If you're looking to modify these menus or create new ones:
-    Read the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki
+    Read the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#home-bar-items
 */
 
 #pragma once
 
 #include "imgui.h"
+
+#include "al/util.hpp"
 
 #include "container/seadPtrArray.h"
 #include "heap/seadDisposer.h"
@@ -21,10 +23,10 @@ class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class HomeMenuBase {
 public:
-    HomeMenuBase(DevGuiManager* parent, const char* menuName, sead::Heap* heap);
+    HomeMenuBase(DevGuiManager* parent, const char* menuName);
 
-    virtual void updateMenu(); // Called whenever this menu is open
-    // Unlike categories, these don't have a seperation between run and display since code is triggered once on input (or sets flags)
+    virtual void updateMenu() {} // Called every frame regardless of if the menu is currently open
+    virtual void updateMenuDisplay() = 0; // Called whenever this menu is opened
 
     virtual const char* getMenuName() { return mMenuName; };
 
@@ -34,7 +36,7 @@ protected:
     virtual bool addMenu(const char* name, bool enabled = true);
 
     DevGuiManager* mParent = nullptr;
-    sead::Heap* mDevGuiHeap = nullptr;
+    sead::Heap* mHeap = nullptr;
 
     const char* mMenuName = nullptr;
 };

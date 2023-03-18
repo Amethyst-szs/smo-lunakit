@@ -8,6 +8,7 @@ WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, bool isActiveBy
 {
     mConfig.mSize = ImVec2(400, 70);
 
+    mConfig.mWindowFlags |= ImGuiWindowFlags_NoBackground;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoNav;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoDecoration;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoInputs;
@@ -15,9 +16,7 @@ WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, bool isActiveBy
 
 bool WindowFPS::tryUpdateWinDisplay()
 {
-    bool canUpdateDisp = WindowBase::tryUpdateWinDisplay();
-
-    if(!canUpdateDisp)
+    if(!WindowBase::tryUpdateWinDisplay())
         return false;
 
     float curFPS = Application::instance()->mFramework->calcFps();
