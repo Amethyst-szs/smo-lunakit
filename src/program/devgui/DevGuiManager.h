@@ -53,7 +53,6 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #include "devgui/windows/WindowInfo.h"
 #include "devgui/windows/WindowMemoryManage.h"
 #include "devgui/windows/WindowActorBrowse.h"
-#include "devgui/windows/WindowTeleport.h"
 #include "devgui/windows/WindowFPS.h"
 
 // All tabs on the bar the top of the screen
