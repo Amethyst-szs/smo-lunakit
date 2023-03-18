@@ -9,51 +9,37 @@
 
 CategorySpeed::CategorySpeed(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap)
-{
-}
+{}
 
 void CategorySpeed::updateCat()
 {
-
     // Get the player actor and check if they are dead
     PlayerActorHakoniwa* playerHak = tryGetPlayerActorHakoniwa();
     if (!playerHak)
         return;
 
-    // Override the player's speed if they exist and are alive
-    if (mIsOverride && playerHak) {
-        playerHak->mPlayerConst->mNormalMaxSpeed = mTargetSpeed;
-        if(mTargetSpeed != 14){
-            playerHak->mPlayerConst->mJumpBaseSpeedMax = mTargetSpeed + 50;
-            playerHak->mPlayerConst->mJumpMoveSpeedMax = mTargetSpeed + 50;
-            }
-        else{
-            playerHak->mPlayerConst->mJumpBaseSpeedMax = 24;
-            playerHak->mPlayerConst->mJumpMoveSpeedMax = 30;
-        }
-    }
-    else {
-        playerHak->mPlayerConst->mNormalMaxSpeed = 14;
-        playerHak->mPlayerConst->mJumpBaseSpeedMax = 24;
-        playerHak->mPlayerConst->mJumpMoveSpeedMax = 30;
-    }
+    // Reset the player's speed consts, before overriding them with new value if in use
+    playerHak->mPlayerConst->mNormalMaxSpeed = 14;
+    playerHak->mPlayerConst->mJumpBaseSpeedMax = 24;
+    playerHak->mPlayerConst->mJumpMoveSpeedMax = 30;
+
+    if (!mIsOverride)
+        return;
+
+    playerHak->mPlayerConst->mNormalMaxSpeed = mTargetSpeed;
+    playerHak->mPlayerConst->mJumpBaseSpeedMax = mTargetSpeed + 50;
+    playerHak->mPlayerConst->mJumpMoveSpeedMax = mTargetSpeed + 50;
 }
 
 void CategorySpeed::updateCatDisplay()
 {
     CategoryBase::updateCatDisplay();
-    PlayerActorHakoniwa* playerHak = tryGetPlayerActorHakoniwa();
 
-    if (ImGui::Checkbox("Edit Speed", &mIsOverride) && playerHak) {
-        mTargetSpeed = playerHak->mPlayerConst->mNormalMaxSpeed;
+    ImGui::Checkbox("Edit Speed", &mIsOverride);
 
-    }
+    if (mIsOverride)
+        ImGui::SliderFloat("Speed", &mTargetSpeed, 0.f, 100.f);
 
-    if (mIsOverride) {
-
-        ImGui::SliderInt("Speed", &mTargetSpeed, 0, 100);
-    }
-
-    if (isInStageScene() && mIsOverride && ImGui::Button("Reset Speed"))
+    if (mIsOverride && ImGui::Button("Reset Speed"))
         mTargetSpeed = 14.0f;
 }

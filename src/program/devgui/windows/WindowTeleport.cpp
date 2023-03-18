@@ -27,7 +27,6 @@ bool WindowTeleport::tryUpdateWinDisplay()
     if(!WindowBase::tryUpdateWinDisplay())
         return false;
 
-
     PlayerActorHakoniwa* player = tryGetPlayerActorHakoniwa();
 
     if(!player)

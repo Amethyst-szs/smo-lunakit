@@ -1,11 +1,5 @@
 #include "program/devgui/categories/edit/CategoryCoins.h"
 
-#include "game/Player/PlayerFunction.h"
-#include "helpers/PlayerHelper.h"
-#include "game/Player/PlayerConst.h"
-#include "game/Player/PlayerActorHakoniwa.h"
-#include "logger/Logger.hpp"
-
 
 CategoryCoins::CategoryCoins(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap)
@@ -14,34 +8,16 @@ CategoryCoins::CategoryCoins(const char* catName, const char* catDesc, sead::Hea
 
 void CategoryCoins::updateCat()
 {
-
-    PlayerActorBase* player = tryGetPlayerActor();
-
-    if (!holder && !gameSeq) {
-        GameDataHolder* holder = tryGetGameDataHolder();
-        HakoniwaSequence* gameSeq = tryGetHakoniwaSequence();
-
-
-
-        if (holder && gameSeq) {
-            file = holder->mGameDataFile;
-            scene = gameSeq->curScene;
-
-        }
-    }
-
-    // Get the player actor and check if they are dead
-    if (!player){
+    GameDataHolder* holder = tryGetGameDataHolder();
+    if(!holder)
         return;
-    }
-    // Override the player's Coins if they exist and are alive
-    if (mIsOverrideCoins && scene && player) {
-        file->mCoinCount = mTargetCoins;
-        scene->mSceneLayout->coinCounter->updateCountImmidiate();
 
-    }
-    else {
+    if (mIsOverrideCoins) {
+        holder->mGameDataFile->mCoinCount = mTargetCoins;
 
+        StageScene* scene = tryGetStageScene();
+        if(scene)
+            scene->mSceneLayout->coinCounter->updateCountImmidiate();
     }
 }
 
@@ -49,11 +25,13 @@ void CategoryCoins::updateCatDisplay()
 {
     CategoryBase::updateCatDisplay();
 
-    if (ImGui::Checkbox("Edit Coins", &mIsOverrideCoins) && file ) {
-        mTargetCoins = file->mCoinCount;
-    }
+    GameDataHolder* holder = tryGetGameDataHolder();
+    if(!holder)
+        return;
 
-// Sliders
+    if (ImGui::Checkbox("Edit Coins", &mIsOverrideCoins))
+        mTargetCoins = holder->mGameDataFile->mCoinCount;
+
     if (mIsOverrideCoins) {
         ImGui::SameLine();
         ImGui::Checkbox("Negative", &mIsExtendSlider);
@@ -63,7 +41,5 @@ void CategoryCoins::updateCatDisplay()
         ImGui::SliderInt("Coins", &mTargetCoins, mIsExtendSlider ? -9999 : 0, 9999);
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("The amount of Coins the player has");
-
-
     }
 }
