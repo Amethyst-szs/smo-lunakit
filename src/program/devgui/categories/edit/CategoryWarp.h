@@ -21,7 +21,7 @@ private:
 
     static const int mMaxSaves = 8;
     WarpSaveState mStates[mMaxSaves];
-    int mCurStateIdx = 1;
+    int mCurStateIdx = 0;
 
     bool mIsUseHotkeys = false;
 };
