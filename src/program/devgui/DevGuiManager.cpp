@@ -158,7 +158,7 @@ void DevGuiManager::updateDisplay()
         if(!mIsDisplayAnchorWindows && ImGui::BeginMenu("  Hidden! (L-Stick)", false))
             ImGui::EndMenu();
 
-        if(InputHelper::isInputToggled() && ImGui::BeginMenu("  Controller Input", false))
+        if(InputHelper::isInputToggled() && ImGui::BeginMenu("  Controller (R+ZR+ZL)", false))
             ImGui::EndMenu();
 
         ImGui::EndMainMenuBar();
