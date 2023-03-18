@@ -6,7 +6,7 @@
 #include "game/GameData/GameDataFunction.h"
 #include "game/Player/PlayerFunction.h"
 
-#include "program/GetterUtil.h"
+#include "helpers/GetHelper.h"
 
 #include "devgui/homemenu/HomeMenuBase.h"
 

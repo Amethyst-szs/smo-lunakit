@@ -21,7 +21,7 @@
 #include "heap/seadHeap.h"
 #include "math/seadVector.h"
 
-#include "program/GetterUtil.h"
+#include "helpers/GetHelper.h"
 #include "devgui/categories/CategoryBase.h"
 
 #include "logger/Logger.hpp"

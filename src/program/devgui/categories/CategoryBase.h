@@ -16,7 +16,7 @@
 #include "heap/seadDisposer.h"
 #include "heap/seadHeap.h"
 
-#include "program/GetterUtil.h"
+#include "helpers/GetHelper.h"
 
 #include "logger/Logger.hpp"
 

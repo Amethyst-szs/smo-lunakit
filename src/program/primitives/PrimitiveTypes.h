@@ -16,7 +16,7 @@
 
 #include "logger/Logger.hpp"
 
-#include "GetterUtil.h"
+#include "helpers/GetHelper.h"
 
 enum PrimitiveTypes {
     PRIM_NONE = -1,

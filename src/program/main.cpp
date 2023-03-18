@@ -60,7 +60,7 @@
 #include "os/os_tick.hpp"
 #include "patch/code_patcher.hpp"
 
-#include "GetterUtil.h"
+#include "helpers/GetHelper.h"
 #include "devgui/DevGuiManager.h"
 #include "devgui/settings/HooksSettings.h"
 
