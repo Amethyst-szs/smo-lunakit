@@ -44,22 +44,22 @@ void DevGuiManager::init(sead::Heap* heap)
     mWindows.allocBuffer(0x10, heap);
     mHomeMenuTabs.allocBuffer(0x10, heap);
 
-    mSettings = new DevGuiSettings(this);
+    mSettings = new DevGuiSettings(this); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#settings
 
-    mCustomList = new CustomStageManager();
+    mCustomList = new CustomStageManager(); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Custom-Stage-Support
     mCustomList->init(heap);
 
-    mPrimQueue = new PrimitiveQueue(heap);
+    mPrimQueue = new PrimitiveQueue(heap); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#primitives
     mPrimitiveSettings = new PrimMenuSettings(this);
 
-    mTheme = new DevGuiTheme(this);
+    mTheme = new DevGuiTheme(this); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#themes
     mTheme->init();
 
     // Create all windows and home menu items
     createElements();
 
     // Load and read save data if it already exists
-    mSaveData = new DevGuiSaveData(heap);
+    mSaveData = new DevGuiSaveData(heap); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#save-data
     mSaveData->init(this);
     mSaveData->read();
 }
@@ -150,12 +150,15 @@ void DevGuiManager::updateDisplay()
         }
 
         if(mSaveData->isSaveQueued()) {
-            sead::FormatFixedSafeString<0x20> display("   Saving... %.00fs", mSaveData->getSaveQueueTime());
+            sead::FormatFixedSafeString<0x20> display("  Save %.00fs", mSaveData->getSaveQueueTime());
             if(ImGui::BeginMenu(display.cstr(), false))
                 ImGui::EndMenu();
         }
 
-        if(!mIsDisplayAnchorWindows && ImGui::BeginMenu("   Hidden! (L-Stick)", false))
+        if(!mIsDisplayAnchorWindows && ImGui::BeginMenu("  Hidden! (L-Stick)", false))
+            ImGui::EndMenu();
+
+        if(InputHelper::isInputToggled() && ImGui::BeginMenu("  Controller Input", false))
             ImGui::EndMenu();
 
         ImGui::EndMainMenuBar();

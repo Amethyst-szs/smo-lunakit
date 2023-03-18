@@ -34,6 +34,7 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #include "heap/seadHeapMgr.h"
 
 #include "GetterUtil.h"
+#include "helpers/InputHelper.h"
 
 // Custom stage plugin support
 #include "cstages/CustomStageManager.h"
