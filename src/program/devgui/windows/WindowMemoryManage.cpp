@@ -79,7 +79,7 @@ void WindowMemoryManage::drawComplexHeapTreeItem(sead::Heap* heap)
     float percentUsed = (heap->getSize() - heap->getFreeSize()) / (float(heap->getSize()) / 100);
 
     char buf[32];
-    snprintf(buf, sizeof(buf), "%.1fMB/%.1fMB (%.1f%%)", mbUsed, mbSize, percentUsed);
+    snprintf(buf, sizeof(buf), "%.1fMB/%.1fMB %.0f%%", mbUsed, mbSize, percentUsed);
     ImGui::SameLine();
     ImGui::ProgressBar(percentUsed / 100, ImVec2(-FLT_MIN, 0), buf);
 
