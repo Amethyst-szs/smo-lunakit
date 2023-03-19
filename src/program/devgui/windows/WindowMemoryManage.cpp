@@ -10,7 +10,21 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
         return false;
 
     ImGui::SetWindowFontScale(1.3f);
+    
+    ImGui::Checkbox("Simplified Heap Viewer", &mIsSimpleView);
 
+    if(mIsSimpleView)
+        drawSimpleHeapView();
+    else
+        drawComplexHeapTreeItem(sead::HeapMgr::instance()->sRootHeaps[0]);
+
+    ImGui::SetWindowFontScale(mConfig.mFontSize);
+
+    return true;
+}
+
+void WindowMemoryManage::drawSimpleHeapView()
+{
     al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
     al::Scene* scene = nullptr;
 
@@ -52,10 +66,31 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
     drawProgressBarPerc(al::getWorldResourceHeap());
     if (ImGui::IsItemHovered())
         ImGui::SetTooltip("- World Resource Heap -\nAll resources requested by the\nWorld List for the current world");
+}
 
-    ImGui::SetWindowFontScale(mConfig.mFontSize);
+void WindowMemoryManage::drawComplexHeapTreeItem(sead::Heap* heap)
+{
+    ImGui::SetWindowFontScale(1.f);
 
-    return true;
+    bool expanded = ImGui::TreeNode(heap->getName().cstr());
+
+    float mbUsed = (heap->getSize() - heap->getFreeSize()) / 1000000.f;
+    float mbSize = heap->getSize() / 1000000.f;
+    float percentUsed = (heap->getSize() - heap->getFreeSize()) / (float(heap->getSize()) / 100);
+
+    char buf[32];
+    snprintf(buf, sizeof(buf), "%.1fMB/%.1fMB %.0f%%", mbUsed, mbSize, percentUsed);
+    ImGui::SameLine();
+    ImGui::ProgressBar(percentUsed / 100, ImVec2(-FLT_MIN, 0), buf);
+
+    if (expanded) {
+        for (sead::Heap& childRef : heap->mChildren) {
+            sead::Heap* child = &childRef;
+            if (child)
+                drawComplexHeapTreeItem(child);
+        }
+        ImGui::TreePop();
+    }
 }
 
 void WindowMemoryManage::drawProgressBarPerc(sead::Heap* heap)

@@ -28,6 +28,11 @@ public:
     bool tryUpdateWinDisplay() override;
 
 private:
+    void drawSimpleHeapView();
     void drawProgressBarPerc(sead::Heap* heap);
     void drawProgressBarFrac(int current, int max, const char* header);
+
+    void drawComplexHeapTreeItem(sead::Heap* rootHeap);
+
+    bool mIsSimpleView = true;
 };
