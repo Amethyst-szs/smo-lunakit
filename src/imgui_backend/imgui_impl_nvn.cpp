@@ -393,7 +393,13 @@ namespace ImguiNvnBackend {
         bd->cmdBuf = initInfo.cmdBuf;
         bd->isInitialized = false;
 
-        io.Fonts->AddFontDefault();
+        FsHelper::LoadData fontLoadData = {
+            .path = "sd:/LunaKit/ImGuiData/Font/SFMonoSquare-Regular.otf"
+        };
+
+        FsHelper::loadFileFromPath(fontLoadData);
+
+        io.Fonts->AddFontFromMemoryTTF(fontLoadData.buffer, fontLoadData.bufSize, 13, nullptr, io.Fonts->GetGlyphRangesJapanese());
 
         if (createShaders()) {
 

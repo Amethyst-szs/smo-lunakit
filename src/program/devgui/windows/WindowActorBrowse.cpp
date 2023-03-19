@@ -143,7 +143,7 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
         // Draw item and favorite option
         ImGui::Selectable(trimName.cstr(), &isFavorite, 0, ImVec2((mMaxCharacters - 2) * horizFontSize, mLineSize));
         if (ImGui::IsItemHovered()) {
-            ImGui::SetTooltip("%s\nClick to open actor", actorName);
+            ImGui::SetTooltip("Class: %s\nName: %s\nClick to open actor", actorName, actor->mActorName);
 
             if(actor->mPoseKeeper)
                 mParent->getPrimitiveQueue()->pushAxis(actor->mPoseKeeper->mTranslation, 400.f);
