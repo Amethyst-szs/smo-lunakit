@@ -65,6 +65,8 @@ void InputHelper::initKBM() {
 }
 
 void InputHelper::updatePadState() {
+    setIsHandheldMode();
+
     prevControllerState = curControllerState;
     tryGetContState(&curControllerState, selectedPort);
 
@@ -106,6 +108,21 @@ bool InputHelper::tryGetContState(nn::hid::NpadBaseState *state, ulong port) {
 
     return result;
 
+}
+
+void InputHelper::setIsHandheldMode()
+{
+    setPort(0);
+
+    nn::hid::NpadStyleSet style = nn::hid::GetNpadStyleSet(0); // Gets player 1's controller style
+    // If no controller is connected in port 0, migrate selected port to handheld 0x20
+
+    if(style.isBitSet(nn::hid::NpadStyleTag::NpadStyleFullKey)) return;
+    if(style.isBitSet(nn::hid::NpadStyleTag::NpadStyleJoyDual)) return;
+    if(style.isBitSet(nn::hid::NpadStyleTag::NpadStyleJoyLeft)) return;
+    if(style.isBitSet(nn::hid::NpadStyleTag::NpadStyleJoyRight)) return;
+
+    setPort(0x20);
 }
 
 bool InputHelper::isButtonHold(nn::hid::NpadButton button) {

@@ -127,6 +127,8 @@ private:
 
     static char getKeyValue(nn::hid::KeyboardKey key, bool isUpper, bool isModifier);
 
+    static void setIsHandheldMode();
+
     static nn::hid::NpadBaseState curControllerState;
     static nn::hid::NpadBaseState prevControllerState;
 
