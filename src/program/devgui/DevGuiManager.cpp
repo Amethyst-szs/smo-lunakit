@@ -17,6 +17,7 @@ void DevGuiManager::createElements()
     createWindow<WindowInfo>("Info Viewer", true, true, 1);
     createWindow<WindowActorBrowse>("Actor Browser", false, true, 2);
     createWindow<WindowFPS>("FPS Window", true, false, 1);
+    createWindow<WindowLoadLog>("Load Log", true, false, 1);
 
     // Create all home menu tabs
     createHomeMenuItem<HomeMenuFile>("File");
