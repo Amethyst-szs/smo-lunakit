@@ -5,7 +5,7 @@
 
 __attribute__((used)) static const char* updateStatusList[] = {
     "Broken",
-    "Acivated",
+    "Activated",
     "First Launch",
     "Cloud Landing",
     "Crashed in Lost",

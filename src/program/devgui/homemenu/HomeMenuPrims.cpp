@@ -94,13 +94,10 @@ void HomeMenuPrims::renderTriangleCategory(al::Scene* scene, PrimitiveQueue* que
         frontRay *= 3000.f;
 
         // Find triangles
-        bool isDown = alCollisionUtil::getFirstPolyOnArrow(playerBase, nullptr, &downTri, rayOrg, downRay, nullptr, nullptr);
-        bool isFront = alCollisionUtil::getFirstPolyOnArrow(playerBase, nullptr, &frontTri, rayOrg, frontRay, nullptr, nullptr);
-
-        if(isDown)
-            queue->pushTriangle(frontTri, {1.f, 0.f, 0.f, 1.f});
-        if(isFront)
-            queue->pushTriangle(downTri, {0.f, 1.f, 0.f, 1.f});
+        if(alCollisionUtil::getFirstPolyOnArrow(playerBase, nullptr, &downTri, rayOrg, downRay, nullptr, nullptr))
+            queue->pushTriangle(downTri, {1.f, 0.f, 0.f, 1.f});
+        if(alCollisionUtil::getFirstPolyOnArrow(playerBase, nullptr, &frontTri, rayOrg, frontRay, nullptr, nullptr))
+            queue->pushTriangle(frontTri, {0.f, 1.f, 0.f, 1.f});
     }
 }
 
