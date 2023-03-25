@@ -29,13 +29,13 @@ void WindowLoadLog::setupAnchor(int totalAnchoredWindows, int anchorIdx) {
     // Setup window's position based on the anchor type
     switch (type) {
     case WinAnchorType::ANC_TOP:
-        mConfig.mTrans = ImVec2(0, mConfig.mScrSize.y - mConfig.mSize.y);
+        mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mScrSize.y - mConfig.mSize.y);
         break;
     case WinAnchorType::ANC_BOTTOM:
-        mConfig.mTrans = ImVec2(0, mConfig.mMinimumY);
+        mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mMinimumY);
         break;
     case WinAnchorType::ANC_LEFT:
-        mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mMinimumY);
+        mConfig.mTrans = ImVec2(0, mConfig.mMinimumY);
         break;
     case WinAnchorType::ANC_RIGHT:
         mConfig.mTrans = ImVec2(0, mConfig.mMinimumY);
