@@ -6,16 +6,13 @@ CategoryInfScene::CategoryInfScene(const char* catName, const char* catDesc, sea
 void CategoryInfScene::updateCatDisplay()
 {
     al::Scene* scene = tryGetScene();
-    PlayerActorBase* player = tryGetPlayerActor(scene);
 
     if(!scene) {
         ImGui::Text("Scene does not exist!");
         return;
     }
 
-    /*
-        GENERIC SCENE INFO
-    */
+    PlayerActorBase* player = tryGetPlayerActor(scene);
 
     ImGui::Text("Name: %s", GameDataFunction::getCurrentStageName(scene));
     if(player)
