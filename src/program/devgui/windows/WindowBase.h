@@ -15,11 +15,12 @@
 
 #include "al/util.hpp"
 
-#include "container/seadPtrArray.h"
 #include "game/HakoniwaSequence/HakoniwaSequence.h"
 #include "game/System/GameSystem.h"
-#include "heap/seadHeap.h"
-#include "math/seadVector.h"
+
+#include "sead/container/seadPtrArray.h"
+#include "sead/heap/seadHeap.h"
+#include "sead/math/seadVector.h"
 
 #include "helpers/GetHelper.h"
 #include "devgui/categories/CategoryBase.h"

@@ -18,6 +18,8 @@
 #include "devgui/popups/PopupKeyboard.h"
 #include "devgui/windows/WindowBase.h"
 
+#include "helpers/ImGuiHelper.h"
+
 enum ActorBrowseFilterType {
     FILTER_NONE,
     FILTER_FAV,
@@ -36,7 +38,7 @@ private:
     void drawActorList(al::Scene* scene);
     void drawActorInfo();
 
-    void drawVectorInfo(const char* prefixName, const char* tooltip, sead::Vector3f* vec, float range);
+    
 
     bool isActorInFavorites(char* actorName);
     void toggleFavorite(char* actorName);

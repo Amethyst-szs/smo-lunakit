@@ -18,6 +18,19 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 ![Gameplay 2](https://user-images.githubusercontent.com/62185604/220535575-e94cbda0-a6bf-49fd-ac5f-8bfa92da732f.jpg)
 
 ## How to use:
+
+### Installation on switch
+- Install Atmosphere and SMO V1.0.0
+- Remove any previous mods that would cause conflicts
+- Download newest build from [releases](https://github.com/Amethyst-szs/smo-lunakit/releases/)
+- Drag and drop the included `atmosphere` and `LunaKit` folders onto the root of your SD card
+
+### Installation on [Ryujinx](https://ryujinx.org/)
+- Download newest build from [releases](https://github.com/Amethyst-szs/smo-lunakit/releases/)
+- Drag and drop the included `atmosphere` and `LunaKit` folders onto the root of the [emulated SD card](https://github.com/Ryujinx/Ryujinx/wiki/Ryujinx-Setup-&-Configuration-Guide#managing-mods)
+
+### Installation on Yuzu is NOT actively supported.
+
 ### Controls:
 - Open the interface by holding ZR + R and tapping L  
 - Hide windows by pressing L-Stick  

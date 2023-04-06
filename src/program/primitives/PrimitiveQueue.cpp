@@ -18,8 +18,10 @@ void PrimitiveQueue::render()
     }
     
     al::Scene* curScene = tryGetScene(seq);
+    const char* sceneNrv = typeid(*al::getCurrentNerve(seq)).name();
+
     // Check if the scene exists and if the current sequence nerve is save
-    if(!isInScene(curScene) || strstr(typeid(*al::getCurrentNerve(seq)).name(), "Destroy")) {
+    if(!isInScene(curScene) || strstr(sceneNrv, "Destroy") || strstr(sceneNrv, "DemoOpening")) {
         emptyQueue();
         return;
     }

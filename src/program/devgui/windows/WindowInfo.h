@@ -15,6 +15,8 @@
 #include "program/devgui/windows/WindowBase.h"
 
 #include "program/devgui/categories/CategoryBase.h"
+#include "program/devgui/categories/info/CategoryInfSequence.h"
+#include "program/devgui/categories/info/CategoryInfScene.h"
 #include "program/devgui/categories/info/CategoryInfPlayer.h"
 
 class WindowInfo : public WindowBase {
