@@ -13,7 +13,9 @@
         "tuple": "cpp",
         "utility": "cpp",
         "atomic": "cpp",
-        "cstdarg": "cpp"
+        "cstdarg": "cpp",
+        "xlocinfo": "cpp",
+        "xstring": "cpp"
     },
     "cmake.configureOnOpen": false,
     "C_Cpp.errorSquiggles": "Enabled"

@@ -12,6 +12,7 @@
 #include "fs.h"
 
 #include "logger/Logger.hpp"
+#include "logger/LoadLogger.hpp"
 
 #include <basis/seadRawPrint.h>
 #include <prim/seadSafeString.h>
@@ -135,7 +136,7 @@ HOOK_DEFINE_TRAMPOLINE(RedirectFileDevice) {
 HOOK_DEFINE_TRAMPOLINE(FileLoaderLoadArc) {
     static sead::ArchiveRes *
     Callback(al::FileLoader *thisPtr, sead::SafeString &path, const char *ext, sead::FileDevice *device) {
-        
+        LoadLog::pushTextToVector(path.cstr());
         sead::FileDevice *sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
 
         if (sdFileDevice && sdFileDevice->isExistFile(path))
