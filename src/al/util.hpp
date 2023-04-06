@@ -82,6 +82,10 @@ namespace al {
 
     int getPlayerControllerPort(int);
 
+    PlayerActorBase* getPlayerActor(al::LiveActor const*, int);
+    
+    PlayerActorBase* tryGetPlayerActor(al::PlayerHolder const*, int);
+
     char const *getActionName(al::LiveActor const *);
 
     char const *getActionFrame(al::LiveActor const *);

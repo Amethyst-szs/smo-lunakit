@@ -7,6 +7,7 @@
 #include "al/nerve/NerveKeeper.h"
 #include "al/nerve/NerveStateBase.h"
 #include "al/nerve/NerveStateCtrl.h"
+#include "al/util.hpp"
 
 #include "game/System/GameSystem.h"
 #include "game/System/Application.h"
@@ -29,6 +30,7 @@ al::Sequence* tryGetSequence();
 HakoniwaSequence* tryGetHakoniwaSequence();
 
 al::Scene* tryGetScene();
+al::Scene* tryGetScene(al::Sequence* curSequence);
 al::Scene* tryGetScene(HakoniwaSequence* curSequence);
 StageScene* tryGetStageScene();
 StageScene* tryGetStageScene(HakoniwaSequence* curSequence);
@@ -42,7 +44,7 @@ GameDataHolderAccessor* tryGetGameDataHolderAccess(StageScene* scene);
 
 PlayerActorBase* tryGetPlayerActor();
 PlayerActorBase* tryGetPlayerActor(HakoniwaSequence* curSequence);
-PlayerActorBase* tryGetPlayerActor(al::Scene* scene);
+PlayerActorBase* tryGetPlayerActor(StageScene* scene);
 PlayerActorHakoniwa* tryGetPlayerActorHakoniwa();
 PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(HakoniwaSequence* curSequence);
 PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(StageScene* scene);

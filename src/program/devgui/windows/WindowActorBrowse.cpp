@@ -98,7 +98,19 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
 
 void WindowActorBrowse::drawActorList(al::Scene* scene)
 {
-    al::LiveActorGroup* group = scene->mLiveActorKit->mLiveActorGroup2;
+    al::LiveActorKit* kit = scene->mLiveActorKit;
+    if(!kit) {
+        ImGui::TextDisabled("No LiveActorKit!");
+        mSelectedActor = nullptr;
+        return;
+    }
+
+    al::LiveActorGroup* group = kit->mLiveActorGroup2;
+    if(!group) {
+        ImGui::TextDisabled("No LiveActorGroup!");
+        mSelectedActor = nullptr;
+        return;
+    }
 
     if (isFilterBySearch() && mIsKeyboardInUse)
         generateFilterListBySearch(scene);

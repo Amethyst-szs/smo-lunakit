@@ -76,7 +76,7 @@ class HakoniwaSequence : public al::Sequence {
         al::LayoutKit* mLytKit;                     // 0xF8
         bool mYBalls;                                   
         sead::FixedSafeString<0x80> stageName;  
-        int scenarioNum;    
+        uint scenarioNum;    
         al::ScreenCaptureExecutor* mScreenCapExecutor;
         al::WipeHolder* mWipeHolder;
         bool mMissEnd;

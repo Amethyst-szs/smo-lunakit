@@ -35,7 +35,7 @@ void HomeMenuPrims::updateMenuDisplay()
 
 void HomeMenuPrims::renderPlayerCategory(al::Scene* scene, PrimitiveQueue* queue)
 {
-    PlayerActorBase* player = tryGetPlayerActor(scene);
+    PlayerActorBase* player = tryGetPlayerActor();
     if(!player)
         return;
 
@@ -75,7 +75,7 @@ void HomeMenuPrims::renderPlayerCategory(al::Scene* scene, PrimitiveQueue* queue
 void HomeMenuPrims::renderTriangleCategory(al::Scene* scene, PrimitiveQueue* queue)
 {
     if(mSettings->getSettingEntryByName("Collision")->isTrue()) {
-        PlayerActorBase* playerBase = tryGetPlayerActor(scene);
+        PlayerActorBase* playerBase = tryGetPlayerActor();
         if(!playerBase)
             return;
         
@@ -142,8 +142,8 @@ void HomeMenuPrims::renderHitSensorCategory(al::Scene* scene, PrimitiveQueue* qu
     al::LiveActorGroup* group = scene->mLiveActorKit->mLiveActorGroup2;
     if(!group)
         return;
-    
-    PlayerActorBase* playerBase = tryGetPlayerActor(scene);
+
+    PlayerActorBase* playerBase = tryGetPlayerActor();
     if(!playerBase)
         return;
     

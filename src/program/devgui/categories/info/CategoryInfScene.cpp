@@ -5,18 +5,20 @@ CategoryInfScene::CategoryInfScene(const char* catName, const char* catDesc, sea
 
 void CategoryInfScene::updateCatDisplay()
 {
-    al::Scene* scene = tryGetScene();
+    HakoniwaSequence* sequence = tryGetHakoniwaSequence();
+    if(!sequence) {
+        ImGui::Text("Hakoniwa Sequence does not exist!");
+        return;
+    }
 
+    al::Scene* scene = tryGetScene(sequence);
     if(!scene) {
         ImGui::Text("Scene does not exist!");
         return;
     }
 
-    PlayerActorBase* player = tryGetPlayerActor(scene);
-
-    ImGui::Text("Name: %s", GameDataFunction::getCurrentStageName(scene));
-    if(player)
-        ImGui::Text("Scenario: %u", GameDataFunction::getScenarioNo(player));
+    ImGui::Text("Name: %s", sequence->stageName.cstr());
+    ImGui::Text("Scenario: %u", sequence->scenarioNum);
 
     int status;
     al::NerveKeeper* sceneNerveKeeper = scene->getNerveKeeper();
