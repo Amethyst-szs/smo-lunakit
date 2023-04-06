@@ -19,6 +19,8 @@ void CategoryWarp::updateCat()
 
 void CategoryWarp::updateCatDisplay()
 {
+    CategoryBase::updateCatDisplay();
+    
     PlayerActorHakoniwa* player = tryGetPlayerActorHakoniwa();
 
     if(!player) {
