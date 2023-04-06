@@ -201,6 +201,14 @@ void WindowActorBrowse::drawActorInfo()
         mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
         
     if(pose && ImGui::TreeNode("Actor Pose")) {
+        PlayerActorBase* player = tryGetPlayerActor();
+        
+        if(player && ImGui::Button("Warp to Object")) {
+            player->startDemoPuppetable();
+            player->mPoseKeeper->mTranslation = pose->mTranslation;
+            player->endDemoPuppetable();
+        }
+
         ImGui::Separator();
 
         ImGuiHelper::drawVector3Drag("T", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
