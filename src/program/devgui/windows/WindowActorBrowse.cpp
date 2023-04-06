@@ -203,40 +203,14 @@ void WindowActorBrowse::drawActorInfo()
     if(pose && ImGui::TreeNode("Actor Pose")) {
         ImGui::Separator();
 
-        drawVectorInfo("T", "Pose Keeper Translation", &pose->mTranslation, 30000.f);
-
-        sead::Vector3f* r = pose->getRotatePtr();
-        if(r)
-            drawVectorInfo("R", "Pose Keeper Rotation", r, 360.f);
-
-        sead::Vector3f* s = pose->getScalePtr();
-        if(s)
-            drawVectorInfo("S", "Pose Keeper Scale", s, 2.f);
-
-        sead::Vector3f* v = pose->getVelocityPtr();
-        if(v) {
-            mParent->getPrimitiveQueue()->pushLine(pose->mTranslation, pose->mTranslation + *v, {1.f, 1.f, 1.f, 1.f});
-            drawVectorInfo("V", "Pose Keeper Velocity", v, 100.f);
-        }
-
-        sead::Vector3f* f = pose->getFrontPtr();
-        if(f) {
-            drawVectorInfo("F", "Pose Keeper Front", v, 1.f);
-            f->normalize();
-        }
-
-        sead::Vector3f* u = pose->getUpPtr();
-        if(u) {
-            drawVectorInfo("U", "Pose Keeper Up", v, 1.f);
-            u->normalize();
-        }
-
-        sead::Vector3f* g = pose->getGravityPtr();
-        if(g) {
-            mParent->getPrimitiveQueue()->pushLine(pose->mTranslation, pose->mTranslation + (*g * 200.f), {0.f, 0.f, 1.f, 1.f});
-            drawVectorInfo("G", "Pose Keeper Gravity", g, 1.f);
-            g->normalize();
-        }
+        ImGuiHelper::drawVector3Drag("T", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
+        ImGuiHelper::drawVector3Drag("S", "Pose Keeper Scale", pose->getScalePtr(), 0.05f, 0.f);
+        ImGuiHelper::drawVector3Drag("V", "Pose Keeper Velocity", pose->getVelocityPtr(), 1.f, 0.f);
+        ImGuiHelper::drawVector3Slide("F", "Pose Keeper Front", pose->getFrontPtr(), 1.f, true);
+        ImGuiHelper::drawVector3Slide("U", "Pose Keeper Up", pose->getUpPtr(), 1.f, true);
+        ImGuiHelper::drawVector3Slide("G", "Pose Keeper Gravity", pose->getGravityPtr(), 1.f, true);
+        ImGuiHelper::drawVector3Drag("R", "Pose Keeper Rotation", pose->getRotatePtr(), 1.f, 360.f);
+        ImGuiHelper::drawQuat("Pose Keeper Quaternion", pose->getQuatPtr());
 
         ImGui::TreePop();
     }
@@ -279,32 +253,6 @@ void WindowActorBrowse::drawActorInfo()
     ImGui::EndChild();
 
     free(actorName);
-}
-
-void WindowActorBrowse::drawVectorInfo(const char* prefixName, const char* tooltip, sead::Vector3f* vec, float range)
-{
-    sead::FixedSafeString<0xf> sliderName(prefixName);
-
-    ImGui::BeginGroup();
-
-    sliderName.append("X");
-    ImGui::SliderFloat(sliderName.cstr(), &vec->x, -range, range, "%.1f", ImGuiSliderFlags_NoRoundToFormat);
-    sliderName.chop(1);
-
-    sliderName.append("Y");
-    ImGui::SliderFloat(sliderName.cstr(), &vec->y, -range, range, "%.1f", ImGuiSliderFlags_NoRoundToFormat);
-    sliderName.chop(1);
-
-    sliderName.append("Z");
-    ImGui::SliderFloat(sliderName.cstr(), &vec->z, -range, range, "%.1f", ImGuiSliderFlags_NoRoundToFormat);
-    sliderName.chop(1);
-
-    ImGui::EndGroup();
-
-    if(ImGui::IsItemHovered())
-        ImGui::SetTooltip(tooltip);
-    
-    ImGui::Separator();
 }
 
 bool WindowActorBrowse::isActorInFavorites(char* actorName)
