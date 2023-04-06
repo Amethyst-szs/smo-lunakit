@@ -26,6 +26,7 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 - Drag and drop the included `atmosphere` and `LunaKit` folders onto the root of your SD card
 
 ### Installation on [Ryujinx](https://ryujinx.org/)
+- Enable mouse input in Ryujinx settings
 - Download newest build from [releases](https://github.com/Amethyst-szs/smo-lunakit/releases/)
 - Drag and drop the included `atmosphere` and `LunaKit` folders onto the root of the [emulated SD card](https://github.com/Ryujinx/Ryujinx/wiki/Ryujinx-Setup-&-Configuration-Guide#managing-mods)
 
