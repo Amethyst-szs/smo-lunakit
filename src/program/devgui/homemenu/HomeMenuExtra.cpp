@@ -54,7 +54,11 @@ void HomeMenuExtra::updateMenuDisplay()
             ImGui::MenuItem("Disable via menu or deleting:", nullptr, false, false);
             ImGui::MenuItem("LunaKit/LKData/logger.byml", nullptr, false, false);
             if(ImGui::MenuItem("Activate Logger")) {
-                mNewPort = std::__cxx11::stoi(mPortString.cstr());
+                // Jank code, converts string to number without using stoi
+                mNewPort = 0;
+                for(int i = 0; i < mPortString.calcLength(); i++)
+                    mNewPort += (mPortString.cstr()[mPortString.calcLength() - 1 - i] - 48) * pow(10, i);
+
                 Logger::instance().writeLoggerSave(mHeap, false, mIPString.cstr(), mNewPort);
 
                 mIsLoggerDisabled = false;
