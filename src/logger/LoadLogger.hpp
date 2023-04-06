@@ -14,5 +14,7 @@
 
 namespace LoadLog {
     void pushTextToVector(const char* text);
+
     extern ImVector<char*> mTextLines;
+    static const int mMaxListSize = 0x800;
 } // namespace LoadLog

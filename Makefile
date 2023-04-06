@@ -1,4 +1,4 @@
-FTP_IP ?= 192.168.0.9 # put console IP here
+FTP_IP ?= 192.168.0.24 # put console IP here
 .PHONY: all clean
 
 all:

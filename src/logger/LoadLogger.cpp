@@ -13,9 +13,9 @@ void LoadLog::pushTextToVector(const char* text) {
     currentTime.setNow();
     currentTime.getCalendarTime(&calendarTime);
 
-    if (mTextLines.size() > 4000) 
+    if (mTextLines.size() > mMaxListSize)
         mTextLines.erase(mTextLines.begin());
-    snprintf(temp, sizeof(temp), "%02d:%02d:%02d\t|\t%s", calendarTime.getHour(), calendarTime.getMinute(), calendarTime.getSecond(), text);
+    snprintf(temp, sizeof(temp), "%02d:%02d:%02d | %s", calendarTime.getHour(), calendarTime.getMinute(), calendarTime.getSecond(), text);
     
     mTextLines.push_back(strdup(temp));
 }
