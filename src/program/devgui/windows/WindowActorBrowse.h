@@ -20,11 +20,13 @@
 
 #include "helpers/ImGuiHelper.h"
 
-enum ActorBrowseFilterType {
-    FILTER_NONE,
-    FILTER_FAV,
-    FILTER_SEARCH
+enum ActorBrowseFilterType_ {
+    ActorBrowseFilterType_NONE = 0,
+    ActorBrowseFilterType_FAV = 1 << 0,
+    ActorBrowseFilterType_SEARCH = 1 << 1
 };
+
+typedef int ActorBrowseFilterType;
 
 class WindowActorBrowse : public WindowBase {
 public:
@@ -44,19 +46,20 @@ private:
     void publishFavoritesToSave();
     void getFavoritesFromSave();
 
-    void generateFilterListByFavs(al::Scene* scene);
-    void generateFilterListBySearch(al::Scene* scene);
-
     char* getActorName(al::LiveActor* actor);
     sead::FixedSafeString<0x30> calcTrimNameFromRight(char* text);
     sead::FixedSafeString<0x30> calcTrimNameFromRight(char* text, int maxChars);
     int calcRoundedNum(int numToRound, int multiple);
     
-    bool isFilterByNone() { return mFilterType == ActorBrowseFilterType::FILTER_NONE; }
-    bool isFilterByFavorites() { return mFilterType == ActorBrowseFilterType::FILTER_FAV; }
-    bool isFilterBySearch() { return mFilterType == ActorBrowseFilterType::FILTER_SEARCH; }
+    // Filtering
+    void generateFilterList(al::Scene* scene);
+
+    bool isFilterByNone() { return mFilterType == ActorBrowseFilterType_NONE; }
+    bool isFilterByFavorites() { return mFilterType & ActorBrowseFilterType_FAV; }
+    bool isFilterBySearch() { return mFilterType & ActorBrowseFilterType_SEARCH; }
 
     bool mIsSaveDataInited = false;
+    bool mIsWindowVertical = false;
     
     // Selected actor
     al::LiveActor* mSelectedActor = nullptr;
@@ -64,7 +67,7 @@ private:
     unsigned int mRailPercision = 10;
 
     // Filtering
-    ActorBrowseFilterType mFilterType = ActorBrowseFilterType::FILTER_NONE;
+    ActorBrowseFilterType mFilterType = ActorBrowseFilterType_NONE;
     al::LiveActorGroup* mFilterActorGroup = nullptr;
     bool mIsPrimDrawFilterGroup = false;
 
@@ -82,5 +85,5 @@ private:
     int mMaxCharacters = 1;
 
     // Constants
-    const float mHeaderSize = 30.f;
+    const float mHeaderSize = 24.f;
 };

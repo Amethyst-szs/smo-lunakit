@@ -15,10 +15,13 @@ void WindowActorBrowse::updateWin()
     al::Scene* scene = tryGetScene();
     if (!scene || !mIsActive) {
         mSelectedActor = nullptr;
-        mFilterType = ActorBrowseFilterType::FILTER_NONE;
+        mFilterType = ActorBrowseFilterType_NONE;
         mFilterActorGroup->removeActorAll();
         return;
     }
+
+    if(!mIsSaveDataInited)
+        getFavoritesFromSave();
 
     return;
 }
@@ -33,59 +36,53 @@ bool WindowActorBrowse::tryUpdateWinDisplay()
         ImGui::TextDisabled("No scene!");
         return true;
     }
-    
-    if(!mIsSaveDataInited)
-        getFavoritesFromSave();
 
     mLineSize = ImGui::GetTextLineHeightWithSpacing();
+    float winWidth = ImGui::GetWindowWidth();
+    float winHeight = ImGui::GetWindowHeight();
+    mIsWindowVertical = winWidth < winHeight;
 
     drawButtonHeader(scene);
     drawActorList(scene);
-    if (mSelectedActor) {
+
+    if(!mIsWindowVertical)
         ImGui::SameLine();
+    if (mSelectedActor)
         drawActorInfo();
-    }
 
     return true;
 }
 
 void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
 {
+    ImGui::SetWindowFontScale(1.1f);
+
     ImVec2 inputChildSize = ImGui::GetContentRegionAvail();
+
     inputChildSize.y = mHeaderSize;
     ImGui::BeginChild("ActorInputs", inputChildSize, false);
 
-    bool isFiltFavs = isFilterByFavorites();
-    if (mTotalFavs == 0)
-        ImGui::Text("No Favs!");
-    else if (ImGui::Checkbox("Favs", &isFiltFavs))
-        generateFilterListByFavs(scene);
-
-    ImGui::SameLine();
-
-    if (ImGui::Button("Del Favs")) {
-        if(isFilterByFavorites())
-            mFilterType = ActorBrowseFilterType::FILTER_NONE;
-
-        mTotalFavs = 0;
-        for (int i = 0; i < mMaxFavs; i++)
-            mFavActorNames[i].clear();
-        
-        publishFavoritesToSave();
+    if (!isFilterBySearch()) {
+        if (ImGui::Button("Search")) {
+            mFilterType |= ActorBrowseFilterType_SEARCH;
+            mParent->tryOpenKeyboard(24, KEYTYPE_QWERTY, &mSearchString, &mIsKeyboardInUse);
+        }
+    } else {
+        if (ImGui::Button("Clear Search")) {
+            mFilterType ^= ActorBrowseFilterType_SEARCH;
+            mSearchString = nullptr;
+            generateFilterList(scene);
+        }
     }
 
     ImGui::SameLine();
 
-    if (!mSearchString) {
-        if (ImGui::Button("Search")) {
-            mFilterType = ActorBrowseFilterType::FILTER_SEARCH;
-            mParent->tryOpenKeyboard(24, KEYTYPE_QWERTY, &mSearchString, &mIsKeyboardInUse);
-        }
-    } else {
-        if (ImGui::Button("Clear")) {
-            mFilterType = ActorBrowseFilterType::FILTER_NONE;
-            mSearchString = nullptr;
-        }
+    bool isFiltFavs = isFilterByFavorites();
+    if (mTotalFavs == 0)
+        ImGui::Text("No Favorites");
+    else if (ImGui::Checkbox("Favorites", &isFiltFavs)) {
+        mFilterType ^= ActorBrowseFilterType_FAV;
+        generateFilterList(scene);
     }
 
     if(!isFilterByNone()) {
@@ -93,7 +90,13 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
         ImGui::Checkbox("Render List", &mIsPrimDrawFilterGroup);
     }
 
+    ImGui::SameLine(ImGui::GetWindowWidth() - 90);
+    if (mSelectedActor && ImGui::Button("Close Actor"))
+        mSelectedActor = nullptr;
+
     ImGui::EndChild();
+
+    ImGui::SetWindowFontScale(mConfig.mFontSize);
 }
 
 void WindowActorBrowse::drawActorList(al::Scene* scene)
@@ -113,15 +116,22 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
     }
 
     if (isFilterBySearch() && mIsKeyboardInUse)
-        generateFilterListBySearch(scene);
+        generateFilterList(scene);
 
     if (!isFilterByNone() && mFilterActorGroup->mActorCount > 0)
         group = mFilterActorGroup;
 
     ImVec2 listSize = ImGui::GetContentRegionAvail();
-    if (mSelectedActor)
-        listSize.x *= 0.4f;
-    listSize.y -= mHeaderSize - 2.f;
+    if(mIsWindowVertical)
+        listSize.y -= mHeaderSize - 2.f;
+
+    if (mSelectedActor) {
+        if(mIsWindowVertical)
+            listSize.y *= 0.3f;
+        else
+            listSize.x *= 0.45f;
+    }
+
     ImGui::BeginChild("ActorList", listSize, true);
 
     float winWidth = ImGui::GetWindowWidth();
@@ -189,24 +199,16 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 void WindowActorBrowse::drawActorInfo()
 {
     ImVec2 listSize = ImGui::GetContentRegionAvail();
-    listSize.y -= mHeaderSize - 2.f;
+    if(mIsWindowVertical)
+        listSize.y -= mHeaderSize - 2.f;
+
     ImGui::BeginChild("ActorInfo", listSize, true);
 
-    float winWidth = ImGui::GetWindowWidth();
-    float horizFontSize = ImGui::GetFontSize() * 0.63f;
-    int maxChars = (winWidth / horizFontSize) - 1;
+    char* actorClass = getActorName(mSelectedActor);
 
-    char* actorName = getActorName(mSelectedActor);
-    sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName, maxChars);
-
-    ImGui::Text(trimName.cstr());
-    ImGui::SameLine(winWidth - 30);
-    if (ImGui::Button("X")) {
-        ImGui::EndChild();
-        mSelectedActor = nullptr;
-        free(actorName);
-        return;
-    }
+    ImGui::LabelText("Class", actorClass);
+    ImGui::Separator();
+    ImGui::LabelText("Name", mSelectedActor->getName());
     
     al::ActorPoseKeeperBase* pose = mSelectedActor->mPoseKeeper;
     if(pose) {
@@ -223,14 +225,14 @@ void WindowActorBrowse::drawActorInfo()
         if (ImGui::TreeNode("Actor Pose")) {
             ImGui::Separator();
 
-            ImGuiHelper::drawVector3Drag("T", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
-            ImGuiHelper::drawVector3Drag("S", "Pose Keeper Scale", pose->getScalePtr(), 0.05f, 0.f);
-            ImGuiHelper::drawVector3Drag("V", "Pose Keeper Velocity", pose->getVelocityPtr(), 1.f, 0.f);
-            ImGuiHelper::drawVector3Slide("F", "Pose Keeper Front", pose->getFrontPtr(), 1.f, true);
-            ImGuiHelper::drawVector3Slide("U", "Pose Keeper Up", pose->getUpPtr(), 1.f, true);
-            ImGuiHelper::drawVector3Slide("G", "Pose Keeper Gravity", pose->getGravityPtr(), 1.f, true);
-            ImGuiHelper::drawVector3Drag("R", "Pose Keeper Rotation", pose->getRotatePtr(), 1.f, 360.f);
-            ImGuiHelper::drawQuat("Pose Keeper Quaternion", pose->getQuatPtr());
+            ImGuiHelper::Vector3Drag("Trans", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
+            ImGuiHelper::Vector3Drag("Scale", "Pose Keeper Scale", pose->getScalePtr(), 0.05f, 0.f);
+            ImGuiHelper::Vector3Drag("Velcoity", "Pose Keeper Velocity", pose->getVelocityPtr(), 1.f, 0.f);
+            ImGuiHelper::Vector3Slide("Front", "Pose Keeper Front", pose->getFrontPtr(), 1.f, true);
+            ImGuiHelper::Vector3Slide("Up", "Pose Keeper Up", pose->getUpPtr(), 1.f, true);
+            ImGuiHelper::Vector3Slide("Gravity", "Pose Keeper Gravity", pose->getGravityPtr(), 1.f, true);
+            ImGuiHelper::Vector3Drag("Eular", "Pose Keeper Rotation", pose->getRotatePtr(), 1.f, 360.f);
+            ImGuiHelper::Quat("Pose Keeper Quaternion", pose->getQuatPtr());
 
             ImGui::TreePop();
         }
@@ -260,7 +262,7 @@ void WindowActorBrowse::drawActorInfo()
         const al::Nerve* pNrv2 = nrvKeep->getCurrentNerve();
         char* nrvName2 = abi::__cxa_demangle(typeid(*pNrv2).name(), nullptr, nullptr, &status);
 
-        ImGui::Text("Nerve: %s", nrvName2 + 23 + strlen(actorName) + 3);
+        ImGui::Text("Nerve: %s", nrvName2 + 23 + strlen(actorClass) + 3);
         ImGui::Text("Step: %i", nrvKeep->mStep);
 
         ImGui::TreePop();
@@ -296,7 +298,7 @@ void WindowActorBrowse::drawActorInfo()
 
     ImGui::EndChild();
 
-    free(actorName);
+    free(actorClass);
 }
 
 bool WindowActorBrowse::isActorInFavorites(char* actorName)
@@ -364,46 +366,32 @@ void WindowActorBrowse::getFavoritesFromSave()
     mIsSaveDataInited = true;
 }
 
-void WindowActorBrowse::generateFilterListByFavs(al::Scene* scene)
+void WindowActorBrowse::generateFilterList(al::Scene* scene)
 {
     mFilterActorGroup->removeActorAll();
 
-    if (isFilterByFavorites()) {
-        mFilterType = ActorBrowseFilterType::FILTER_NONE;
-        return;
-    }
-
-    al::LiveActorGroup* sceneGroup = scene->mLiveActorKit->mLiveActorGroup2;
-    mFilterType = ActorBrowseFilterType::FILTER_FAV;
-
-    for (int i = 0; i < sceneGroup->mActorCount; i++) {
-        char* actorName = getActorName(sceneGroup->mActors[i]);
-        if (isActorInFavorites(actorName))
-            mFilterActorGroup->registerActor(sceneGroup->mActors[i]);
-
-        free(actorName);
-    }
-
-    if (mFilterActorGroup->mActorCount == 0)
-        mFilterType = ActorBrowseFilterType::FILTER_NONE;
-}
-
-void WindowActorBrowse::generateFilterListBySearch(al::Scene* scene)
-{
-    mFilterActorGroup->removeActorAll();
-
-    if (!mSearchString)
-        return;
-
-    int searchLength = strlen(mSearchString);
-    if (searchLength <= 1)
+    if(isFilterBySearch() && !mSearchString) 
         return;
 
     al::LiveActorGroup* sceneGroup = scene->mLiveActorKit->mLiveActorGroup2;
 
+    int requiredFilters = 0;
+    if(isFilterByFavorites())
+        requiredFilters++;
+    if(isFilterBySearch())
+        requiredFilters++;
+
     for (int i = 0; i < sceneGroup->mActorCount; i++) {
         char* actorName = getActorName(sceneGroup->mActors[i]);
-        if (al::isEqualSubString(actorName, mSearchString))
+        int filtersHit = 0;
+        
+        if (isFilterByFavorites() && isActorInFavorites(actorName))
+            filtersHit++;
+
+        if (isFilterBySearch() && al::isEqualSubString(actorName, mSearchString))
+            filtersHit++;
+        
+        if(filtersHit >= requiredFilters)
             mFilterActorGroup->registerActor(sceneGroup->mActors[i]);
 
         free(actorName);
