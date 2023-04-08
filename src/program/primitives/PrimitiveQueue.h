@@ -59,6 +59,24 @@ public:
         auto* entry = new (mHeap) PrimitiveTypeHitSensor(actor, sensorTypes, opacity);
         mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
     }
+    
+    void pushLinearCurve(al::LinearCurve* curve, sead::Color4f color)
+    {   
+        auto* entry = new (mHeap) PrimitiveTypeLinearCurve(curve, color);
+        mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
+    }
+    
+    void pushBezierCurve(al::BezierCurve* curve, uint percision, sead::Color4f color)
+    {   
+        auto* entry = new (mHeap) PrimitiveTypeBezierCurve(curve, percision, color);
+        mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
+    }
+    
+    void pushRail(al::Rail* rail, uint percision, sead::Color4f color)
+    {   
+        auto* entry = new (mHeap) PrimitiveTypeRail(rail, percision, color);
+        mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
+    }
 
 private:
     void emptyQueue();

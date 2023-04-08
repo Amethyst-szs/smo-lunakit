@@ -37,7 +37,7 @@ public:
     al::Rail* mRail;                //0x00
     sead::Vector3f mPosition;       //0x08
     sead::Vector3f mDirection;      //0x14
-    float mRailPercentage;          //0x20
+    float mRailProgress;            //0x20
     float mMoveSpeed;               //0x24
     bool mIsMoveForwardOnRail;      //0x28
 };

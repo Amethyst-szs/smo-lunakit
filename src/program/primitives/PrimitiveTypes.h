@@ -25,7 +25,10 @@ enum PrimitiveTypes {
     PRIM_AXIS,
     PRIM_AREA,
     PRIM_TRIANGLE,
-    PRIM_HIT_SENSOR
+    PRIM_HIT_SENSOR,
+    PRIM_LINEAR_CURVE,
+    PRIM_BEZIER_CURVE,
+    PRIM_RAIL
 };
 
 class PrimitiveTypeBase {
@@ -158,6 +161,61 @@ public:
     HitSensorRenderTypes mSensorTypes = HitSensorRenderTypes::HitSensorType_NONE;
     sead::Color4f mColor;
     float mOpacity;
+
+    void render() override;
+};
+
+class PrimitiveTypeLinearCurve : public PrimitiveTypeBase {
+public:
+    PrimitiveTypeLinearCurve(al::LinearCurve* curve, sead::Color4f color)
+        : PrimitiveTypeBase(PrimitiveTypes::PRIM_LINEAR_CURVE)
+    {
+        mCurve = curve;
+        mColor = color;
+    }
+
+    ~PrimitiveTypeLinearCurve() override {}
+
+    al::LinearCurve* mCurve;
+    sead::Color4f mColor;
+
+    void render() override;
+};
+
+class PrimitiveTypeBezierCurve : public PrimitiveTypeBase {
+public:
+    PrimitiveTypeBezierCurve(al::BezierCurve* curve, uint percision, sead::Color4f color)
+        : PrimitiveTypeBase(PrimitiveTypes::PRIM_BEZIER_CURVE)
+    {
+        mCurve = curve;
+        mPercision = percision;
+        mColor = color;
+    }
+
+    ~PrimitiveTypeBezierCurve() override {}
+
+    al::BezierCurve* mCurve;
+    uint mPercision;
+    sead::Color4f mColor;
+
+    void render() override;
+};
+
+class PrimitiveTypeRail : public PrimitiveTypeBase {
+public:
+    PrimitiveTypeRail(al::Rail* rail, uint percision, sead::Color4f color)
+        : PrimitiveTypeBase(PrimitiveTypes::PRIM_RAIL)
+    {
+        mRail = rail;
+        mPercision = percision;
+        mColor = color;
+    }
+
+    ~PrimitiveTypeRail() override {}
+
+    al::Rail* mRail;
+    uint mPercision;
+    sead::Color4f mColor;
 
     void render() override;
 };

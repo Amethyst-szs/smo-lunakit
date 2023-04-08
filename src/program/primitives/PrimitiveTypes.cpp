@@ -172,3 +172,61 @@ void PrimitiveTypeHitSensor::render()
         }
     }
 }
+
+void PrimitiveTypeLinearCurve::render()
+{
+    sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
+    renderer->drawLine(mCurve->mStartPos, mCurve->mStartPos + mCurve->mOffsetToEndPos, mColor);
+
+    renderer->drawSphere4x8(mCurve->mStartPos, 15.f, mColor);
+    renderer->drawSphere4x8(mCurve->mStartPos + mCurve->mOffsetToEndPos, 15.f, mColor);
+}
+
+void PrimitiveTypeBezierCurve::render()
+{
+    sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
+    float percisionRate = 1.f / static_cast<float>(mPercision);
+    float rangePoint = 0.f;
+
+    sead::Vector3f startPos;
+    sead::Vector3f endPos;
+
+    while(rangePoint <= 1.f) {
+        mCurve->calcPos(&startPos, rangePoint);
+        rangePoint += percisionRate;
+        mCurve->calcPos(&endPos, rangePoint);
+
+        renderer->drawLine(startPos, endPos, mColor);
+    }
+
+    mCurve->calcPos(&startPos, 0.f);
+    renderer->drawSphere4x8(startPos, 15.f, mColor);
+
+    mCurve->calcPos(&endPos, 1.f);
+    renderer->drawSphere4x8(endPos, 15.f, mColor);
+}
+
+void PrimitiveTypeRail::render()
+{
+    sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
+    float railLength = mRail->getTotalLength();
+    float percisionRate = railLength / static_cast<float>(mPercision);
+    float rangePoint = 0.f;
+
+    sead::Vector3f startPos;
+    sead::Vector3f endPos;
+
+    while(rangePoint <= railLength) {
+        mRail->calcPos(&startPos, rangePoint);
+        rangePoint += percisionRate;
+        mRail->calcPos(&endPos, rangePoint);
+
+        renderer->drawLine(startPos, endPos, mColor);
+    }
+
+    mRail->calcPos(&startPos, 0.f);
+    renderer->drawSphere4x8(startPos, 20.f, mColor);
+
+    mRail->calcPos(&endPos, railLength);
+    renderer->drawSphere4x8(endPos, 20.f, mColor);
+}

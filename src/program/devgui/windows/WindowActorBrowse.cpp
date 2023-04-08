@@ -209,43 +209,31 @@ void WindowActorBrowse::drawActorInfo()
     }
     
     al::ActorPoseKeeperBase* pose = mSelectedActor->mPoseKeeper;
-    if(pose)
-        mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
-        
-    if(pose && ImGui::TreeNode("Actor Pose")) {
+    if(pose) {
         PlayerActorBase* player = tryGetPlayerActor();
-        
+
         if(player && ImGui::Button("Warp to Object")) {
             player->startDemoPuppetable();
             player->mPoseKeeper->mTranslation = pose->mTranslation;
             player->endDemoPuppetable();
         }
 
-        ImGui::Separator();
+        mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
 
-        ImGuiHelper::drawVector3Drag("T", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
-        ImGuiHelper::drawVector3Drag("S", "Pose Keeper Scale", pose->getScalePtr(), 0.05f, 0.f);
-        ImGuiHelper::drawVector3Drag("V", "Pose Keeper Velocity", pose->getVelocityPtr(), 1.f, 0.f);
-        ImGuiHelper::drawVector3Slide("F", "Pose Keeper Front", pose->getFrontPtr(), 1.f, true);
-        ImGuiHelper::drawVector3Slide("U", "Pose Keeper Up", pose->getUpPtr(), 1.f, true);
-        ImGuiHelper::drawVector3Slide("G", "Pose Keeper Gravity", pose->getGravityPtr(), 1.f, true);
-        ImGuiHelper::drawVector3Drag("R", "Pose Keeper Rotation", pose->getRotatePtr(), 1.f, 360.f);
-        ImGuiHelper::drawQuat("Pose Keeper Quaternion", pose->getQuatPtr());
+        if (ImGui::TreeNode("Actor Pose")) {
+            ImGui::Separator();
 
-        ImGui::TreePop();
-    }
-    
-    al::NerveKeeper* nrvKeep = mSelectedActor->getNerveKeeper();
-    if(nrvKeep && ImGui::TreeNode("Nerves")) {
-        int status = 0;
-        const al::Nerve* pNrv2 = nrvKeep->getCurrentNerve();
-        char* nrvName2 = abi::__cxa_demangle(typeid(*pNrv2).name(), nullptr, nullptr, &status);
+            ImGuiHelper::drawVector3Drag("T", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
+            ImGuiHelper::drawVector3Drag("S", "Pose Keeper Scale", pose->getScalePtr(), 0.05f, 0.f);
+            ImGuiHelper::drawVector3Drag("V", "Pose Keeper Velocity", pose->getVelocityPtr(), 1.f, 0.f);
+            ImGuiHelper::drawVector3Slide("F", "Pose Keeper Front", pose->getFrontPtr(), 1.f, true);
+            ImGuiHelper::drawVector3Slide("U", "Pose Keeper Up", pose->getUpPtr(), 1.f, true);
+            ImGuiHelper::drawVector3Slide("G", "Pose Keeper Gravity", pose->getGravityPtr(), 1.f, true);
+            ImGuiHelper::drawVector3Drag("R", "Pose Keeper Rotation", pose->getRotatePtr(), 1.f, 360.f);
+            ImGuiHelper::drawQuat("Pose Keeper Quaternion", pose->getQuatPtr());
 
-        ImGui::Text("Nerve: %s", nrvName2 + 23 + strlen(actorName) + 3);
-        ImGui::Text("Step: %i", nrvKeep->mStep);
-
-        ImGui::TreePop();
-        free(nrvName2);
+            ImGui::TreePop();
+        }
     }
 
     al::LiveActorFlag* flag = mSelectedActor->mLiveActorFlag;
@@ -264,6 +252,42 @@ void WindowActorBrowse::drawActorInfo()
         ImGui::Checkbox("Unknown 12", &flag->mIsFlag12);
         
         ImGui::TreePop();
+    }
+
+    al::NerveKeeper* nrvKeep = mSelectedActor->getNerveKeeper();
+    if(nrvKeep && ImGui::TreeNode("Nerves")) {
+        int status = 0;
+        const al::Nerve* pNrv2 = nrvKeep->getCurrentNerve();
+        char* nrvName2 = abi::__cxa_demangle(typeid(*pNrv2).name(), nullptr, nullptr, &status);
+
+        ImGui::Text("Nerve: %s", nrvName2 + 23 + strlen(actorName) + 3);
+        ImGui::Text("Step: %i", nrvKeep->mStep);
+
+        ImGui::TreePop();
+        free(nrvName2);
+    }
+
+    al::RailRider* railRide = mSelectedActor->getRailRider();
+    if(railRide) {
+        mParent->getPrimitiveQueue()->pushRail(railRide->mRail, mRailPercision, {0.7f, 0.1f, 0.5f, 1.f});
+        if(ImGui::TreeNode("Rail")) {
+            int percisonEdit = mRailPercision;
+            ImGui::SliderInt("Percision", &percisonEdit, 2, 40, "%d", ImGuiSliderFlags_NoRoundToFormat);
+            mRailPercision = percisonEdit;
+
+            ImGui::Text("Progress: %.02f", railRide->mRailProgress);
+            ImGui::DragFloat("Speed", &railRide->mMoveSpeed, 0.1f, 1000.f, -1000.f, "%.1f", ImGuiSliderFlags_NoRoundToFormat);
+
+            ImGui::Text(railRide->mIsMoveForwardOnRail ? "Forward" : "Backward");
+            ImGui::SameLine();
+            if(ImGui::Button("Flip")) railRide->reverse();
+
+            if(ImGui::Button("Go Start")) railRide->setMoveGoingStart();
+            ImGui::SameLine();
+            if(ImGui::Button("Go End")) railRide->setMoveGoingEnd();
+
+            ImGui::TreePop();
+        }
     }
 
     al::HitSensorKeeper* sensor = mSelectedActor->mHitSensorKeeper;

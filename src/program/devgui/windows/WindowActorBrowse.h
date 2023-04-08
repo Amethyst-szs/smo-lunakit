@@ -38,8 +38,6 @@ private:
     void drawActorList(al::Scene* scene);
     void drawActorInfo();
 
-    
-
     bool isActorInFavorites(char* actorName);
     void toggleFavorite(char* actorName);
 
@@ -63,6 +61,7 @@ private:
     // Selected actor
     al::LiveActor* mSelectedActor = nullptr;
     HitSensorRenderTypes mHitSensorTypes = HitSensorType_ALL;
+    unsigned int mRailPercision = 10;
 
     // Filtering
     ActorBrowseFilterType mFilterType = ActorBrowseFilterType::FILTER_NONE;
