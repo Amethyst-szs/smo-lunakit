@@ -241,16 +241,27 @@ void WindowActorBrowse::drawActorInfo()
     al::LiveActorFlag* flag = mSelectedActor->mLiveActorFlag;
     if(flag && ImGui::TreeNode("Flags")) {
         ImGui::Checkbox("Dead", &flag->mIsDead);
+        ImGui::SameLine(listSize.x / 2.f);
         ImGui::Checkbox("Clipped", &flag->mIsClipped);
+
         ImGui::Checkbox("Cannot Clip", &flag->mIsClippingInvalidated);
+        ImGui::SameLine(listSize.x / 2.f);
         ImGui::Checkbox("Draw Clipped", &flag->mIsDrawClipped);
+
         ImGui::Checkbox("Calc Anim On", &flag->mIsCalcAnimOn);
+        ImGui::SameLine(listSize.x / 2.f);
         ImGui::Checkbox("Model Visible", &flag->mIsModelVisible);
+
         ImGui::Checkbox("No Collide", &flag->mIsNoCollide);
+        ImGui::SameLine(listSize.x / 2.f);
         ImGui::Checkbox("Unknown 8", &flag->mIsFlag8);
+
         ImGui::Checkbox("Material Code", &flag->mIsMaterialCodeValid);
+        ImGui::SameLine(listSize.x / 2.f);
         ImGui::Checkbox("Area Target", &flag->mIsAreaTarget);
+
         ImGui::Checkbox("Update Move FX", &flag->mIsUpdateMovementEffectAudioCollisionSensor);
+        ImGui::SameLine(listSize.x / 2.f);
         ImGui::Checkbox("Unknown 12", &flag->mIsFlag12);
         
         ImGui::TreePop();
