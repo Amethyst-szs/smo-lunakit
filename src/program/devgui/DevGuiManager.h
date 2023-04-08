@@ -154,7 +154,7 @@ private:
 
     // Window anchor stuff
     bool mIsAnchorChange = true; // Starts true in order to automatically fire anchor setup on first activation
-    WinAnchorType mWinAnchor = WinAnchorType::ANC_TOP; // Default anchor is top, is replaced by data in save file if it exists
+    WinAnchorType mWinAnchor = WinAnchorType::ANC_LEFT; // Default anchor is left, is replaced by data in save file if it exists
 
     // Debug info
     bool mIsDisplayImGuiDemo = false;
