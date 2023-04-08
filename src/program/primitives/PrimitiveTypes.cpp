@@ -173,15 +173,6 @@ void PrimitiveTypeHitSensor::render()
     }
 }
 
-void PrimitiveTypeLinearCurve::render()
-{
-    sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
-    renderer->drawLine(mCurve->mStartPos, mCurve->mStartPos + mCurve->mOffsetToEndPos, mColor);
-
-    renderer->drawSphere4x8(mCurve->mStartPos, 15.f, mColor);
-    renderer->drawSphere4x8(mCurve->mStartPos + mCurve->mOffsetToEndPos, 15.f, mColor);
-}
-
 void PrimitiveTypeBezierCurve::render()
 {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();

@@ -26,7 +26,6 @@ enum PrimitiveTypes {
     PRIM_AREA,
     PRIM_TRIANGLE,
     PRIM_HIT_SENSOR,
-    PRIM_LINEAR_CURVE,
     PRIM_BEZIER_CURVE,
     PRIM_RAIL
 };
@@ -161,23 +160,6 @@ public:
     HitSensorRenderTypes mSensorTypes = HitSensorRenderTypes::HitSensorType_NONE;
     sead::Color4f mColor;
     float mOpacity;
-
-    void render() override;
-};
-
-class PrimitiveTypeLinearCurve : public PrimitiveTypeBase {
-public:
-    PrimitiveTypeLinearCurve(al::LinearCurve* curve, sead::Color4f color)
-        : PrimitiveTypeBase(PrimitiveTypes::PRIM_LINEAR_CURVE)
-    {
-        mCurve = curve;
-        mColor = color;
-    }
-
-    ~PrimitiveTypeLinearCurve() override {}
-
-    al::LinearCurve* mCurve;
-    sead::Color4f mColor;
 
     void render() override;
 };

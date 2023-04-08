@@ -60,12 +60,6 @@ public:
         mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
     }
     
-    void pushLinearCurve(al::LinearCurve* curve, sead::Color4f color)
-    {   
-        auto* entry = new (mHeap) PrimitiveTypeLinearCurve(curve, color);
-        mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
-    }
-    
     void pushBezierCurve(al::BezierCurve* curve, uint percision, sead::Color4f color)
     {   
         auto* entry = new (mHeap) PrimitiveTypeBezierCurve(curve, percision, color);
