@@ -16,9 +16,10 @@
 #include "primitives/PrimitiveQueue.h"
 
 #include "devgui/popups/PopupKeyboard.h"
-#include "devgui/windows/WindowBase.h"
 
 #include "helpers/ImGuiHelper.h"
+
+#include "devgui/windows/WindowBase.h"
 
 enum ActorBrowseFilterType_ {
     ActorBrowseFilterType_NONE = 0,
@@ -43,25 +44,16 @@ __attribute__((used)) static const char* actorBrowseNameTypeTable[ActorBrowseNam
 
 class WindowActorBrowse : public WindowBase {
 public:
-    WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
-
-    void updateWin() override;
-    bool tryUpdateWinDisplay() override;
-
-private:
 
     /*
         Main Functions
         These are implemented in the main WindowActorBrowse.cpp and are the most important to the front-end
     */
 
-    // Draw different child windows
-    void drawButtonHeader(al::Scene* scene);
-    void drawActorList(al::Scene* scene);
-    void drawActorInfo();
+    WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
 
-    // Filtering
-    void generateFilterList(al::Scene* scene);
+    void updateWin() override;
+    bool tryUpdateWinDisplay() override;
 
     // Check if filter types are active (note multiple can be enabled at once)
     bool isFilterByNone() { return mFilterType == ActorBrowseFilterType_NONE; }
@@ -73,10 +65,35 @@ private:
     bool isNameDisplayModel() { return mNameDisplayType == ActorBrowseNameDisplayType_MODEL; }
     bool isNameDisplayName() { return mNameDisplayType == ActorBrowseNameDisplayType_NAME; }
 
+private:
+
+    /*
+        Draw different child windows
+        Each of these is implemented in it's own CPP file for organization
+    */
+
+    // ActorBrowseChildHeader.cpp
+    void childButtonHeader(al::Scene* scene);
+
+    // ActorBrowseChildList.cpp
+    void childActorList(al::Scene* scene); 
+
+    // ActorBrowseChildInspect.cpp
+    void childActorInspector();
+    inline void drawActorInspectorTreePose(al::ActorPoseKeeperBase* pose);
+    inline void drawActorInspectorTreeFlags(al::LiveActorFlag* flag, float childWindowWidth);
+    inline void drawActorInspectorTreeNrvs(al::NerveKeeper* nrvKeep, sead::FixedSafeString<0x30>* actorClass);
+    inline void drawActorInspectorTreeRail(al::RailRider* railRide);
+    inline void drawActorInspectorTreeSensor(al::HitSensorKeeper* sensor);
+    inline void drawActorInspectorTreeSubActor(al::SubActorKeeper* subActorKeep);
+
     /*
         WindowActorBrowseUtil.cpp functions
         These functions serve as general utility, implemented in the util cpp
     */
+
+    // Filtering
+    void generateFilterList(al::Scene* scene);
 
     // Favorite handling
     bool isActorInFavorites(const char* actorName);

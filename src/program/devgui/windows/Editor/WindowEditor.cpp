@@ -1,5 +1,5 @@
 #include "devgui/DevGuiManager.h"
-#include "devgui/windows/WindowEditor.h"
+#include "WindowEditor.h"
 
 WindowEditor::WindowEditor(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
     : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)

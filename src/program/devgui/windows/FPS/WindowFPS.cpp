@@ -1,5 +1,5 @@
 #include "devgui/DevGuiManager.h"
-#include "devgui/windows/WindowFPS.h"
+#include "WindowFPS.h"
 
 #include "game/System/Application.h"
 

@@ -1,4 +1,4 @@
-#include "devgui/windows/WindowLoadLog.h"
+#include "WindowLoadLog.h"
 #include "devgui/DevGuiManager.h"
 #include "logger/LoadLogger.hpp"
 

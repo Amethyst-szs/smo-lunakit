@@ -1,8 +1,9 @@
 #include "devgui/DevGuiManager.h"
-#include "devgui/windows/WindowBase.h"
 #include "devgui/categories/CategoryBase.h"
 
 #include "types.h"
+
+#include "WindowBase.h"
 
 WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
 {

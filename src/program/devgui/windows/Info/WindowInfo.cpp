@@ -1,5 +1,5 @@
 #include "devgui/DevGuiManager.h"
-#include "devgui/windows/WindowInfo.h"
+#include "WindowInfo.h"
 
 WindowInfo::WindowInfo(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
     : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)

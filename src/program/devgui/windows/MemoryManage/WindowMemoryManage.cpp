@@ -1,5 +1,5 @@
 #include "devgui/DevGuiManager.h"
-#include "devgui/windows/WindowMemoryManage.h"
+#include "WindowMemoryManage.h"
 
 WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
     : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages) {}

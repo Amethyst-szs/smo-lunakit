@@ -1,5 +1,37 @@
-#include "devgui/windows/WindowActorBrowse.h"
+#include "WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
+
+void WindowActorBrowse::generateFilterList(al::Scene* scene)
+{
+    mFilterActorGroup->removeActorAll();
+
+    if(isFilterBySearch() && !mSearchString) 
+        return;
+
+    al::LiveActorGroup* sceneGroup = scene->mLiveActorKit->mLiveActorGroup2;
+
+    int requiredFilters = 0;
+    if(isFilterByFavorites())
+        requiredFilters++;
+    if(isFilterBySearch())
+        requiredFilters++;
+
+    for (int i = 0; i < sceneGroup->mActorCount; i++) {
+        sead::FixedSafeString<0x30> className = getActorName(sceneGroup->mActors[i], ActorBrowseNameDisplayType_CLASS);
+        sead::FixedSafeString<0x30> modelName = getActorName(sceneGroup->mActors[i], ActorBrowseNameDisplayType_MODEL);
+
+        int filtersHit = 0;
+        
+        if (isFilterByFavorites() && isActorInFavorites(className.cstr()))
+            filtersHit++;
+
+        if (isFilterBySearch() && (al::isEqualSubString(className.cstr(), mSearchString) || al::isEqualSubString(modelName.cstr(), mSearchString)))
+            filtersHit++;
+        
+        if(filtersHit >= requiredFilters)
+            mFilterActorGroup->registerActor(sceneGroup->mActors[i]);
+    }
+}
 
 bool WindowActorBrowse::isActorInFavorites(const char* actorName)
 {

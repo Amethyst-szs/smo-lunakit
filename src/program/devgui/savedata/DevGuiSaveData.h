@@ -27,7 +27,7 @@
 
 #include "types.h"
 
-#include "devgui/windows/WindowActorBrowse.h"
+#include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
 
 #include "DevGuiWriteStream.h"
 

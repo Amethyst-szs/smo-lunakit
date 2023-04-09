@@ -50,12 +50,12 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 
 // All windows
 #include "devgui/windows/WindowBase.h"
-#include "devgui/windows/WindowEditor.h"
-#include "devgui/windows/WindowInfo.h"
-#include "devgui/windows/WindowMemoryManage.h"
-#include "devgui/windows/WindowActorBrowse.h"
-#include "devgui/windows/WindowFPS.h"
-#include "devgui/windows/WindowLoadLog.h"
+#include "devgui/windows/Editor/WindowEditor.h"
+#include "devgui/windows/Info/WindowInfo.h"
+#include "devgui/windows/MemoryManage/WindowMemoryManage.h"
+#include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
+#include "devgui/windows/FPS/WindowFPS.h"
+#include "devgui/windows/LoadLog/WindowLoadLog.h"
 
 // All tabs on the bar the top of the screen
 #include "devgui/homemenu/HomeMenuBase.h"
