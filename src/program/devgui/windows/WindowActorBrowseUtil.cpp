@@ -1,0 +1,146 @@
+#include "devgui/windows/WindowActorBrowse.h"
+#include "devgui/DevGuiManager.h"
+
+bool WindowActorBrowse::isActorInFavorites(const char* actorName)
+{
+    for (int i = 0; i < mMaxFavs; i++) {
+        if (al::isEqualString(actorName, mFavActorNames[i].cstr()))
+            return true;
+    }
+
+    return false;
+}
+
+void WindowActorBrowse::toggleFavorite(const char* actorName)
+{
+    // Check for removing a favorite
+    for (int i = 0; i < mMaxFavs; i++) {
+        if (al::isEqualString(actorName, mFavActorNames[i].cstr())) {
+            mTotalFavs--;
+            mFavActorNames[i].clear();
+            publishFavoritesToSave();
+            return;
+        }
+    }
+
+    // Max favorites, don't allow adding one
+    if (mTotalFavs >= mMaxFavs)
+        return;
+
+    // Add a favorite if not removing a favorite
+    sead::FixedSafeString<0x40> favName(actorName);
+    for (int i = 0; i < mMaxFavs; i++) {
+        if (mFavActorNames[i].isEmpty()) {
+            mTotalFavs++;
+            mFavActorNames[i] = favName;
+            publishFavoritesToSave();
+            return;
+        }
+    }
+}
+
+void WindowActorBrowse::publishFavoritesToSave()
+{
+    DevGuiSaveData* save = mParent->getSaveData();
+
+    for(int i = 0; i < mMaxFavs; i++) {
+        save->setActorBrowserFavoriteAtIdx(mFavActorNames[i], i);
+    }
+
+    save->queueSaveWrite();
+}
+
+void WindowActorBrowse::getFavoritesFromSave()
+{
+    if(mIsSaveDataInited)
+        return;
+
+    DevGuiSaveData* save = mParent->getSaveData();
+
+    for(int i = 0; i < mMaxFavs; i++) {
+        mFavActorNames[i] = save->getActorBrowserFavoriteAtIdx(i);
+        if(!mFavActorNames[i].isEmpty())
+            mTotalFavs++;
+    }
+
+    mIsSaveDataInited = true;
+}
+
+
+sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor, bool isGetClassNameAlways)
+{
+    al::ModelKeeper* model = actor->mModelKeeper;
+
+    if(isNameDisplayClass() || isGetClassNameAlways || (!model && isNameDisplayModel())) {
+        int status = 0;
+        char* actName = nullptr;
+        actName = abi::__cxa_demangle(typeid(*actor).name(), nullptr, nullptr, &status);
+
+        sead::FixedSafeString<0x30> classNameSafe(actName);
+
+        free(actName);
+        return classNameSafe;
+    }
+
+    if(model && isNameDisplayModel()) {
+        sead::FixedSafeString<0x30> modelNameSafe(model->mResourceName);
+        return modelNameSafe;
+    }
+
+    if(isNameDisplayName()) {
+        sead::FixedSafeString<0x30> baseNameSafe(actor->getName());
+        return baseNameSafe;
+    }
+}
+
+sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(sead::FixedSafeString<0x30> text)
+{
+    int textLen = text.calcLength();
+    sead::FixedSafeString<0x30> trimName;
+
+    // If string doesn't need trimming, pad to target length and return
+    if (textLen <= mMaxCharacters) {
+        trimName.append(text.cstr());
+        trimName.append(' ', (mMaxCharacters - textLen) + 1);
+        return trimName;
+    }
+
+    // Create trimed string
+    for (int trimIdx = mMaxCharacters; trimIdx >= 0; trimIdx--) {
+        trimName.append(&text.cstr()[textLen - trimIdx - 1], 1);
+    }
+
+    return trimName;
+}
+
+sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(sead::FixedSafeString<0x30> text, int maxChars)
+{
+    int textLen = text.calcLength();
+    sead::FixedSafeString<0x30> trimName;
+
+    // If string doesn't need trimming, pad to target length and return
+    if (textLen <= maxChars) {
+        trimName.append(text.cstr());
+        trimName.append(' ', (maxChars - textLen) + 1);
+        return trimName;
+    }
+
+    // Create trimed string
+    for (int trimIdx = maxChars; trimIdx >= 0; trimIdx--) {
+        trimName.append(&text.cstr()[textLen - trimIdx - 1], 1);
+    }
+
+    return trimName;
+}
+
+int WindowActorBrowse::calcRoundedNum(int numToRound, int multiple)
+{
+    if (multiple == 0)
+        return numToRound;
+
+    int remainder = numToRound % multiple;
+    if (remainder == 0)
+        return numToRound;
+
+    return numToRound + multiple - remainder;
+}

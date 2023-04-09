@@ -49,7 +49,7 @@ bool WindowActorBrowse::tryUpdateWinDisplay()
         ImGui::SameLine();
     if (mSelectedActor)
         drawActorInfo();
-
+    
     return true;
 }
 
@@ -61,6 +61,24 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
 
     inputChildSize.y = mHeaderSize;
     ImGui::BeginChild("ActorInputs", inputChildSize, false);
+
+    if(ImGui::BeginCombo("Names", actorBrowseNameTypeTable[mNameDisplayType], ImGuiComboFlags_NoPreview)) {
+        ImGui::SetWindowFontScale(1.5f);
+
+        for(int i = 0; i < ActorBrowseNameDisplayType_ENUMSIZE; i++) {
+            bool is_selected = mNameDisplayType == (ActorBrowseNameDisplayType)i;
+
+            if (ImGui::Selectable(actorBrowseNameTypeTable[i], is_selected))
+                mNameDisplayType = (ActorBrowseNameDisplayType)i;
+
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();
+        }
+
+        ImGui::EndCombo();
+    }
+
+    ImGui::SameLine();
 
     if (!isFilterBySearch()) {
         if (ImGui::Button("Search")) {
@@ -79,18 +97,14 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
 
     bool isFiltFavs = isFilterByFavorites();
     if (mTotalFavs == 0)
-        ImGui::Text("No Favorites");
-    else if (ImGui::Checkbox("Favorites", &isFiltFavs)) {
+        ImGui::Text("No Favs");
+    else if (ImGui::Checkbox("Favs", &isFiltFavs)) {
         mFilterType ^= ActorBrowseFilterType_FAV;
         generateFilterList(scene);
     }
 
-    if(!isFilterByNone()) {
-        ImGui::SameLine();
-        ImGui::Checkbox("Mark", &mIsPrimDrawFilterGroup);
-    }
-
     ImGui::SameLine(ImGui::GetWindowWidth() - 105);
+
     if (mSelectedActor && ImGui::Button("Close Actor"))
         mSelectedActor = nullptr;
 
@@ -151,8 +165,14 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 
         // Prepare name data
         al::LiveActor* actor = group->mActors[i];
-        char* actorName = getActorName(actor);
-        bool isFavorite = isActorInFavorites(actorName);
+        sead::FixedSafeString<0x30> actorName = getActorName(actor, false);
+        sead::FixedSafeString<0x30> className;
+        if(isNameDisplayClass())
+            className = actorName;
+        else
+            className = getActorName(actor, true);
+
+        bool isFavorite = isActorInFavorites(className.cstr());
 
         sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName);
         sead::FormatFixedSafeString<0x9> buttonName("%i", i);
@@ -165,13 +185,21 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
         // Draw item and favorite option
         ImGui::Selectable(trimName.cstr(), &isFavorite, 0, ImVec2((mMaxCharacters - 2) * horizFontSize, mLineSize));
         if (ImGui::IsItemHovered()) {
-            ImGui::SetTooltip("Class: %s\nName: %s\nClick to open actor", actorName, actor->mActorName);
+            sead::FormatFixedSafeString<0x200> tooltipText("Class: %s\nName: %s\n", className.cstr(), actor->mActorName);
+            if(actor->mModelKeeper) {
+                tooltipText.append("Model: ");
+                tooltipText.append(actor->mModelKeeper->mResourceName);
+                tooltipText.append("\n");
+            }
+
+            tooltipText.append("Click to open actor");
+            ImGui::SetTooltip(tooltipText.cstr());
 
             if(actor->mPoseKeeper)
                 mParent->getPrimitiveQueue()->pushAxis(actor->mPoseKeeper->mTranslation, 400.f);
 
             if(actor->mHitSensorKeeper)
-                mParent->getPrimitiveQueue()->pushHitSensor(actor, mHitSensorTypes, 0.2f);
+                mParent->getPrimitiveQueue()->pushHitSensor(actor, mHitSensorTypes, 0.15f);
         }
 
         if (ImGui::IsItemClicked()) 
@@ -179,15 +207,9 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 
         ImGui::SameLine();
         if (ImGui::ArrowButton(buttonName.cstr(), isFavorite ? ImGuiDir_Down : ImGuiDir_Up))
-            toggleFavorite(actorName);
+            toggleFavorite(actorName.cstr());
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("%s\n%i/%i Favorites", isFavorite ? "Remove Favorite" : "Favorite", mTotalFavs, mMaxFavs);
-        
-        // If list is filtered and prim drawing for filter group is on, draw points
-        if(!isFilterByNone() && mIsPrimDrawFilterGroup && mFilterActorGroup->mActorCount < 75 && actor->mPoseKeeper)
-            mParent->getPrimitiveQueue()->pushPoint(actor->mPoseKeeper->mTranslation, 80.f, {0.9f, 0.6f, 0.9f, 0.3f});
-
-        free(actorName);
     }
 
     // Fill in empty space below bottom of window for scroll
@@ -198,15 +220,17 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 
 void WindowActorBrowse::drawActorInfo()
 {
+    ImGui::SetWindowFontScale(mConfig.mFontSize);
+
     ImVec2 listSize = ImGui::GetContentRegionAvail();
     if(mIsWindowVertical)
         listSize.y -= mHeaderSize - 2.f;
 
     ImGui::BeginChild("ActorInfo", listSize, true);
 
-    char* actorClass = getActorName(mSelectedActor);
+    sead::FixedSafeString<0x30> actorClass = getActorName(mSelectedActor, true);
 
-    ImGui::LabelText("Class", actorClass);
+    ImGui::LabelText("Class", actorClass.cstr());
     if(mSelectedActor->mModelKeeper) {
         ImGui::Separator();
         ImGui::LabelText("Model", mSelectedActor->mModelKeeper->mResourceName);
@@ -278,7 +302,7 @@ void WindowActorBrowse::drawActorInfo()
         const al::Nerve* pNrv2 = nrvKeep->getCurrentNerve();
         char* nrvName2 = abi::__cxa_demangle(typeid(*pNrv2).name(), nullptr, nullptr, &status);
 
-        ImGui::Text("Nerve: %s", nrvName2 + 23 + strlen(actorClass) + 3);
+        ImGui::Text("Nerve: %s", nrvName2 + 23 + strlen(actorClass.cstr()) + 3);
         ImGui::Text("Step: %i", nrvKeep->mStep);
 
         ImGui::TreePop();
@@ -313,73 +337,6 @@ void WindowActorBrowse::drawActorInfo()
         mParent->getPrimitiveQueue()->pushHitSensor(mSelectedActor, mHitSensorTypes, 0.4f);
 
     ImGui::EndChild();
-
-    free(actorClass);
-}
-
-bool WindowActorBrowse::isActorInFavorites(char* actorName)
-{
-    for (int i = 0; i < mMaxFavs; i++) {
-        if (al::isEqualString(actorName, mFavActorNames[i].cstr()))
-            return true;
-    }
-
-    return false;
-}
-
-void WindowActorBrowse::toggleFavorite(char* actorName)
-{
-    // Check for removing a favorite
-    for (int i = 0; i < mMaxFavs; i++) {
-        if (al::isEqualString(actorName, mFavActorNames[i].cstr())) {
-            mTotalFavs--;
-            mFavActorNames[i].clear();
-            publishFavoritesToSave();
-            return;
-        }
-    }
-
-    // Max favorites, don't allow adding one
-    if (mTotalFavs >= mMaxFavs)
-        return;
-
-    // Add a favorite if not removing a favorite
-    sead::FixedSafeString<0x40> favName(actorName);
-    for (int i = 0; i < mMaxFavs; i++) {
-        if (mFavActorNames[i].isEmpty()) {
-            mTotalFavs++;
-            mFavActorNames[i] = favName;
-            publishFavoritesToSave();
-            return;
-        }
-    }
-}
-
-void WindowActorBrowse::publishFavoritesToSave()
-{
-    DevGuiSaveData* save = mParent->getSaveData();
-
-    for(int i = 0; i < mMaxFavs; i++) {
-        save->setActorBrowserFavoriteAtIdx(mFavActorNames[i], i);
-    }
-
-    save->queueSaveWrite();
-}
-
-void WindowActorBrowse::getFavoritesFromSave()
-{
-    if(mIsSaveDataInited)
-        return;
-
-    DevGuiSaveData* save = mParent->getSaveData();
-
-    for(int i = 0; i < mMaxFavs; i++) {
-        mFavActorNames[i] = save->getActorBrowserFavoriteAtIdx(i);
-        if(!mFavActorNames[i].isEmpty())
-            mTotalFavs++;
-    }
-
-    mIsSaveDataInited = true;
 }
 
 void WindowActorBrowse::generateFilterList(al::Scene* scene)
@@ -398,78 +355,16 @@ void WindowActorBrowse::generateFilterList(al::Scene* scene)
         requiredFilters++;
 
     for (int i = 0; i < sceneGroup->mActorCount; i++) {
-        char* actorName = getActorName(sceneGroup->mActors[i]);
+        sead::FixedSafeString<0x30> actorName = getActorName(sceneGroup->mActors[i], false);
         int filtersHit = 0;
         
-        if (isFilterByFavorites() && isActorInFavorites(actorName))
+        if (isFilterByFavorites() && isActorInFavorites(actorName.cstr()))
             filtersHit++;
 
-        if (isFilterBySearch() && al::isEqualSubString(actorName, mSearchString))
+        if (isFilterBySearch() && al::isEqualSubString(actorName.cstr(), mSearchString))
             filtersHit++;
         
         if(filtersHit >= requiredFilters)
             mFilterActorGroup->registerActor(sceneGroup->mActors[i]);
-
-        free(actorName);
     }
-}
-
-char* WindowActorBrowse::getActorName(al::LiveActor* actor)
-{
-    int status = 0;
-    char* actName = nullptr;
-    actName = abi::__cxa_demangle(typeid(*actor).name(), nullptr, nullptr, &status);
-    return actName;
-}
-
-sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(char* text)
-{
-    int textLen = strlen(text);
-    sead::FixedSafeString<0x30> trimName;
-
-    // If string doesn't need trimming, pad to target length and return
-    if (textLen <= mMaxCharacters) {
-        trimName.append(text);
-        trimName.append(' ', (mMaxCharacters - textLen) + 1);
-        return trimName;
-    }
-
-    // Create trimed string
-    for (int trimIdx = mMaxCharacters; trimIdx >= 0; trimIdx--) {
-        trimName.append(&text[textLen - trimIdx - 1], 1);
-    }
-
-    return trimName;
-}
-
-sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(char* text, int maxChars)
-{
-    int textLen = strlen(text);
-    sead::FixedSafeString<0x30> trimName;
-
-    // If string doesn't need trimming, pad to target length and return
-    if (textLen <= maxChars) {
-        trimName.append(text);
-        trimName.append(' ', (maxChars - textLen) + 1);
-        return trimName;
-    }
-
-    // Create trimed string
-    for (int trimIdx = maxChars; trimIdx >= 0; trimIdx--) {
-        trimName.append(&text[textLen - trimIdx - 1], 1);
-    }
-
-    return trimName;
-}
-
-int WindowActorBrowse::calcRoundedNum(int numToRound, int multiple)
-{
-    if (multiple == 0)
-        return numToRound;
-
-    int remainder = numToRound % multiple;
-    if (remainder == 0)
-        return numToRound;
-
-    return numToRound + multiple - remainder;
 }
