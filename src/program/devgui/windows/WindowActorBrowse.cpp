@@ -62,14 +62,16 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
     inputChildSize.y = mHeaderSize;
     ImGui::BeginChild("ActorInputs", inputChildSize, false);
 
-    if(ImGui::BeginCombo("Names", actorBrowseNameTypeTable[mNameDisplayType], ImGuiComboFlags_NoPreview)) {
+    if(ImGui::BeginCombo(actorBrowseNameTypeTable[mNameDisplayType], " ", ImGuiComboFlags_NoPreview)) {
         ImGui::SetWindowFontScale(1.5f);
 
         for(int i = 0; i < ActorBrowseNameDisplayType_ENUMSIZE; i++) {
             bool is_selected = mNameDisplayType == (ActorBrowseNameDisplayType)i;
 
-            if (ImGui::Selectable(actorBrowseNameTypeTable[i], is_selected))
+            if (ImGui::Selectable(actorBrowseNameTypeTable[i], is_selected)) {
                 mNameDisplayType = (ActorBrowseNameDisplayType)i;
+                generateFilterList(scene);
+            }
 
             if (is_selected)
                 ImGui::SetItemDefaultFocus();
@@ -165,12 +167,12 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 
         // Prepare name data
         al::LiveActor* actor = group->mActors[i];
-        sead::FixedSafeString<0x30> actorName = getActorName(actor, false);
+        sead::FixedSafeString<0x30> actorName = getActorName(actor);
         sead::FixedSafeString<0x30> className;
         if(isNameDisplayClass())
             className = actorName;
         else
-            className = getActorName(actor, true);
+            className = getActorName(actor, ActorBrowseNameDisplayType_CLASS);
 
         bool isFavorite = isActorInFavorites(className.cstr());
 
@@ -207,7 +209,7 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 
         ImGui::SameLine();
         if (ImGui::ArrowButton(buttonName.cstr(), isFavorite ? ImGuiDir_Down : ImGuiDir_Up))
-            toggleFavorite(actorName.cstr());
+            toggleFavorite(className.cstr());
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("%s\n%i/%i Favorites", isFavorite ? "Remove Favorite" : "Favorite", mTotalFavs, mMaxFavs);
     }
@@ -228,7 +230,7 @@ void WindowActorBrowse::drawActorInfo()
 
     ImGui::BeginChild("ActorInfo", listSize, true);
 
-    sead::FixedSafeString<0x30> actorClass = getActorName(mSelectedActor, true);
+    sead::FixedSafeString<0x30> actorClass = getActorName(mSelectedActor, ActorBrowseNameDisplayType_CLASS);
 
     ImGui::LabelText("Class", actorClass.cstr());
     if(mSelectedActor->mModelKeeper) {
@@ -355,13 +357,15 @@ void WindowActorBrowse::generateFilterList(al::Scene* scene)
         requiredFilters++;
 
     for (int i = 0; i < sceneGroup->mActorCount; i++) {
-        sead::FixedSafeString<0x30> actorName = getActorName(sceneGroup->mActors[i], false);
+        sead::FixedSafeString<0x30> className = getActorName(sceneGroup->mActors[i], ActorBrowseNameDisplayType_CLASS);
+        sead::FixedSafeString<0x30> modelName = getActorName(sceneGroup->mActors[i], ActorBrowseNameDisplayType_MODEL);
+
         int filtersHit = 0;
         
-        if (isFilterByFavorites() && isActorInFavorites(actorName.cstr()))
+        if (isFilterByFavorites() && isActorInFavorites(className.cstr()))
             filtersHit++;
 
-        if (isFilterBySearch() && al::isEqualSubString(actorName.cstr(), mSearchString))
+        if (isFilterBySearch() && (al::isEqualSubString(className.cstr(), mSearchString) || al::isEqualSubString(modelName.cstr(), mSearchString)))
             filtersHit++;
         
         if(filtersHit >= requiredFilters)

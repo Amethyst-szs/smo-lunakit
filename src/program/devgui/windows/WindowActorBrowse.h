@@ -38,7 +38,7 @@ enum ActorBrowseNameDisplayType {
 __attribute__((used)) static const char* actorBrowseNameTypeTable[ActorBrowseNameDisplayType_ENUMSIZE] = {
     "Class",
     "Model",
-    "Name"
+    "Name "
 };
 
 class WindowActorBrowse : public WindowBase {
@@ -85,7 +85,8 @@ private:
     void publishFavoritesToSave();
 
     // Actor name getting and trimming
-    sead::FixedSafeString<0x30> getActorName(al::LiveActor* actor, bool isGetClassNameAlways);
+    sead::FixedSafeString<0x30> getActorName(al::LiveActor* actor);
+    sead::FixedSafeString<0x30> getActorName(al::LiveActor* actor, ActorBrowseNameDisplayType nameType);
     sead::FixedSafeString<0x30> calcTrimNameFromRight(sead::FixedSafeString<0x30>);
     sead::FixedSafeString<0x30> calcTrimNameFromRight(sead::FixedSafeString<0x30>, int maxChars);
     int calcRoundedNum(int numToRound, int multiple);

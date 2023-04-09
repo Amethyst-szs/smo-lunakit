@@ -66,12 +66,11 @@ void WindowActorBrowse::getFavoritesFromSave()
     mIsSaveDataInited = true;
 }
 
-
-sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor, bool isGetClassNameAlways)
+sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor)
 {
     al::ModelKeeper* model = actor->mModelKeeper;
 
-    if(isNameDisplayClass() || isGetClassNameAlways || (!model && isNameDisplayModel())) {
+    if(isNameDisplayClass() || (!model && isNameDisplayModel())) {
         int status = 0;
         char* actName = nullptr;
         actName = abi::__cxa_demangle(typeid(*actor).name(), nullptr, nullptr, &status);
@@ -91,6 +90,38 @@ sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor
         sead::FixedSafeString<0x30> baseNameSafe(actor->getName());
         return baseNameSafe;
     }
+
+    sead::FixedSafeString<0x30> failName("NO NAME FOUND");
+    return failName;
+}
+
+sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor, ActorBrowseNameDisplayType nameType)
+{
+    al::ModelKeeper* model = actor->mModelKeeper;
+
+    if(nameType == ActorBrowseNameDisplayType_CLASS || (!model && isNameDisplayModel())) {
+        int status = 0;
+        char* actName = nullptr;
+        actName = abi::__cxa_demangle(typeid(*actor).name(), nullptr, nullptr, &status);
+
+        sead::FixedSafeString<0x30> classNameSafe(actName);
+
+        free(actName);
+        return classNameSafe;
+    }
+
+    if(model && nameType == ActorBrowseNameDisplayType_MODEL) {
+        sead::FixedSafeString<0x30> modelNameSafe(model->mResourceName);
+        return modelNameSafe;
+    }
+
+    if(nameType == ActorBrowseNameDisplayType_NAME) {
+        sead::FixedSafeString<0x30> baseNameSafe(actor->getName());
+        return baseNameSafe;
+    }
+
+    sead::FixedSafeString<0x30> failName("NO NAME FOUND");
+    return failName;
 }
 
 sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(sead::FixedSafeString<0x30> text)
