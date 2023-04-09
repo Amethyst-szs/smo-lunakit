@@ -214,7 +214,7 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
 
         gTextWriter->mColor = sead::Color4f(1.f, 1.f, 1.f, 0.8f);
 
-        test_curl(lkHeap);
+        // test_curl(lkHeap);
 
         Orig(thisPtr);
 

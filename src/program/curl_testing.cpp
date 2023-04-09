@@ -39,75 +39,75 @@ namespace nn::ssl {
   struct timeval wait = { 0, (x) * 1000 };      \
   (void)nn::socket::Select(0, nullptr, nullptr, nullptr, &wait);
 
-void test_curl(sead::Heap *heap) {
-    sead::ScopedCurrentHeapSetter setter(heap);
+// void test_curl(sead::Heap *heap) {
+//     sead::ScopedCurrentHeapSetter setter(heap);
 
-    nn::ssl::Initialize();
+//     nn::ssl::Initialize();
 
-    CURLcode result = curl_global_init(CURL_GLOBAL_ALL);
+//     CURLcode result = curl_global_init(CURL_GLOBAL_ALL);
 
-    if(result != CURLcode::CURLE_OK) {
-        Logger::log("init returned non ok! Val: %d\n", curl_easy_strerror(result));
-        return;
-    }
+//     if(result != CURLcode::CURLE_OK) {
+//         Logger::log("init returned non ok! Val: %d\n", curl_easy_strerror(result));
+//         return;
+//     }
 
-    CURL* curl = curl_easy_init();
-    CURLM* multi = curl_multi_init();
+//     CURL* curl = curl_easy_init();
+//     CURLM* multi = curl_multi_init();
 
-    DataStream curlData(0x10);
+//     DataStream curlData(0x10);
 
-    if(curl && multi) {
-        curl_easy_setopt(curl, CURLOPT_URL, "http://sanae6.ca/share/amy/Palette.png");
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, test_curl_write);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&curlData);
+//     if(curl && multi) {
+//         curl_easy_setopt(curl, CURLOPT_URL, "url here");
+//         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, test_curl_write);
+//         curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&curlData);
 
-        curl_multi_add_handle(multi, curl);
+//         curl_multi_add_handle(multi, curl);
 
-        result = curl_easy_perform(curl);
+//         result = curl_easy_perform(curl);
 
-        if(result != CURLE_OK)
-            Logger::log("curl_easy_perform() failed: %s\n", curl_easy_strerror(result));
+//         if(result != CURLE_OK)
+//             Logger::log("curl_easy_perform() failed: %s\n", curl_easy_strerror(result));
 
-        int still_running = 1;
-        int repeats = 0;
+//         int still_running = 1;
+//         int repeats = 0;
 
-        curl_multi_perform(multi, &still_running);
+//         curl_multi_perform(multi, &still_running);
 
-        do {
-            int numfds;
-            CURLMcode code = curl_multi_wait(multi, nullptr, 0, 1000, &numfds);
+//         do {
+//             int numfds;
+//             CURLMcode code = curl_multi_wait(multi, nullptr, 0, 1000, &numfds);
 
-            if(code != CURLM_OK) {
-                Logger::log("curl_multi_wait() failed, code %d.\n", code);
-                break;
-            }
+//             if(code != CURLM_OK) {
+//                 Logger::log("curl_multi_wait() failed, code %d.\n", code);
+//                 break;
+//             }
 
-            if(!numfds) {
-                repeats++; /* count number of repeated zero numfds */
-                if(repeats > 1) {
-                    WAITMS(100); /* sleep 100 milliseconds */
-                }
-            }
-            else
-                repeats = 0;
+//             if(!numfds) {
+//                 repeats++; /* count number of repeated zero numfds */
+//                 if(repeats > 1) {
+//                     WAITMS(100); /* sleep 100 milliseconds */
+//                 }
+//             }
+//             else
+//                 repeats = 0;
 
-            curl_multi_perform(multi, &still_running);
+//             curl_multi_perform(multi, &still_running);
 
-        }while(still_running);
+//         }while(still_running);
 
-        FsHelper::writeFileToPath(curlData.getData(), curlData.getSize(), "sd:/LunaKit/Palette.png");
+//         FsHelper::writeFileToPath(curlData.getData(), curlData.getSize(), "sd:/LunaKit/File.bin");
 
-        curl_multi_remove_handle(multi, curl);
+//         curl_multi_remove_handle(multi, curl);
 
-        curl_easy_cleanup(curl);
+//         curl_easy_cleanup(curl);
 
-        curl_multi_cleanup(multi);
+//         curl_multi_cleanup(multi);
 
-        Logger::log("Curl test successful.\n");
+//         Logger::log("Curl test successful.\n");
 
-        return;
-    }
+//         return;
+//     }
 
-    Logger::log("Curl test failed!\n");
+//     Logger::log("Curl test failed!\n");
 
-}
+// }
