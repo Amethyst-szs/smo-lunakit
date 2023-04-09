@@ -85,5 +85,5 @@ private:
     int mMaxCharacters = 1;
 
     // Constants
-    const float mHeaderSize = 24.f;
+    const float mHeaderSize = 27.f;
 };

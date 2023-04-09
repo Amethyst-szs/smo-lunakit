@@ -55,7 +55,7 @@ bool WindowActorBrowse::tryUpdateWinDisplay()
 
 void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
 {
-    ImGui::SetWindowFontScale(1.1f);
+    ImGui::SetWindowFontScale(1.25f);
 
     ImVec2 inputChildSize = ImGui::GetContentRegionAvail();
 
@@ -87,10 +87,10 @@ void WindowActorBrowse::drawButtonHeader(al::Scene* scene)
 
     if(!isFilterByNone()) {
         ImGui::SameLine();
-        ImGui::Checkbox("Render List", &mIsPrimDrawFilterGroup);
+        ImGui::Checkbox("Mark", &mIsPrimDrawFilterGroup);
     }
 
-    ImGui::SameLine(ImGui::GetWindowWidth() - 90);
+    ImGui::SameLine(ImGui::GetWindowWidth() - 105);
     if (mSelectedActor && ImGui::Button("Close Actor"))
         mSelectedActor = nullptr;
 
@@ -207,8 +207,13 @@ void WindowActorBrowse::drawActorInfo()
     char* actorClass = getActorName(mSelectedActor);
 
     ImGui::LabelText("Class", actorClass);
+    if(mSelectedActor->mModelKeeper) {
+        ImGui::Separator();
+        ImGui::LabelText("Model", mSelectedActor->mModelKeeper->mResourceName);
+    }
     ImGui::Separator();
     ImGui::LabelText("Name", mSelectedActor->getName());
+    ImGui::Separator();
     
     al::ActorPoseKeeperBase* pose = mSelectedActor->mPoseKeeper;
     if(pose) {

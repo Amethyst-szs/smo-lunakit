@@ -6,32 +6,20 @@
 #include "al/actor/SubActorKeeper.h"
 
 #include "al/area/AreaObjDirector.h"
-
 #include "al/audio/AudioKeeper.h"
-
 #include "al/camera/CameraDirector.h"
-
 #include "al/collision/CollisionDirector.h"
-
 #include "al/effect/EffectKeeper.h"
-
 #include "al/hio/HioNode.h"
-
+#include "al/model/ModelKeeper.h"
 #include "al/nerve/Nerve.h"
 #include "al/nerve/NerveStateCtrl.h"
-
 #include "al/pose/ActorPoseKeeper.h"
-
 #include "al/rail/RailKeeper.h"
-
 #include "al/scene/SceneObjHolder.h"
-
 #include "al/screen/ScreenPointKeeper.h"
-
 #include "al/sensor/HitSensorKeeper.h"
-
 #include "al/switch/StageSwitchKeeper.h"
-
 #include "al/LiveActor/LiveActorFlag.h"
 
 // vtable for LiveActor: 1C4EB58
@@ -45,7 +33,6 @@ namespace al
     class ActorScoreKeeper;
     class Collider;
     class CollisionParts;
-    class ModelKeeper;
     class ShadowKeeper;
     class ActorPrePassLightKeeper;
     class ActorOcclusionKeeper;
