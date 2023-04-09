@@ -71,3 +71,11 @@ typedef __builtin_va_list va_list;
 typedef u32 Result;
 typedef u32 Handle;
 typedef void (*ThreadFunc)(void*);
+
+// socket types
+
+typedef uint16_t in_port_t;
+typedef uint32_t in_addr_t;
+typedef uint16_t sa_family_t;
+
+typedef unsigned int socklen_t;
