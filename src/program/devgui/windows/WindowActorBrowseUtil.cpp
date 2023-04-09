@@ -164,6 +164,28 @@ sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(sead::Fixed
     return trimName;
 }
 
+void WindowActorBrowse::showActorTooltip(al::LiveActor* actor)
+{
+    al::ModelKeeper* model = actor->mModelKeeper;
+    sead::FixedSafeString<0x30> className = getActorName(actor, ActorBrowseNameDisplayType_CLASS);
+
+    sead::FormatFixedSafeString<0x200> tooltipText("Class: %s\nName: %s\n", className.cstr(), actor->mActorName);
+    if(actor->mModelKeeper) {
+        tooltipText.append("Model: ");
+        tooltipText.append(model->mResourceName);
+        tooltipText.append("\n");
+    }
+
+    tooltipText.append("Click to open actor");
+    ImGui::SetTooltip(tooltipText.cstr());
+
+    if(actor->mPoseKeeper)
+        mParent->getPrimitiveQueue()->pushAxis(actor->mPoseKeeper->mTranslation, 400.f);
+
+    if(actor->mHitSensorKeeper)
+        mParent->getPrimitiveQueue()->pushHitSensor(actor, mHitSensorTypes, 0.15f);
+}
+
 int WindowActorBrowse::calcRoundedNum(int numToRound, int multiple)
 {
     if (multiple == 0)

@@ -89,6 +89,7 @@ private:
     sead::FixedSafeString<0x30> getActorName(al::LiveActor* actor, ActorBrowseNameDisplayType nameType);
     sead::FixedSafeString<0x30> calcTrimNameFromRight(sead::FixedSafeString<0x30>);
     sead::FixedSafeString<0x30> calcTrimNameFromRight(sead::FixedSafeString<0x30>, int maxChars);
+    void showActorTooltip(al::LiveActor* actor);
     int calcRoundedNum(int numToRound, int multiple);
 
     bool mIsSaveDataInited = false;

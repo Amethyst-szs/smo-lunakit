@@ -186,23 +186,8 @@ void WindowActorBrowse::drawActorList(al::Scene* scene)
 
         // Draw item and favorite option
         ImGui::Selectable(trimName.cstr(), &isFavorite, 0, ImVec2((mMaxCharacters - 2) * horizFontSize, mLineSize));
-        if (ImGui::IsItemHovered()) {
-            sead::FormatFixedSafeString<0x200> tooltipText("Class: %s\nName: %s\n", className.cstr(), actor->mActorName);
-            if(actor->mModelKeeper) {
-                tooltipText.append("Model: ");
-                tooltipText.append(actor->mModelKeeper->mResourceName);
-                tooltipText.append("\n");
-            }
-
-            tooltipText.append("Click to open actor");
-            ImGui::SetTooltip(tooltipText.cstr());
-
-            if(actor->mPoseKeeper)
-                mParent->getPrimitiveQueue()->pushAxis(actor->mPoseKeeper->mTranslation, 400.f);
-
-            if(actor->mHitSensorKeeper)
-                mParent->getPrimitiveQueue()->pushHitSensor(actor, mHitSensorTypes, 0.15f);
-        }
+        if (ImGui::IsItemHovered())
+            showActorTooltip(actor);
 
         if (ImGui::IsItemClicked()) 
             mSelectedActor = actor;
@@ -241,6 +226,30 @@ void WindowActorBrowse::drawActorInfo()
     ImGui::LabelText("Name", mSelectedActor->getName());
     ImGui::Separator();
     
+    al::SubActorKeeper* subActorKeep = mSelectedActor->mSubActorKeeper;
+    if(subActorKeep && ImGui::TreeNode("Sub-Actors")) {
+        for(int i = 0; i < subActorKeep->mActorCount; i++) {
+            al::LiveActor* subActor = subActorKeep->mInfoList[i]->mSubActor;
+
+            sead::FixedSafeString<0x30> actorName = getActorName(subActor);
+            sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName);
+
+            if(trimName.isEmpty()) {
+                ImGui::TextDisabled("Actor name not found!");
+                continue;
+            }
+            
+            bool isFalse = false;
+            ImGui::Selectable(trimName.cstr(), &isFalse, 0, ImVec2(ImGui::GetWindowWidth(), mLineSize));
+            if (ImGui::IsItemHovered())
+                showActorTooltip(subActor);
+            if (ImGui::IsItemClicked()) 
+                mSelectedActor = subActor;
+        }
+
+        ImGui::TreePop();
+    }
+
     al::ActorPoseKeeperBase* pose = mSelectedActor->mPoseKeeper;
     if(pose) {
         PlayerActorBase* player = tryGetPlayerActor();
@@ -254,8 +263,6 @@ void WindowActorBrowse::drawActorInfo()
         mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
 
         if (ImGui::TreeNode("Actor Pose")) {
-            ImGui::Separator();
-
             ImGuiHelper::Vector3Drag("Trans", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
             ImGuiHelper::Vector3Drag("Scale", "Pose Keeper Scale", pose->getScalePtr(), 0.05f, 0.f);
             ImGuiHelper::Vector3Drag("Velcoity", "Pose Keeper Velocity", pose->getVelocityPtr(), 1.f, 0.f);
