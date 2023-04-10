@@ -69,7 +69,8 @@
 
 #include "ExceptionHandler.h"
 
-#include "curl_testing.h"
+#include "helpers/DataStream.h"
+#include "helpers/curlHelper.h"
 
 namespace patch = exl::patch;
 namespace inst = exl::armv8::inst;
@@ -213,8 +214,6 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
         gTextWriter->setupGraphics(context);
 
         gTextWriter->mColor = sead::Color4f(1.f, 1.f, 1.f, 0.8f);
-
-        // test_curl(lkHeap);
 
         Orig(thisPtr);
 
