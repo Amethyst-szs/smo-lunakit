@@ -24,6 +24,10 @@ void WindowActorBrowse::childActorInspector()
     ImGui::LabelText("Name", mSelectedActor->getName());
 
     ImGui::Spacing();
+
+    if(ImGui::Button("Appear")) mSelectedActor->appear();
+    ImGui::SameLine();
+    if(ImGui::Button("Kill")) mSelectedActor->kill();
     
     drawActorInspectorTreePose(mSelectedActor->mPoseKeeper);
     drawActorInspectorTreeFlags(mSelectedActor->mLiveActorFlag, listSize.x);
@@ -43,11 +47,13 @@ inline void WindowActorBrowse::drawActorInspectorTreePose(al::ActorPoseKeeperBas
     mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
 
     PlayerActorBase* player = tryGetPlayerActor();
+
+    ImGui::SameLine();
     if(player && ImGui::Button("Warp to Object")) {
         player->startDemoPuppetable();
         player->mPoseKeeper->mTranslation = pose->mTranslation;
         player->endDemoPuppetable();
-    }
+    } else ImGui::NewLine();
 
     if (ImGui::TreeNode("Actor Pose")) {
         ImGuiHelper::Vector3Drag("Trans", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
