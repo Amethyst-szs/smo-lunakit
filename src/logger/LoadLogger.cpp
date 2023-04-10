@@ -2,7 +2,6 @@
 #include "devgui/DevGuiManager.h"
 #include "lib.hpp"
 #include "nifm.h"
-#include "socket.h"
 #include "util.h"
 
 void LoadLog::pushTextToVector(const char* text) {

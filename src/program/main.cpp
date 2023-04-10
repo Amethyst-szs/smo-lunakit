@@ -69,6 +69,9 @@
 
 #include "ExceptionHandler.h"
 
+#include "helpers/DataStream.h"
+#include "helpers/curlHelper.h"
+
 namespace patch = exl::patch;
 namespace inst = exl::armv8::inst;
 namespace reg = exl::armv8::reg;
