@@ -25,8 +25,15 @@ class HomeMenuBase {
 public:
     HomeMenuBase(DevGuiManager* parent, const char* menuName);
 
-    virtual void updateMenu() {} // Called every frame regardless of if the menu is currently open
-    virtual void updateMenuDisplay() = 0; // Called whenever this menu is opened
+    // updateMenu is called every frame even if the LunaKit display is closed
+    virtual void updateMenu(){};
+
+    // updateMenuDisplay is only called if the menu is open AND the LunaKit display is active
+    virtual void updateMenuDisplay() = 0;
+
+    // updatePostDisplay is only called if the menu is open AND the LunaKit display is active
+    // Mainly serves as a place to open popups or modals if needed
+    virtual void updatePostDisplay(){};
 
     virtual const char* getMenuName() { return mMenuName; };
 

@@ -1,11 +1,13 @@
 #pragma once
 
-#include "imgui.h"
-#include "imgui_internal.h"
-
 #include "devgui/homemenu/HomeMenuBase.h"
 
 #include "logger/Logger.hpp"
+
+#include "imgui.h"
+#include "imgui_internal.h"
+
+#include "update/UpdateHandler.h"
 
 class HomeMenuExtra : public HomeMenuBase {
 public:

@@ -8,8 +8,15 @@ SEAD_SINGLETON_DISPOSER_IMPL(UpdateHandler)
 UpdateHandler::UpdateHandler() = default;
 UpdateHandler::~UpdateHandler() = default;
 
-void UpdateHandler::init(sead::Heap* heap)
+void UpdateHandler::checkForUpdates(sead::Heap* heap)
 {
+    if(mInfo) {
+        Logger::log("Starting UpdateHandler again, deleting previous info\n");
+        mIsNewUpdate = false;
+        mIsCurlFail = false;
+        delete(mInfo);
+    }
+
     Logger::log("Initalizing Auto-Update Handler\n");
 
     // Get data from GitHub API with curl

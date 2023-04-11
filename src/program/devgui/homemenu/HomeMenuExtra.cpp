@@ -72,18 +72,8 @@ void HomeMenuExtra::updateMenuDisplay()
     }
 
     bool* demoWinState = mParent->getImGuiDemoWindowState();
-    if (ImGui::MenuItem("ImGui Demo Window", NULL, *demoWinState)) {
+    if (ImGui::MenuItem("ImGui Demo Window", NULL, *demoWinState))
         *demoWinState = !(*demoWinState);
-    }
-
-    if(addMenu("Credits")) {
-        ImGui::MenuItem("Amethyst-szs", NULL, false, false);
-        ImGui::MenuItem("CraftyBoss", NULL, false, false);
-        ImGui::MenuItem("Mars", NULL, false, false);
-        ImGui::MenuItem("ExLaunch Devs", NULL, false, false);
-
-        ImGui::EndMenu();
-    }
 
     ImGui::PopItemFlag();
 }

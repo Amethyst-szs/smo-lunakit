@@ -20,7 +20,7 @@ class UpdateHandler {
 
 public:
     // Tries to download the data package of what the newest version is
-    void init(sead::Heap* heap); 
+    void checkForUpdates(sead::Heap* heap); 
     void downloadUpdate();
 
     bool isUpdateAvailable() { return mIsNewUpdate; }

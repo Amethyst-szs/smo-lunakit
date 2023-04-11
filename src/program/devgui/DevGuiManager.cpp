@@ -133,6 +133,8 @@ void DevGuiManager::updateDisplay()
         entry->tryUpdateWinDisplay();
 
         ImGui::End();
+
+        entry->updatePostDisplay();
     }
 
     mIsAnchorChange = false;
@@ -147,6 +149,8 @@ void DevGuiManager::updateDisplay()
                 entry->updateMenuDisplay();
 
                 ImGui::EndMenu();
+                
+                entry->updatePostDisplay();
             }
         }
 

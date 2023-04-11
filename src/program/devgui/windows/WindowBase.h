@@ -69,8 +69,11 @@ public:
     virtual void updateWin();
 
     // updateWinDisplay is only called if the window is open AND the LunaKit display is active
-    // If window does not have any categories, the implementation is responsible for running ImGui::End()
     virtual bool tryUpdateWinDisplay();
+
+    // updatePostDisplay is only called if the window is open AND the LunaKit display is active
+    // Mainly serves as a place to open popups or modals if needed
+    virtual void updatePostDisplay(){};
 
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#categories
