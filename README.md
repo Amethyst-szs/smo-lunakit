@@ -57,7 +57,9 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 ## Credits:
 - [Amethyst-szs](https://github.com/Amethyst-szs): LunaKit Creator
 - [CraftyBoss](https://github.com/CraftyBoss): SMO ExLaunch, ImGui, and more
-- [Mars](https://github.com/Mars2032): Referenced TAS Mod, Emotional support
+- [Mars](https://github.com/Mars2032): Referenced TAS Mod, Emotional support  
+  
+- [DaveGamble/cJSON](https://github.com/DaveGamble/cJSON): C JSON Parser
 
 
 # Original SMO-Exlaunch-Base Description

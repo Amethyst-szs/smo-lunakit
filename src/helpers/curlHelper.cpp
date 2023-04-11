@@ -29,6 +29,7 @@ namespace curlHelper {
 
         curl_easy_setopt(curl, CURLOPT_URL, url);
 
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, "libcurl-agent/1.0");
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, DataDownloader::DataWrite);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&data);
         curl_easy_setopt(curl, CURLOPT_SSL_CTX_FUNCTION, DataDownloader::CreateSslCtx);
