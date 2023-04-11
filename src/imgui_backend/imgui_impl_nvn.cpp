@@ -1,4 +1,5 @@
 #include <cmath>
+#include "imgui.h"
 #include "imgui_impl_nvn.hpp"
 #include "imgui_hid_mappings.h"
 #include "lib.hpp"
@@ -381,6 +382,7 @@ namespace ImguiNvnBackend {
         io.MouseDrawCursor = true;
         io.ConfigFlags |= ImGuiConfigFlags_IsTouchScreen;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
         io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
         io.DisplaySize = ImVec2(1600, 900); // default size

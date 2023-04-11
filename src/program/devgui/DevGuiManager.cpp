@@ -46,6 +46,8 @@ void DevGuiManager::init(sead::Heap* heap)
     mWindows.allocBuffer(0x10, heap);
     mHomeMenuTabs.allocBuffer(0x10, heap);
 
+    mDockSystem = new DevGuiDocking(this);
+
     mSettings = new DevGuiSettings(this); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#settings
 
     mCustomList = new CustomStageManager(); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Custom-Stage-Support
@@ -116,6 +118,8 @@ void DevGuiManager::updateDisplay()
 
     mPopupKeyboard->update();
 
+    mDockSystem->update();
+
     mTheme->tryUpdateTheme();
 
     for (int i = 0; i < mWindows.size(); i++) {
@@ -124,7 +128,7 @@ void DevGuiManager::updateDisplay()
             continue;
 
         ImGui::Begin(entry->getWindowName(), entry->getCloseInteractionPtr(), entry->getWindowConfig()->mWindowFlags);
-
+        
         if(mIsAnchorChange) {
             Logger::log("Anchor calc %s - Size: %i - Page %i/%i\n", entry->getWindowName(), entry->getAnchorPages(), curAnchorWin, totalAnchorWin);
             entry->setupAnchor(totalAnchorWin, curAnchorWin);

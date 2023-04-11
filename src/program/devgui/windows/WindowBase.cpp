@@ -21,10 +21,10 @@ WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActive
     // General window flags that all LunaKit windows will share to avoid bugs with the menu bar and anchoring
     mConfig.mWindowFlags |= ImGuiWindowFlags_HorizontalScrollbar;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
+    // mConfig.mWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+    // mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
+    // mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
+    // mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
 
     Logger::log("Constructing Window: %s (Is Anchored: %s)\n", winName, BTOC(isAnchor));
 }

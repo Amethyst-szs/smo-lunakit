@@ -40,6 +40,7 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #include "primitives/PrimitiveQueue.h"
 
 // All extra DevGui features included by the manager
+#include "devgui/docking/DevGuiDocking.h"
 #include "devgui/settings/PrimMenuSettings.h"
 #include "devgui/savedata/DevGuiSaveData.h"
 #include "devgui/settings/DevGuiSettings.h"
@@ -139,6 +140,7 @@ private:
     bool mIsDisplayAnchorWindows = true; // Are the main windows hidden by pressing L-Stick?
 
     sead::Heap* mHeap = nullptr; // Uses the stationed heap
+    DevGuiDocking* mDockSystem = nullptr; // Custom DockSpace system used by LunaKit for docking windows
     DevGuiSettings* mSettings = nullptr; // Current settings (used in the settings home menu, written to save file)
     PrimMenuSettings* mPrimitiveSettings = nullptr; // Settings for the prim home menu tab, written to save file
     DevGuiTheme* mTheme = nullptr; // Controls the theme, including reading data from the SD card
