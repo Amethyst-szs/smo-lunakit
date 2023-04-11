@@ -1,15 +1,14 @@
 #pragma once
 
-#include "al/byaml/ByamlIter.h"
-
-#include "sead/prim/seadSafeString.h"
-
 #include "helpers/curlHelper.h"
 #include "helpers/fsHelper.h"
 
-#include "zip.h"
+#include "cjson/cJSON.h"
 
-#define RELEASE_PATH "https://github.com/Amethyst-szs/smo-lunakit/releases/latest/download/SMO-LunaKit.zip"
+#include "UpdateApiInfo.h"
+
+#define GIT_API_PATH "https://api.github.com/repos/Amethyst-szs/smo-lunakit/releases/latest"
+#define GIT_RELEASE_PATH "https://github.com/Amethyst-szs/smo-lunakit/releases/latest/download/SMO-LunaKit.zip"
 
 class UpdateHandler {
     // This class is a singleton! It does not have a typical constructor
@@ -21,14 +20,19 @@ class UpdateHandler {
 
 public:
     // Tries to download the data package of what the newest version is
-    void init(); 
-
+    void init(sead::Heap* heap); 
     void downloadUpdate();
 
     bool isUpdateAvailable() { return mIsNewUpdate; }
     bool isUpdateCurlFailed() { return mIsCurlFail; }
 
+    const char* getUpdateName() { if(mInfo) return mInfo->mName.cstr(); else return nullptr; }
+    const char* getUpdateTag() { if(mInfo) return mInfo->mTagName.cstr(); else return nullptr; }
+    const char* getUpdateAuthor() { if(mInfo) return mInfo->mAuthorName.cstr(); else return nullptr; }
+    const char* getUpdateDate() { if(mInfo) return mInfo->mPublishDate.cstr(); else return nullptr; }
+
 private:
+    UpdateApiInfo* mInfo;
     bool mIsNewUpdate = false;
     bool mIsCurlFail = false;
 };

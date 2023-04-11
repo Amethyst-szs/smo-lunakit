@@ -1,8 +1,6 @@
 #include "UpdateHandler.h"
 #include "devgui/DevGuiManager.h"
 
-#include "cjson/cJSON.h"
-
 // This class is a singleton! It does not have a typical constructor
 // This is class is created in GameSystemInit in main.cpp
 // Access this class from anywhere using DevGuiManager::instance()->...
@@ -10,19 +8,22 @@ SEAD_SINGLETON_DISPOSER_IMPL(UpdateHandler)
 UpdateHandler::UpdateHandler() = default;
 UpdateHandler::~UpdateHandler() = default;
 
-void UpdateHandler::init()
+void UpdateHandler::init(sead::Heap* heap)
 {
-    Logger::log("Initalizing automatic update handler\n");
+    Logger::log("Initalizing Auto-Update Handler\n");
 
+    // Get data from GitHub API with curl
     DataStream data = DataStream(0x10);
-    curlHelper::DataDownloader::downloadFromUrl(data, "https://api.github.com/repos/Amethyst-szs/smo-lunakit/releases/latest");
+    curlHelper::DataDownloader::downloadFromUrl(data, GIT_API_PATH);
 
+    // Verify data was downloaded
     if(data.getSize() == 0x10) {
         mIsCurlFail = true;
         Logger::log("Auto-updater: CURL could not contact GitHub API for recent release JSON\n");
         return;
     }
 
+    // Parse out JSON from buffer
     cJSON* dataJ = cJSON_ParseWithLength((const char*)data.getData(), data.getSize());
     if(!dataJ) {
         mIsCurlFail = true;
@@ -30,6 +31,7 @@ void UpdateHandler::init()
         return;
     }
 
+    // Get the tag name from the parsed JSON data
     const cJSON* tagName = cJSON_GetObjectItemCaseSensitive(dataJ, "tag_name");
     if (!cJSON_IsString(tagName) || !tagName->valuestring){
         mIsCurlFail = true;
@@ -37,9 +39,12 @@ void UpdateHandler::init()
         return;
     }
 
+    // Check if that tag version differs from the tag version saved at compile, if so mark new update flag and save info
     if(!al::isEqualString(GIT_VER, tagName->valuestring)) {
-        Logger::log("New update available\nBuild Version: %s\nServer Version: %s\n", GIT_VER, tagName->valuestring);
+        Logger::log("New Update Available! (%s -> %s)\n", GIT_VER, tagName->valuestring);
         mIsNewUpdate = true;
+
+        mInfo = new (heap) UpdateApiInfo(dataJ, tagName);
     }
 
     cJSON_Delete(dataJ);
