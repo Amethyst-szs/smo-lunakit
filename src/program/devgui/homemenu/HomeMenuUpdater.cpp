@@ -8,7 +8,8 @@ HomeMenuUpdater::HomeMenuUpdater(DevGuiManager* parent, const char* menuName, bo
     for (sead::Heap& childRef : mHeap->mChildren) {
         sead::Heap* child = &childRef;
 
-        if (child->getName().cstr() == "UpdateHeap")
+        const char* childName = child->getName().cstr();
+        if (al::isEqualString(childName, "UpdateHeap"))
             mUpdateHeap = child;
     }
 }
