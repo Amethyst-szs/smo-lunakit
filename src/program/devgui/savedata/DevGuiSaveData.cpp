@@ -27,7 +27,7 @@ void DevGuiSaveData::read()
 
     // Check if the program version matches the save file version, if so wipe the save and write a new one
     const char* saveVer;
-    if(!root.tryGetStringByKey(&saveVer, "Version") || !al::isEqualString(saveVer, LUNAKITVERSION)) {
+    if(!root.tryGetStringByKey(&saveVer, "Version") || !al::isEqualString(saveVer, GIT_VER)) {
         Logger::log("Save file version does not match program version, resetting...\n");
         write();
         return;
@@ -113,7 +113,7 @@ nn::Result DevGuiSaveData::write()
     file.pushHash();
 
     // General information
-    file.addString("Version", LUNAKITVERSION);
+    file.addString("Version", GIT_VER);
     file.addString("Theme", mParent->getTheme()->getThemeName());
     file.addInt("WinAnchor", (int)mParent->getAnchorType());
 

@@ -34,7 +34,7 @@ void DevGuiManager::createElements()
 
 void DevGuiManager::init(sead::Heap* heap)
 {
-    Logger::log("Initing DevGuiManager... (Version: %s)\n", LUNAKITVERSION);
+    Logger::log("Initing DevGuiManager... (Version: %s)\n", GIT_VER);
     
     // Sets the DevGuiHeap to the heap passed in as an arg, along with setting the current scope to the heap
     mHeap = heap;

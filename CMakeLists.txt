@@ -12,10 +12,19 @@ set(CMAKE_CXX_STANDARD 23)
 ## Title Id
 set(TITLE_ID 0100000000010000)
 set(CONFIG_TITLE_ID 0x${TITLE_ID})
-add_compile_definitions(EXL_PROGRAM_ID=${CONFIG_TITLE_ID} NNSDK=1 IMGUI_USER_CONFIG="imgui_backend/nvn_imgui_config.h")
+
+execute_process(
+  COMMAND git describe --tags --abbrev=0
+  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  OUTPUT_VARIABLE GIT_VER
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+add_compile_definitions(EXL_PROGRAM_ID=${CONFIG_TITLE_ID} NNSDK=1 IMGUI_USER_CONFIG="imgui_backend/nvn_imgui_config.h" GIT_VER="${GIT_VER}")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/module/subsdk9.json.template ${CMAKE_CURRENT_BINARY_DIR}/subsdk9.json)
 
 ## Project sources
+include_directories(${PROJECT_SOURCE_DIR}/src/lib/zip)
 include_directories(${PROJECT_SOURCE_DIR}/src/lib)
 include_directories(${PROJECT_SOURCE_DIR}/src/nvn)
 include_directories(${PROJECT_SOURCE_DIR}/src/nn)

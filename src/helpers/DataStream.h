@@ -86,7 +86,7 @@ public:
         return mBufferMaxSize;
     }
 
-    void* getData() const {
+    u8* getData() const {
         return mBuffer;
     }
 

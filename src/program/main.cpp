@@ -65,12 +65,11 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/settings/HooksSettings.h"
 
+#include "update/UpdateHandler.h"
+
 #include <typeinfo>
 
 #include "ExceptionHandler.h"
-
-#include "helpers/DataStream.h"
-#include "helpers/curlHelper.h"
 
 namespace patch = exl::patch;
 namespace inst = exl::armv8::inst;
@@ -199,6 +198,9 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
 
         DevGuiManager::createInstance(lkHeap);
         DevGuiManager::instance()->init(lkHeap);
+
+        UpdateHandler::createInstance(lkHeap);
+        UpdateHandler::instance()->init();
 
         sead::TextWriter::setDefaultFont(sead::DebugFontMgrJis1Nvn::instance());
 
