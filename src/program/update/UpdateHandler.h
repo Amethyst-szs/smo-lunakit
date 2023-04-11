@@ -19,7 +19,8 @@ enum UpdateHandlerStatus {
     UpdateHandlerStatus_CHECKFAIL,
     UpdateHandlerStatus_UPDATEREADY,
     UpdateHandlerStatus_INSTALL,
-    UpdateHandlerStatus_INSTALLFAIL,
+    UpdateHandlerStatus_INSTALLFAILDOWNLOAD,
+    UpdateHandlerStatus_INSTALLFAILSDCARD,
     UpdateHandlerStatus_COMPLETE,
 };
 
@@ -44,7 +45,8 @@ public:
     bool isUpdateCheckFailed() { return mStatus == UpdateHandlerStatus_CHECKFAIL; }
     bool isUpdateAvailable() { return mStatus >= UpdateHandlerStatus_UPDATEREADY; }
     bool isUpdateInstalling() { return mStatus == UpdateHandlerStatus_INSTALL; }
-    bool isUpdateInstallFail() { return mStatus == UpdateHandlerStatus_INSTALLFAIL; }
+    bool isUpdateInstallFailDownload() { return mStatus == UpdateHandlerStatus_INSTALLFAILDOWNLOAD; }
+    bool isUpdateInstallFailWriteToSD() { return mStatus == UpdateHandlerStatus_INSTALLFAILSDCARD; }
     bool isUpdateComplete() { return mStatus == UpdateHandlerStatus_COMPLETE; }
 
     bool isUpdateSilenced() { return mIsUpdateSilenced; }

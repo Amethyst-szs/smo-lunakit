@@ -70,8 +70,11 @@ void HomeMenuUpdater::updatePostDisplay()
         if(!update->isUpdateInstalling() && !update->isUpdateComplete() && !mIsStartInstall)
             interfaceSetup();
 
-        if(update->isUpdateInstallFail())
-            interfaceFailed();
+        if(update->isUpdateInstallFailDownload())
+            interfaceFailedDownload();
+
+        if(update->isUpdateInstallFailWriteToSD())
+            interfaceFailedSDCard();
 
         if(update->isUpdateComplete())
             interfaceComplete();
@@ -112,12 +115,21 @@ void HomeMenuUpdater::interfaceSetup()
     }
 }
 
-void HomeMenuUpdater::interfaceFailed()
+void HomeMenuUpdater::interfaceFailedDownload()
 {
     InputHelper::setInputToggled(true);
-    ImGui::Text("Update could not be installed correctly!\nTroubleshooting ideas:");
+    ImGui::Text("Update could not be downloaded!\nTroubleshooting ideas:");
     ImGui::Text("Switch is not connected to the internet");
     ImGui::Text("Using 90DNS or some other DNS blocker");
+}
+
+void HomeMenuUpdater::interfaceFailedSDCard()
+{
+    InputHelper::setInputToggled(true);
+    ImGui::Text("Update could not be written to your SD card!\nTroubleshooting ideas:");
+    ImGui::Text("Your SD card is in read-only mode");
+    ImGui::Text("A specific folder is in read-only mode");
+    ImGui::Text("Something is corrupted with your switch's SD card reader");
 }
 
 void HomeMenuUpdater::interfaceComplete()

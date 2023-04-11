@@ -191,10 +191,10 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
                                                               0x100000);
         }
 
-        sead::Heap* lkHeap = sead::ExpHeap::create(0x300000, "LunaKitHeap", al::getStationedHeap(), 8,
+        sead::Heap* lkHeap = sead::ExpHeap::create(5000000, "LunaKitHeap", al::getStationedHeap(), 8,
             sead::Heap::HeapDirection::cHeapDirection_Forward, false);
 
-        sead::Heap* updaterHeap = sead::ExpHeap::create(0x200000, "UpdateHeap", lkHeap, 8,
+        sead::Heap* updaterHeap = sead::ExpHeap::create(2500000, "UpdateHeap", lkHeap, 8,
             sead::Heap::HeapDirection::cHeapDirection_Forward, false);
 
         Logger::instance().init(lkHeap).value;

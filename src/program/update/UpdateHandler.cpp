@@ -78,7 +78,7 @@ void UpdateHandler::downloadUpdate(sead::Heap* heap)
 
     if(npdmData.getSize() == 0x10) {
         Logger::log("Auto-updater: CURL failed to get npdm data!\n");
-        mStatus = UpdateHandlerStatus_INSTALLFAIL;
+        mStatus = UpdateHandlerStatus_INSTALLFAILDOWNLOAD;
         return;
     }
 
@@ -92,21 +92,30 @@ void UpdateHandler::downloadUpdate(sead::Heap* heap)
     
     if(subsdkData.getSize() == 0x10) {
         Logger::log("Auto-updater: CURL failed to get subsdk9 data!\n");
-        mStatus = UpdateHandlerStatus_INSTALLFAIL;
+        mStatus = UpdateHandlerStatus_INSTALLFAILDOWNLOAD;
         return;
     }
 
     Logger::log("subsdk9 downloaded from %s\n", subsdkURL.cstr());
 
-
     // Write downloaded data from memory to disk
     Logger::log("Writing data to disk\n");
 
-    FsHelper::writeFileToPath(npdmData.getData(), npdmData.getSize(), NPDM_PATH);
+    if(FsHelper::writeFileToPath(npdmData.getData(), npdmData.getSize(), NPDM_PATH).isFailure()) {
+        Logger::log("Auto-updater: Failed to write main.npdm to SD card!\n");
+        mStatus = UpdateHandlerStatus_INSTALLFAILSDCARD;
+        return;
+    }
+
     Logger::log("main.npdm written to %s\n", NPDM_PATH);
     npdmData.~DataStream();
 
-    FsHelper::writeFileToPath(subsdkData.getData(), subsdkData.getSize(), SUBSDK_PATH);
+    if(FsHelper::writeFileToPath(subsdkData.getData(), subsdkData.getSize(), SUBSDK_PATH).isFailure()) {
+        Logger::log("Auto-updater: Failed to write subsdk9 to SD card!\n");
+        mStatus = UpdateHandlerStatus_INSTALLFAILSDCARD;
+        return;
+    }
+
     Logger::log("subsdk9 written to %s\n", SUBSDK_PATH);
     subsdkData.~DataStream();
 

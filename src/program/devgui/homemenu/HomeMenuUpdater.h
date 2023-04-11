@@ -19,7 +19,8 @@ public:
 private:
     void interfaceHeader(UpdateHandler* update);
     void interfaceSetup();
-    void interfaceFailed();
+    void interfaceFailedDownload();
+    void interfaceFailedSDCard();
     void interfaceComplete();
 
     sead::Heap* mUpdateHeap = nullptr;
