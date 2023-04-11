@@ -8,15 +8,18 @@
 #include "UpdateApiInfo.h"
 
 #define GIT_API_PATH "https://api.github.com/repos/Amethyst-szs/smo-lunakit/releases/latest"
-#define GIT_RELEASE_PATH "https://github.com/Amethyst-szs/smo-lunakit/releases/latest/download/SMO-LunaKit.zip"
+#define GIT_RELEASE_PATH "https://github.com/Amethyst-szs/smo-lunakit/releases/latest/download"
 
-enum UpdateHandlerStatus{
+#define SUBSDK_PATH "sd:/atmosphere/contents/0100000000010000/exefs/subsdk9"
+#define NPDM_PATH "sd:/atmosphere/contents/0100000000010000/exefs/main.npdm"
+
+enum UpdateHandlerStatus {
     UpdateHandlerStatus_NEEDCHECK,
     UpdateHandlerStatus_NOUPDATE,
     UpdateHandlerStatus_CHECKFAIL,
     UpdateHandlerStatus_UPDATEREADY,
-
-    UpdateHandlerStatus_DOWNLOADING,
+    UpdateHandlerStatus_INSTALL,
+    UpdateHandlerStatus_INSTALLFAIL,
     UpdateHandlerStatus_COMPLETE,
 };
 
@@ -31,7 +34,7 @@ class UpdateHandler {
 public:
     // Tries to download the data package of what the newest version is
     void checkForUpdates(sead::Heap* heap); 
-    void downloadUpdate();
+    void downloadUpdate(sead::Heap* heap);
 
     void setSilenceState(bool isSilenced) { mIsUpdateSilenced = isSilenced; }
 
@@ -39,11 +42,9 @@ public:
     bool isUpdateStillNeedCheck() { return mStatus == UpdateHandlerStatus_NEEDCHECK; }
     bool isUpdateNoNew() { return mStatus == UpdateHandlerStatus_NOUPDATE; }
     bool isUpdateCheckFailed() { return mStatus == UpdateHandlerStatus_CHECKFAIL; }
-
     bool isUpdateAvailable() { return mStatus >= UpdateHandlerStatus_UPDATEREADY; }
-    bool isUpdateInstalling() { return mStatus < UpdateHandlerStatus_UPDATEREADY; }
-    
-    bool isUpdateDownloading() { return mStatus == UpdateHandlerStatus_DOWNLOADING; }
+    bool isUpdateInstalling() { return mStatus == UpdateHandlerStatus_INSTALL; }
+    bool isUpdateInstallFail() { return mStatus == UpdateHandlerStatus_INSTALLFAIL; }
     bool isUpdateComplete() { return mStatus == UpdateHandlerStatus_COMPLETE; }
 
     bool isUpdateSilenced() { return mIsUpdateSilenced; }

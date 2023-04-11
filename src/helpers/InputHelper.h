@@ -25,6 +25,8 @@ public:
 
     static bool isInputToggled() { return toggleInput; }
 
+    static void setInputToggled(bool isEnableInput) { toggleInput = isEnableInput; }
+
     // keyboard key presses
 
     static bool isKeyHold(nn::hid::KeyboardKey key);

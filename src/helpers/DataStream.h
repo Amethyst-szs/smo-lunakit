@@ -7,16 +7,16 @@
 
 class DataStream {
     u8* mBuffer = nullptr;
-    u16 mBufferMaxSize = 0;
-    u16 mBufferPos = 0;
+    u32 mBufferMaxSize = 0;
+    u32 mBufferPos = 0;
     sead::Heap* mHeap = nullptr;
 
     /// resizes the buffer by the amount specified.
     /// \param amt size to add to the buffer (not the new size of the buffer).
     /// \return True if reallocation was successful.
     /// \return False if heap cannot support new size, or reallocation fails.
-    bool resize(u16 amt) {
-        u16 newSize = mBufferMaxSize + (amt - (mBufferMaxSize - mBufferPos));
+    bool resize(u32 amt) {
+        u32 newSize = mBufferMaxSize + (amt - (mBufferMaxSize - mBufferPos));
         if(mHeap->getFreeSize() > newSize) {
             // note: if reallocation fails, the game crashes
             u8* newBuffer = (u8*)mHeap->tryRealloc(mBuffer, newSize, sizeof(u8*));
@@ -29,7 +29,7 @@ class DataStream {
         return false;
     }
 public:
-    explicit DataStream(u16 startSize) {
+    explicit DataStream(u32 startSize) {
         if(startSize > 0) {
             mBuffer = new u8[startSize]();
             mBufferMaxSize = startSize;
@@ -44,7 +44,7 @@ public:
     }
 
     template <typename T>
-    u16 write(T* data, u16 len = sizeof(T)) {
+    u32 write(T* data, u32 len = sizeof(T)) {
         if(mBufferPos + len > mBufferMaxSize) {
             if(!resize(len))
                 return 0;
@@ -55,14 +55,14 @@ public:
     }
 
     template <typename T>
-    u16 read(T* data, u16 len = sizeof(T)) {
-        u16 readSize = mBufferPos + len > mBufferMaxSize ? len : mBufferMaxSize - mBufferPos;
+    u32 read(T* data, u32 len = sizeof(T)) {
+        u32 readSize = mBufferPos + len > mBufferMaxSize ? len : mBufferMaxSize - mBufferPos;
         memcpy(data, mBuffer + mBufferPos, readSize);
         mBufferPos += readSize;
         return readSize;
     }
 
-    void rewind(u16 len = 0) {
+    void rewind(u32 len = 0) {
         if(len == 0)
             mBufferPos = 0;
         else {
@@ -72,7 +72,7 @@ public:
         }
     }
 
-    void skip(u16 len) {
+    void skip(u32 len) {
         if(mBufferPos + len > mBufferMaxSize) {
             if(!resize(len))
                 return;
@@ -82,7 +82,7 @@ public:
     }
 
     // TODO: change this to the current size, not the max size
-    u16 getSize() const {
+    u32 getSize() const {
         return mBufferMaxSize;
     }
 

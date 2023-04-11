@@ -29,6 +29,8 @@ namespace curlHelper {
 
         curl_easy_setopt(curl, CURLOPT_URL, url);
 
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+        curl_easy_setopt(curl, CURLOPT_REDIR_PROTOCOLS, CURLPROTO_ALL);
         curl_easy_setopt(curl, CURLOPT_USERAGENT, "libcurl-agent/1.0");
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, DataDownloader::DataWrite);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*)&data);

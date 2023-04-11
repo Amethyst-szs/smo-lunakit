@@ -191,16 +191,19 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
                                                               0x100000);
         }
 
-        sead::Heap* lkHeap = sead::ExpHeap::create(256000, "LunaKitHeap", al::getStationedHeap(), 8,
-            sead::Heap::HeapDirection::cHeapDirection_Reverse, false);
+        sead::Heap* lkHeap = sead::ExpHeap::create(0x300000, "LunaKitHeap", al::getStationedHeap(), 8,
+            sead::Heap::HeapDirection::cHeapDirection_Forward, false);
+
+        sead::Heap* updaterHeap = sead::ExpHeap::create(0x200000, "UpdateHeap", lkHeap, 8,
+            sead::Heap::HeapDirection::cHeapDirection_Forward, false);
 
         Logger::instance().init(lkHeap).value;
 
         DevGuiManager::createInstance(lkHeap);
-        UpdateHandler::createInstance(lkHeap);
+        UpdateHandler::createInstance(updaterHeap);
 
         DevGuiManager::instance()->init(lkHeap);
-        UpdateHandler::instance()->checkForUpdates(lkHeap);
+        UpdateHandler::instance()->checkForUpdates(updaterHeap);
 
         sead::TextWriter::setDefaultFont(sead::DebugFontMgrJis1Nvn::instance());
 

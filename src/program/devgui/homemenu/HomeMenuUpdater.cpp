@@ -4,7 +4,14 @@
 
 HomeMenuUpdater::HomeMenuUpdater(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
     : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
-{}
+{
+    for (sead::Heap& childRef : mHeap->mChildren) {
+        sead::Heap* child = &childRef;
+
+        if (child->getName().cstr() == "UpdateHeap")
+            mUpdateHeap = child;
+    }
+}
 
 void HomeMenuUpdater::updateMenu()
 {
@@ -12,6 +19,11 @@ void HomeMenuUpdater::updateMenu()
         mIsDisplayInList = true;
     else
         mIsDisplayInList = false;
+    
+    if(mIsStartInstall) {
+        mIsStartInstall = false;
+        UpdateHandler::instance()->downloadUpdate(mUpdateHeap);
+    }
 }
 
 void HomeMenuUpdater::updateMenuDisplay()
@@ -54,11 +66,14 @@ void HomeMenuUpdater::updatePostDisplay()
         UpdateHandler* update = UpdateHandler::instance();
         interfaceHeader(update);
         
-        if(!update->isUpdateInstalling()) {
+        if(!update->isUpdateInstalling() && !update->isUpdateComplete() && !mIsStartInstall)
             interfaceSetup();
-            ImGui::EndPopup();
-            return;
-        }
+
+        if(update->isUpdateInstallFail())
+            interfaceFailed();
+
+        if(update->isUpdateComplete())
+            interfaceComplete();
 
         ImGui::EndPopup();
     }
@@ -91,6 +106,21 @@ void HomeMenuUpdater::interfaceSetup()
     }
 
     if(ImGui::Button("Install Update")) {
-        Logger::log("Install button hit\n");
+        mIsStartInstall = true;
+        ImGui::Text("Installing...\n");
     }
+}
+
+void HomeMenuUpdater::interfaceFailed()
+{
+    InputHelper::setInputToggled(true);
+    ImGui::Text("Update could not be installed correctly!\nTroubleshooting ideas:");
+    ImGui::Text("Switch is not connected to the internet");
+    ImGui::Text("Using 90DNS or some other DNS blocker");
+}
+
+void HomeMenuUpdater::interfaceComplete()
+{
+    InputHelper::setInputToggled(true);
+    ImGui::Text("Update installed successfully!\nPlease restart the software");
 }

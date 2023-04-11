@@ -2,8 +2,10 @@
 
 #include "imgui.h"
 
-#include "devgui/homemenu/HomeMenuBase.h"
+#include "sead/heap/seadHeap.h"
 
+#include "helpers/InputHelper.h"
+#include "devgui/homemenu/HomeMenuBase.h"
 #include "update/UpdateHandler.h"
 
 class HomeMenuUpdater : public HomeMenuBase {
@@ -17,9 +19,15 @@ public:
 private:
     void interfaceHeader(UpdateHandler* update);
     void interfaceSetup();
+    void interfaceFailed();
+    void interfaceComplete();
+
+    sead::Heap* mUpdateHeap = nullptr;
 
     bool mIsOpenInterface = false;
     bool mIsDisplayingInterface = false;
+
+    bool mIsStartInstall = false;
 
     const float mInterfaceBorder = 25.f;
 };

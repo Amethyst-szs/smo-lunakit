@@ -1,5 +1,6 @@
 #include "UpdateHandler.h"
 #include "devgui/DevGuiManager.h"
+#include "heap/seadHeapMgr.h"
 
 // This class is a singleton! It does not have a typical constructor
 // This is class is created in GameSystemInit in main.cpp
@@ -10,6 +11,8 @@ UpdateHandler::~UpdateHandler() = default;
 
 void UpdateHandler::checkForUpdates(sead::Heap* heap)
 {
+    sead::ScopedCurrentHeapSetter heapSetter(heap);
+
     if(mInfo) {
         Logger::log("Starting UpdateHandler again, deleting previous info\n");
         mStatus = UpdateHandlerStatus_NEEDCHECK;
@@ -55,4 +58,57 @@ void UpdateHandler::checkForUpdates(sead::Heap* heap)
 
     cJSON_Delete(dataJ);
     return;
+}
+
+void UpdateHandler::downloadUpdate(sead::Heap* heap)
+{
+    if(!isUpdateAvailable())
+        return;
+    
+    sead::ScopedCurrentHeapSetter heapSetter(heap);
+
+    mStatus = UpdateHandlerStatus_INSTALL;
+    Logger::log("Downloading update from %s\n", GIT_RELEASE_PATH);
+
+
+    // Download main.npdm
+    sead::FormatFixedSafeString<0x50> npdmURL("%s/main.npdm", GIT_RELEASE_PATH);
+    DataStream npdmData = DataStream(0x10);
+    curlHelper::DataDownloader::downloadFromUrl(npdmData, npdmURL.cstr());
+
+    if(npdmData.getSize() == 0x10) {
+        Logger::log("Auto-updater: CURL failed to get npdm data!\n");
+        mStatus = UpdateHandlerStatus_INSTALLFAIL;
+        return;
+    }
+
+    Logger::log("main.npdm downloaded from %s\n", npdmURL.cstr());
+    
+
+    // Download subsdk9
+    sead::FormatFixedSafeString<0x50> subsdkURL("%s/subsdk9", GIT_RELEASE_PATH);
+    DataStream subsdkData = DataStream(0x10);
+    curlHelper::DataDownloader::downloadFromUrl(subsdkData, subsdkURL.cstr());
+    
+    if(subsdkData.getSize() == 0x10) {
+        Logger::log("Auto-updater: CURL failed to get subsdk9 data!\n");
+        mStatus = UpdateHandlerStatus_INSTALLFAIL;
+        return;
+    }
+
+    Logger::log("subsdk9 downloaded from %s\n", subsdkURL.cstr());
+
+
+    // Write downloaded data from memory to disk
+    Logger::log("Writing data to disk\n");
+
+    FsHelper::writeFileToPath(npdmData.getData(), npdmData.getSize(), NPDM_PATH);
+    Logger::log("main.npdm written to %s\n", NPDM_PATH);
+    npdmData.~DataStream();
+
+    FsHelper::writeFileToPath(subsdkData.getData(), subsdkData.getSize(), SUBSDK_PATH);
+    Logger::log("subsdk9 written to %s\n", SUBSDK_PATH);
+    subsdkData.~DataStream();
+
+    mStatus = UpdateHandlerStatus_COMPLETE;
 }
