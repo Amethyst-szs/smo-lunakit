@@ -23,8 +23,11 @@ public:
     void checkForUpdates(sead::Heap* heap); 
     void downloadUpdate();
 
+    void setSilenceState(bool isSilenced) { mIsUpdateSilenced = isSilenced; }
+
     bool isUpdateAvailable() { return mIsNewUpdate; }
     bool isUpdateCurlFailed() { return mIsCurlFail; }
+    bool isUpdateSilenced() { return mIsUpdateSilenced; }
 
     const char* getUpdateName() { if(mInfo) return mInfo->mName.cstr(); else return nullptr; }
     const char* getUpdateTag() { if(mInfo) return mInfo->mTagName.cstr(); else return nullptr; }
@@ -33,6 +36,8 @@ public:
 
 private:
     UpdateApiInfo* mInfo;
+
+    bool mIsUpdateSilenced = false;
     bool mIsNewUpdate = false;
     bool mIsCurlFail = false;
 };

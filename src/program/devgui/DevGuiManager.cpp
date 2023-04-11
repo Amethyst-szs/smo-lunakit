@@ -20,13 +20,14 @@ void DevGuiManager::createElements()
     createWindow<WindowLoadLog>("Load Log", false, false, 1);
 
     // Create all home menu tabs
-    createHomeMenuItem<HomeMenuFile>("File");
-    createHomeMenuItem<HomeMenuSettings>("Settings");
-    createHomeMenuItem<HomeMenuWindows>("Windows");
-    createHomeMenuItem<HomeMenuPrims>("Prims");
-    createHomeMenuItem<HomeMenuWorlds>("Kingdoms");
-    createHomeMenuItem<HomeMenuCStages>("Stages");
-    createHomeMenuItem<HomeMenuExtra>("Extras");
+    createHomeMenuItem<HomeMenuFile>("File", true);
+    createHomeMenuItem<HomeMenuSettings>("Settings", true);
+    createHomeMenuItem<HomeMenuWindows>("Windows", true);
+    createHomeMenuItem<HomeMenuPrims>("Prims", true);
+    createHomeMenuItem<HomeMenuWorlds>("Kingdoms", true);
+    createHomeMenuItem<HomeMenuCStages>("Stages", true);
+    createHomeMenuItem<HomeMenuExtra>("Extras", true);
+    createHomeMenuItem<HomeMenuUpdater>("Update!", false);
 
     // Create each popup window
     mPopupKeyboard = new PopupKeyboard();
@@ -145,12 +146,10 @@ void DevGuiManager::updateDisplay()
         
         for (int i = 0; i < mHomeMenuTabs.size(); i++) {
             auto* entry = mHomeMenuTabs.at(i);
-            if (ImGui::BeginMenu(entry->getMenuName())) {
+            if (entry->isDisplayInList() && ImGui::BeginMenu(entry->getMenuName())) {
                 entry->updateMenuDisplay();
 
                 ImGui::EndMenu();
-                
-                entry->updatePostDisplay();
             }
         }
 
@@ -167,6 +166,11 @@ void DevGuiManager::updateDisplay()
             ImGui::EndMenu();
 
         ImGui::EndMainMenuBar();
+    }
+
+    for (int i = 0; i < mHomeMenuTabs.size(); i++) {
+        auto* entry = mHomeMenuTabs.at(i);
+        entry->updatePostDisplay();
     }
 
     // Draw the demo window if the settings class has it enabled
@@ -195,9 +199,9 @@ void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault, bo
 }
 
 template <class T>
-void DevGuiManager::createHomeMenuItem(const char* menuName)
+void DevGuiManager::createHomeMenuItem(const char* menuName, bool isDisplayInListByDefault)
 {
-    T* home = new (mHeap) T(this, menuName);
+    T* home = new (mHeap) T(this, menuName, isDisplayInListByDefault);
     mHomeMenuTabs.pushBack(home);
 }
 

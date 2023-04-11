@@ -8,9 +8,9 @@
 
 class HomeMenuSettings : public HomeMenuBase {
 public:
-    HomeMenuSettings(DevGuiManager* parent, const char* menuName);
+    HomeMenuSettings(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
-    virtual void updateMenuDisplay();
+    void updateMenuDisplay() override;
 private:
 
     void parameterEdit(const char* name, bool* value, bool isSave);

@@ -2,8 +2,8 @@
 #include "devgui/homemenu/HomeMenuExtra.h"
 #include "devgui/popups/PopupKeyboard.h"
 
-HomeMenuExtra::HomeMenuExtra(DevGuiManager* parent, const char* menuName)
-    : HomeMenuBase(parent, menuName)
+HomeMenuExtra::HomeMenuExtra(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
+    : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
 {}
 
 void HomeMenuExtra::updateMenu()
@@ -31,6 +31,12 @@ void HomeMenuExtra::updateMenu()
 void HomeMenuExtra::updateMenuDisplay()
 {
     ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+    
+    ImGui::MenuItem("Current Version", GIT_VER, false, true);
+    if(UpdateHandler::instance()->isUpdateSilenced() && ImGui::MenuItem("Unsilence Updates")) {
+        UpdateHandler::instance()->setSilenceState(false);
+        mParent->getSaveData()->queueSaveWrite();
+    }
 
     if(!mIsLoggerDisabled && ImGui::MenuItem("Disable Logger")) {
         Logger::instance().writeLoggerSave(mHeap, true, "0", 0);

@@ -1,8 +1,8 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuCStages.h"
 
-HomeMenuCStages::HomeMenuCStages(DevGuiManager* parent, const char* menuName)
-    : HomeMenuBase(parent, menuName)
+HomeMenuCStages::HomeMenuCStages(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
+    : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
 {}
 
 void HomeMenuCStages::updateMenuDisplay()

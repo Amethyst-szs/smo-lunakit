@@ -1,8 +1,8 @@
 #include "devgui/homemenu/HomeMenuPrims.h"
 #include "devgui/DevGuiManager.h"
 
-HomeMenuPrims::HomeMenuPrims(DevGuiManager* parent, const char* menuName)
-    : HomeMenuBase(parent, menuName)
+HomeMenuPrims::HomeMenuPrims(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
+    : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
 {
     mSettings = parent->getPrimitiveSettings();
 }

@@ -25,6 +25,11 @@ void DevGuiSaveData::read()
     FsHelper::loadFileFromPath(loadData);
     al::ByamlIter root = al::ByamlIter((u8*)loadData.buffer);
 
+    // Before checking if the save needs to be reset, check for if the user has updates silenced
+    bool isUpdatesSilenced;
+    if(root.tryGetBoolByKey(&isUpdatesSilenced, "UpdateShh"))
+        UpdateHandler::instance()->setSilenceState(isUpdatesSilenced);
+
     // Check if the program version matches the save file version, if so wipe the save and write a new one
     const char* saveVer;
     if(!root.tryGetStringByKey(&saveVer, "Version") || !al::isEqualString(saveVer, GIT_VER)) {
@@ -116,6 +121,7 @@ nn::Result DevGuiSaveData::write()
     file.addString("Version", GIT_VER);
     file.addString("Theme", mParent->getTheme()->getThemeName());
     file.addInt("WinAnchor", (int)mParent->getAnchorType());
+    file.addBool("UpdateShh", UpdateHandler::instance()->isUpdateSilenced());
 
     // Open/close state of all windows
     file.pushHash("ActiveWins");

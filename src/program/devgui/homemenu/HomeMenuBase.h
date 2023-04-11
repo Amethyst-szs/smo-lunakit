@@ -23,7 +23,7 @@ class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class HomeMenuBase {
 public:
-    HomeMenuBase(DevGuiManager* parent, const char* menuName);
+    HomeMenuBase(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
     // updateMenu is called every frame even if the LunaKit display is closed
     virtual void updateMenu(){};
@@ -35,7 +35,8 @@ public:
     // Mainly serves as a place to open popups or modals if needed
     virtual void updatePostDisplay(){};
 
-    virtual const char* getMenuName() { return mMenuName; };
+    virtual const char* getMenuName() { return mMenuName; }
+    virtual bool isDisplayInList() { return mIsDisplayInList; }
 
 protected:
     // This function is used to preserve font sizing through sub-menus
@@ -45,5 +46,6 @@ protected:
     DevGuiManager* mParent = nullptr;
     sead::Heap* mHeap = nullptr;
 
+    bool mIsDisplayInList = true;
     const char* mMenuName = nullptr;
 };

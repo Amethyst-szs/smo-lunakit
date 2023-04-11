@@ -12,9 +12,9 @@
 
 class HomeMenuWorlds : public HomeMenuBase {
 public:
-    HomeMenuWorlds(DevGuiManager* parent, const char* menuName);
+    HomeMenuWorlds(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
-    virtual void updateMenuDisplay();
+    void updateMenuDisplay() override;
 
 private:
     // Please clean up this code! There has got to be a cleaner way of implementing this!

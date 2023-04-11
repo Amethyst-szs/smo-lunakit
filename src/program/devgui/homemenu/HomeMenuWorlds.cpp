@@ -1,8 +1,8 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuWorlds.h"
 
-HomeMenuWorlds::HomeMenuWorlds(DevGuiManager* parent, const char* menuName)
-    : HomeMenuBase(parent, menuName)
+HomeMenuWorlds::HomeMenuWorlds(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
+    : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
 {}
 
 void HomeMenuWorlds::updateMenuDisplay()

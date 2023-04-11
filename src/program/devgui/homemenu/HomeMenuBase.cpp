@@ -1,7 +1,7 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuBase.h"
 
-HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName)
+HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
 {
     Logger::log("Constructing HomeMenu: %s\n", menuName);
 
@@ -9,6 +9,7 @@ HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName)
     mHeap = parent->getHeap();
     
     mMenuName = menuName;
+    mIsDisplayInList = isDisplayInListByDefault;
 }
 
 bool HomeMenuBase::addMenu(const char* name, bool enabled)

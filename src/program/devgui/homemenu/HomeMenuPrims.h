@@ -13,7 +13,7 @@
 
 class HomeMenuPrims : public HomeMenuBase {
 public:
-    HomeMenuPrims(DevGuiManager* parent, const char* menuName);
+    HomeMenuPrims(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
     void updateMenu() override;
     void updateMenuDisplay() override;

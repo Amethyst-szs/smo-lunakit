@@ -27,6 +27,8 @@
 
 #include "types.h"
 
+#include "update/UpdateHandler.h"
+
 #include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
 
 #include "DevGuiWriteStream.h"

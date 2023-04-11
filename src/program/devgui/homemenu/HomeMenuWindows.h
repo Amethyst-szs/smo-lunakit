@@ -7,9 +7,9 @@
 
 class HomeMenuWindows : public HomeMenuBase {
 public:
-    HomeMenuWindows(DevGuiManager* parent, const char* menuName);
+    HomeMenuWindows(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
-    virtual void updateMenuDisplay();
+    void updateMenuDisplay() override;
 
 private:
     void setAnc(int type);

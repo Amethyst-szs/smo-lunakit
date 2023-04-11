@@ -4,17 +4,17 @@
 
 #include "logger/Logger.hpp"
 
+#include "update/UpdateHandler.h"
+
 #include "imgui.h"
 #include "imgui_internal.h"
 
-#include "update/UpdateHandler.h"
-
 class HomeMenuExtra : public HomeMenuBase {
 public:
-    HomeMenuExtra(DevGuiManager* parent, const char* menuName);
+    HomeMenuExtra(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
-    virtual void updateMenu();
-    virtual void updateMenuDisplay();
+    void updateMenu() override;
+    void updateMenuDisplay() override;
 
 private:
     bool mIsFirstStep = true;

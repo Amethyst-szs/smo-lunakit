@@ -63,6 +63,7 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #include "devgui/homemenu/HomeMenuWorlds.h"
 #include "devgui/homemenu/HomeMenuCStages.h"
 #include "devgui/homemenu/HomeMenuExtra.h"
+#include "devgui/homemenu/HomeMenuUpdater.h"
 
 // All popups
 #include "devgui/popups/PopupKeyboard.h"
@@ -99,7 +100,7 @@ public:
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#adding-a-home-bar-item
     template <class T> // Template function to create and add a new tab to the home bar
-    void createHomeMenuItem(const char* menuName);
+    void createHomeMenuItem(const char* menuName, bool isDisplayInListByDefault);
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#popups-and-on-screen-keyboard
     bool tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType, const char** output, bool* isKeyboardOpen) { return mPopupKeyboard->tryOpenKeyboard(maxChars, keyType, output, isKeyboardOpen); }
