@@ -12,8 +12,7 @@ void UpdateHandler::checkForUpdates(sead::Heap* heap)
 {
     if(mInfo) {
         Logger::log("Starting UpdateHandler again, deleting previous info\n");
-        mIsNewUpdate = false;
-        mIsCurlFail = false;
+        mStatus = UpdateHandlerStatus_NEEDCHECK;
         delete(mInfo);
     }
 
@@ -25,7 +24,7 @@ void UpdateHandler::checkForUpdates(sead::Heap* heap)
 
     // Verify data was downloaded
     if(data.getSize() == 0x10) {
-        mIsCurlFail = true;
+        mStatus = UpdateHandlerStatus_CHECKFAIL;
         Logger::log("Auto-updater: CURL could not contact GitHub API for recent release JSON\n");
         return;
     }
@@ -33,7 +32,7 @@ void UpdateHandler::checkForUpdates(sead::Heap* heap)
     // Parse out JSON from buffer
     cJSON* dataJ = cJSON_ParseWithLength((const char*)data.getData(), data.getSize());
     if(!dataJ) {
-        mIsCurlFail = true;
+        mStatus = UpdateHandlerStatus_CHECKFAIL;
         Logger::log("Auto-updater: CURL downloaded GitHub API's recent release JSON but could not parse into json!\n");
         return;
     }
@@ -41,7 +40,7 @@ void UpdateHandler::checkForUpdates(sead::Heap* heap)
     // Get the tag name from the parsed JSON data
     const cJSON* tagName = cJSON_GetObjectItemCaseSensitive(dataJ, "tag_name");
     if (!cJSON_IsString(tagName) || !tagName->valuestring){
-        mIsCurlFail = true;
+        mStatus = UpdateHandlerStatus_CHECKFAIL;
         Logger::log("Auto-updater: Parsed JSON could not find key \"tag_name\"\n");
         return;
     }
@@ -49,10 +48,10 @@ void UpdateHandler::checkForUpdates(sead::Heap* heap)
     // Check if that tag version differs from the tag version saved at compile, if so mark new update flag and save info
     if(!al::isEqualString(GIT_VER, tagName->valuestring)) {
         Logger::log("New Update Available! (%s -> %s)\n", GIT_VER, tagName->valuestring);
-        mIsNewUpdate = true;
+        mStatus = UpdateHandlerStatus_UPDATEREADY;
 
         mInfo = new (heap) UpdateApiInfo(dataJ, tagName);
-    }
+    } else mStatus = UpdateHandlerStatus_NOUPDATE;
 
     cJSON_Delete(dataJ);
     return;

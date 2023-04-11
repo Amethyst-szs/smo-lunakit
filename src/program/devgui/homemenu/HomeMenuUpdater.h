@@ -15,6 +15,9 @@ public:
     void updatePostDisplay() override;
 
 private:
+    void interfaceHeader(UpdateHandler* update);
+    void interfaceSetup();
+
     bool mIsOpenInterface = false;
     bool mIsDisplayingInterface = false;
 
