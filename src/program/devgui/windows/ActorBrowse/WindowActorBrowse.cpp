@@ -1,8 +1,8 @@
 #include "WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
 
-WindowActorBrowse::WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
-    : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)
+WindowActorBrowse::WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
+    : WindowBase(parent, winName, isActiveByDefault)
 {
     mSelectedActor = nullptr;
     mFilterActorGroup = new (mHeap) al::LiveActorGroup("FavActors", 5120);

@@ -2,11 +2,8 @@
 #include "devgui/DevGuiManager.h"
 #include "logger/LoadLogger.hpp"
 
-WindowLoadLog::WindowLoadLog(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor,
-                             int windowPages)
-    : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages) {
-    mConfig.mSize = ImVec2(475, 325);
-}
+WindowLoadLog::WindowLoadLog(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
+    : WindowBase(parent, winName, isActiveByDefault) {}
 
 namespace LoadLog {
     ImVector<char*> mTextLines;
@@ -19,7 +16,8 @@ bool WindowLoadLog::tryUpdateWinDisplay() {
     float winHeight = ImGui::GetWindowHeight();
     float curScrollPos = ImGui::GetScrollY();
 
-    ImGui::Dummy(ImVec2(50, calcRoundedNum(curScrollPos - lineSize, lineSize)));
+    if (ImGui::GetScrollY() > 1.f)
+        ImGui::Dummy(ImVec2(50, calcRoundedNum(curScrollPos - lineSize, lineSize)));
 
     for (int i = curScrollPos / lineSize; i < (curScrollPos + winHeight) / lineSize; i++) {
         if (i >= LoadLog::mTextLines.size())
@@ -30,38 +28,12 @@ bool WindowLoadLog::tryUpdateWinDisplay() {
         ImGui::Text(currentLine);
     }
 
-    if ((ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
-        ImGui::SetScrollHereY(1.0f);
-    else
-        ImGui::Dummy(ImVec2(50, calcRoundedNum((LoadLog::mTextLines.size() - (curScrollPos / lineSize + 8)) * lineSize, lineSize)));
+    if (ImGui::GetScrollY() <= 1.f)
+        ImGui::SetScrollY(0.f);
+
+    ImGui::Dummy(ImVec2(50, calcRoundedNum((LoadLog::mTextLines.size() - (curScrollPos / lineSize + 8)) * lineSize, lineSize)));
 
     return true;
-}
-
-void WindowLoadLog::setupAnchor(int totalAnchoredWindows, int anchorIdx) {
-    return;
-    // WinAnchorType type = mParent->getAnchorType();
-
-    // // Setup window's position based on the anchor type
-    // switch (type) {
-    // case WinAnchorType::ANC_TOP:
-    //     mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mScrSize.y - mConfig.mSize.y);
-    //     break;
-    // case WinAnchorType::ANC_BOTTOM:
-    //     mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mMinimumY);
-    //     break;
-    // case WinAnchorType::ANC_LEFT:
-    //     mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mScrSize.y - mConfig.mSize.y);
-    //     break;
-    // case WinAnchorType::ANC_RIGHT:
-    //     mConfig.mTrans = ImVec2(0, mConfig.mScrSize.y - mConfig.mSize.y);
-    //     break;
-    // default:
-    //     break;
-    // }
-
-    // ImGui::SetWindowPos(mConfig.mTrans);
-    // ImGui::SetWindowSize(mConfig.mSize);
 }
 
 int WindowLoadLog::calcRoundedNum(int numToRound, int multiple)

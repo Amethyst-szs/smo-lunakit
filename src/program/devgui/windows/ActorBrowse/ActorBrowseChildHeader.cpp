@@ -59,6 +59,4 @@ void WindowActorBrowse::childButtonHeader(al::Scene* scene)
         mSelectedActor = nullptr;
 
     ImGui::EndChild();
-
-    ImGui::SetWindowFontScale(mConfig.mFontSize);
 }

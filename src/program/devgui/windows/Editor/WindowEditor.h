@@ -24,5 +24,5 @@
 
 class WindowEditor : public WindowBase {
 public:
-    WindowEditor(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
+    WindowEditor(DevGuiManager* parent, const char* winName, bool isActiveByDefault);
 };

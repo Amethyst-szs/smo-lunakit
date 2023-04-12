@@ -88,7 +88,7 @@ public:
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#creating-a-window-class
     template <class T> // Template function to create and add a new window to the list
-    void createWindow(const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
+    void createWindow(const char* winName, bool isActiveByDefault);
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#adding-a-home-bar-item
     template <class T> // Template function to create and add a new tab to the home bar

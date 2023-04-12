@@ -1,8 +1,8 @@
 #include "devgui/DevGuiManager.h"
 #include "WindowEditor.h"
 
-WindowEditor::WindowEditor(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
-    : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages)
+WindowEditor::WindowEditor(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
+    : WindowBase(parent, winName, isActiveByDefault)
 {
     createCategory<CategoryHealth>("HP", "Edit the player's health");
     createCategory<CategoryCoins>("Coins", "Edit the player's coin count");

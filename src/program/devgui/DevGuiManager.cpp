@@ -12,12 +12,12 @@ void DevGuiManager::createElements()
     sead::ScopedCurrentHeapSetter heapSetter(mHeap);
     
     // Create all display windows
-    createWindow<WindowMemoryManage>("Memory Manager", true, true, 1);
-    createWindow<WindowEditor>("Param Editor", true, true, 1);
-    createWindow<WindowInfo>("Info Viewer", true, true, 1);
-    createWindow<WindowActorBrowse>("Actor Browser", false, true, 2);
-    createWindow<WindowFPS>("FPS Window", true, false, 1);
-    createWindow<WindowLoadLog>("Load Log", false, false, 1);
+    createWindow<WindowMemoryManage>("Memory Manager", true);
+    createWindow<WindowEditor>("Param Editor", true);
+    createWindow<WindowInfo>("Info Viewer", true);
+    createWindow<WindowActorBrowse>("Actor Browser", false);
+    createWindow<WindowFPS>("FPS Window", true);
+    createWindow<WindowLoadLog>("Load Log", false);
 
     // Create all home menu tabs
     createHomeMenuItem<HomeMenuFile>("File", true);
@@ -120,7 +120,7 @@ void DevGuiManager::updateDisplay()
         if(!entry->isActive() || (!mIsDisplayWindows))
             continue;
 
-        ImGui::Begin(entry->getWindowName(), entry->getCloseInteractionPtr(), entry->getWindowConfig()->mWindowFlags);
+        ImGui::Begin(entry->getWindowName(), entry->getCloseInteractionPtr(), entry->getWindowFlags());
 
         entry->tryUpdateWinDisplay();
 
@@ -186,9 +186,9 @@ void DevGuiManager::updateCursorState()
 }
 
 template <class T>
-void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
+void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault)
 {
-    T* window = new (mHeap) T(this, winName, isActiveByDefault, isAnchor, windowPages);
+    T* window = new (mHeap) T(this, winName, isActiveByDefault);
     mWindows.pushBack(window);
 }
 

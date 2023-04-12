@@ -13,8 +13,8 @@ void LoadLog::pushTextToVector(const char* text) {
     currentTime.getCalendarTime(&calendarTime);
 
     if (mTextLines.size() > mMaxListSize)
-        mTextLines.erase(mTextLines.begin());
+        mTextLines.erase(mTextLines.end());
     snprintf(temp, sizeof(temp), "%02d:%02d:%02d | %s", calendarTime.getHour(), calendarTime.getMinute(), calendarTime.getSecond(), text);
     
-    mTextLines.push_back(strdup(temp));
+    mTextLines.push_front(strdup(temp));
 }

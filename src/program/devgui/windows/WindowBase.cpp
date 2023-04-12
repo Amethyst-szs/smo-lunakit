@@ -5,7 +5,7 @@
 
 #include "WindowBase.h"
 
-WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
+WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
 {
     // Set members from parameters
     mParent = parent;
@@ -17,10 +17,10 @@ WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActive
     mCategories.allocBuffer(0x8, mHeap);
     
     // General window flags that all LunaKit windows will share to avoid bugs with the menu bar and anchoring
-    mConfig.mWindowFlags |= ImGuiWindowFlags_HorizontalScrollbar;
-    mConfig.mWindowFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
+    mWindowFlags |= ImGuiWindowFlags_HorizontalScrollbar;
+    mWindowFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
 
-    Logger::log("Constructing Window: %s (Is Anchored: %s)\n", winName, BTOC(isAnchor));
+    Logger::log("Constructing Window: %s\n", winName);
 }
 
 void WindowBase::updateWin()
@@ -44,16 +44,16 @@ void WindowBase::updateWin()
 
 bool WindowBase::tryUpdateWinDisplay()
 {
-    ImGui::SetWindowFontScale(mConfig.mFontSize);
+    ImGui::SetWindowFontScale(1.33f);
 
     // If this window contains categories, load in the tabs
     if (mCategories.size() > 0) {
-        if (ImGui::BeginTabBar("Categories", mConfig.mTabFlags)) {
+        if (ImGui::BeginTabBar("Categories", mTabFlags)) {
 
             for (int i = 0; i < mCategories.size(); i++) {
                 auto* entry = mCategories.at(i);
 
-                if (ImGui::BeginTabItem(entry->getCategoryName(), NULL, mConfig.mTabItemFlags)) {
+                if (ImGui::BeginTabItem(entry->getCategoryName(), NULL, mTabItemFlags)) {
                     entry->updateCatDisplay();
                     ImGui::EndTabItem();
                 }
@@ -64,9 +64,4 @@ bool WindowBase::tryUpdateWinDisplay()
     }
 
     return true;
-}
-
-void WindowBase::setupAnchor(int totalAnchoredWindows, int anchorIdx)
-{
-    return;
 }

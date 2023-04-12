@@ -3,7 +3,7 @@
 
 void WindowActorBrowse::childActorInspector()
 {
-    ImGui::SetWindowFontScale(mConfig.mFontSize);
+    ImGui::SetWindowFontScale(1.4f);
 
     ImVec2 listSize = ImGui::GetContentRegionAvail();
     if(mIsWindowVertical)

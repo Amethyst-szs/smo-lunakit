@@ -14,14 +14,12 @@
 
 class WindowFPS : public WindowBase {
 public:
-    WindowFPS(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
+    WindowFPS(DevGuiManager* parent, const char* winName, bool isActiveByDefault);
 
     bool tryUpdateWinDisplay() override;
 
-    void setupAnchor(int totalAnchoredWindows, int anchorIdx) override;
-
 private:
-    static const int mHistorySize = 200;
+    static const int mHistorySize = 40;
     float mHistory[mHistorySize] = {};
     int mHistoryOffset = 0;
     

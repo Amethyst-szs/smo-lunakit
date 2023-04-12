@@ -21,5 +21,5 @@
 
 class WindowInfo : public WindowBase {
 public:
-    WindowInfo(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
+    WindowInfo(DevGuiManager* parent, const char* winName, bool isActiveByDefault);
 };

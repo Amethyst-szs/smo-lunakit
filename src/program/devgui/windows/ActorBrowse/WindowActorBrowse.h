@@ -50,7 +50,7 @@ public:
         These are implemented in the main WindowActorBrowse.cpp and are the most important to the front-end
     */
 
-    WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
+    WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault);
 
     void updateWin() override;
     bool tryUpdateWinDisplay() override;

@@ -22,9 +22,8 @@
 
 class WindowLoadLog : public WindowBase {
 public:
-    WindowLoadLog(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
+    WindowLoadLog(DevGuiManager* parent, const char* winName, bool isActiveByDefault);
     bool tryUpdateWinDisplay() override;
-    void setupAnchor(int totalAnchoredWindows, int anchorIdx) override;
     
     void pushTextToWindow(const char* text);
 

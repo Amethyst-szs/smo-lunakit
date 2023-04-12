@@ -1,15 +1,15 @@
 #include "devgui/DevGuiManager.h"
 #include "WindowMemoryManage.h"
 
-WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
-    : WindowBase(parent, winName, isActiveByDefault, isAnchor, windowPages) {}
+WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
+    : WindowBase(parent, winName, isActiveByDefault) {}
 
 bool WindowMemoryManage::tryUpdateWinDisplay()
 {
     if(!WindowBase::tryUpdateWinDisplay())
         return false;
 
-    ImGui::SetWindowFontScale(1.3f);
+    ImGui::SetWindowFontScale(1.2f);
     
     ImGui::Checkbox("Simplified Heap Viewer", &mIsSimpleView);
 
@@ -17,8 +17,6 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
         drawSimpleHeapView();
     else
         drawComplexHeapTreeItem(sead::HeapMgr::instance()->sRootHeaps[0]);
-
-    ImGui::SetWindowFontScale(mConfig.mFontSize);
 
     return true;
 }
