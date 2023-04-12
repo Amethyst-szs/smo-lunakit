@@ -14,7 +14,7 @@ CategoryOutfit::CategoryOutfit(const char* catName, const char* catDesc, sead::H
     mTotalBody = IM_ARRAYSIZE(bodyNames);
     mTotalCap = IM_ARRAYSIZE(capNames);
 
-    mComboFlags |= ImGuiComboFlags_HeightLarge;
+    mComboFlags |= ImGuiComboFlags_HeightRegular;
 }
 
 void CategoryOutfit::updateCat()

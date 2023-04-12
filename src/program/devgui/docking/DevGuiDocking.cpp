@@ -70,21 +70,21 @@ void DevGuiDocking::update()
     mDockLeft = ImGui::DockBuilderSplitNode(mDockSpace, ImGuiDir_Left, 0.4f, nullptr, &mDockSpace);
     mDockRight = ImGui::DockBuilderSplitNode(mDockSpace, ImGuiDir_Right, 0.4f, nullptr, &mDockSpace);
 
+    ImGui::DockBuilderSetNodeSize(mDockLeft, ImVec2(345.f, 695.f));
+    ImGui::DockBuilderSetNodeSize(mDockRight, ImVec2(400.f, 695.f));
+    ImGui::DockBuilderSetNodeSize(mDockDown, ImVec2(400.f, 695.f));
+
+    ImGuiID dockLM = ImGui::DockBuilderSplitNode(mDockLeft, ImGuiDir_Left, 0.82f, nullptr, &mDockLeft);
+    ImGui::DockBuilderSetNodeSize(dockLM, ImVec2(345.f, 695.f));
+
+    ImGuiID dockLU = ImGui::DockBuilderSplitNode(dockLM, ImGuiDir_Up, 0.33f, nullptr, &dockLM);
+    ImGui::DockBuilderSetNodeSize(dockLU, ImVec2(345.f, 231.6f));
+
+    ImGuiID dockLD = ImGui::DockBuilderSplitNode(dockLM, ImGuiDir_Down, 0.5f, nullptr, &dockLM);
+    ImGui::DockBuilderSetNodeSize(dockLD, ImVec2(345.f, 275.f));
+
     if(!mParent->getSaveData()->isExistImGuiLayoutFile()) {
         // Create the default interface layout if no saved layout exists
-        ImGui::DockBuilderSetNodeSize(mDockLeft, ImVec2(345.f, 695.f));
-        ImGui::DockBuilderSetNodeSize(mDockRight, ImVec2(400.f, 695.f));
-        ImGui::DockBuilderSetNodeSize(mDockDown, ImVec2(400.f, 695.f));
-        
-        ImGuiID dockLM = ImGui::DockBuilderSplitNode(mDockLeft, ImGuiDir_Left, 0.82f, nullptr, &mDockLeft);
-        ImGui::DockBuilderSetNodeSize(dockLM, ImVec2(345.f, 695.f));
-
-        ImGuiID dockLU = ImGui::DockBuilderSplitNode(dockLM, ImGuiDir_Up, 0.33f, nullptr, &dockLM);
-        ImGui::DockBuilderSetNodeSize(dockLU, ImVec2(345.f, 231.6f));
-
-        ImGuiID dockLD = ImGui::DockBuilderSplitNode(dockLM, ImGuiDir_Down, 0.5f, nullptr, &dockLM);
-        ImGui::DockBuilderSetNodeSize(dockLD, ImVec2(345.f, 275.f));
-
         ImGui::DockBuilderDockWindow(memoryManageWindowName, dockLU);
         ImGui::DockBuilderDockWindow(loadLogWindowName, dockLU);
         ImGui::DockBuilderDockWindow(paramEditorWindowName, dockLM);

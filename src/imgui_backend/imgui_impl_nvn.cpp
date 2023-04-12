@@ -383,6 +383,7 @@ namespace ImguiNvnBackend {
         io.ConfigFlags |= ImGuiConfigFlags_IsTouchScreen;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigWindowsMoveFromTitleBarOnly = true;
         io.BackendFlags |= ImGuiBackendFlags_HasGamepad;
         io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
         io.DisplaySize = ImVec2(1600, 900); // default size

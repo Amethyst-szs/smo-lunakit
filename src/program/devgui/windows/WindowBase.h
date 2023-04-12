@@ -59,16 +59,18 @@ public:
     virtual void setGroup(WindowGroup* group) { mGroup = group; }
 
 protected:
+    // Parent info
+    DevGuiManager* mParent;
+    sead::Heap* mHeap;
+
+    // Current state
     bool mIsActive = true;
     bool mIsFirstStep = true;
     bool mIsCloseUnpressed = true;
 
+    // Window information
     const char* mWinName = "null";
     WindowGroup* mGroup = nullptr;
-
-    DevGuiManager* mParent;
-    sead::Heap* mHeap;
-
     ImGuiWindowFlags mWindowFlags = 0;
 
     sead::PtrArray<CategoryBase> mCategories;
