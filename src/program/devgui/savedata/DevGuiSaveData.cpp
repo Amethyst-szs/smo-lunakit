@@ -32,15 +32,16 @@ void DevGuiSaveData::read()
 
     // Check if the program version matches the save file version, if so wipe the save and write a new one
     const char* saveVer;
-    if(!root.tryGetStringByKey(&saveVer, "Version") || !al::isEqualString(saveVer, GIT_VER)) {
-        Logger::log("Save file version does not match program version, resetting...\n");
-        write();
-        return;
-    }
+    if(!root.tryGetStringByKey(&saveVer, "Version") || !al::isEqualString(saveVer, GIT_VER))
+        Logger::log("Save file version does not match program version!\n");
 
     const char* theme;
     if(root.tryGetStringByKey(&theme, "Theme"))
         mParent->getTheme()->setWinThemeByName(theme);
+
+    float opacity;
+    if(root.tryGetFloatByKey(&opacity, "Opacity"))
+        ImGui::GetStyle().Alpha = opacity;
     
     if(root.isExistKey("ActiveWins")) {
         al::ByamlIter windows = root.getIterByKey("ActiveWins");
@@ -116,6 +117,7 @@ nn::Result DevGuiSaveData::write()
     // General information
     file.addString("Version", GIT_VER);
     file.addString("Theme", mParent->getTheme()->getThemeName());
+    file.addFloat("Opacity", ImGui::GetStyle().Alpha);
     file.addBool("UpdateShh", UpdateHandler::instance()->isUpdateSilenced());
 
     // Open/close state of all windows

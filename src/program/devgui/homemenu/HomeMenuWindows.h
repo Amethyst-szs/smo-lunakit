@@ -12,5 +12,5 @@ public:
     void updateMenuDisplay() override;
 
 private:
-    void setAnc(int type);
+    void opacitySetting(const char* label, float opacity);
 };

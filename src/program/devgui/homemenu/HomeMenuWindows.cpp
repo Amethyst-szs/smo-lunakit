@@ -28,6 +28,23 @@ void HomeMenuWindows::updateMenuDisplay()
         ImGui::EndMenu();
     }
 
+    if (addMenu("Opacity")) {
+        ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+
+        opacitySetting("100%", 1.f);
+        opacitySetting("95%", 0.95f);
+        opacitySetting("90%", 0.9f);
+        opacitySetting("85%", 0.85f);
+        opacitySetting("80%", 0.8f);
+        opacitySetting("70%", 0.7f);
+        
+        ImGui::PopItemFlag();
+        ImGui::EndMenu();
+    }
+
+    // Create a seperator between settings and wins
+    ImGui::MenuItem(" ", nullptr, false, false); 
+
     ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 
     for (int i = 0; i < mParent->getWindowCount(); i++) {
@@ -42,7 +59,13 @@ void HomeMenuWindows::updateMenuDisplay()
     ImGui::PopItemFlag();
 }
 
-void HomeMenuWindows::setAnc(int type)
+void HomeMenuWindows::opacitySetting(const char* label, float opacity)
 {
-    mParent->getSaveData()->queueSaveWrite();
+    ImGuiStyle* style = &ImGui::GetStyle();
+
+    if(ImGui::MenuItem(label)){
+        style->Alpha = opacity;
+        style->DisabledAlpha = opacity;
+        mParent->getSaveData()->queueSaveWrite();
+    }
 }

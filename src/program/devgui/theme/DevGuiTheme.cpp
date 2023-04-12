@@ -44,7 +44,6 @@ void DevGuiTheme::tryUpdateTheme()
     al::ByamlIter params = themeIter->getIterByKey("Parameters");
     al::ByamlIter colors = themeIter->getIterByKey("Colors");
 
-    setStyleParam(&style.Alpha, &params, "Alpha");
     setStyleParam(&style.WindowPadding, &params, "WindowPadding");
     setStyleParam(&style.WindowBorderSize, &params, "WindowBorderSize");
     setStyleParam(&style.WindowTitleAlign, &params, "WindowTitleAlign");
