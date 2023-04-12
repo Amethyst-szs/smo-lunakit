@@ -4,19 +4,10 @@
 
 #include "al/collision/Triangle.h"
 #include "al/LiveActor/LiveActor.h"
-#include "al/scene/Scene.h"
 #include "al/util/SensorUtil.h"
-#include "al/util.hpp"
 
-#include "game/StageScene/StageScene.h"
-
-#include "sead/gfx/seadPrimitiveRenderer.h"
 #include "sead/gfx/seadColor.h"
 #include "sead/math/seadVector.h"
-
-#include "logger/Logger.hpp"
-
-#include "helpers/GetHelper.h"
 
 enum PrimitiveTypes {
     PRIM_NONE = -1,

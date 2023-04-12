@@ -11,10 +11,6 @@
 
 #pragma once
 
-#include "imgui.h"
-
-#include "al/util.hpp"
-
 #include "container/seadPtrArray.h"
 #include "heap/seadDisposer.h"
 #include "heap/seadHeap.h"

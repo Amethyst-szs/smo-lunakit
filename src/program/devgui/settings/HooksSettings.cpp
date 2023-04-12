@@ -1,5 +1,11 @@
 #include "HooksSettings.h"
+
+#include "rs/util.hpp"
+
+#include "helpers/GetHelper.h"
+
 #include "logger/Logger.hpp"
+
 namespace patch = exl::patch;
 namespace inst = exl::armv8::inst;
 namespace reg = exl::armv8::reg;

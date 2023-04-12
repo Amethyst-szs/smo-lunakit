@@ -1,7 +1,6 @@
 #pragma once
 
 #include "imgui.h"
-#include "imgui_internal.h"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
 

@@ -1,7 +1,11 @@
 #include "program/devgui/categories/edit/CategoryHealth.h"
 
 #include "game/Player/PlayerFunction.h"
+
+#include "helpers/GetHelper.h"
 #include "helpers/PlayerHelper.h"
+
+#include "imgui.h"
 
 CategoryHealth::CategoryHealth(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap) {}

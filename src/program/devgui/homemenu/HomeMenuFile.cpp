@@ -1,6 +1,12 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuFile.h"
 
+#include "game/SaveData/SaveDataAccessFunction.h"
+
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
+
 HomeMenuFile::HomeMenuFile(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
     : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
 {}

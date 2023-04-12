@@ -16,24 +16,13 @@
 #define SAVEPATH "sd:/LunaKit/LKData/data.byml"
 #define IMGUILAYOUTPATH "sd:/LunaKit/LKData/imgui_layout.ini"
 
-#include "al/byaml/ByamlIter.h"
-#include "al/byaml/writer/ByamlWriter.h"
-#include "al/util.hpp"
-
-#include "helpers/fsHelper.h"
-#include "helpers/DataStream.h"
-
-#include "nn/fs/fs_directories.hpp"
-#include "nn/fs/fs_files.hpp"
-#include "nn/fs/fs_types.hpp"
-
-#include "types.h"
-
-#include "update/UpdateHandler.h"
+#include "DevGuiWriteStream.h"
 
 #include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
 
-#include "DevGuiWriteStream.h"
+#include "nn/result.h"
+
+#include "types.h"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
 

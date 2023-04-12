@@ -11,25 +11,14 @@
 
 #pragma once
 
-#include "imgui.h"
-#include "imgui_internal.h"
-
-#include "al/util.hpp"
-
-#include "game/HakoniwaSequence/HakoniwaSequence.h"
-#include "game/System/GameSystem.h"
-
-#include "sead/container/seadPtrArray.h"
-#include "sead/heap/seadHeap.h"
-#include "sead/math/seadVector.h"
-
-#include "helpers/GetHelper.h"
 #include "devgui/categories/CategoryBase.h"
 
-#include "logger/Logger.hpp"
+#include "sead/container/seadPtrArray.h"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
 class WindowGroup; // Forward declaration
+
+typedef int ImGuiWindowFlags; // Forward declaration from imgui.h
 
 class WindowBase {
 public:
@@ -80,9 +69,7 @@ protected:
     DevGuiManager* mParent;
     sead::Heap* mHeap;
 
-    ImGuiWindowFlags mWindowFlags = ImGuiWindowFlags_None;
-    ImGuiTabBarFlags mTabFlags = ImGuiTabBarFlags_None;
-    ImGuiTabItemFlags mTabItemFlags = ImGuiTabItemFlags_None;
+    ImGuiWindowFlags mWindowFlags = 0;
 
     sead::PtrArray<CategoryBase> mCategories;
 };

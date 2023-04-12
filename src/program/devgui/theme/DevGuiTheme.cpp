@@ -1,6 +1,23 @@
+#include "DevGuiTheme.h"
 #include "devgui/DevGuiManager.h"
 
-#include "DevGuiTheme.h"
+#include "al/resource/Resource.h"
+#include "al/util.hpp"
+
+#include "sead/heap/seadExpHeap.h"
+#include "sead/heap/seadHeap.h"
+#include "sead/heap/seadHeapMgr.h"
+#include "sead/filedevice/seadFileDeviceMgr.h"
+
+#include "nn/fs/fs_files.hpp"
+#include "nn/result.h"
+#include "nn/init.h"
+
+#include "helpers/fsHelper.h"
+
+#include "imgui.h"
+
+#include "logger/Logger.hpp"
 
 void DevGuiTheme::init()
 {

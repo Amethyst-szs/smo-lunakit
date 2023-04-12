@@ -1,5 +1,47 @@
 #include "program/devgui/DevGuiManager.h"
 
+// sead
+#include "heap/seadDisposer.h"
+#include "heap/seadHeapMgr.h"
+
+// Helpers
+#include "helpers/GetHelper.h"
+#include "helpers/InputHelper.h"
+
+// Custom stage plugin support
+#include "cstages/CustomStageManager.h"
+
+// Primitive renderering queue system, allowing LunaKit to push primitive rendering shapes from anywhere
+#include "primitives/PrimitiveQueue.h"
+
+// All extra DevGui features included by the manager
+#include "devgui/docking/DevGuiDocking.h"
+#include "devgui/settings/PrimMenuSettings.h"
+#include "devgui/savedata/DevGuiSaveData.h"
+#include "devgui/settings/DevGuiSettings.h"
+#include "devgui/theme/DevGuiTheme.h"
+
+// All windows
+#include "devgui/windows/WindowGroup.h"
+#include "devgui/windows/Editor/WindowEditor.h"
+#include "devgui/windows/Info/WindowInfo.h"
+#include "devgui/windows/MemoryManage/WindowMemoryManage.h"
+#include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
+#include "devgui/windows/FPS/WindowFPS.h"
+#include "devgui/windows/LoadLog/WindowLoadLog.h"
+
+// All tabs on the bar the top of the screen
+#include "devgui/homemenu/HomeMenuFile.h"
+#include "devgui/homemenu/HomeMenuSettings.h"
+#include "devgui/homemenu/HomeMenuWindows.h"
+#include "devgui/homemenu/HomeMenuPrims.h"
+#include "devgui/homemenu/HomeMenuWorlds.h"
+#include "devgui/homemenu/HomeMenuCStages.h"
+#include "devgui/homemenu/HomeMenuExtra.h"
+#include "devgui/homemenu/HomeMenuUpdater.h"
+
+#include "imgui.h"
+
 // This class is a singleton! It does not have a typical constructor
 // This is class is created in GameSystemInit in main.cpp
 // Access this class from anywhere using DevGuiManager::instance()->...
@@ -213,4 +255,14 @@ WindowGroup* DevGuiManager::createWindowGroup(const char *groupName, u8 maxSize)
     WindowGroup* g = new (mHeap) WindowGroup(this, groupName, maxSize);
     mWindowGroups.pushBack(g);
     return g;
+}
+
+WindowBase* DevGuiManager::getWindow(const char* sName)
+{
+    for(WindowBase& win : mWindows) {
+        if(al::isEqualString(win.getWindowName(), sName)) 
+            return &win;
+    }
+
+    return nullptr;
 }

@@ -2,6 +2,8 @@
 
 #include "devgui/settings/DevGuiSettings.h"
 
+#include "logger/Logger.hpp"
+
 // Settings are added and created here
 DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
 {

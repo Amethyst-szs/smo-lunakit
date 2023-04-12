@@ -1,5 +1,11 @@
 #include "devgui/DevGuiManager.h"
 #include "HomeMenuUpdater.h"
+#include "devgui/savedata/DevGuiSaveData.h"
+
+#include "al/util.hpp"
+
+#include "helpers/InputHelper.h"
+
 #include "imgui.h"
 
 HomeMenuUpdater::HomeMenuUpdater(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)

@@ -12,13 +12,6 @@
 
 #pragma once
 
-#include "imgui.h"
-
-#include "al/actor/LiveActorKit.h"
-
-#include "game/System/GameSystem.h"
-#include "game/System/Application.h"
-
 #include "program/devgui/windows/WindowBase.h"
 
 class WindowMemoryManage : public WindowBase {

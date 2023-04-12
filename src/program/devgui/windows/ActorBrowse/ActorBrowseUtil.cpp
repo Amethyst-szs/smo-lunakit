@@ -1,5 +1,14 @@
 #include "WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
+#include "devgui/savedata/DevGuiSaveData.h"
+
+#include "al/util.hpp"
+
+#include "primitives/PrimitiveQueue.h"
+
+#include <cxxabi.h>
+
+#include "imgui.h"
 
 void WindowActorBrowse::generateFilterList(al::Scene* scene)
 {

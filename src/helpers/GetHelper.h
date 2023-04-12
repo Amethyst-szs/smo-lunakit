@@ -2,15 +2,7 @@
 
 #include "al/sequence/Sequence.h"
 #include "al/scene/Scene.h"
-#include "al/LiveActor/LiveActor.h"
-#include "al/nerve/Nerve.h"
-#include "al/nerve/NerveKeeper.h"
-#include "al/nerve/NerveStateBase.h"
-#include "al/nerve/NerveStateCtrl.h"
-#include "al/util.hpp"
 
-#include "game/System/GameSystem.h"
-#include "game/System/Application.h"
 #include "game/HakoniwaSequence/HakoniwaSequence.h"
 #include "game/StageScene/StageScene.h"
 #include "game/GameData/GameDataHolder.h"

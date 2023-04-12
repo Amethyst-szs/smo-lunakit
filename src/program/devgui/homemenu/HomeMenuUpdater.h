@@ -1,10 +1,7 @@
 #pragma once
 
-#include "imgui.h"
-
 #include "sead/heap/seadHeap.h"
 
-#include "helpers/InputHelper.h"
 #include "devgui/homemenu/HomeMenuBase.h"
 #include "update/UpdateHandler.h"
 

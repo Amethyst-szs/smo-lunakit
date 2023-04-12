@@ -1,14 +1,8 @@
 #pragma once
 
-#include "imgui.h"
-
-#include "game/GameData/GameDataHolder.h"
-#include "game/GameData/GameDataFunction.h"
-#include "game/Player/PlayerFunction.h"
-
-#include "helpers/GetHelper.h"
-
 #include "devgui/homemenu/HomeMenuBase.h"
+
+#include "game/GameData/GameDataHolderAccessor.h"
 
 class HomeMenuWorlds : public HomeMenuBase {
 public:

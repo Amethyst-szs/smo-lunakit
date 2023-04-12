@@ -11,15 +11,8 @@
 
 #define MAXFAVS 32
 
-#include "imgui.h"
-
-#include "primitives/PrimitiveQueue.h"
-
-#include "devgui/popups/PopupKeyboard.h"
-
-#include "helpers/ImGuiHelper.h"
-
 #include "devgui/windows/WindowBase.h"
+#include "primitives/PrimitiveTypes.h"
 
 enum ActorBrowseFilterType_ {
     ActorBrowseFilterType_NONE = 0,

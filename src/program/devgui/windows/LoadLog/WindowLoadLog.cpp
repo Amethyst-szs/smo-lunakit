@@ -1,6 +1,9 @@
 #include "WindowLoadLog.h"
 #include "devgui/DevGuiManager.h"
+
 #include "logger/LoadLogger.hpp"
+
+#include "imgui.h"
 
 WindowLoadLog::WindowLoadLog(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
     : WindowBase(parent, winName, isActiveByDefault) {}

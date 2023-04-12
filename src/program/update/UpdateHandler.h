@@ -1,11 +1,8 @@
 #pragma once
 
-#include "helpers/curlHelper.h"
-#include "helpers/fsHelper.h"
-
-#include "cjson/cJSON.h"
-
 #include "UpdateApiInfo.h"
+
+#include "sead/heap/seadDisposer.h"
 
 #define GIT_API_PATH "https://api.github.com/repos/Amethyst-szs/smo-lunakit/releases/latest"
 #define GIT_RELEASE_PATH "https://github.com/Amethyst-szs/smo-lunakit/releases/latest/download"

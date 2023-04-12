@@ -1,5 +1,15 @@
 #include "helpers/GetHelper.h"
 
+#include "al/LiveActor/LiveActor.h"
+#include "al/nerve/Nerve.h"
+#include "al/nerve/NerveKeeper.h"
+#include "al/nerve/NerveStateBase.h"
+#include "al/nerve/NerveStateCtrl.h"
+#include "al/util.hpp"
+
+#include "game/System/GameSystem.h"
+#include "game/System/Application.h"
+
 bool isInScene()
 {
     al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;

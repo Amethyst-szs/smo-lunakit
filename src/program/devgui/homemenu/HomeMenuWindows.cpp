@@ -1,5 +1,11 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuWindows.h"
+#include "devgui/savedata/DevGuiSaveData.h"
+#include "devgui/theme/DevGuiTheme.h"
+#include "devgui/windows/WindowGroup.h"
+
+#include "imgui.h"
+#include "imgui_internal.h"
 
 HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
     : HomeMenuBase(parent, menuName, isDisplayInListByDefault)

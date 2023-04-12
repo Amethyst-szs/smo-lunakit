@@ -1,5 +1,13 @@
 #include "CustomStage.h"
 
+#include "al/util.hpp"
+
+#include "nn/fs/fs_files.hpp"
+#include "nn/result.h"
+#include "nn/init.h"
+
+#include "helpers/fsHelper.h"
+
 CustomStageEntry::CustomStageEntry(const char* stageName)
 {
     mStageName = stageName;
@@ -7,7 +15,6 @@ CustomStageEntry::CustomStageEntry(const char* stageName)
     sead::FormatFixedSafeString<0xff> stageMapPath("StageData/%sMap", stageName);
     mIsExist = al::isExistArchive(stageMapPath);
 }
-
 
 
 CustomStageCategory::CustomStageCategory(al::ByamlIter catIter, sead::Heap* heap)
@@ -29,6 +36,7 @@ CustomStageCategory::CustomStageCategory(al::ByamlIter catIter, sead::Heap* heap
         mEntries.pushBack(newEntry);
     }
 }
+
 
 CustomStageResource::CustomStageResource(const char* resourcePath, const char* resourceName, sead::Heap* heap)
 {

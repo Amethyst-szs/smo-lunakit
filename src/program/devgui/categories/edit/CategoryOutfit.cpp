@@ -1,9 +1,12 @@
 #include "program/devgui/categories/edit/CategoryOutfit.h"
 
 #include "game/GameData/GameDataHolder.h"
-#include "game/GameData/GameDataHolder.h"
 #include "game/GameData/GameDataFunction.h"
+
+#include "helpers/GetHelper.h"
 #include "helpers.h"
+
+#include "imgui.h"
 
 CategoryOutfit::CategoryOutfit(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap)

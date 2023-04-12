@@ -1,9 +1,17 @@
+#include "WindowBase.h"
+
 #include "devgui/DevGuiManager.h"
+#include "devgui/savedata/DevGuiSaveData.h"
 #include "devgui/categories/CategoryBase.h"
+
+#include "al/util.hpp"
 
 #include "types.h"
 
-#include "WindowBase.h"
+#include "helpers/GetHelper.h"
+#include "logger/Logger.hpp"
+
+#include "imgui.h"
 
 WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
 {
@@ -48,12 +56,12 @@ bool WindowBase::tryUpdateWinDisplay()
 
     // If this window contains categories, load in the tabs
     if (mCategories.size() > 0) {
-        if (ImGui::BeginTabBar("Categories", mTabFlags)) {
+        if (ImGui::BeginTabBar("Categories")) {
 
             for (int i = 0; i < mCategories.size(); i++) {
                 auto* entry = mCategories.at(i);
 
-                if (ImGui::BeginTabItem(entry->getCategoryName(), NULL, mTabItemFlags)) {
+                if (ImGui::BeginTabItem(entry->getCategoryName(), NULL)) {
                     entry->updateCatDisplay();
                     ImGui::EndTabItem();
                 }

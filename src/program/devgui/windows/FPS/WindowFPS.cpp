@@ -3,6 +3,8 @@
 
 #include "game/System/Application.h"
 
+#include "imgui.h"
+
 WindowFPS::WindowFPS(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
     : WindowBase(parent, winName, isActiveByDefault)
 {

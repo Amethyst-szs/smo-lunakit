@@ -1,6 +1,12 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuBase.h"
 
+#include "al/util.hpp"
+
+#include "imgui.h"
+
+#include "logger/Logger.hpp"
+
 HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
 {
     Logger::log("Constructing HomeMenu: %s\n", menuName);

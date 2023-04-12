@@ -10,14 +10,7 @@
 
 #pragma once
 
-#include "imgui.h"
-
-#include "sead/container/seadPtrArray.h"
 #include "sead/prim/seadSafeString.h"
-
-#include "logger/Logger.hpp"
-
-#include "types.h"
 
 enum PopupKeyboardType {
     KEYTYPE_QWERTY,

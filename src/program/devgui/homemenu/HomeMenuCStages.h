@@ -1,11 +1,9 @@
 #pragma once
 
-#include "imgui.h"
-
-#include "game/Player/PlayerFunction.h"
-
 #include "cstages/CustomStage.h"
 #include "cstages/CustomStageManager.h"
+
+#include "game/GameData/GameDataHolderAccessor.h"
 
 #include "devgui/homemenu/HomeMenuBase.h"
 

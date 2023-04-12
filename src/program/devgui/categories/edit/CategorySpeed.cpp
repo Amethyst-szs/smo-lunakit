@@ -1,11 +1,10 @@
 #include "program/devgui/categories/edit/CategorySpeed.h"
 
-#include "game/Player/PlayerFunction.h"
-#include "helpers/PlayerHelper.h"
-#include "game/Player/PlayerConst.h"
-#include "game/Player/PlayerActorHakoniwa.h"
+#include "helpers/GetHelper.h"
+
 #include "logger/Logger.hpp"
 
+#include "imgui.h"
 
 CategorySpeed::CategorySpeed(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap)

@@ -13,11 +13,6 @@
 
 #pragma once
 
-#include "imgui.h"
-
-#include "game/System/GameSystem.h"
-#include "game/System/Application.h"
-
 #include "program/devgui/windows/WindowBase.h"
 
 class WindowLoadLog : public WindowBase {

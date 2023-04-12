@@ -1,6 +1,14 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuExtra.h"
 #include "devgui/popups/PopupKeyboard.h"
+#include "devgui/savedata/DevGuiSaveData.h"
+
+#include "update/UpdateHandler.h"
+
+#include "logger/Logger.hpp"
+
+#include "imgui.h"
+#include "imgui_internal.h"
 
 HomeMenuExtra::HomeMenuExtra(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
     : HomeMenuBase(parent, menuName, isDisplayInListByDefault)

@@ -1,5 +1,23 @@
 #include "DevGuiSaveData.h"
 #include "devgui/DevGuiManager.h"
+#include "devgui/theme/DevGuiTheme.h"
+#include "devgui/settings/DevGuiSettings.h"
+#include "devgui/settings/PrimMenuSettings.h"
+
+#include "al/byaml/ByamlIter.h"
+#include "al/byaml/writer/ByamlWriter.h"
+#include "al/util.hpp"
+
+#include "nn/fs/fs_directories.hpp"
+#include "nn/fs/fs_files.hpp"
+#include "nn/fs/fs_types.hpp"
+
+#include "helpers/fsHelper.h"
+#include "helpers/DataStream.h"
+
+#include "update/UpdateHandler.h"
+
+#include "imgui.h"
 
 void DevGuiSaveData::init(DevGuiManager* parent)
 {

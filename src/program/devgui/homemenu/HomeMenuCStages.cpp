@@ -1,6 +1,13 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuCStages.h"
 
+#include "game/Player/PlayerFunction.h"
+#include "game/GameData/GameDataFunction.h"
+
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
+
 HomeMenuCStages::HomeMenuCStages(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
     : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
 {}

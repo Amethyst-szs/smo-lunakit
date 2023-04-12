@@ -1,6 +1,14 @@
 #include "UpdateHandler.h"
 #include "devgui/DevGuiManager.h"
-#include "heap/seadHeapMgr.h"
+
+#include "al/util.hpp"
+
+#include "sead/heap/seadHeapMgr.h"
+
+#include "helpers/curlHelper.h"
+#include "helpers/fsHelper.h"
+
+#include "cjson/cJSON.h"
 
 // This class is a singleton! It does not have a typical constructor
 // This is class is created in GameSystemInit in main.cpp

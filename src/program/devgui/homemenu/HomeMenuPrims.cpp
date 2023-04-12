@@ -1,5 +1,14 @@
 #include "devgui/homemenu/HomeMenuPrims.h"
 #include "devgui/DevGuiManager.h"
+#include "devgui/savedata/DevGuiSaveData.h"
+
+#include "al/collision/alCollisionUtil.h"
+#include "al/util.hpp"
+
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
+#include "imgui_internal.h"
 
 HomeMenuPrims::HomeMenuPrims(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
     : HomeMenuBase(parent, menuName, isDisplayInListByDefault)

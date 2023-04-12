@@ -1,5 +1,9 @@
 #include "devgui/popups/PopupKeyboard.h"
 
+#include "imgui.h"
+
+#include "logger/Logger.hpp"
+
 void PopupKeyboard::update()
 {
     if(!mIsKeyboardOpen)

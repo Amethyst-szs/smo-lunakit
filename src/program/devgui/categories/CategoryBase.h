@@ -9,16 +9,7 @@
 
 #pragma once
 
-#include "imgui.h"
-
-#include "al/util.hpp"
-
-#include "heap/seadDisposer.h"
 #include "heap/seadHeap.h"
-
-#include "helpers/GetHelper.h"
-
-#include "logger/Logger.hpp"
 
 class CategoryBase {
 public:

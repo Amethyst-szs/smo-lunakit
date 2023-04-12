@@ -1,6 +1,13 @@
 #include "devgui/DevGuiManager.h"
 #include "WindowEditor.h"
 
+#include "program/devgui/categories/edit/CategoryHealth.h"
+#include "program/devgui/categories/edit/CategoryCoins.h"
+#include "program/devgui/categories/edit/CategorySpeed.h"
+#include "program/devgui/categories/edit/CategoryWarp.h"
+#include "program/devgui/categories/edit/CategoryOutfit.h"
+#include "program/devgui/categories/edit/CategoryHomeShip.h"
+
 WindowEditor::WindowEditor(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
     : WindowBase(parent, winName, isActiveByDefault)
 {

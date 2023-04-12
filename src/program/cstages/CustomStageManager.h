@@ -19,23 +19,7 @@
 
 #define CUSTOMSTAGEPATH "sd:/LunaKit/LKData/CustomStages/"
 
-#include "lib.hpp"
-
-#include "al/byaml/ByamlIter.h"
-#include "al/resource/Resource.h"
-#include "al/util.hpp"
-
 #include "nn/fs/fs_directories.hpp"
-#include "nn/fs/fs_files.hpp"
-#include "nn/result.h"
-
-#include "sead/heap/seadExpHeap.h"
-#include "sead/heap/seadHeap.h"
-#include "sead/heap/seadHeapMgr.h"
-#include "sead/filedevice/seadFileDeviceMgr.h"
-
-#include "types.h"
-#include "logger/Logger.hpp"
 
 #include "CustomStage.h"
 

@@ -1,5 +1,13 @@
 #include "WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
+#include "primitives/PrimitiveQueue.h"
+
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
+#include "helpers/ImGuiHelper.h"
+
+#include <cxxabi.h>
 
 void WindowActorBrowse::childActorInspector()
 {

@@ -16,59 +16,27 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 
 #pragma once
 
-// General includes
-#include "imgui.h"
-
-#include "al/scene/Scene.h"
-
-#include "game/HakoniwaSequence/HakoniwaSequence.h"
-#include "game/System/GameSystem.h"
-
-#include "container/seadPtrArray.h"
-#include "heap/seadDisposer.h"
-#include "heap/seadExpHeap.h"
-#include "heap/seadHeap.h"
-#include "heap/seadHeapMgr.h"
-
-#include "helpers/GetHelper.h"
-#include "helpers/InputHelper.h"
-
-// Custom stage plugin support
-#include "cstages/CustomStageManager.h"
-
-// Primitive renderering queue system, allowing LunaKit to push primitive rendering shapes from anywhere
-#include "primitives/PrimitiveQueue.h"
-
-// All extra DevGui features included by the manager
-#include "devgui/docking/DevGuiDocking.h"
-#include "devgui/settings/PrimMenuSettings.h"
-#include "devgui/savedata/DevGuiSaveData.h"
-#include "devgui/settings/DevGuiSettings.h"
-#include "devgui/theme/DevGuiTheme.h"
-
-// All windows
-#include "devgui/windows/WindowBase.h"
-#include "devgui/windows/WindowGroup.h"
-#include "devgui/windows/Editor/WindowEditor.h"
-#include "devgui/windows/Info/WindowInfo.h"
-#include "devgui/windows/MemoryManage/WindowMemoryManage.h"
-#include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
-#include "devgui/windows/FPS/WindowFPS.h"
-#include "devgui/windows/LoadLog/WindowLoadLog.h"
-
-// All tabs on the bar the top of the screen
-#include "devgui/homemenu/HomeMenuBase.h"
-#include "devgui/homemenu/HomeMenuFile.h"
-#include "devgui/homemenu/HomeMenuSettings.h"
-#include "devgui/homemenu/HomeMenuWindows.h"
-#include "devgui/homemenu/HomeMenuPrims.h"
-#include "devgui/homemenu/HomeMenuWorlds.h"
-#include "devgui/homemenu/HomeMenuCStages.h"
-#include "devgui/homemenu/HomeMenuExtra.h"
-#include "devgui/homemenu/HomeMenuUpdater.h"
+#include "sead/container/seadPtrArray.h"
+#include "sead/heap/seadHeap.h"
 
 // All popups
 #include "devgui/popups/PopupKeyboard.h"
+
+// Base classes for windows and menu tabs
+#include "devgui/windows/WindowBase.h"
+#include "devgui/homemenu/HomeMenuBase.h"
+
+class CustomStageManager; // Forward declaration
+
+class DevGuiDocking; // Forward declaration
+class DevGuiSettings; // Forward declaration
+class DevGuiSaveData; // Forward declaration
+class DevGuiTheme; // Forward declaration
+
+class PrimitiveQueue; // Forward declaration
+class PrimMenuSettings; // Forward declaration
+
+class WindowGroup; // Forward declaration
 
 class DevGuiManager {
     // This class is a singleton! It does not have a typical constructor
@@ -110,7 +78,7 @@ public:
 
     // Generic getters
     WindowBase* getWindow(int windowIdx) { return mWindows.at(windowIdx); } // Get a window at an index (casts to WindowBase)
-    WindowBase* getWindow(const char* sName) { for(WindowBase& win : mWindows) if(al::isEqualString(win.getWindowName(), sName)) return &win; return nullptr; }
+    WindowBase* getWindow(const char* sName);
     int getWindowCount() { return mWindows.size(); } // Total windows (includes closed and non-anchored windows)
     bool* getWindowActiveStateAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getActiveState(); } // Open/close state of a window
     const char* getWindowNameAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getWindowName(); } // Header name of a window

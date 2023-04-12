@@ -1,14 +1,7 @@
 #pragma once
 
-#include "imgui.h"
-#include "imgui_internal.h"
-
-#include "al/collision/alCollisionUtil.h"
-#include "al/util.hpp"
-
 #include "primitives/PrimitiveQueue.h"
 #include "devgui/settings/PrimMenuSettings.h"
-
 #include "devgui/homemenu/HomeMenuBase.h"
 
 class HomeMenuPrims : public HomeMenuBase {

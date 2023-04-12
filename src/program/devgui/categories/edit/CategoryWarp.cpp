@@ -1,5 +1,10 @@
 #include "program/devgui/categories/edit/CategoryWarp.h"
 
+#include "al/util.hpp"
+
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
 
 CategoryWarp::CategoryWarp(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap) {}

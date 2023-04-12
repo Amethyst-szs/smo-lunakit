@@ -1,6 +1,8 @@
 #include "WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
 
+#include "imgui.h"
+
 void WindowActorBrowse::childActorList(al::Scene* scene)
 {
     al::LiveActorKit* kit = scene->mLiveActorKit;

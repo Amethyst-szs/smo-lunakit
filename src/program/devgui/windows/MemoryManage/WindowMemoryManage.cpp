@@ -1,6 +1,15 @@
 #include "devgui/DevGuiManager.h"
 #include "WindowMemoryManage.h"
 
+#include "al/actor/LiveActorKit.h"
+#include "al/util.hpp"
+
+#include "game/HakoniwaSequence/HakoniwaSequence.h"
+#include "game/System/GameSystem.h"
+#include "game/System/Application.h"
+
+#include "imgui.h"
+
 WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
     : WindowBase(parent, winName, isActiveByDefault) {}
 

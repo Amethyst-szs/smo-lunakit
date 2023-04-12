@@ -1,5 +1,8 @@
 #include "program/devgui/categories/edit/CategoryCoins.h"
 
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
 
 CategoryCoins::CategoryCoins(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap)

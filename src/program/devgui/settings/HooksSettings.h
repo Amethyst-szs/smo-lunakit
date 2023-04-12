@@ -6,6 +6,7 @@
 #include "game/StageScene/StageScene.h"
 
 #include "devgui/DevGuiManager.h"
+#include "devgui/settings/DevGuiSettings.h"
 
 #include "lib.hpp"
 

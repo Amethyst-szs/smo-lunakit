@@ -1,5 +1,9 @@
 #include "PrimitiveTypes.h"
 
+#include "sead/gfx/seadPrimitiveRenderer.h"
+
+#include "helpers/GetHelper.h"
+
 void PrimitiveTypePoint::render()
 {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();

@@ -1,6 +1,10 @@
 #include "WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
 
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
+
 WindowActorBrowse::WindowActorBrowse(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
     : WindowBase(parent, winName, isActiveByDefault)
 {

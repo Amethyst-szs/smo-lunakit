@@ -2,13 +2,6 @@
 
 #include "devgui/homemenu/HomeMenuBase.h"
 
-#include "logger/Logger.hpp"
-
-#include "update/UpdateHandler.h"
-
-#include "imgui.h"
-#include "imgui_internal.h"
-
 class HomeMenuExtra : public HomeMenuBase {
 public:
     HomeMenuExtra(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);

@@ -12,9 +12,7 @@
 #pragma once
 
 #include "sead/container/seadPtrArray.h"
-#include "sead/heap/seadExpHeap.h"
 #include "sead/heap/seadHeap.h"
-#include "sead/heap/seadDisposer.h"
 
 #include "PrimitiveTypes.h"
 

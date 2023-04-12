@@ -1,6 +1,8 @@
 #include "WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
 
+#include "imgui.h"
+
 void WindowActorBrowse::childButtonHeader(al::Scene* scene)
 {
     ImGui::SetWindowFontScale(1.25f);

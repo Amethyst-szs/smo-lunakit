@@ -1,6 +1,8 @@
 #include "PrimMenuSettings.h"
 #include "devgui/DevGuiManager.h"
 
+#include "al/util.hpp"
+
 PrimMenuSettings::PrimMenuSettings(DevGuiManager* parent)
 {
     Logger::log("Starting primitive settings constructor\n");

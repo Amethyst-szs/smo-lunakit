@@ -1,5 +1,14 @@
 #include "program/devgui/categories/info/CategoryInfSequence.h"
 
+#include "al/nerve/Nerve.h"
+#include "al/nerve/NerveKeeper.h"
+
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
+
+#include <cxxabi.h>
+
 CategoryInfSequence::CategoryInfSequence(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap) {}
 

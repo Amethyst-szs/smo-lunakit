@@ -18,24 +18,12 @@
 #define THEMEPATH "sd:/LunaKit/LKData/Themes/"
 
 #include "al/byaml/ByamlIter.h"
-#include "al/resource/Resource.h"
-#include "al/util.hpp"
 
 #include "nn/fs/fs_directories.hpp"
-#include "nn/fs/fs_files.hpp"
-#include "nn/result.h"
-#include "nn/init.h"
-
-#include "helpers/fsHelper.h"
-
-#include "sead/heap/seadExpHeap.h"
-#include "sead/heap/seadHeap.h"
-#include "sead/heap/seadHeapMgr.h"
-#include "sead/filedevice/seadFileDeviceMgr.h"
-
-#include "logger/Logger.hpp"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
+class ImVec2; // Forward declaration
+class ImVec4; // Forward declaration
 
 class DevGuiTheme {
 public:

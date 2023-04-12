@@ -1,6 +1,8 @@
 #include "devgui/docking/DevGuiDocking.h"
 #include "devgui/DevGuiManager.h"
 
+#include "imgui_internal.h"
+
 DevGuiDocking::DevGuiDocking(DevGuiManager* parent)
 {
     mParent = parent;

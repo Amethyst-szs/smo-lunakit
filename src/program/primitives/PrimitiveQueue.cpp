@@ -1,5 +1,10 @@
 #include "PrimitiveQueue.h"
 
+#include "sead/heap/seadDisposer.h"
+#include "sead/gfx/seadPrimitiveRenderer.h"
+
+#include "helpers/GetHelper.h"
+
 PrimitiveQueue::PrimitiveQueue(sead::Heap* heap)
 {
     mHeap = heap;

@@ -1,5 +1,14 @@
 #include "program/devgui/categories/info/CategoryInfScene.h"
 
+#include "al/nerve/Nerve.h"
+#include "al/nerve/NerveKeeper.h"
+
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
+
+#include <cxxabi.h>
+
 CategoryInfScene::CategoryInfScene(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap) {}
 
