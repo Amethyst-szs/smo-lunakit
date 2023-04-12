@@ -14,6 +14,8 @@
 
 #include "program/devgui/windows/WindowBase.h"
 
+__attribute__((used)) static const char* memoryManageWindowName = "Heap View";
+
 class WindowMemoryManage : public WindowBase {
 public:
     WindowMemoryManage(DevGuiManager* parent, const char* winName, bool isActiveByDefault);

@@ -12,6 +12,8 @@
 
 #include "program/devgui/windows/WindowBase.h"
 
+__attribute__((used)) static const char* infoWindowName = "Info Viewer";
+
 class WindowInfo : public WindowBase {
 public:
     WindowInfo(DevGuiManager* parent, const char* winName, bool isActiveByDefault);

@@ -35,6 +35,8 @@ __attribute__((used)) static const char* actorBrowseNameTypeTable[ActorBrowseNam
     "Name "
 };
 
+__attribute__((used)) static const char* actorBrowseWindowName = "Actor Browser";
+
 class WindowActorBrowse : public WindowBase {
 public:
 

@@ -54,12 +54,14 @@ void DevGuiManager::createElements()
     sead::ScopedCurrentHeapSetter heapSetter(mHeap);
     
     // Create all display windows
-    createWindow<WindowMemoryManage>("Memory Manager", true);
-    createWindow<WindowEditor>("Param Editor", true);
-    createWindow<WindowInfo>("Info Viewer", true);
-    createWindow<WindowActorBrowse>("Actor Browser", false);
-    createWindow<WindowFPS>("FPS Window", true);
-    createWindow<WindowLoadLog>("Load Log", false);
+    createWindow<WindowEditor>(paramEditorWindowName, true);
+    createWindow<WindowInfo>(infoWindowName, true);
+    createWindow<WindowActorBrowse>(actorBrowseWindowName, false);
+    createWindow<WindowFPS>(fpsWindowName, true);
+
+    WindowGroup* memoryGroup = createWindowGroup("Memory Tools", 2);
+    createWindow<WindowLoadLog>(loadLogWindowName, false, memoryGroup);
+    createWindow<WindowMemoryManage>(memoryManageWindowName, true, memoryGroup);
 
     // Create all home menu tabs
     createHomeMenuItem<HomeMenuFile>("File", true);
@@ -119,13 +121,13 @@ void DevGuiManager::update()
         if (mIsActive)
             mIsRequestCursorShow = true;
 
-        Logger::log("Active state %s\n", mIsActive ? "enabled" : "disabled");
+        Logger::log("Active state %s\n", mIsActive ? "Enabled" : "Disabled");
     }
 
     // Toggle display/hide of all anchored windows
     if(mIsActive && al::isPadTriggerPressLeftStick(-1)) {
         mIsDisplayWindows = !mIsDisplayWindows;
-        Logger::log("window display %s\n", mIsDisplayWindows ? "enabled" : "disabled");
+        Logger::log("Window display %s\n", mIsDisplayWindows ? "Enabled" : "Disabled");
     }
 
     // This is run every frame, only actually saves if a save is queued and the timer hits zero

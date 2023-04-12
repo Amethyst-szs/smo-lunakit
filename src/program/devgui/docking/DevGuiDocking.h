@@ -26,6 +26,7 @@ private:
 
     // Dock points
     ImGuiID mDockSpace;
+
     ImGuiID mDockUp;
     ImGuiID mDockDown;
     ImGuiID mDockLeft;

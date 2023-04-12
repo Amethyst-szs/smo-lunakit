@@ -1,7 +1,15 @@
 #include "devgui/docking/DevGuiDocking.h"
+#include "devgui/savedata/DevGuiSaveData.h"
 #include "devgui/DevGuiManager.h"
 
 #include "imgui_internal.h"
+
+// Include different window classes in order to set up default anchoring placements
+#include "devgui/windows/MemoryManage/WindowMemoryManage.h"
+#include "devgui/windows/Editor/WindowEditor.h"
+#include "devgui/windows/Info/WindowInfo.h"
+#include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
+#include "devgui/windows/LoadLog/WindowLoadLog.h"
 
 DevGuiDocking::DevGuiDocking(DevGuiManager* parent)
 {
@@ -62,10 +70,27 @@ void DevGuiDocking::update()
     mDockLeft = ImGui::DockBuilderSplitNode(mDockSpace, ImGuiDir_Left, 0.4f, nullptr, &mDockSpace);
     mDockRight = ImGui::DockBuilderSplitNode(mDockSpace, ImGuiDir_Right, 0.4f, nullptr, &mDockSpace);
 
-    // if(!mParent->getSaveData()->isReadImGuiLayoutFile()) {
-    //     WindowBase* memWin = mParent->getWindow("Memory Manager");
-    //     ImGui::DockBuilderDockWindow(mParent->getWindowNameAtIdx(0), mDockLeft);
-    // }
+    if(!mParent->getSaveData()->isExistImGuiLayoutFile()) {
+        // Create the default interface layout if no saved layout exists
+        ImGui::DockBuilderSetNodeSize(mDockLeft, ImVec2(345.f, 695.f));
+        ImGui::DockBuilderSetNodeSize(mDockRight, ImVec2(400.f, 695.f));
+        ImGui::DockBuilderSetNodeSize(mDockDown, ImVec2(400.f, 695.f));
+        
+        ImGuiID dockLM = ImGui::DockBuilderSplitNode(mDockLeft, ImGuiDir_Left, 0.82f, nullptr, &mDockLeft);
+        ImGui::DockBuilderSetNodeSize(dockLM, ImVec2(345.f, 695.f));
+
+        ImGuiID dockLU = ImGui::DockBuilderSplitNode(dockLM, ImGuiDir_Up, 0.33f, nullptr, &dockLM);
+        ImGui::DockBuilderSetNodeSize(dockLU, ImVec2(345.f, 231.6f));
+
+        ImGuiID dockLD = ImGui::DockBuilderSplitNode(dockLM, ImGuiDir_Down, 0.5f, nullptr, &dockLM);
+        ImGui::DockBuilderSetNodeSize(dockLD, ImVec2(345.f, 275.f));
+
+        ImGui::DockBuilderDockWindow(memoryManageWindowName, dockLU);
+        ImGui::DockBuilderDockWindow(loadLogWindowName, dockLU);
+        ImGui::DockBuilderDockWindow(paramEditorWindowName, dockLM);
+        ImGui::DockBuilderDockWindow(infoWindowName, dockLD);
+        ImGui::DockBuilderDockWindow(actorBrowseWindowName, mDockRight);
+    }
 
     ImGui::DockBuilderFinish(mDockSpace);
 

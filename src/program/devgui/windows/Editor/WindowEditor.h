@@ -12,6 +12,8 @@
 
 #include "program/devgui/windows/WindowBase.h"
 
+__attribute__((used)) static const char* paramEditorWindowName = "Param Editor";
+
 class WindowEditor : public WindowBase {
 public:
     WindowEditor(DevGuiManager* parent, const char* winName, bool isActiveByDefault);
