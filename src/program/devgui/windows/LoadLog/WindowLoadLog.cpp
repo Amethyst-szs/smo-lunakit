@@ -8,11 +8,9 @@
 WindowLoadLog::WindowLoadLog(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
     : WindowBase(parent, winName, isActiveByDefault) {}
 
-namespace LoadLog {
-    ImVector<char*> mTextLines;
-}
-
 bool WindowLoadLog::tryUpdateWinDisplay() {
+    ResourceLoadLogger& log = *ResourceLoadLogger::instance();
+
     ImGui::SetWindowFontScale(1.0f);
 
     float lineSize = ImGui::GetTextLineHeightWithSpacing();
@@ -23,18 +21,16 @@ bool WindowLoadLog::tryUpdateWinDisplay() {
         ImGui::Dummy(ImVec2(50, calcRoundedNum(curScrollPos - lineSize, lineSize)));
 
     for (int i = curScrollPos / lineSize; i < (curScrollPos + winHeight) / lineSize; i++) {
-        if (i >= LoadLog::mTextLines.size())
+        if (i >= log.mTextLines.size())
             continue;
             
-        char currentLine[256];
-        strncpy(currentLine, LoadLog::mTextLines[i], 255);
-        ImGui::Text(currentLine);
+        ImGui::Text(log.mTextLines[i]->cstr());
     }
 
     if (ImGui::GetScrollY() <= 1.f)
         ImGui::SetScrollY(0.f);
 
-    ImGui::Dummy(ImVec2(50, calcRoundedNum((LoadLog::mTextLines.size() - (curScrollPos / lineSize + 8)) * lineSize, lineSize)));
+    ImGui::Dummy(ImVec2(50, calcRoundedNum((log.mTextLines.size() - (curScrollPos / lineSize + 8)) * lineSize, lineSize)));
 
     return true;
 }

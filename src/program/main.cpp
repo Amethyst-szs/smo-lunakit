@@ -138,7 +138,12 @@ HOOK_DEFINE_TRAMPOLINE(RedirectFileDevice) {
 HOOK_DEFINE_TRAMPOLINE(FileLoaderLoadArc) {
     static sead::ArchiveRes *
     Callback(al::FileLoader *thisPtr, sead::SafeString &path, const char *ext, sead::FileDevice *device) {
-        LoadLog::pushTextToVector(path.cstr());
+
+        ResourceLoadLogger* log = ResourceLoadLogger::instance();
+
+        if(log)
+            log->pushTextToVector(path.cstr());
+
         sead::FileDevice *sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
 
         if (sdFileDevice && sdFileDevice->isExistFile(path))
@@ -150,6 +155,11 @@ HOOK_DEFINE_TRAMPOLINE(FileLoaderLoadArc) {
 
 HOOK_DEFINE_TRAMPOLINE(FileLoaderIsExistFile) {
     static bool Callback(al::FileLoader *thisPtr, sead::SafeString &path, sead::FileDevice *device) {
+
+        ResourceLoadLogger* log = ResourceLoadLogger::instance();
+        
+        if(log)
+            log->pushTextToVector(path.cstr());
 
         sead::FileDevice *sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
 
@@ -198,6 +208,8 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
             sead::Heap::HeapDirection::cHeapDirection_Forward, false);
 
         Logger::instance().init(lkHeap).value;
+        ResourceLoadLogger::createInstance(lkHeap);
+        ResourceLoadLogger::instance()->init(lkHeap);
 
         DevGuiManager::createInstance(lkHeap);
         UpdateHandler::createInstance(updaterHeap);
