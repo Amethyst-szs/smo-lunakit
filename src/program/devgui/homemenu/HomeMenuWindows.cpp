@@ -7,25 +7,10 @@ HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName, bo
 
 void HomeMenuWindows::updateMenuDisplay()
 {
-    if (addMenu("Window Anchor")) {
-        ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
-
-        if (ImGui::MenuItem("Top"))
-            setAnc((int)WinAnchorType::ANC_TOP);
-
-        if (ImGui::MenuItem("Bottom"))
-            setAnc((int)WinAnchorType::ANC_BOTTOM);
-
-        if (ImGui::MenuItem("Left"))
-            setAnc((int)WinAnchorType::ANC_LEFT);
-
-        if (ImGui::MenuItem("Right"))
-            setAnc((int)WinAnchorType::ANC_RIGHT);
-        
-        ImGui::PopItemFlag();
-        
-        ImGui::EndMenu();
-    }
+    if(ImGui::MenuItem("Save Layout"))
+        mParent->getSaveData()->writeImGuiLayout();
+    if(ImGui::MenuItem("Load Layout"))
+        mParent->getSaveData()->readImGuiLayout();
 
     if (addMenu("Themes")) {
         ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
@@ -50,7 +35,6 @@ void HomeMenuWindows::updateMenuDisplay()
         
         if(ImGui::MenuItem(mParent->getWindowNameAtIdx(i), NULL, *isActive)) {
             *isActive = !(*isActive);
-            mParent->refreshAnchor();
             mParent->getSaveData()->queueSaveWrite();
         }
     }
@@ -60,6 +44,5 @@ void HomeMenuWindows::updateMenuDisplay()
 
 void HomeMenuWindows::setAnc(int type)
 {
-    mParent->setAnchorType((WinAnchorType)type);
     mParent->getSaveData()->queueSaveWrite();
 }

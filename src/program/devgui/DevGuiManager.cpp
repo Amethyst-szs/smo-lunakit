@@ -45,7 +45,6 @@ void DevGuiManager::init(sead::Heap* heap)
     // Please don't increase these unless you REALLY need more space for some ungodly reason
     mWindows.allocBuffer(0x10, heap);
     mHomeMenuTabs.allocBuffer(0x10, heap);
-
     mDockSystem = new DevGuiDocking(this);
 
     mSettings = new DevGuiSettings(this); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#settings
@@ -74,15 +73,15 @@ void DevGuiManager::update()
     if (InputHelper::isHoldR() && InputHelper::isHoldZR() && InputHelper::isPressL()) {
         mIsActive = !mIsActive;
         if (mIsActive)
-            mIsFirstStep = true;
+            mIsRequestCursorShow = true;
 
         Logger::log("Active state %s\n", mIsActive ? "enabled" : "disabled");
     }
 
     // Toggle display/hide of all anchored windows
     if(mIsActive && al::isPadTriggerPressLeftStick(-1)) {
-        mIsDisplayAnchorWindows = !mIsDisplayAnchorWindows;
-        Logger::log("Anchored window display %s\n", mIsDisplayAnchorWindows ? "enabled" : "disabled");
+        mIsDisplayWindows = !mIsDisplayWindows;
+        Logger::log("window display %s\n", mIsDisplayWindows ? "enabled" : "disabled");
     }
 
     // This is run every frame, only actually saves if a save is queued and the timer hits zero
@@ -111,29 +110,17 @@ void DevGuiManager::updateDisplay()
 
     if(!mIsActive)
         return;
-
-    // Load and draw all windows (and update anchors if needed)
-    int totalAnchorWin = calcTotalAnchoredWindows();
-    int curAnchorWin = 0;
-
+        
     mPopupKeyboard->update();
-
     mDockSystem->update();
-
     mTheme->tryUpdateTheme();
 
     for (int i = 0; i < mWindows.size(); i++) {
         auto* entry = mWindows.at(i);
-        if(!entry->isActive() || (entry->isInAnchorList() && !mIsDisplayAnchorWindows))
+        if(!entry->isActive() || (!mIsDisplayWindows))
             continue;
 
         ImGui::Begin(entry->getWindowName(), entry->getCloseInteractionPtr(), entry->getWindowConfig()->mWindowFlags);
-        
-        if(mIsAnchorChange) {
-            Logger::log("Anchor calc %s - Size: %i - Page %i/%i\n", entry->getWindowName(), entry->getAnchorPages(), curAnchorWin, totalAnchorWin);
-            entry->setupAnchor(totalAnchorWin, curAnchorWin);
-            curAnchorWin += entry->getAnchorPages();
-        }
 
         entry->tryUpdateWinDisplay();
 
@@ -141,8 +128,6 @@ void DevGuiManager::updateDisplay()
 
         entry->updatePostDisplay();
     }
-
-    mIsAnchorChange = false;
     
     // Load and draw all home menu tabs
     if (ImGui::BeginMainMenuBar()) {
@@ -163,7 +148,7 @@ void DevGuiManager::updateDisplay()
                 ImGui::EndMenu();
         }
 
-        if(!mIsDisplayAnchorWindows && ImGui::BeginMenu("  Hidden! (L-Stick)", false))
+        if(!mIsDisplayWindows && ImGui::BeginMenu("  Hidden! (L-Stick)", false))
             ImGui::EndMenu();
 
         if(InputHelper::isInputToggled() && ImGui::BeginMenu("  Controller (R+ZR+ZL)", false))
@@ -181,9 +166,12 @@ void DevGuiManager::updateDisplay()
     if(mIsDisplayImGuiDemo)
         ImGui::ShowDemoWindow();
 
+    // Try loading the ImGui layout on first step now that everything is created
     // Reset the first step flag when complete!
-    if (mIsFirstStep)
+    if (mIsFirstStep) {
+        mSaveData->readImGuiLayout();
         mIsFirstStep = false;
+    }
 }
 
 void DevGuiManager::updateCursorState()
@@ -191,8 +179,10 @@ void DevGuiManager::updateCursorState()
     if (!mIsActive)
         ImGui::SetMouseCursor(ImGuiMouseCursor_None);
 
-    if (mIsFirstStep)
+    if (mIsRequestCursorShow) {
         ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+        mIsRequestCursorShow = false;
+    }
 }
 
 template <class T>
@@ -207,17 +197,4 @@ void DevGuiManager::createHomeMenuItem(const char* menuName, bool isDisplayInLis
 {
     T* home = new (mHeap) T(this, menuName, isDisplayInListByDefault);
     mHomeMenuTabs.pushBack(home);
-}
-
-int DevGuiManager::calcTotalAnchoredWindows()
-{
-    int total = 0;
-    for (int i = 0; i < mWindows.size(); i++) {
-        auto* entry = mWindows.at(i);
-
-        if(*(entry->getActiveState()) && entry->isInAnchorList())
-            total += entry->getAnchorPages();
-    }
-
-    return total;
 }

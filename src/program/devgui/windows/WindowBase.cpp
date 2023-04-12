@@ -12,8 +12,6 @@ WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActive
     mWinName = winName;
     mHeap = mParent->getHeap();
     mIsActive = isActiveByDefault;
-    mIsAnchorList = isAnchor;
-    mAnchorPages = windowPages;
 
     // Prepares up to 8 categories, windows without categories will ignore this
     mCategories.allocBuffer(0x8, mHeap);
@@ -21,10 +19,6 @@ WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActive
     // General window flags that all LunaKit windows will share to avoid bugs with the menu bar and anchoring
     mConfig.mWindowFlags |= ImGuiWindowFlags_HorizontalScrollbar;
     mConfig.mWindowFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
-    // mConfig.mWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-    // mConfig.mWindowFlags |= ImGuiWindowFlags_NoCollapse;
-    // mConfig.mWindowFlags |= ImGuiWindowFlags_NoMove;
-    // mConfig.mWindowFlags |= ImGuiWindowFlags_NoResize;
 
     Logger::log("Constructing Window: %s (Is Anchored: %s)\n", winName, BTOC(isAnchor));
 }
@@ -34,7 +28,6 @@ void WindowBase::updateWin()
     if(!mIsCloseUnpressed) {
         mIsCloseUnpressed = true;
         mIsActive = false;
-        mParent->refreshAnchor();
         mParent->getSaveData()->queueSaveWrite();
     }
 
@@ -75,39 +68,5 @@ bool WindowBase::tryUpdateWinDisplay()
 
 void WindowBase::setupAnchor(int totalAnchoredWindows, int anchorIdx)
 {
-    if(totalAnchoredWindows == 0)
-        return; // This should never happen, but check just in case to avoid dividing by zero
-
-    WinAnchorType type = mParent->getAnchorType();
-    DevGuiWindowConfig* c = &mConfig;
-
-    // Setup window's position based on the anchor type
-    switch(type) {
-        case WinAnchorType::ANC_TOP:
-            c->mTrans = ImVec2(c->mScrSize.x / totalAnchoredWindows * anchorIdx, c->mMinimumY);
-            c->mSize = ImVec2(c->mScrSize.x / totalAnchoredWindows * mAnchorPages, c->mSizeBase.y);
-            break;
-        case WinAnchorType::ANC_BOTTOM:
-            c->mTrans = ImVec2(c->mScrSize.x / totalAnchoredWindows * anchorIdx, c->mScrSize.y - c->mSizeBase.y);
-            c->mSize = ImVec2(c->mScrSize.x / totalAnchoredWindows * mAnchorPages, c->mSizeBase.y);
-            break;
-        case WinAnchorType::ANC_LEFT:
-            c->mTrans = ImVec2(0, (c->mScrSize.y / totalAnchoredWindows * anchorIdx) + c->mMinimumY);
-            c->mSize = ImVec2(c->mSizeBase.x, c->mScrSize.y / totalAnchoredWindows * mAnchorPages);
-            break;
-        case WinAnchorType::ANC_RIGHT:
-            c->mTrans = ImVec2(c->mScrSize.x - c->mSizeBase.x, (c->mScrSize.y / totalAnchoredWindows * anchorIdx) + c->mMinimumY);
-            c->mSize = ImVec2(c->mSizeBase.x, c->mScrSize.y / totalAnchoredWindows * mAnchorPages);
-            break;
-        default: // In no situation should this happen, but if it does fall back on loading over the whole screen
-            Logger::log("Anchoring window in invalid placement type!\n");
-            mConfig.mTrans = ImVec2(0, 0);
-            mConfig.mSize = ImVec2(1280, 720);
-            break;
-    }
-
-    c->mSize.x += 1; // Fixes small rounding based alignment issues
-
-    ImGui::SetWindowPos(mConfig.mTrans);
-    ImGui::SetWindowSize(mConfig.mSize);
+    return;
 }

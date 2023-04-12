@@ -12,6 +12,7 @@
 #pragma once
 
 #include "imgui.h"
+#include "imgui_internal.h"
 
 #include "al/util.hpp"
 
@@ -33,7 +34,7 @@ class DevGuiManager; // Forward declaration (include is in cpp file)
     This class is used by each window to configure it's position, size, and flags (regardless of anchored or not)
     For more information about different flags go these points in the imgui.h header
 */
-struct DevGuiWindowConfig {
+struct DevGuiWindowConfig { // DEPRECATED
     // Flags (Find different flag parameters in the imgui.h header)
     ImGuiWindowFlags mWindowFlags = ImGuiWindowFlags_None;
     ImGuiTabBarFlags mTabFlags = ImGuiTabBarFlags_None;
@@ -63,7 +64,7 @@ public:
 
     // Determines how the window is positioned
     // Most non-anchored windows will override this function with their own placement code
-    virtual void setupAnchor(int totalAnchoredWindows, int anchorIdx);
+    virtual void setupAnchor(int totalAnchoredWindows, int anchorIdx); // DEPRECATED
 
     // updateWin is called every frame (where the window is active) even if the LunaKit display is closed
     virtual void updateWin();
@@ -74,7 +75,6 @@ public:
     // updatePostDisplay is only called if the window is open AND the LunaKit display is active
     // Mainly serves as a place to open popups or modals if needed
     virtual void updatePostDisplay(){};
-
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#categories
     template <class T> // Template function to create and add category to list
@@ -96,21 +96,16 @@ public:
     
     virtual bool isActive() { return mIsActive; }
 
-    // If window is not anchored (defined in the constructor code) it will be placed independently from other windows
-    virtual bool isInAnchorList() { return mIsAnchorList; }
-    virtual int getAnchorPages() { return mAnchorPages; }
-
 protected:
     bool mIsActive = true;
+    bool mIsFirstStep = true;
     bool mIsCloseUnpressed = true;
+
     const char* mWinName = "null";
 
     DevGuiManager* mParent;
-    DevGuiWindowConfig mConfig;
+    DevGuiWindowConfig mConfig; // DEPRECATED
     sead::Heap* mHeap;
-
-    bool mIsAnchorList = true;
-    int mAnchorPages = 1;
 
     sead::PtrArray<CategoryBase> mCategories;
 };

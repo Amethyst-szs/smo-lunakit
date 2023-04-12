@@ -41,8 +41,8 @@ void DevGuiDocking::update()
     ImGui::PopStyleVar();
     ImGui::PopStyleVar(2);
 
-    ImGuiID dockspace_id = ImGui::GetID("DockSpace");
-    ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+    mDockSpace = ImGui::GetID("DockSpace");
+    ImGui::DockSpace(mDockSpace, ImVec2(0.0f, 0.0f), dockspace_flags);
 
     if(!mIsFirstStep || !(io.ConfigFlags & ImGuiConfigFlags_DockingEnable)) {
         ImGui::End();
@@ -51,16 +51,50 @@ void DevGuiDocking::update()
 
     mIsFirstStep = false;
 
-    ImGui::DockBuilderRemoveNode(dockspace_id); // clear any previous layout
-    ImGui::DockBuilderAddNode(dockspace_id, dockspace_flags | ImGuiDockNodeFlags_DockSpace);
-    ImGui::DockBuilderSetNodeSize(dockspace_id, mScreenSize);
+    ImGui::DockBuilderRemoveNode(mDockSpace); // clear any previous layout
+    ImGui::DockBuilderAddNode(mDockSpace, dockspace_flags | ImGuiDockNodeFlags_DockSpace);
+    ImGui::DockBuilderSetNodeSize(mDockSpace, mScreenSize);
 
-    mDockUp = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.15f, nullptr, &dockspace_id);
-    mDockDown = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Down, 0.15f, nullptr, &dockspace_id);
-    mDockLeft = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, nullptr, &dockspace_id);
-    mDockRight = ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.2f, nullptr, &dockspace_id);
+    mDockUp = ImGui::DockBuilderSplitNode(mDockSpace, ImGuiDir_Up, 0.1f, nullptr, &mDockSpace);
+    mDockDown = ImGui::DockBuilderSplitNode(mDockSpace, ImGuiDir_Down, 0.1f, nullptr, &mDockSpace);
+    mDockLeft = ImGui::DockBuilderSplitNode(mDockSpace, ImGuiDir_Left, 0.4f, nullptr, &mDockSpace);
+    mDockRight = ImGui::DockBuilderSplitNode(mDockSpace, ImGuiDir_Right, 0.4f, nullptr, &mDockSpace);
 
-    ImGui::DockBuilderFinish(dockspace_id);
+    // if(!mParent->getSaveData()->isReadImGuiLayoutFile()) {
+    //     WindowBase* memWin = mParent->getWindow("Memory Manager");
+    //     ImGui::DockBuilderDockWindow(mParent->getWindowNameAtIdx(0), mDockLeft);
+    // }
+
+    ImGui::DockBuilderFinish(mDockSpace);
 
     ImGui::End();
+}
+
+ImGuiID DevGuiDocking::getDockPoint(ImGuiDir direction)
+{
+    switch(direction) {
+        case ImGuiDir_Up:
+            return mDockUp;
+
+        case ImGuiDir_Down:
+            return mDockDown;
+            
+        case ImGuiDir_Left:
+            return mDockLeft;
+
+        case ImGuiDir_Right:
+            return mDockRight;
+    }
+
+    return 0;
+}
+
+ImGuiDir DevGuiDocking::getDockDirection(ImGuiID id)
+{
+    if(id == mDockUp) return ImGuiDir_Up;
+    else if(id == mDockDown) return ImGuiDir_Down;
+    else if(id == mDockLeft) return ImGuiDir_Left;
+    else if(id == mDockRight) return ImGuiDir_Right;
+
+    return ImGuiDir_None;
 }

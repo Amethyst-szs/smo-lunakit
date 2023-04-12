@@ -41,10 +41,6 @@ void DevGuiSaveData::read()
     const char* theme;
     if(root.tryGetStringByKey(&theme, "Theme"))
         mParent->getTheme()->setWinThemeByName(theme);
-
-    int winAnchor;
-    if(root.tryGetIntByKey(&winAnchor, "WinAnchor"))
-        mParent->setAnchorType((WinAnchorType)winAnchor);
     
     if(root.isExistKey("ActiveWins")) {
         al::ByamlIter windows = root.getIterByKey("ActiveWins");
@@ -120,7 +116,6 @@ nn::Result DevGuiSaveData::write()
     // General information
     file.addString("Version", GIT_VER);
     file.addString("Theme", mParent->getTheme()->getThemeName());
-    file.addInt("WinAnchor", (int)mParent->getAnchorType());
     file.addBool("UpdateShh", UpdateHandler::instance()->isUpdateSilenced());
 
     // Open/close state of all windows
@@ -182,4 +177,47 @@ nn::Result DevGuiSaveData::write()
         Logger::log("\n\n ! WARNING !\n The save file is close to the work buffer limit\n Consider increasing buffer size!\n\n");
 
     return result;
+}
+
+bool DevGuiSaveData::isExistImGuiLayoutFile()
+{
+    if(!FsHelper::isFileExist(IMGUILAYOUTPATH)) {
+        Logger::log("ImGui does not have a saved layout\n");
+        return false;
+    }
+
+    Logger::log("ImGui layout save exists at %s\n", IMGUILAYOUTPATH);
+    return true;
+}
+
+void DevGuiSaveData::readImGuiLayout()
+{
+    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
+
+    if(!FsHelper::isFileExist(IMGUILAYOUTPATH)) {
+        Logger::log("ImGui does not have a saved layout.\n");
+        return;
+    }
+
+    Logger::log("Loading ImGui layout from %s\n", IMGUILAYOUTPATH);
+
+    FsHelper::LoadData loadData = {
+        .path = IMGUILAYOUTPATH
+    };
+
+    FsHelper::loadFileFromPath(loadData);
+
+    ImGui::LoadIniSettingsFromMemory((const char*)loadData.buffer, loadData.bufSize);
+}
+
+void DevGuiSaveData::writeImGuiLayout()
+{
+    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
+
+    size_t bufSize;
+    const char* buf = ImGui::SaveIniSettingsToMemory(&bufSize);
+
+    FsHelper::writeFileToPath((void*)buf, bufSize, IMGUILAYOUTPATH);
+
+    Logger::log("Wrote %u bytes to %s\n", bufSize, IMGUILAYOUTPATH);
 }

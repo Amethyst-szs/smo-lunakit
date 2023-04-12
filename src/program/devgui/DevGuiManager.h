@@ -69,15 +69,6 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 // All popups
 #include "devgui/popups/PopupKeyboard.h"
 
-// All positions the windows can be placed on the screen
-enum WinAnchorType {
-    ANC_TOP,
-    ANC_BOTTOM,
-    ANC_LEFT,
-    ANC_RIGHT,
-    ANC_TOTAL_SIZE
-};
-
 class DevGuiManager {
     // This class is a singleton! It does not have a typical constructor
     // This is class is created in GameSystemInit in main.cpp
@@ -112,19 +103,15 @@ public:
 
     void updateCursorState(); // Shows/hides the cursor based on if the window is open
 
-    // Anchor functions
-    WinAnchorType getAnchorType() { return mWinAnchor; } // Current anchor position
-    void setAnchorType(WinAnchorType type) { mIsAnchorChange = true; mWinAnchor = type; } // Change the anchor and queue a refresh
-    void refreshAnchor() { mIsAnchorChange = true; } // Refresh the anchor position (used when opening/closing windows to resize)
-    int calcTotalAnchoredWindows(); // Amount of open windows in the anchor list (excludes windows outside the list ex. FPS Window)
-
     // Generic getters
     WindowBase* getWindow(int windowIdx) { return mWindows.at(windowIdx); } // Get a window at an index (casts to WindowBase)
+    WindowBase* getWindow(const char* sName) { for(WindowBase& win : mWindows) if(al::isEqualString(win.getWindowName(), sName)) return &win; return nullptr; }
     int getWindowCount() { return mWindows.size(); } // Total windows (includes closed and non-anchored windows)
     bool* getWindowActiveStateAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getActiveState(); } // Open/close state of a window
     const char* getWindowNameAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getWindowName(); } // Header name of a window
 
     sead::Heap* getHeap() { return mHeap; } // Heap where data is stored (same as the Stationed Heap)
+    DevGuiDocking* getDockSystem() { return mDockSystem; } // Custom DockSpace system used by LunaKit for docking windows
     DevGuiSettings* getSettings() { return mSettings; } // Current settings (used in the settings home menu, written to save file)
     PrimMenuSettings* getPrimitiveSettings() { return mPrimitiveSettings; } // Settings for the prim home menu tab, written to save file
     DevGuiTheme* getTheme() { return mTheme; } // Controls the theme, including reading data from the SD card
@@ -136,8 +123,9 @@ public:
 
 private:
     bool mIsActive = false; // Is the LunaKit display active
-    bool mIsFirstStep = false; // Is this the first frame of the LunaKit display (retriggers each time it is opened)
-    bool mIsDisplayAnchorWindows = true; // Are the main windows hidden by pressing L-Stick?
+    bool mIsFirstStep = true; // Is this the first frame of the LunaKit display (retriggers each time it is opened)
+    bool mIsRequestCursorShow = false; // Setting this bool to true will display the mouse cursor
+    bool mIsDisplayWindows = true; // Are the windows hidden by pressing L-Stick?
 
     sead::Heap* mHeap = nullptr; // Uses the stationed heap
     DevGuiDocking* mDockSystem = nullptr; // Custom DockSpace system used by LunaKit for docking windows
@@ -151,10 +139,6 @@ private:
 
     // Popups
     PopupKeyboard* mPopupKeyboard = nullptr; // On screen ImGui keyboard used by other modules
-
-    // Window anchor stuff
-    bool mIsAnchorChange = true; // Starts true in order to automatically fire anchor setup on first activation
-    WinAnchorType mWinAnchor = WinAnchorType::ANC_LEFT; // Default anchor is left, is replaced by data in save file if it exists
 
     // Debug info
     bool mIsDisplayImGuiDemo = false;

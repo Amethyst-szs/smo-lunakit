@@ -39,28 +39,29 @@ bool WindowLoadLog::tryUpdateWinDisplay() {
 }
 
 void WindowLoadLog::setupAnchor(int totalAnchoredWindows, int anchorIdx) {
-    WinAnchorType type = mParent->getAnchorType();
+    return;
+    // WinAnchorType type = mParent->getAnchorType();
 
-    // Setup window's position based on the anchor type
-    switch (type) {
-    case WinAnchorType::ANC_TOP:
-        mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mScrSize.y - mConfig.mSize.y);
-        break;
-    case WinAnchorType::ANC_BOTTOM:
-        mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mMinimumY);
-        break;
-    case WinAnchorType::ANC_LEFT:
-        mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mScrSize.y - mConfig.mSize.y);
-        break;
-    case WinAnchorType::ANC_RIGHT:
-        mConfig.mTrans = ImVec2(0, mConfig.mScrSize.y - mConfig.mSize.y);
-        break;
-    default:
-        break;
-    }
+    // // Setup window's position based on the anchor type
+    // switch (type) {
+    // case WinAnchorType::ANC_TOP:
+    //     mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mScrSize.y - mConfig.mSize.y);
+    //     break;
+    // case WinAnchorType::ANC_BOTTOM:
+    //     mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mMinimumY);
+    //     break;
+    // case WinAnchorType::ANC_LEFT:
+    //     mConfig.mTrans = ImVec2(mConfig.mScrSize.x - mConfig.mSize.x, mConfig.mScrSize.y - mConfig.mSize.y);
+    //     break;
+    // case WinAnchorType::ANC_RIGHT:
+    //     mConfig.mTrans = ImVec2(0, mConfig.mScrSize.y - mConfig.mSize.y);
+    //     break;
+    // default:
+    //     break;
+    // }
 
-    ImGui::SetWindowPos(mConfig.mTrans);
-    ImGui::SetWindowSize(mConfig.mSize);
+    // ImGui::SetWindowPos(mConfig.mTrans);
+    // ImGui::SetWindowSize(mConfig.mSize);
 }
 
 int WindowLoadLog::calcRoundedNum(int numToRound, int multiple)
