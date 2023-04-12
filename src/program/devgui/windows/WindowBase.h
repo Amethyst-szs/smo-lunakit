@@ -29,6 +29,7 @@
 #include "logger/Logger.hpp"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
+class WindowGroup; // Forward declaration
 
 class WindowBase {
 public:
@@ -64,12 +65,17 @@ public:
     
     virtual bool isActive() { return mIsActive; }
 
+    // WindowGroup functions
+    virtual bool isInGroup() { return mGroup; }
+    virtual void setGroup(WindowGroup* group) { mGroup = group; }
+
 protected:
     bool mIsActive = true;
     bool mIsFirstStep = true;
     bool mIsCloseUnpressed = true;
 
     const char* mWinName = "null";
+    WindowGroup* mGroup = nullptr;
 
     DevGuiManager* mParent;
     sead::Heap* mHeap;

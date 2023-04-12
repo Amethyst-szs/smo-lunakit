@@ -41,9 +41,10 @@ void DevGuiManager::init(sead::Heap* heap)
     mHeap = heap;
     sead::ScopedCurrentHeapSetter heapSetter(heap);
 
-    // Allocate 0x10 (16) slots for windows and tabs at the top
+    // Allocate 0x20 (32) slots for windows, 0x10 (16) slots for win groups, and 0x10 (16) for tabs at the top
     // Please don't increase these unless you REALLY need more space for some ungodly reason
-    mWindows.allocBuffer(0x10, heap);
+    mWindows.allocBuffer(0x20, heap);
+    mWindowGroups.allocBuffer(0x10, heap);
     mHomeMenuTabs.allocBuffer(0x10, heap);
     mDockSystem = new DevGuiDocking(this);
 
@@ -193,8 +194,23 @@ void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault)
 }
 
 template <class T>
+void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault, WindowGroup* group)
+{
+    T* window = new (mHeap) T(this, winName, isActiveByDefault);
+    mWindows.pushBack(window);
+    group->registerWindow(window);
+}
+
+template <class T>
 void DevGuiManager::createHomeMenuItem(const char* menuName, bool isDisplayInListByDefault)
 {
     T* home = new (mHeap) T(this, menuName, isDisplayInListByDefault);
     mHomeMenuTabs.pushBack(home);
+}
+
+WindowGroup* DevGuiManager::createWindowGroup(const char *groupName, u8 maxSize)
+{
+    WindowGroup* g = new (mHeap) WindowGroup(this, groupName, maxSize);
+    mWindowGroups.pushBack(g);
+    return g;
 }

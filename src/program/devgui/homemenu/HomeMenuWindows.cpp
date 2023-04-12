@@ -47,13 +47,43 @@ void HomeMenuWindows::updateMenuDisplay()
 
     ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 
+    // List of all non-grouped windows
     for (int i = 0; i < mParent->getWindowCount(); i++) {
-        bool* isActive = mParent->getWindowActiveStateAtIdx(i);
+        WindowBase* win = mParent->getWindow(i);
+
+        if(win->isInGroup())
+            continue;
+
+        bool* isActive = win->getActiveState();
         
-        if(ImGui::MenuItem(mParent->getWindowNameAtIdx(i), NULL, *isActive)) {
+        if(ImGui::MenuItem(win->getWindowName(), NULL, *isActive)) {
             *isActive = !(*isActive);
             mParent->getSaveData()->queueSaveWrite();
         }
+    }
+
+    // List of all grouped windows
+    for (int i = 0; i < mParent->getWindowGroupCount(); i++) {
+        WindowGroup* group = mParent->getWindowGroup(i);
+
+        bool tree = addMenu(group->getName());
+        if(!tree)
+            continue;
+
+        ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+
+        for(int w = 0; w < group->getSize(); w++) {
+            WindowBase* win = group->getWindowInGroup(w);
+            bool* isActive = win->getActiveState();
+        
+            if(ImGui::MenuItem(win->getWindowName(), NULL, *isActive)) {
+                *isActive = !(*isActive);
+                mParent->getSaveData()->queueSaveWrite();
+            }
+        }
+
+        ImGui::PopItemFlag();
+        ImGui::EndMenu();
     }
 
     ImGui::PopItemFlag();

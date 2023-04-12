@@ -48,6 +48,7 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 
 // All windows
 #include "devgui/windows/WindowBase.h"
+#include "devgui/windows/WindowGroup.h"
 #include "devgui/windows/Editor/WindowEditor.h"
 #include "devgui/windows/Info/WindowInfo.h"
 #include "devgui/windows/MemoryManage/WindowMemoryManage.h"
@@ -89,10 +90,14 @@ public:
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#creating-a-window-class
     template <class T> // Template function to create and add a new window to the list
     void createWindow(const char* winName, bool isActiveByDefault);
+    template <class T> // Template function to create and add a new window to the list, as well as a group
+    void createWindow(const char* winName, bool isActiveByDefault, WindowGroup* group);
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#adding-a-home-bar-item
     template <class T> // Template function to create and add a new tab to the home bar
     void createHomeMenuItem(const char* menuName, bool isDisplayInListByDefault);
+    
+    WindowGroup* createWindowGroup(const char* groupName, u8 maxSize);
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#popups-and-on-screen-keyboard
     bool tryOpenKeyboard(uint16_t maxChars, PopupKeyboardType keyType, const char** output, bool* isKeyboardOpen) { return mPopupKeyboard->tryOpenKeyboard(maxChars, keyType, output, isKeyboardOpen); }
@@ -109,6 +114,9 @@ public:
     int getWindowCount() { return mWindows.size(); } // Total windows (includes closed and non-anchored windows)
     bool* getWindowActiveStateAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getActiveState(); } // Open/close state of a window
     const char* getWindowNameAtIdx(int windowIdx) { return mWindows.at(windowIdx)->getWindowName(); } // Header name of a window
+
+    WindowGroup* getWindowGroup(int groupIdx) { return mWindowGroups.at(groupIdx); } // Get a window group at an idx
+    int getWindowGroupCount() { return mWindowGroups.size(); } // Total window groups created
 
     sead::Heap* getHeap() { return mHeap; } // Heap where data is stored (same as the Stationed Heap)
     DevGuiDocking* getDockSystem() { return mDockSystem; } // Custom DockSpace system used by LunaKit for docking windows
@@ -145,5 +153,6 @@ private:
 
     // Array of children classes (Manager holds each window and each home menu tab)
     sead::PtrArray<WindowBase> mWindows;
+    sead::PtrArray<WindowGroup> mWindowGroups;
     sead::PtrArray<HomeMenuBase> mHomeMenuTabs;
 };
