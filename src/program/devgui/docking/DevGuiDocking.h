@@ -1,3 +1,13 @@
+
+/*
+    - LunaKit DockSpace -
+
+    LunaKit uses the docking branch of ImGui and this class serves to initalize the DockSpace
+    This allows placing windows on the edges of the screens like the original anchoring system in older versions of LunaKit
+
+    Check the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation
+*/
+
 #pragma once
 
 #include "imgui.h"
@@ -9,9 +19,6 @@ public:
     DevGuiDocking(DevGuiManager* parent);
 
     void update();
-
-    ImGuiID getDockPoint(ImGuiDir direction);
-    ImGuiDir getDockDirection(ImGuiID id); // Will return ImGuiDir_None if id is not in the DockSpace
 
 private:
     DevGuiManager* mParent = nullptr;

@@ -1,3 +1,13 @@
+
+/*
+    - LunaKit Window Groups -
+
+    This class is mainly for organizing windows in the "Windows" home menu tab
+    When creating windows, they can be assigned into groups, making sub-categories
+
+    Check the wiki! https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation
+*/
+
 #pragma once
 
 #include "sead/container/seadPtrArray.h"

@@ -88,6 +88,7 @@ void DevGuiManager::init(sead::Heap* heap)
     mWindows.allocBuffer(0x20, heap);
     mWindowGroups.allocBuffer(0x10, heap);
     mHomeMenuTabs.allocBuffer(0x10, heap);
+    
     mDockSystem = new DevGuiDocking(this);
 
     mSettings = new DevGuiSettings(this); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#settings

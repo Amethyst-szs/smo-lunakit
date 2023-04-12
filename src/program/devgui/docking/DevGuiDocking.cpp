@@ -71,32 +71,3 @@ void DevGuiDocking::update()
 
     ImGui::End();
 }
-
-ImGuiID DevGuiDocking::getDockPoint(ImGuiDir direction)
-{
-    switch(direction) {
-        case ImGuiDir_Up:
-            return mDockUp;
-
-        case ImGuiDir_Down:
-            return mDockDown;
-            
-        case ImGuiDir_Left:
-            return mDockLeft;
-
-        case ImGuiDir_Right:
-            return mDockRight;
-    }
-
-    return 0;
-}
-
-ImGuiDir DevGuiDocking::getDockDirection(ImGuiID id)
-{
-    if(id == mDockUp) return ImGuiDir_Up;
-    else if(id == mDockDown) return ImGuiDir_Down;
-    else if(id == mDockLeft) return ImGuiDir_Left;
-    else if(id == mDockRight) return ImGuiDir_Right;
-
-    return ImGuiDir_None;
-}
