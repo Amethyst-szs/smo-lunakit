@@ -5,11 +5,11 @@
 #include "imgui_internal.h"
 
 // Include different window classes in order to set up default anchoring placements
-#include "devgui/windows/MemoryManage/WindowMemoryManage.h"
 #include "devgui/windows/Editor/WindowEditor.h"
 #include "devgui/windows/Info/WindowInfo.h"
 #include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
-#include "devgui/windows/LoadLog/WindowLoadLog.h"
+#include "devgui/windows/MemoryTools/WindowMemoryManage.h"
+#include "devgui/windows/MemoryTools/WindowLoadLog.h"
 
 DevGuiDocking::DevGuiDocking(DevGuiManager* parent)
 {

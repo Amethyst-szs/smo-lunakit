@@ -25,10 +25,10 @@
 #include "devgui/windows/WindowGroup.h"
 #include "devgui/windows/Editor/WindowEditor.h"
 #include "devgui/windows/Info/WindowInfo.h"
-#include "devgui/windows/MemoryManage/WindowMemoryManage.h"
 #include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
 #include "devgui/windows/FPS/WindowFPS.h"
-#include "devgui/windows/LoadLog/WindowLoadLog.h"
+#include "devgui/windows/MemoryTools/WindowMemoryManage.h"
+#include "devgui/windows/MemoryTools/WindowLoadLog.h"
 
 // All tabs on the bar the top of the screen
 #include "devgui/homemenu/HomeMenuFile.h"
