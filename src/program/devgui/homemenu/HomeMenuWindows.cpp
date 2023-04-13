@@ -13,10 +13,21 @@ HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName, bo
 
 void HomeMenuWindows::updateMenuDisplay()
 {
-    if(ImGui::MenuItem("Save Layout"))
+    ImGui::MenuItem("Appearance:", nullptr, false, false);
+    
+    if(ImGui::Button("Save"))
         mParent->getSaveData()->writeImGuiLayout();
-    if(ImGui::MenuItem("Load Layout"))
+
+    ImGui::SameLine();
+    if(ImGui::Button("Load"))
         mParent->getSaveData()->readImGuiLayout();
+        
+    ImGui::SameLine();
+    ImGui::Text("Layout");
+    
+    ImGui::SetNextItemWidth(90.f);
+    if(ImGui::SliderFloat("Opacity", &ImGui::GetStyle().Alpha, 0.7f, 1.f, "%.2f"))
+        mParent->getSaveData()->queueSaveWrite();
 
     if (addMenu("Themes")) {
         ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
@@ -34,22 +45,9 @@ void HomeMenuWindows::updateMenuDisplay()
         ImGui::EndMenu();
     }
 
-    if (addMenu("Opacity")) {
-        ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
-
-        opacitySetting("100%", 1.f);
-        opacitySetting("95%", 0.95f);
-        opacitySetting("90%", 0.9f);
-        opacitySetting("85%", 0.85f);
-        opacitySetting("80%", 0.8f);
-        opacitySetting("70%", 0.7f);
-        
-        ImGui::PopItemFlag();
-        ImGui::EndMenu();
-    }
-
     // Create a seperator between settings and wins
-    ImGui::MenuItem(" ", nullptr, false, false); 
+    ImGui::NewLine();
+    ImGui::MenuItem("Windows:", nullptr, false, false);
 
     ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
 
@@ -93,15 +91,4 @@ void HomeMenuWindows::updateMenuDisplay()
     }
 
     ImGui::PopItemFlag();
-}
-
-void HomeMenuWindows::opacitySetting(const char* label, float opacity)
-{
-    ImGuiStyle* style = &ImGui::GetStyle();
-
-    if(ImGui::MenuItem(label)){
-        style->Alpha = opacity;
-        style->DisabledAlpha = opacity;
-        mParent->getSaveData()->queueSaveWrite();
-    }
 }

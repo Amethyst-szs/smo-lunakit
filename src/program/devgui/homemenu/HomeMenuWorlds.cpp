@@ -1,6 +1,8 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuWorlds.h"
 
+#include "al/util.hpp"
+
 #include "game/GameData/GameDataFunction.h"
 #include "game/Player/PlayerFunction.h"
 
@@ -14,126 +16,83 @@ HomeMenuWorlds::HomeMenuWorlds(DevGuiManager* parent, const char* menuName, bool
 
 void HomeMenuWorlds::updateMenuDisplay()
 {
-    GameDataHolderAccessor* holder = tryGetGameDataHolderAccess();
-    if(!holder) {
-        ImGui::MenuItem("World List does not exist yet!");
+    StageScene* scene = tryGetStageScene();
+    if(!scene) {
+        mScenarioPicker = -1;
+        ImGui::MenuItem("No stage is loaded!", nullptr, false, false);
         return;
     }
 
-    for (auto &entry: holder->mData->mWorldList->mWorldList) {
-        if (addMenu(entry.mMainStageName)) {
-            if(ImGui::MenuItem("Warp to World (Post-Rock)"))
-                warpToStage(holder, entry.mMainStageName, entry.mMoonRockScenario);
+    GameDataHolderAccessor* holder = tryGetGameDataHolderAccess(scene);
 
-            if(ImGui::BeginMenu("Warp to Scenario"))
-                drawScenarioPicker(holder, &entry);
+    s32 worldID = GameDataFunction::getCurrentWorldId(*holder);
+    WorldListEntry* worldEntry = holder->mData->mWorldList->mWorldList.at(worldID);
+    const char* worldName = holder->mData->mWorldList->getWorldDevelopName(worldID);
 
-            if (ImGui::BeginMenu("Quest Info")) {
-                for (int i = 0; i < entry.mQuestInfoCount; ++i) {
-                    char item[0x20];
-                    sprintf(item, "Q %d Scenario %d", i, entry.mMainQuestIndexes[i]);
-                    ImGui::MenuItem(item, NULL, false, false);
-                }
-                
-                ImGui::EndMenu();
-            }
+    // Draw the top components to select kindom and scenario
+    drawKingdomPicker(worldName, scene, holder);
+    if(GameDataFunction::isMainStage(*holder))
+        drawScenarioPicker(*worldEntry, scene, holder);
 
-            if (ImGui::BeginMenu("Sub Areas Stages"))
-                drawDatabaseCategoryEX(holder, &entry);
+    if(addMenu("Sub-Areas")) {
+        ImGui::BeginChild("Sub-Area Child", ImVec2(525, 325), false, ImGuiWindowFlags_NoBackground);
 
-            if (ImGui::BeginMenu("Zones"))
-                drawDatabaseCategoryZone(holder, &entry);
+        for (auto &dbEntry: worldEntry->mStageNames) {
+            bool isDemo = al::isEqualString(dbEntry.mStageCategory, "Demo");
 
-            if (ImGui::BeginMenu("Cutscenes"))
-                drawDatabaseCategoryDemo(holder, &entry);
-
-            if (ImGui::BeginMenu("Other Stages"))
-                drawDatabaseCategoryOther(holder, &entry);
-
-            ImGui::EndMenu();
+            if(ImGui::MenuItem(dbEntry.mStageName.cstr(), dbEntry.mStageCategory.cstr(), false, !isDemo))
+                warpToStage(holder, dbEntry.mStageName.cstr(), dbEntry.mUseScenario);
         }
+
+        ImGui::EndChild();
+        ImGui::EndMenu();
     }
 }
 
-void HomeMenuWorlds::drawDatabaseCategoryEX(GameDataHolderAccessor* data, WorldListEntry* entry)
+inline void HomeMenuWorlds::drawKingdomPicker(const char* worldName, StageScene* scene, GameDataHolderAccessor* holder)
 {
-    for (auto &dbEntry: entry->mStageNames) {
-        const char* dbCat = dbEntry.mStageCategory.cstr();
-        if(!isInCategory(dbCat, "ExStage") && !isInCategory(dbCat, "MoonExStage"))
-            continue;
+    ImGui::SetNextItemWidth(140.f);
+    if(ImGui::BeginCombo("Kingdom", worldName, ImGuiComboFlags_HeightLargest)) {
+        ImGui::SetWindowFontScale(1.66f);
 
-        if(ImGui::MenuItem(dbEntry.mStageName.cstr()))
-            warpToStage(data, dbEntry.mStageName.cstr(), -1);
+        for (auto &entry: holder->mData->mWorldList->mWorldList) {
+            if(ImGui::Selectable(entry.mWorldDevelopName, false)) {
+                warpToStage(holder, entry.mMainStageName, -1);
+            }
+        }
+
+        ImGui::EndCombo();
     }
-
-    ImGui::EndMenu();
 }
 
-void HomeMenuWorlds::drawDatabaseCategoryZone(GameDataHolderAccessor* data, WorldListEntry* entry)
+inline void HomeMenuWorlds::drawScenarioPicker(WorldListEntry& entry, StageScene* scene, GameDataHolderAccessor* holder)
 {
-    for (auto &dbEntry: entry->mStageNames) {
-        const char* dbCat = dbEntry.mStageCategory.cstr();
-        if(!isInCategory(dbCat, "Zone"))
-            continue;
+    PlayerActorBase* player = tryGetPlayerActor(scene);
+    if(player && mScenarioPicker == -1)
+        mScenarioPicker = GameDataFunction::getScenarioNo(player);
+    
+    ImGui::Text("Scenario (%s)", getScenarioType(entry, mScenarioPicker));
 
-        if(ImGui::MenuItem(dbEntry.mStageName.cstr()))
-            warpToStage(data, dbEntry.mStageName.cstr(), -1);
-    }
+    ImGui::SetNextItemWidth(60.f);
+    ImGui::DragInt("\n\0", &mScenarioPicker, 0.075f, 1, 15, nullptr, ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_NoInput);
+    if(ImGui::IsItemHovered())
+        ImGui::SetTooltip("Click and drag to change the scenario!\nClick load to reload the kingdom with this scenario");
 
-    ImGui::EndMenu();
+    ImGui::SameLine();
+    if(ImGui::Button(" Load "))
+        warpToStage(holder, entry.mMainStageName, mScenarioPicker);
 }
 
-void HomeMenuWorlds::drawDatabaseCategoryDemo(GameDataHolderAccessor* data, WorldListEntry* entry)
+inline const char* HomeMenuWorlds::getScenarioType(WorldListEntry& entry, int scenario)
 {
-    for (auto &dbEntry: entry->mStageNames) {
-        const char* dbCat = dbEntry.mStageCategory.cstr();
-        if(!isInCategory(dbCat, "Demo"))
-            continue;
+    if(scenario == entry.mClearMainScenario)
+        return "Peace";
+    if(scenario == entry.mEndingScenario)
+        return "Post-game";
+    if(scenario == entry.mMoonRockScenario)
+        return "Moon Rock";
 
-        ImGui::MenuItem(dbEntry.mStageName.cstr(), NULL, false, false);
-    }
-
-    ImGui::EndMenu();
-}
-
-void HomeMenuWorlds::drawDatabaseCategoryOther(GameDataHolderAccessor* data, WorldListEntry* entry)
-{
-    for (auto &dbEntry: entry->mStageNames) {
-        const char* dbCat = dbEntry.mStageCategory.cstr();
-        if(isInCategory(dbCat, "ExStage") || isInCategory(dbCat, "MoonExStage") || isInCategory(dbCat, "Zone") || isInCategory(dbCat, "Demo") || isInCategory(dbCat, "MainStage"))
-            continue;
-
-        if(ImGui::MenuItem(dbEntry.mStageName.cstr(), dbCat))
-            warpToStage(data, dbEntry.mStageName.cstr(), -1);
-    }
-
-    ImGui::EndMenu();
-}
-
-bool HomeMenuWorlds::isInCategory(const char* dbCat, const char* compare)
-{
-    return al::isEqualString(dbCat, compare);
-}
-
-void HomeMenuWorlds::drawScenarioPicker(GameDataHolderAccessor* data, WorldListEntry* entry)
-{
-    for(int i = 1; i <= 15; i++) {
-        char buttonLabel[0x15];
-
-        if(i == entry->mClearMainScenario)
-            sprintf(buttonLabel, "Scen %i (Clear)", i);
-        else if(i == entry->mEndingScenario)
-            sprintf(buttonLabel, "Scen %i (Ending)", i);
-        else if(i == entry->mMoonRockScenario)
-            sprintf(buttonLabel, "Scen %i (Moon Rock)", i);
-        else
-            sprintf(buttonLabel, "Scen %i", i);
-
-        if(ImGui::MenuItem(buttonLabel))
-            warpToStage(data, entry->mMainStageName, i);
-    }
-
-    ImGui::EndMenu();
+    return "Unknown";
 }
 
 void HomeMenuWorlds::warpToStage(GameDataHolderAccessor* data, const char* stageName, int scenario)

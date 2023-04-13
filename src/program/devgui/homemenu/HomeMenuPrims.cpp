@@ -35,7 +35,14 @@ void HomeMenuPrims::updateMenu()
 
 void HomeMenuPrims::updateMenuDisplay()
 {
-    drawCategory(PrimMenuCat_NONE, nullptr);
+    ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+
+    PrimMenuEntry* entry = mSettings->getSettingEntryInCat(0, PrimMenuCat_NONE);
+    if(ImGui::Checkbox("Primitive Rendering", entry->getValuePtr()))
+        mParent->getSaveData()->queueSaveWrite();
+
+    ImGui::PopItemFlag();
+
     drawCategory(PrimMenuCat_PLAYER, "Player");
     drawCategory(PrimMenuCat_TRIANGLE, "Collision");
     drawCategory(PrimMenuCat_AREA, "Areas");

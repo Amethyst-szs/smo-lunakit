@@ -68,7 +68,7 @@ void DevGuiManager::createElements()
     createHomeMenuItem<HomeMenuSettings>("Settings", true);
     createHomeMenuItem<HomeMenuWindows>("Windows", true);
     createHomeMenuItem<HomeMenuPrims>("Prims", true);
-    createHomeMenuItem<HomeMenuWorlds>("Kingdoms", true);
+    createHomeMenuItem<HomeMenuWorlds>("Kingdom", true);
     createHomeMenuItem<HomeMenuCStages>("Stages", true);
     createHomeMenuItem<HomeMenuExtra>("Extras", true);
     createHomeMenuItem<HomeMenuUpdater>("Update!", false);

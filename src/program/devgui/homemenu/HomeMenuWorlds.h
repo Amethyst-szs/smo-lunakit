@@ -3,6 +3,7 @@
 #include "devgui/homemenu/HomeMenuBase.h"
 
 #include "game/GameData/GameDataHolderAccessor.h"
+#include "game/StageScene/StageScene.h"
 
 class HomeMenuWorlds : public HomeMenuBase {
 public:
@@ -11,14 +12,12 @@ public:
     void updateMenuDisplay() override;
 
 private:
-    // Please clean up this code! There has got to be a cleaner way of implementing this!
-    void drawDatabaseCategoryEX(GameDataHolderAccessor* data, WorldListEntry* entry);
-    void drawDatabaseCategoryZone(GameDataHolderAccessor* data, WorldListEntry* entry);
-    void drawDatabaseCategoryDemo(GameDataHolderAccessor* data, WorldListEntry* entry);
-    void drawDatabaseCategoryOther(GameDataHolderAccessor* data, WorldListEntry* entry);
+    inline void drawKingdomPicker(const char* worldName, StageScene* scene, GameDataHolderAccessor* holder);
+    inline void drawScenarioPicker(WorldListEntry& entry, StageScene* scene, GameDataHolderAccessor* holder);
 
-    bool isInCategory(const char* dbCat, const char* compare);
+    inline const char* getScenarioType(WorldListEntry& entry, int scenario);
 
-    void drawScenarioPicker(GameDataHolderAccessor* data, WorldListEntry* entry);
     void warpToStage(GameDataHolderAccessor* data, const char* stageName, int scenario);
+
+    int mScenarioPicker = -1;
 };
