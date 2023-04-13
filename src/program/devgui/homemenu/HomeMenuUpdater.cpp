@@ -38,12 +38,11 @@ void HomeMenuUpdater::updateMenuDisplay()
     UpdateHandler* update = UpdateHandler::instance();
     
     sead::FormatFixedSafeString<0x30> versionCompare("%s to %s", GIT_VER, update->getUpdateTag());
-    ImGui::MenuItem(versionCompare.cstr());
-
-    ImGui::MenuItem("Name", update->getUpdateName(), false, false);
-    ImGui::MenuItem("Author", update->getUpdateAuthor(), false, false);
-    ImGui::MenuItem("Date", update->getUpdateDate(), false, false);
-    ImGui::MenuItem(" ", nullptr, false, false);
+    ImGui::Text("%s", versionCompare.cstr());
+    ImGui::TextDisabled("Name: %s", update->getUpdateName());
+    ImGui::TextDisabled("Author: %s", update->getUpdateAuthor());
+    ImGui::TextDisabled("Date: %s", update->getUpdateDate());
+    ImGui::NewLine();
 
     if(ImGui::MenuItem("Silence Update")) {
         update->setSilenceState(true);

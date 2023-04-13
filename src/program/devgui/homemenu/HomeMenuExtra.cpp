@@ -40,10 +40,14 @@ void HomeMenuExtra::updateMenuDisplay()
 {
     ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
     
-    ImGui::MenuItem("Current Version", GIT_VER, false, true);
-    if(UpdateHandler::instance()->isUpdateSilenced() && ImGui::MenuItem("Unsilence Updates")) {
-        UpdateHandler::instance()->setSilenceState(false);
-        mParent->getSaveData()->queueSaveWrite();
+    ImGui::Text("Current Version: %s", GIT_VER);
+    if(UpdateHandler::instance()->isUpdateSilenced() && UpdateHandler::instance()->isUpdateAvailable()) {
+        ImGui::Text("Update: %s", UpdateHandler::instance()->getUpdateTag());
+        ImGui::SameLine();
+        if(ImGui::SmallButton("Unsilence")) {
+            UpdateHandler::instance()->setSilenceState(false);
+            mParent->getSaveData()->queueSaveWrite();
+        }
     }
 
     if(!mIsLoggerDisabled && ImGui::MenuItem("Disable Logger")) {
@@ -52,21 +56,20 @@ void HomeMenuExtra::updateMenuDisplay()
     }
 
     if(mIsLoggerDisabled && addMenu("Server Logging")) {
-        if(ImGui::MenuItem("IP", mIPString.cstr())) {
+        if(ImGui::MenuItem("IP", mIPString.cstr()))
             mParent->tryOpenKeyboard(15, KEYTYPE_IP, &mKeyboardString, &mIsIPKeyboardOpen);
-        }
         
-        if(ImGui::MenuItem("Port", mPortString.cstr())) {
+        if(ImGui::MenuItem("Port", mPortString.cstr()))
             mParent->tryOpenKeyboard(5, KEYTYPE_NUMBER, &mKeyboardString, &mIsPortKeyboardOpen);
-        }
         
         if(!mIPString.isEmpty() && !mPortString.isEmpty()) {
-            ImGui::MenuItem(" ", nullptr, false, false);
-            ImGui::MenuItem("Requires restart", nullptr, false, false);
-            ImGui::MenuItem("Server must run on startup", nullptr, false, false);
-            ImGui::MenuItem(" ", nullptr, false, false);
-            ImGui::MenuItem("Disable via menu or deleting:", nullptr, false, false);
-            ImGui::MenuItem("LunaKit/LKData/logger.byml", nullptr, false, false);
+            ImGui::NewLine();
+            ImGui::Text("Requires restart");
+            ImGui::Text("Server must run on startup");
+            ImGui::NewLine();
+            ImGui::Text("Disable via menu or deleting:");
+            ImGui::Text("LunaKit/LKData/logger.byml");
+
             if(ImGui::MenuItem("Activate Logger")) {
                 // Jank code, converts string to number without using stoi
                 mNewPort = 0;
