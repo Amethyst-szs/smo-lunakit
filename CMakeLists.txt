@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.18)
 project(subsdk CXX C ASM)
 
 ## Error if not using switch toolchain file
