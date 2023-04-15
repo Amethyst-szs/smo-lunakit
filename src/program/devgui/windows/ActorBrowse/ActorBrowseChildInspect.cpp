@@ -21,15 +21,15 @@ void WindowActorBrowse::childActorInspector()
 
     sead::FixedSafeString<0x30> actorClass = getActorName(mSelectedActor, ActorBrowseNameDisplayType_CLASS);
 
-    ImGui::LabelText("Class", actorClass.cstr());
+    ImGui::LabelText("Class", "%s", actorClass.cstr());
 
     if(mSelectedActor->mModelKeeper) {
         ImGui::Separator();
-        ImGui::LabelText("Model", mSelectedActor->mModelKeeper->mResourceName);
+        ImGui::LabelText("Model", "%s", mSelectedActor->mModelKeeper->mResourceName);
     }
 
     ImGui::Separator();
-    ImGui::LabelText("Name", mSelectedActor->getName());
+    ImGui::LabelText("Name", "%s", mSelectedActor->getName());
 
     ImGui::Spacing();
 
@@ -83,30 +83,12 @@ inline void WindowActorBrowse::drawActorInspectorTreeFlags(al::LiveActorFlag* fl
         return;
 
     if(ImGui::TreeNode("Flags")) {
-        ImGui::Checkbox("Dead", &flag->mIsDead);
-        ImGui::SameLine(childWindowWidth / 2.f);
-        ImGui::Checkbox("Clipped", &flag->mIsClipped);
+        for(int i = 0; i < 12; i++) {
+            ImGui::Checkbox(flagNames[i], (bool*)((uintptr_t)flag + i));
+            if(childWindowWidth >= 375.f && i % 2 == 0)
+                ImGui::SameLine(childWindowWidth / 2.f);
+        }
 
-        ImGui::Checkbox("Cannot Clip", &flag->mIsClippingInvalidated);
-        ImGui::SameLine(childWindowWidth / 2.f);
-        ImGui::Checkbox("Draw Clipped", &flag->mIsDrawClipped);
-
-        ImGui::Checkbox("Calc Anim On", &flag->mIsCalcAnimOn);
-        ImGui::SameLine(childWindowWidth / 2.f);
-        ImGui::Checkbox("Model Visible", &flag->mIsModelVisible);
-
-        ImGui::Checkbox("No Collide", &flag->mIsNoCollide);
-        ImGui::SameLine(childWindowWidth / 2.f);
-        ImGui::Checkbox("Unknown 8", &flag->mIsFlag8);
-
-        ImGui::Checkbox("Material Code", &flag->mIsMaterialCodeValid);
-        ImGui::SameLine(childWindowWidth / 2.f);
-        ImGui::Checkbox("Area Target", &flag->mIsAreaTarget);
-
-        ImGui::Checkbox("Update Move FX", &flag->mIsUpdateMovementEffectAudioCollisionSensor);
-        ImGui::SameLine(childWindowWidth / 2.f);
-        ImGui::Checkbox("Unknown 12", &flag->mIsFlag12);
-        
         ImGui::TreePop();
     }
 }
