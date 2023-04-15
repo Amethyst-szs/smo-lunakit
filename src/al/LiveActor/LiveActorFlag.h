@@ -12,7 +12,7 @@ __attribute__((used)) static const char* flagNames[] = {
     "Valid Mat Code",
     "Area Target",
     "Move FX Sensor",
-    "Unknown 8"
+    "Unknown 12"
 };
 
 namespace al {
