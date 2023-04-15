@@ -21,11 +21,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Setup dkp-pacman
-      run: |
-        wget https://apt.devkitpro.org/install-devkitpro-pacman
-        chmod +x ./install-devkitpro-pacman
-        sudo ./install-devkitpro-pacman
+    - name: wget dkp-pacman
+      run: wget https://apt.devkitpro.org/install-devkitpro-pacman
+      
+    - name: chmod dkp-pacman
+      run: chmod +x ./install-devkitpro-pacman
+    
+    - name: install dkp-pacman
+      run: sudo ./install-devkitpro-pacman
       
     - name: Setup devkitPro
       run: sudo dkp-pacman -S --noconfirm --noscriptlet switch-dev
