@@ -14,7 +14,7 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 ![Gameplay screenshow showing the primitive rendering options](https://user-images.githubusercontent.com/62185604/232249361-9db6af48-b183-455d-b8f9-4a536c879416.png)
 - Extremely fast stage warping, including custom stages using [Custom Stage plugins](https://github.com/Amethyst-szs/smo-lunakit/wiki/Custom-Stage-Support)
 - Easy to make [Custom Theme plugins](https://github.com/Amethyst-szs/smo-lunakit/wiki/LunaKit-Theme-Plugins)
-![The window menu open over the new save screen, showing the bult in themes](https://user-images.githubusercontent.com/62185604/232249428-18871fa2-fdcd-456f-b30c-be264bb0934f.png)
+![The window menu open over Cascade Kingdom, showing the bult in themes](https://user-images.githubusercontent.com/62185604/232249852-e2e5ebaf-1bf7-4a01-bcdc-0c89fb13c6fd.png)
 - Automatically install new updates as they come out with a built in automatic updater
 - Highly modular and expandable code with a detailed [Wiki page](https://github.com/Amethyst-szs/smo-lunakit/wiki)
 
