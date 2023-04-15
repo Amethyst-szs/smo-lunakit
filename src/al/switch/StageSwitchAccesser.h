@@ -1,8 +1,8 @@
 #pragma once
 
-namespace al {
+#include "StageSwitchDirector.h"
 
-class StageSwitchDirector;
+namespace al {
 
 class StageSwitchAccesser {
 public:
