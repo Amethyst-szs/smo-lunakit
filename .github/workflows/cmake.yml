@@ -21,8 +21,17 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
+    - name: Pacman setup 1
+      run: wget https://apt.devkitpro.org/install-devkitpro-pacman
+      
+    - name: Pacman setup 2
+      run: chmod +x ./install-devkitpro-pacman
+      
+    - name: Pacman setup 3
+      run: sudo ./install-devkitpro-pacman
+      
     - name: Setup devkitPro
-      run: sudo pacman -S switch-dev
+      run: sudo dkp-pacman -S switch-dev
 
     - name: Build
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
