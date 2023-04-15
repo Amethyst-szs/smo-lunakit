@@ -427,7 +427,7 @@ namespace ImguiNvnBackend {
         io.AddMousePosEvent(mousePos.x, mousePos.y);
 
         ImVec2 scrollDelta(0, 0);
-        InputHelper::getScrollDelta(&scrollDelta.x, &scrollDelta.y);
+        //InputHelper::getScrollDelta(&scrollDelta.x, &scrollDelta.y);
 
         if (scrollDelta.x != 0.0f)
             io.AddMouseWheelEvent(0.0f, scrollDelta.x > 0.0f ? 0.5f : -0.5f);

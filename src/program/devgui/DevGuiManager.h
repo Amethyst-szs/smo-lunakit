@@ -32,6 +32,8 @@ class DevGuiDocking; // Forward declaration
 class DevGuiSettings; // Forward declaration
 class DevGuiSaveData; // Forward declaration
 class DevGuiTheme; // Forward declaration
+class DevGuiHooks;
+#include "devgui/DevGuiHooks.h"
 
 class PrimitiveQueue; // Forward declaration
 class PrimMenuSettings; // Forward declaration
@@ -95,6 +97,8 @@ public:
     CustomStageManager* getCustomStageManager() { return mCustomList; } // Custom stage plugin support
     PrimitiveQueue* getPrimitiveQueue() { return mPrimQueue; } // Accessible primitive renderer queueing
 
+    DevGuiHooks *getHookSettings() { return mHooks; } // Settings for hooks, not stored in save file
+
     bool* getImGuiDemoWindowState() {return &mIsDisplayImGuiDemo; } // Is the ImGui Demo Window open (accessible in the extras tab)
 
 private:
@@ -118,6 +122,8 @@ private:
 
     // Debug info
     bool mIsDisplayImGuiDemo = false;
+
+    DevGuiHooks *mHooks = nullptr; // Settings for hooks, not stored in save file
 
     // Array of children classes (Manager holds each window and each home menu tab)
     sead::PtrArray<WindowBase> mWindows;
