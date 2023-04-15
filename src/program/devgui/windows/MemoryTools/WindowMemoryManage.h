@@ -28,6 +28,4 @@ private:
     void drawProgressBarFrac(int current, int max, const char* header);
 
     void drawComplexHeapTreeItem(sead::Heap* rootHeap);
-
-    bool mIsSimpleView = true;
 };
