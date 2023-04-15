@@ -1,21 +1,22 @@
-# LunaKit for Super Mario Odyssey
 ![Luna Kit Logo](assets/LunaKitText.png "Logo")
 
 LunaKit is a development tool / modification of Super Mario Odyssey designed to assist in debugging, testing, experimenting, and more! Uses ImGui ExLaunch with a special dedicated SD card folder to allow being layered on top of any RomFS or Starlight mod
 
-![Gameplay 1](https://user-images.githubusercontent.com/62185604/220535481-78afc5ef-29df-4412-ba21-cb98c6b06bae.jpg)
+![A gameplay screenshot showing LunaKit in Metro Kingdom with the heap viewer, parameter editor, and info viewer open](https://user-images.githubusercontent.com/62185604/232249144-4c7a594e-2abc-44ac-8743-f76eb785cf3e.png)
 
 ## Features:
 - Custom in-game GUI built on [Dear ImGui](https://github.com/ocornut/imgui)
+![Showing the docking system in LunaKit to position windows on the screen](https://user-images.githubusercontent.com/62185604/232249641-826e034e-798e-41c7-9581-8f141ba43917.png)
 - View and edit large amounts of game info
-- Browse, search, favorite, and manipulate every object in a stage
+- Browse, search, favorite, and manipulate every object in a stage![Gameplay screenshot showing the capabilities of the actor browser](https://user-images.githubusercontent.com/62185604/232249306-c96d515f-6e64-45a4-83f1-0d2048ce8155.png)
 - Many game settings and cheats for players and developers alike
 - Primitive Rendering to visually draw additonal game info
-- Extremely fast stage warping, including custom stages using [Custom Stage plugins](https://github.com/Amethyst-szs/smo-lunakit/wiki)
-- Easy to make [Custom Theme plugins](https://github.com/Amethyst-szs/smo-lunakit/wiki)
+![Gameplay screenshow showing the primitive rendering options](https://user-images.githubusercontent.com/62185604/232249361-9db6af48-b183-455d-b8f9-4a536c879416.png)
+- Extremely fast stage warping, including custom stages using [Custom Stage plugins](https://github.com/Amethyst-szs/smo-lunakit/wiki/Custom-Stage-Support)
+- Easy to make [Custom Theme plugins](https://github.com/Amethyst-szs/smo-lunakit/wiki/LunaKit-Theme-Plugins)
+![The window menu open over the new save screen, showing the bult in themes](https://user-images.githubusercontent.com/62185604/232249428-18871fa2-fdcd-456f-b30c-be264bb0934f.png)
+- Automatically install new updates as they come out with a built in automatic updater
 - Highly modular and expandable code with a detailed [Wiki page](https://github.com/Amethyst-szs/smo-lunakit/wiki)
-
-![Gameplay 2](https://user-images.githubusercontent.com/62185604/220535575-e94cbda0-a6bf-49fd-ac5f-8bfa92da732f.jpg)
 
 ## How to use:
 
@@ -32,7 +33,7 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 
 ### Installation on Yuzu is NOT actively supported.
 
-### Controls:
+## Controls:
 - Open the interface by holding ZR + R and tapping L  
 - Hide windows by pressing L-Stick  
 - Mouse controls (RECOMMENDED)
@@ -44,7 +45,7 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
   - Interact with windows using A or B
   - Change windows by holding Y and using shoulder buttons
 
-### Building:
+## Building:
 - Requires running Linux (Ubuntu recommended)
   - If you're running Windows, try [WSL](https://learn.microsoft.com/en-us/windows/wsl/install)!
 - Install [devkitPro](https://devkitpro.org/wiki/Getting_Started) with the switch-dev platform
@@ -58,7 +59,6 @@ LunaKit is a development tool / modification of Super Mario Odyssey designed to 
 - [Amethyst-szs](https://github.com/Amethyst-szs): LunaKit Creator
 - [CraftyBoss](https://github.com/CraftyBoss): SMO ExLaunch, ImGui, and more
 - [Mars](https://github.com/Mars2032): Referenced TAS Mod, Emotional support  
-  
 - [DaveGamble/cJSON](https://github.com/DaveGamble/cJSON): C JSON Parser
 
 
