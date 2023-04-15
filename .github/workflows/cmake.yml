@@ -18,7 +18,5 @@ jobs:
     container: devkitpro/devkita64:latest
     steps:
     - uses: actions/checkout@v3
-    - name: Setup devkitPro
-      run: sudo dkp-pacman -S --noconfirm --noscriptlet switch-dev
     - name: Build LunaKit
       run: cmake --toolchain=${{github.workspace}}/cmake/toolchain.cmake -S . -B build && $(MAKE) -C build subsdk9_meta
