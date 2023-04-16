@@ -9,6 +9,7 @@ WindowActorBrowse::WindowActorBrowse(DevGuiManager* parent, const char* winName,
     : WindowBase(parent, winName, isActiveByDefault)
 {
     mSelectedActor = nullptr;
+    mSelectedActorTarget = new al::ActorCameraTarget(nullptr, 0.f, &sead::Vector3f::zero);
     mFilterActorGroup = new (mHeap) al::LiveActorGroup("FavActors", 5120);
 }
 

@@ -1,6 +1,7 @@
 #include "devgui/docking/DevGuiDocking.h"
 #include "devgui/savedata/DevGuiSaveData.h"
 #include "devgui/DevGuiManager.h"
+#include "helpers/ImGuiHelper.h"
 
 #include "imgui_internal.h"
 
@@ -11,6 +12,8 @@
 #include "devgui/windows/MemoryTools/WindowMemoryManage.h"
 #include "devgui/windows/MemoryTools/WindowLoadLog.h"
 
+#include "nn/oe.h"
+
 DevGuiDocking::DevGuiDocking(DevGuiManager* parent)
 {
     mParent = parent;
@@ -18,6 +21,8 @@ DevGuiDocking::DevGuiDocking(DevGuiManager* parent)
 
 void DevGuiDocking::update()
 {
+    mScreenSize = ImGuiHelper::getScreenSize();
+
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImGuiIO& io = ImGui::GetIO();
 

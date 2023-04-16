@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nn/hid.h"
+#include "helpers/ImGuiHelper.h"
 
 class InputHelper {
 
