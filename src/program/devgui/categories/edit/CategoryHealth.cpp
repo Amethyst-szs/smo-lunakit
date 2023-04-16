@@ -13,15 +13,13 @@ CategoryHealth::CategoryHealth(const char* catName, const char* catDesc, sead::H
 void CategoryHealth::updateCat()
 {
     // Get the player's hit point data pointer if it doesn't exist already
-    if (!mHitData) {
-        HakoniwaSequence* gameSeq = tryGetHakoniwaSequence();
-        if (gameSeq) {
-            mHitData = gameSeq->mGameDataHolder.mData->mGameDataFile->mPlayerHitPointData;
-        }
-    }
+    HakoniwaSequence* gameSeq = tryGetHakoniwaSequence();
+
+    if (!mHitData && gameSeq)
+        mHitData = gameSeq->mGameDataHolder.mData->mGameDataFile->mPlayerHitPointData;
 
     // Get the player actor and check if they are dead
-    PlayerActorBase* player = tryGetPlayerActor();
+    PlayerActorBase* player = tryGetPlayerActor(gameSeq);
     if (!player)
         return;
 
@@ -34,7 +32,7 @@ void CategoryHealth::updateCat()
     }
 
     // Try killing the player if the kill button is pressed
-    StageScene* curScene = tryGetStageScene();
+    StageScene* curScene = tryGetStageScene(gameSeq);
     if (isInStageScene(curScene) && mIsKillPlayer && !isPlayerDead) {
         PlayerHelper::killPlayer(player);
         mIsKillPlayer = false;
