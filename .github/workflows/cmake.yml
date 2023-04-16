@@ -26,5 +26,10 @@ jobs:
       with:
         cmake-version: '3.26.x'
     
+    - name: Checkout all Submodules
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    
     - name: Build LunaKit
       run: cmake -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -S . -B build && make -C build subsdk9_meta
