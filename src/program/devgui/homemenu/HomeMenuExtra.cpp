@@ -50,6 +50,9 @@ void HomeMenuExtra::updateMenuDisplay()
         }
     }
 
+    if(ImGui::MenuItem("Check for Updates (SWITCH ONLY)"))
+        UpdateHandler::instance()->checkForUpdates();
+
     if(!mIsLoggerDisabled && ImGui::MenuItem("Disable Logger")) {
         Logger::instance().writeLoggerSave(mHeap, true, "0", 0);
         mIsLoggerDisabled = true;

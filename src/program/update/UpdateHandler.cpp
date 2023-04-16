@@ -17,9 +17,9 @@ SEAD_SINGLETON_DISPOSER_IMPL(UpdateHandler)
 UpdateHandler::UpdateHandler() = default;
 UpdateHandler::~UpdateHandler() = default;
 
-void UpdateHandler::checkForUpdates(sead::Heap* heap)
+void UpdateHandler::checkForUpdates()
 {
-    sead::ScopedCurrentHeapSetter heapSetter(heap);
+    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
 
     if(mInfo) {
         Logger::log("Starting UpdateHandler again, deleting previous info\n");
@@ -61,19 +61,19 @@ void UpdateHandler::checkForUpdates(sead::Heap* heap)
         Logger::log("New Update Available! (%s -> %s)\n", GIT_VER, tagName->valuestring);
         mStatus = UpdateHandlerStatus_UPDATEREADY;
 
-        mInfo = new (heap) UpdateApiInfo(dataJ, tagName);
+        mInfo = new (mHeap) UpdateApiInfo(dataJ, tagName);
     } else mStatus = UpdateHandlerStatus_NOUPDATE;
 
     cJSON_Delete(dataJ);
     return;
 }
 
-void UpdateHandler::downloadUpdate(sead::Heap* heap)
+void UpdateHandler::downloadUpdate()
 {
     if(!isUpdateAvailable())
         return;
     
-    sead::ScopedCurrentHeapSetter heapSetter(heap);
+    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
 
     mStatus = UpdateHandlerStatus_INSTALL;
     Logger::log("Downloading update from %s\n", GIT_RELEASE_PATH);
