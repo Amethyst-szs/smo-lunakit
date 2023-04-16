@@ -140,7 +140,7 @@ inline void WindowActorBrowse::drawActorInspectorTreeRail(al::RailRider* railRid
 
 inline void WindowActorBrowse::drawActorInspectorTreeSensor(al::HitSensorKeeper* sensor)
 {
-    if(!sensor)
+    if(!sensor || !isInStageScene())
         return;
 
     mParent->getPrimitiveQueue()->pushHitSensor(mSelectedActor, mHitSensorTypes, 0.4f);

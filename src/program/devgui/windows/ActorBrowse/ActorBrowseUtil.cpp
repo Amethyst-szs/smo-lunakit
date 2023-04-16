@@ -6,6 +6,8 @@
 
 #include "primitives/PrimitiveQueue.h"
 
+#include "helpers/GetHelper.h"
+
 #include <cxxabi.h>
 
 #include "imgui.h"
@@ -223,7 +225,7 @@ void WindowActorBrowse::showActorTooltip(al::LiveActor* actor)
     if(actor->mPoseKeeper)
         mParent->getPrimitiveQueue()->pushAxis(actor->mPoseKeeper->mTranslation, 400.f);
 
-    if(actor->mHitSensorKeeper)
+    if(actor->mHitSensorKeeper && isInStageScene())
         mParent->getPrimitiveQueue()->pushHitSensor(actor, mHitSensorTypes, 0.15f);
 }
 
