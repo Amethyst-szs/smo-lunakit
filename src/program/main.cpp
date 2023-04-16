@@ -214,7 +214,7 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
         UpdateHandler::createInstance(updaterHeap);
 
         DevGuiManager::instance()->init(lkHeap);
-        //UpdateHandler::instance()->checkForUpdates(updaterHeap);
+        UpdateHandler::instance()->checkForUpdates(updaterHeap);
 
         sead::TextWriter::setDefaultFont(sead::DebugFontMgrJis1Nvn::instance());
 

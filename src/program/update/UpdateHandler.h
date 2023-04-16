@@ -30,9 +30,11 @@ class UpdateHandler {
     ~UpdateHandler();
 
 public:
+    void init(sead::Heap* heap) { mHeap = heap; }
+
     // Tries to download the data package of what the newest version is
-    void checkForUpdates(sead::Heap* heap); 
-    void downloadUpdate(sead::Heap* heap);
+    void checkForUpdates();
+    void downloadUpdate();
 
     void setSilenceState(bool isSilenced) { mIsUpdateSilenced = isSilenced; }
 
@@ -58,4 +60,6 @@ private:
     UpdateApiInfo* mInfo;
     UpdateHandlerStatus mStatus;
     bool mIsUpdateSilenced = false;
+
+    sead::Heap* mHeap;
 };

@@ -18,14 +18,11 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
     if(!WindowBase::tryUpdateWinDisplay())
         return false;
 
-    ImGui::SetWindowFontScale(1.2f);
-    
-    ImGui::Checkbox("Simplified Heap Viewer", &mIsSimpleView);
+    drawSimpleHeapView();
 
-    if(mIsSimpleView)
-        drawSimpleHeapView();
-    else
-        drawComplexHeapTreeItem(sead::HeapMgr::instance()->sRootHeaps[0]);
+    ImGui::Separator();
+
+    drawComplexHeapTreeItem(sead::HeapMgr::instance()->sRootHeaps[0]);
 
     return true;
 }
@@ -39,6 +36,8 @@ void WindowMemoryManage::drawSimpleHeapView()
         auto gameSeq = (HakoniwaSequence*)curSequence;
         scene = gameSeq->curScene;
     }
+
+    ImGui::SetWindowFontScale(1.2f);
 
     if(scene) {
         al::LiveActorKit* kit = scene->mLiveActorKit;
@@ -77,18 +76,30 @@ void WindowMemoryManage::drawSimpleHeapView()
 
 void WindowMemoryManage::drawComplexHeapTreeItem(sead::Heap* heap)
 {
-    ImGui::SetWindowFontScale(1.f);
+    ImGui::SetWindowFontScale(1.1f);
 
-    bool expanded = ImGui::TreeNode(heap->getName().cstr());
+    bool hasNoChildren = heap->mChildren.isEmpty();
 
-    float mbUsed = (heap->getSize() - heap->getFreeSize()) / 1000000.f;
-    float mbSize = heap->getSize() / 1000000.f;
+    ImGui::BeginGroup();
+
+    // Create a unindented tree node, replacing arrow with bullet if no children exist
+    bool expanded = ImGui::TreeNodeEx(heap->getName().cstr(), ImGuiTreeNodeFlags_NoTreePushOnOpen | (hasNoChildren ? ImGuiTreeNodeFlags_Bullet : ImGuiTreeNodeFlags_None));
+
+    float used = (heap->getSize() - heap->getFreeSize());
+    float size = heap->getSize();
+    float mbUsed = used / 1000000.f;
+    float mbSize = size / 1000000.f;
+
     float percentUsed = (heap->getSize() - heap->getFreeSize()) / (float(heap->getSize()) / 100);
 
     char buf[32];
-    snprintf(buf, sizeof(buf), "%.1fMB/%.1fMB %.0f%%", mbUsed, mbSize, percentUsed);
+    snprintf(buf, sizeof(buf), "%.3f/%.3f MB", mbUsed, mbSize);
     ImGui::SameLine();
     ImGui::ProgressBar(percentUsed / 100, ImVec2(-FLT_MIN, 0), buf);
+    ImGui::EndGroup();
+
+    if(ImGui::IsItemHovered())
+        ImGui::SetTooltip("%.0f/%.0f Bytes", used, size);
 
     if (expanded) {
         for (sead::Heap& childRef : heap->mChildren) {
@@ -96,7 +107,6 @@ void WindowMemoryManage::drawComplexHeapTreeItem(sead::Heap* heap)
             if (child)
                 drawComplexHeapTreeItem(child);
         }
-        ImGui::TreePop();
     }
 }
 

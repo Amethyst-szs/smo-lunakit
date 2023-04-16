@@ -10,15 +10,7 @@
 
 HomeMenuUpdater::HomeMenuUpdater(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
     : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
-{
-    for (sead::Heap& childRef : mHeap->mChildren) {
-        sead::Heap* child = &childRef;
-
-        const char* childName = child->getName().cstr();
-        if (al::isEqualString(childName, "UpdateHeap"))
-            mUpdateHeap = child;
-    }
-}
+{}
 
 void HomeMenuUpdater::updateMenu()
 {
@@ -29,7 +21,7 @@ void HomeMenuUpdater::updateMenu()
     
     if(mIsStartInstall) {
         mIsStartInstall = false;
-        UpdateHandler::instance()->downloadUpdate(mUpdateHeap);
+        UpdateHandler::instance()->downloadUpdate();
     }
 }
 

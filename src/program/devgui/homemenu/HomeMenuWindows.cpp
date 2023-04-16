@@ -25,7 +25,7 @@ void HomeMenuWindows::updateMenuDisplay()
     ImGui::SameLine();
     ImGui::Text("Layout");
     
-    ImGui::SetNextItemWidth(90.f);
+    ImGui::SetNextItemWidth(97.f);
     if(ImGui::SliderFloat("Opacity", &ImGui::GetStyle().Alpha, 0.7f, 1.f, "%.2f"))
         mParent->getSaveData()->queueSaveWrite();
 

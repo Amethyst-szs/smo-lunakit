@@ -4,12 +4,11 @@
 #include "al/actor/Placement.h"
 #include "types.h"
 
+#include "StageSwitchDirector.h"
 #include "StageSwitchAccesser.h"
 
 namespace al
 {
-    
-class StageSwitchDirector;
 
 class StageSwitchKeeper {
 public:

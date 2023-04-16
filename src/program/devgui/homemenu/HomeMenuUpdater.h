@@ -20,8 +20,6 @@ private:
     void interfaceFailedSDCard();
     void interfaceComplete();
 
-    sead::Heap* mUpdateHeap = nullptr;
-
     bool mIsOpenInterface = false;
     bool mIsDisplayingInterface = false;
 
