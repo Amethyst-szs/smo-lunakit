@@ -10,29 +10,21 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  cmake_test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup cmake
-      uses: jwlawson/actions-setup-cmake@v1.13
-      with:
-        cmake-version: '3.26.x'
-    - name: Use cmake
-      run: cmake --version
   build:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
+    
     # Use a container with Devkitpro already setup
     container: devkitpro/devkita64:latest
     steps:
     - uses: actions/checkout@v3
     
-    - name: Setup newer CMake version
-      run: |
-        apt --yes remove cmake
-        mkdir -p $HOME/.local && curl -s "https://cmake.org/files/v3.26/cmake-3.26.0-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C $HOME/.local && export PATH=$HOME/.local/bin:$PATH
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1.13
+      with:
+        cmake-version: '3.26.x'
     
     - name: Build LunaKit
       run: cmake -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -S . -B build && make -C build subsdk9_meta
