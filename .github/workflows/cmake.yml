@@ -8,7 +8,17 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+
 jobs:
+  cmake_test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v1.13
+      with:
+        cmake-version: '3.26.x'
+    - name: Use cmake
+      run: cmake --version
   build:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
@@ -19,11 +29,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Remove old CMake
-      run: apt --yes remove cmake
-    
     - name: Setup newer CMake version
-      run: mkdir -p $HOME/.local && curl -s "https://cmake.org/files/v3.26/cmake-3.26.0-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C $HOME/.local && export PATH=$HOME/.local/bin:$PATH
+      run: |
+        apt --yes remove cmake
+        mkdir -p $HOME/.local && curl -s "https://cmake.org/files/v3.26/cmake-3.26.0-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C $HOME/.local && export PATH=$HOME/.local/bin:$PATH
     
     - name: Build LunaKit
       run: cmake -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -S . -B build && make -C build subsdk9_meta
