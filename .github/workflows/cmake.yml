@@ -18,5 +18,9 @@ jobs:
     container: devkitpro/devkita64:latest
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Setup newer CMake version
+      run: mkdir -p $HOME/.local && curl -s "https://cmake.org/files/v3.26/cmake-3.26.0-linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C $HOME/.local && export PATH=$HOME/.local/bin:$PATH
+    
     - name: Build LunaKit
-      run: cmake --toolchain=${{github.workspace}}/cmake/toolchain.cmake -S . -B build && $(MAKE) -C build subsdk9_meta
+      run: cmake -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -S . -B build && make -C build subsdk9_meta
