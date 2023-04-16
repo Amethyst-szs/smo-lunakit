@@ -1,37 +1,38 @@
 name: CMake Compile Test
-
 on:
   push:
-    branches: [ "stable" ]
+    branches:
+    - stable
+    - dev
   pull_request:
-    branches: [ "stable" ]
+    branches:
+    - stable
+    - dev
   workflow_dispatch:
-
+  
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
 
 jobs:
-  build:
+  Compile:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
-
+    
+    # Use a container with Devkitpro already setup
+    container: devkitpro/devkita64:latest
     steps:
-    - uses: actions/checkout@v3
+    - name: Setup Checkout and Submodules
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
     
-    - name: wget dkp-pacman
-      run: wget https://apt.devkitpro.org/install-devkitpro-pacman
-      
-    - name: chmod dkp-pacman
-      run: chmod +x ./install-devkitpro-pacman
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1.13
+      with:
+        cmake-version: '3.26.x'
     
-    - name: install dkp-pacman
-      run: sudo ./install-devkitpro-pacman
-      
-    - name: Setup devkitPro
-      run: sudo dkp-pacman -S --noconfirm --noscriptlet switch-dev
-
     - name: Build LunaKit
-      run: cmake --toolchain=${{github.workspace}}/cmake/toolchain.cmake -S . -B build && $(MAKE) -C build subsdk9_meta
+      run: cmake -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -S . -B build && make -C build subsdk9_meta
