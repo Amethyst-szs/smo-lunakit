@@ -1,5 +1,8 @@
 #include "program/devgui/categories/edit/CategoryCoins.h"
 
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
 
 CategoryCoins::CategoryCoins(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap)
@@ -8,14 +11,14 @@ CategoryCoins::CategoryCoins(const char* catName, const char* catDesc, sead::Hea
 
 void CategoryCoins::updateCat()
 {
-    GameDataHolder* holder = tryGetGameDataHolder();
-    if(!holder)
-        return;
-
     if (mIsOverrideCoins) {
-        holder->mGameDataFile->mCoinCount = mTargetCoins;
-
         StageScene* scene = tryGetStageScene();
+        GameDataHolder* holder = tryGetGameDataHolder(scene);
+
+        if(!holder)
+            return;
+
+        holder->mGameDataFile->mCoinCount = mTargetCoins;
         if(scene)
             scene->mSceneLayout->coinCounter->updateCountImmidiate();
     }

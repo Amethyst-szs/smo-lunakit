@@ -1,9 +1,12 @@
 #include "program/devgui/categories/edit/CategoryOutfit.h"
 
 #include "game/GameData/GameDataHolder.h"
-#include "game/GameData/GameDataHolder.h"
 #include "game/GameData/GameDataFunction.h"
+
+#include "helpers/GetHelper.h"
 #include "helpers.h"
+
+#include "imgui.h"
 
 CategoryOutfit::CategoryOutfit(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap)
@@ -11,7 +14,7 @@ CategoryOutfit::CategoryOutfit(const char* catName, const char* catDesc, sead::H
     mTotalBody = IM_ARRAYSIZE(bodyNames);
     mTotalCap = IM_ARRAYSIZE(capNames);
 
-    mComboFlags |= ImGuiComboFlags_HeightLarge;
+    mComboFlags |= ImGuiComboFlags_HeightRegular;
 }
 
 void CategoryOutfit::updateCat()

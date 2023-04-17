@@ -1,16 +1,13 @@
 #pragma once
 
-#include "imgui.h"
-#include "imgui_internal.h"
-
 #include "devgui/homemenu/HomeMenuBase.h"
 
 class HomeMenuWindows : public HomeMenuBase {
 public:
-    HomeMenuWindows(DevGuiManager* parent, const char* menuName);
+    HomeMenuWindows(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
-    virtual void updateMenuDisplay();
+    void updateMenuDisplay() override;
 
 private:
-    void setAnc(int type);
+    void drawInterfaceSizeEditor(float* sizePtr, const char* sliderName);
 };

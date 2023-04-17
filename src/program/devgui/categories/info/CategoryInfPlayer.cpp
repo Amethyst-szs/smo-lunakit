@@ -1,5 +1,19 @@
 #include "program/devgui/categories/info/CategoryInfPlayer.h"
 
+#include "al/nerve/Nerve.h"
+#include "al/nerve/NerveKeeper.h"
+
+#include "game/Player/PlayerActorBase.h"
+#include "game/Player/PlayerActorHakoniwa.h"
+#include "game/Player/PlayerFunction.h"
+
+#include "rs/util.hpp"
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
+
+#include <cxxabi.h>
+
 CategoryInfPlayer::CategoryInfPlayer(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap) {}
 

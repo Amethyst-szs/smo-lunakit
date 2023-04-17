@@ -12,9 +12,7 @@
 #pragma once
 
 #include "sead/container/seadPtrArray.h"
-#include "sead/heap/seadExpHeap.h"
 #include "sead/heap/seadHeap.h"
-#include "sead/heap/seadDisposer.h"
 
 #include "PrimitiveTypes.h"
 
@@ -57,6 +55,18 @@ public:
     void pushHitSensor(al::LiveActor* actor, HitSensorRenderTypes sensorTypes, float opacity)
     {   
         auto* entry = new (mHeap) PrimitiveTypeHitSensor(actor, sensorTypes, opacity);
+        mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
+    }
+    
+    void pushBezierCurve(al::BezierCurve* curve, uint percision, sead::Color4f color)
+    {   
+        auto* entry = new (mHeap) PrimitiveTypeBezierCurve(curve, percision, color);
+        mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
+    }
+    
+    void pushRail(al::Rail* rail, uint percision, sead::Color4f color)
+    {   
+        auto* entry = new (mHeap) PrimitiveTypeRail(rail, percision, color);
         mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
     }
 

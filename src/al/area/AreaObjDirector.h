@@ -1,5 +1,6 @@
 #pragma once
 #include "AreaObjGroup.h"
+
 namespace al
 {
     class AreaObjDirector {

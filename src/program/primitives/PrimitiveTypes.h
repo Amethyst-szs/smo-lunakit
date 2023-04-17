@@ -4,19 +4,10 @@
 
 #include "al/collision/Triangle.h"
 #include "al/LiveActor/LiveActor.h"
-#include "al/scene/Scene.h"
 #include "al/util/SensorUtil.h"
-#include "al/util.hpp"
 
-#include "game/StageScene/StageScene.h"
-
-#include "sead/gfx/seadPrimitiveRenderer.h"
 #include "sead/gfx/seadColor.h"
 #include "sead/math/seadVector.h"
-
-#include "logger/Logger.hpp"
-
-#include "helpers/GetHelper.h"
 
 enum PrimitiveTypes {
     PRIM_NONE = -1,
@@ -25,7 +16,9 @@ enum PrimitiveTypes {
     PRIM_AXIS,
     PRIM_AREA,
     PRIM_TRIANGLE,
-    PRIM_HIT_SENSOR
+    PRIM_HIT_SENSOR,
+    PRIM_BEZIER_CURVE,
+    PRIM_RAIL
 };
 
 class PrimitiveTypeBase {
@@ -158,6 +151,44 @@ public:
     HitSensorRenderTypes mSensorTypes = HitSensorRenderTypes::HitSensorType_NONE;
     sead::Color4f mColor;
     float mOpacity;
+
+    void render() override;
+};
+
+class PrimitiveTypeBezierCurve : public PrimitiveTypeBase {
+public:
+    PrimitiveTypeBezierCurve(al::BezierCurve* curve, uint percision, sead::Color4f color)
+        : PrimitiveTypeBase(PrimitiveTypes::PRIM_BEZIER_CURVE)
+    {
+        mCurve = curve;
+        mPercision = percision;
+        mColor = color;
+    }
+
+    ~PrimitiveTypeBezierCurve() override {}
+
+    al::BezierCurve* mCurve;
+    uint mPercision;
+    sead::Color4f mColor;
+
+    void render() override;
+};
+
+class PrimitiveTypeRail : public PrimitiveTypeBase {
+public:
+    PrimitiveTypeRail(al::Rail* rail, uint percision, sead::Color4f color)
+        : PrimitiveTypeBase(PrimitiveTypes::PRIM_RAIL)
+    {
+        mRail = rail;
+        mPercision = percision;
+        mColor = color;
+    }
+
+    ~PrimitiveTypeRail() override {}
+
+    al::Rail* mRail;
+    uint mPercision;
+    sead::Color4f mColor;
 
     void render() override;
 };

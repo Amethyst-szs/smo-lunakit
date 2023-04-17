@@ -1,8 +1,13 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuSettings.h"
+#include "devgui/settings/DevGuiSettings.h"
+#include "devgui/savedata/DevGuiSaveData.h"
 
-HomeMenuSettings::HomeMenuSettings(DevGuiManager* parent, const char* menuName)
-    : HomeMenuBase(parent, menuName)
+#include "imgui.h"
+#include "imgui_internal.h"
+
+HomeMenuSettings::HomeMenuSettings(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
+    : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
 {}
 
 void HomeMenuSettings::updateMenuDisplay()

@@ -1,4 +1,50 @@
 #include "program/devgui/DevGuiManager.h"
+#include "program/devgui/DevGuiHooks.h"
+
+// sead
+#include "heap/seadDisposer.h"
+#include "heap/seadHeapMgr.h"
+
+// Helpers
+#include "helpers/GetHelper.h"
+#include "helpers/InputHelper.h"
+
+// Custom stage plugin support
+#include "cstages/CustomStageManager.h"
+
+// Primitive renderering queue system, allowing LunaKit to push primitive rendering shapes from anywhere
+#include "primitives/PrimitiveQueue.h"
+
+// All extra DevGui features included by the manager
+#include "devgui/docking/DevGuiDocking.h"
+#include "devgui/settings/PrimMenuSettings.h"
+#include "devgui/savedata/DevGuiSaveData.h"
+#include "devgui/settings/DevGuiSettings.h"
+#include "devgui/theme/DevGuiTheme.h"
+#include "devgui/DevGuiHooks.h"
+
+// All windows
+#include "devgui/windows/WindowGroup.h"
+#include "devgui/windows/Editor/WindowEditor.h"
+#include "devgui/windows/Info/WindowInfo.h"
+#include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
+#include "devgui/windows/FPS/WindowFPS.h"
+#include "devgui/windows/MemoryTools/WindowMemoryManage.h"
+#include "devgui/windows/MemoryTools/WindowLoadLog.h"
+#include "devgui/windows/Graphics/WindowGBuffer.h"
+#include "devgui/windows/Graphics/WindowPresets.h"
+
+// All tabs on the bar the top of the screen
+#include "devgui/homemenu/HomeMenuFile.h"
+#include "devgui/homemenu/HomeMenuSettings.h"
+#include "devgui/homemenu/HomeMenuWindows.h"
+#include "devgui/homemenu/HomeMenuPrims.h"
+#include "devgui/homemenu/HomeMenuWorlds.h"
+#include "devgui/homemenu/HomeMenuCStages.h"
+#include "devgui/homemenu/HomeMenuExtra.h"
+#include "devgui/homemenu/HomeMenuUpdater.h"
+
+#include "imgui.h"
 
 // This class is a singleton! It does not have a typical constructor
 // This is class is created in GameSystemInit in main.cpp
@@ -12,21 +58,30 @@ void DevGuiManager::createElements()
     sead::ScopedCurrentHeapSetter heapSetter(mHeap);
     
     // Create all display windows
-    createWindow<WindowMemoryManage>("Memory Manager", true, true, 1);
-    createWindow<WindowEditor>("Param Editor", true, true, 1);
-    createWindow<WindowInfo>("Info Viewer", true, true, 1);
-    createWindow<WindowActorBrowse>("Actor Browser", false, true, 2);
-    createWindow<WindowFPS>("FPS Window", true, false, 1);
-    createWindow<WindowLoadLog>("Load Log", false, false, 1);
+    Logger::log("Constructing all windows\n");
+    createWindow<WindowEditor>(paramEditorWindowName, true);
+    createWindow<WindowInfo>(infoWindowName, true);
+    createWindow<WindowActorBrowse>(actorBrowseWindowName, false);
+    createWindow<WindowFPS>(fpsWindowName, true);
+
+    WindowGroup* memoryGroup = createWindowGroup("Memory Tools", 2);
+    createWindow<WindowLoadLog>(loadLogWindowName, false, memoryGroup);
+    createWindow<WindowMemoryManage>(memoryManageWindowName, true, memoryGroup);
+
+    WindowGroup* graphicsGroup = createWindowGroup("Graphics", 2);
+    createWindow<WindowPresets>(presetsWindowName, false, graphicsGroup);
+    createWindow<WindowGBuffer>(gbufferWindowName, false, graphicsGroup);
 
     // Create all home menu tabs
-    createHomeMenuItem<HomeMenuFile>("File");
-    createHomeMenuItem<HomeMenuSettings>("Settings");
-    createHomeMenuItem<HomeMenuWindows>("Windows");
-    createHomeMenuItem<HomeMenuPrims>("Prims");
-    createHomeMenuItem<HomeMenuWorlds>("Kingdoms");
-    createHomeMenuItem<HomeMenuCStages>("Stages");
-    createHomeMenuItem<HomeMenuExtra>("Extras");
+    Logger::log("Constructing all home menu items\n");
+    createHomeMenuItem<HomeMenuFile>("File", true);
+    createHomeMenuItem<HomeMenuSettings>("Settings", true);
+    createHomeMenuItem<HomeMenuWindows>("Windows", true);
+    createHomeMenuItem<HomeMenuPrims>("Prims", true);
+    createHomeMenuItem<HomeMenuWorlds>("Kingdom", true);
+    createHomeMenuItem<HomeMenuCStages>("Stages", true);
+    createHomeMenuItem<HomeMenuExtra>("Extras", true);
+    createHomeMenuItem<HomeMenuUpdater>("Update!", false);
 
     // Create each popup window
     mPopupKeyboard = new PopupKeyboard();
@@ -34,16 +89,21 @@ void DevGuiManager::createElements()
 
 void DevGuiManager::init(sead::Heap* heap)
 {
-    Logger::log("Initing DevGuiManager... (Version: %s)\n", LUNAKITVERSION);
+    Logger::log("Initing DevGuiManager... (Version: %s)\n", GIT_VER);
     
     // Sets the DevGuiHeap to the heap passed in as an arg, along with setting the current scope to the heap
     mHeap = heap;
     sead::ScopedCurrentHeapSetter heapSetter(heap);
 
-    // Allocate 0x10 (16) slots for windows and tabs at the top
+    mHooks = new DevGuiHooks();
+
+    // Allocate 0x20 (32) slots for windows, 0x10 (16) slots for win groups, and 0x10 (16) for tabs at the top
     // Please don't increase these unless you REALLY need more space for some ungodly reason
-    mWindows.allocBuffer(0x10, heap);
+    mWindows.allocBuffer(0x20, heap);
+    mWindowGroups.allocBuffer(0x10, heap);
     mHomeMenuTabs.allocBuffer(0x10, heap);
+    
+    mDockSystem = new DevGuiDocking(this);
 
     mSettings = new DevGuiSettings(this); // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#settings
 
@@ -71,15 +131,15 @@ void DevGuiManager::update()
     if (InputHelper::isHoldR() && InputHelper::isHoldZR() && InputHelper::isPressL()) {
         mIsActive = !mIsActive;
         if (mIsActive)
-            mIsFirstStep = true;
+            mIsRequestCursorShow = true;
 
-        Logger::log("Active state %s\n", mIsActive ? "enabled" : "disabled");
+        Logger::log("Active state %s\n", mIsActive ? "Enabled" : "Disabled");
     }
 
     // Toggle display/hide of all anchored windows
     if(mIsActive && al::isPadTriggerPressLeftStick(-1)) {
-        mIsDisplayAnchorWindows = !mIsDisplayAnchorWindows;
-        Logger::log("Anchored window display %s\n", mIsDisplayAnchorWindows ? "enabled" : "disabled");
+        mIsDisplayWindows = !mIsDisplayWindows;
+        Logger::log("Window display %s\n", mIsDisplayWindows ? "Enabled" : "Disabled");
     }
 
     // This is run every frame, only actually saves if a save is queued and the timer hits zero
@@ -108,34 +168,24 @@ void DevGuiManager::updateDisplay()
 
     if(!mIsActive)
         return;
-
-    // Load and draw all windows (and update anchors if needed)
-    int totalAnchorWin = calcTotalAnchoredWindows();
-    int curAnchorWin = 0;
-
+        
     mPopupKeyboard->update();
-
+    mDockSystem->update();
     mTheme->tryUpdateTheme();
 
     for (int i = 0; i < mWindows.size(); i++) {
         auto* entry = mWindows.at(i);
-        if(!entry->isActive() || (entry->isInAnchorList() && !mIsDisplayAnchorWindows))
+        if(!entry->isActive() || (!mIsDisplayWindows))
             continue;
 
-        ImGui::Begin(entry->getWindowName(), entry->getCloseInteractionPtr(), entry->getWindowConfig()->mWindowFlags);
-
-        if(mIsAnchorChange) {
-            Logger::log("Anchor calc %s - Size: %i - Page %i/%i\n", entry->getWindowName(), entry->getAnchorPages(), curAnchorWin, totalAnchorWin);
-            entry->setupAnchor(totalAnchorWin, curAnchorWin);
-            curAnchorWin += entry->getAnchorPages();
-        }
+        ImGui::Begin(entry->getWindowName(), entry->getCloseInteractionPtr(), entry->getWindowFlags());
 
         entry->tryUpdateWinDisplay();
 
         ImGui::End();
-    }
 
-    mIsAnchorChange = false;
+        entry->updatePostDisplay();
+    }
     
     // Load and draw all home menu tabs
     if (ImGui::BeginMainMenuBar()) {
@@ -143,7 +193,7 @@ void DevGuiManager::updateDisplay()
         
         for (int i = 0; i < mHomeMenuTabs.size(); i++) {
             auto* entry = mHomeMenuTabs.at(i);
-            if (ImGui::BeginMenu(entry->getMenuName())) {
+            if (entry->isDisplayInList() && ImGui::BeginMenu(entry->getMenuName())) {
                 entry->updateMenuDisplay();
 
                 ImGui::EndMenu();
@@ -156,7 +206,7 @@ void DevGuiManager::updateDisplay()
                 ImGui::EndMenu();
         }
 
-        if(!mIsDisplayAnchorWindows && ImGui::BeginMenu("  Hidden! (L-Stick)", false))
+        if(!mIsDisplayWindows && ImGui::BeginMenu("  Hidden! (L-Stick)", false))
             ImGui::EndMenu();
 
         if(InputHelper::isInputToggled() && ImGui::BeginMenu("  Controller (R+ZR+ZL)", false))
@@ -165,13 +215,21 @@ void DevGuiManager::updateDisplay()
         ImGui::EndMainMenuBar();
     }
 
+    for (int i = 0; i < mHomeMenuTabs.size(); i++) {
+        auto* entry = mHomeMenuTabs.at(i);
+        entry->updatePostDisplay();
+    }
+
     // Draw the demo window if the settings class has it enabled
     if(mIsDisplayImGuiDemo)
         ImGui::ShowDemoWindow();
 
+    // Try loading the ImGui layout on first step now that everything is created
     // Reset the first step flag when complete!
-    if (mIsFirstStep)
+    if (mIsFirstStep) {
+        mSaveData->readImGuiLayout();
         mIsFirstStep = false;
+    }
 }
 
 void DevGuiManager::updateCursorState()
@@ -179,33 +237,47 @@ void DevGuiManager::updateCursorState()
     if (!mIsActive)
         ImGui::SetMouseCursor(ImGuiMouseCursor_None);
 
-    if (mIsFirstStep)
+    if (mIsRequestCursorShow) {
         ImGui::SetMouseCursor(ImGuiMouseCursor_Arrow);
+        mIsRequestCursorShow = false;
+    }
 }
 
 template <class T>
-void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages)
+void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault)
 {
-    T* window = new (mHeap) T(this, winName, isActiveByDefault, isAnchor, windowPages);
+    T* window = new (mHeap) T(this, winName, isActiveByDefault);
     mWindows.pushBack(window);
 }
 
 template <class T>
-void DevGuiManager::createHomeMenuItem(const char* menuName)
+void DevGuiManager::createWindow(const char* winName, bool isActiveByDefault, WindowGroup* group)
 {
-    T* home = new (mHeap) T(this, menuName);
+    T* window = new (mHeap) T(this, winName, isActiveByDefault);
+    mWindows.pushBack(window);
+    group->registerWindow(window);
+}
+
+template <class T>
+void DevGuiManager::createHomeMenuItem(const char* menuName, bool isDisplayInListByDefault)
+{
+    T* home = new (mHeap) T(this, menuName, isDisplayInListByDefault);
     mHomeMenuTabs.pushBack(home);
 }
 
-int DevGuiManager::calcTotalAnchoredWindows()
+WindowGroup* DevGuiManager::createWindowGroup(const char *groupName, u8 maxSize)
 {
-    int total = 0;
-    for (int i = 0; i < mWindows.size(); i++) {
-        auto* entry = mWindows.at(i);
+    WindowGroup* g = new (mHeap) WindowGroup(this, groupName, maxSize);
+    mWindowGroups.pushBack(g);
+    return g;
+}
 
-        if(*(entry->getActiveState()) && entry->isInAnchorList())
-            total += entry->getAnchorPages();
+WindowBase* DevGuiManager::getWindow(const char* sName)
+{
+    for(WindowBase& win : mWindows) {
+        if(al::isEqualString(win.getWindowName(), sName)) 
+            return &win;
     }
 
-    return total;
+    return nullptr;
 }

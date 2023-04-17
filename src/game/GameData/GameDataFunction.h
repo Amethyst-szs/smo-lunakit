@@ -53,6 +53,8 @@ public:
 
     static char* getNextStageName(GameDataHolderAccessor);
 
+    static bool isMainStage(GameDataHolderAccessor);
+
     static s32 getCurrentShineNum(GameDataHolderAccessor);
 
     // gets total moons collected on a specified save file (-1 for current save)

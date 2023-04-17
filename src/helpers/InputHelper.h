@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nn/hid.h"
+#include "helpers/ImGuiHelper.h"
 
 class InputHelper {
 
@@ -24,6 +25,14 @@ public:
     static bool isReadInputs() { return isReadInput; }
 
     static bool isInputToggled() { return toggleInput; }
+
+    static void setInputToggled(bool isEnableInput) { toggleInput = isEnableInput; }
+
+    // scroll disabling
+
+    static void scrollState(bool enable) { enableScroll = enable; }
+
+    static bool canScroll() { return enableScroll; }
 
     // keyboard key presses
 
@@ -121,6 +130,18 @@ public:
 
     static bool isReleasePadDown() { return isButtonRelease(nn::hid::NpadButton::Down); }
 
+    static bool isHoldStickL() { return isButtonHold(nn::hid::NpadButton::StickL); }
+
+    static bool isPressStickL() { return isButtonPress(nn::hid::NpadButton::StickL); }
+
+    static bool isReleaseStickL() { return isButtonRelease(nn::hid::NpadButton::StickL); }
+
+    static bool isHoldStickR() { return isButtonHold(nn::hid::NpadButton::StickR); }
+
+    static bool isPressStickR() { return isButtonPress(nn::hid::NpadButton::StickR); }
+
+    static bool isReleaseStickR() { return isButtonRelease(nn::hid::NpadButton::StickR); }
+
 
 private:
     static bool tryGetContState(nn::hid::NpadBaseState *state, ulong port);
@@ -142,4 +163,5 @@ private:
 
     static bool isReadInput;
     static bool toggleInput;
+    static bool enableScroll;
 };

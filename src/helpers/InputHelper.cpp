@@ -32,6 +32,7 @@ nn::hid::MouseState InputHelper::prevMouseState{};
 ulong InputHelper::selectedPort = -1;
 bool InputHelper::isReadInput = true;
 bool InputHelper::toggleInput = false;
+bool InputHelper::enableScroll = true;
 
 const char *getStyleName(nn::hid::NpadStyleSet style) {
 
@@ -167,6 +168,11 @@ void InputHelper::getMouseCoords(float *x, float *y) {
 }
 
 void InputHelper::getScrollDelta(float *x, float *y) {
-    *x = curMouseState.wheelDeltaX;
-    *y = curMouseState.wheelDeltaY;
+    if (InputHelper::canScroll()) {
+        *x = curMouseState.wheelDeltaX;
+        *y = curMouseState.wheelDeltaY;
+    } else {
+        *x = 0.f;
+        *y = 0.f;
+    }
 }

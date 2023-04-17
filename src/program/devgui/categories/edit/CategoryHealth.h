@@ -2,6 +2,8 @@
 
 #include "program/devgui/categories/CategoryBase.h"
 
+#include "game/GameData/PlayerHitPointData.h"
+
 class CategoryHealth : public CategoryBase {
 public:
     CategoryHealth(const char* catName, const char* catDesc, sead::Heap* heap);

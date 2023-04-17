@@ -2,6 +2,11 @@
 
 #include "program/devgui/categories/CategoryBase.h"
 
+#include "game/Player/PlayerActorHakoniwa.h"
+
+#include "sead/math/seadQuat.h"
+#include "sead/math/seadVector.h"
+
 struct WarpSaveState {
     bool mSaved = false;
     sead::Vector3f mTrans = sead::Vector3f::zero;

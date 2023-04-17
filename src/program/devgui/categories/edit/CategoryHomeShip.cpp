@@ -1,6 +1,9 @@
 #include "program/devgui/categories/edit/CategoryHomeShip.h"
 
+#include "helpers/GetHelper.h"
 #include "helpers.h"
+
+#include "imgui.h"
 
 CategoryHomeShip::CategoryHomeShip(const char* catName, const char* catDesc, sead::Heap* heap)
     : CategoryBase(catName, catDesc, heap)

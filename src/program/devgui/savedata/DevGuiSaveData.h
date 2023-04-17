@@ -14,22 +14,15 @@
 #pragma once
 
 #define SAVEPATH "sd:/LunaKit/LKData/data.byml"
-
-#include "al/byaml/ByamlIter.h"
-#include "al/byaml/writer/ByamlWriter.h"
-#include "al/util.hpp"
-
-#include "helpers/fsHelper.h"
-
-#include "nn/fs/fs_directories.hpp"
-#include "nn/fs/fs_files.hpp"
-#include "nn/fs/fs_types.hpp"
-
-#include "types.h"
-
-#include "devgui/windows/WindowActorBrowse.h"
+#define IMGUILAYOUTPATH "sd:/LunaKit/LKData/imgui_layout.ini"
 
 #include "DevGuiWriteStream.h"
+
+#include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
+
+#include "nn/result.h"
+
+#include "types.h"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
 
@@ -37,20 +30,34 @@ class DevGuiSaveData {
 public:
     DevGuiSaveData(sead::Heap* heap) { mHeap = heap; }
     void init(DevGuiManager* parent);
-    void read(); // Read can technically be called at any time, but it only recommended during initalization
 
-    bool trySave(); // Called each frame in the Manager's update() function, checks to see if it should save
+    /*
+        LunaKit Save Data Management
+    */
+
+    void read(); // Read can technically be called at any time, but it only recommended during initalization
     void queueSaveWrite() // Called by any function looking to save LunaKit! Will start a 4 second timer before saving
     {
         mIsQueueSave = true;
         mSaveTimer = 4.f;
     }
 
+    bool trySave(); // Called each frame in the Manager's update() function, checks to see if it should save
+
     void setActorBrowserFavoriteAtIdx(sead::FixedSafeString<0x40> name, int idx) { mActorBrowserFavorites[idx] = name; }
     sead::FixedSafeString<0x40> getActorBrowserFavoriteAtIdx(int idx) { return mActorBrowserFavorites[idx]; }
 
     bool isSaveQueued() { return mIsQueueSave; }
     float getSaveQueueTime() { return mSaveTimer; }
+
+    /*
+        ImGui Layout Save Data Management
+    */
+
+    void writeImGuiLayout();
+    void readImGuiLayout();
+
+    bool isExistImGuiLayoutFile();
 
 private:
     nn::Result write(); // Writes the save data to the SD card

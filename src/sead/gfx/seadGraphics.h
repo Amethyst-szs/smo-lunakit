@@ -9,6 +9,9 @@
 #include <nvn_Cpp.h>
 #endif
 
+#include <heap/seadDisposer.h>
+#include <thread/seadAtomic.h>
+
 namespace sead {
 
     class Graphics

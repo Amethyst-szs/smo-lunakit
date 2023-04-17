@@ -38,6 +38,9 @@ public:
     void startPlayerPuppet(void);
     void initPlayer(al::ActorInitInfo const&, PlayerInitInfo const&);
 
+    void exeJump();
+    void exeWait();
+
     PlayerInfo *mPlayerInfo; // 0x128
     PlayerConst *mPlayerConst; // 0x130
     PlayerInput *mPlayerInput; //0x138

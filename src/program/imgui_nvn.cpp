@@ -2,8 +2,11 @@
 #include "imgui_backend/imgui_impl_nvn.hpp"
 #include "init.h"
 #include "lib.hpp"
+#include "logger/Logger.hpp"
 #include "helpers/InputHelper.h"
 #include "nvn_CppFuncPtrImpl.h"
+
+#include "devgui/DevGuiManager.h"
 
 nvn::Device *nvnDevice;
 nvn::Queue *nvnQueue;
@@ -16,7 +19,7 @@ nvn::DeviceInitializeFunc tempDeviceInitFuncPtr;
 nvn::QueueInitializeFunc tempQueueInitFuncPtr;
 nvn::QueuePresentTextureFunc tempPresentTexFunc;
 
-nvn::CommandBufferSetViewportFunc tempSetViewportFunc;
+nvn::WindowSetCropFunc tempSetCropFunc;
 
 bool hasInitImGui = false;
 
@@ -26,11 +29,27 @@ namespace nvnImGui {
 
 #define IMGUI_USEEXAMPLE_DRAW false
 
-void setViewport(nvn::CommandBuffer *cmdBuf, int x, int y, int w, int h) {
-    tempSetViewportFunc(cmdBuf, x, y, w, h);
+void setCrop(nvn::Window *window, int x, int y, int w, int h) {
+    tempSetCropFunc(window, x, y, w, h);
 
-    if (hasInitImGui)
-        ImGui::GetIO().DisplaySize = ImVec2(w - x, h - y);
+    if (hasInitImGui) {
+
+        ImVec2 &dispSize = ImGui::GetIO().DisplaySize;
+        ImVec2 windowSize = ImVec2(w - x, h - y);
+
+        if (dispSize.x != windowSize.x && dispSize.y != windowSize.y) {
+            bool isDockedMode = !(windowSize.x == 1280 && windowSize.y == 720);
+
+            dispSize = windowSize;
+            ImguiNvnBackend::updateProjection(windowSize);
+
+            // This code is specific to LunaKit, if copying replace the scale getters with 1.25 for docked and 1 for undocked
+            DevGuiManager& manager = *DevGuiManager::instance();
+            float dockSize = *manager.getScreenSizeMultiDocked();
+            float handSize = *manager.getScreenSizeMultiHandheld();
+            ImguiNvnBackend::updateScale(isDockedMode, dockSize, handSize);
+        }
+    }
 }
 
 void presentTexture(nvn::Queue *queue, nvn::Window *window, int texIndex) {
@@ -75,9 +94,9 @@ nvn::GenericFuncPtrFunc getProc(nvn::Device *device, const char *procName) {
     } else if (strcmp(procName, "nvnCommandBufferInitialize") == 0) {
         tempBufferInitFuncPtr = (nvn::CommandBufferInitializeFunc) ptr;
         return (nvn::GenericFuncPtrFunc) &cmdBufInit;
-    } else if (strcmp(procName, "nvnCommandBufferSetViewport") == 0) {
-        tempSetViewportFunc = (nvn::CommandBufferSetViewportFunc) ptr;
-        return (nvn::GenericFuncPtrFunc) &setViewport;
+    } else if (strcmp(procName, "nvnWindowSetCrop") == 0) {
+        tempSetCropFunc = (nvn::WindowSetCropFunc) ptr;
+        return (nvn::GenericFuncPtrFunc) &setCrop;
     } else if (strcmp(procName, "nvnQueuePresentTexture") == 0) {
         tempPresentTexFunc = (nvn::QueuePresentTextureFunc) ptr;
         return (nvn::GenericFuncPtrFunc) &presentTexture;
@@ -161,6 +180,7 @@ void nvnImGui::addDrawFunc(ProcDrawFunc func) {
 }
 
 void nvnImGui::procDraw() {
+
     ImguiNvnBackend::newFrame();
     ImGui::NewFrame();
 
@@ -183,6 +203,8 @@ void nvnImGui::InstallHooks() {
 
 bool nvnImGui::InitImGui() {
     if (nvnDevice && nvnQueue && nvnCmdBuf) {
+
+        Logger::log("Creating ImGui.\n");
 
         IMGUI_CHECKVERSION();
 
@@ -208,6 +230,14 @@ bool nvnImGui::InitImGui() {
                 .cmdBuf = nvnCmdBuf
         };
 
+        FsHelper::LoadData fontLoadData = {
+            .path = "sd:/LunaKit/ImGuiData/Font/SFMonoSquare-Regular.otf"
+        };
+
+        FsHelper::loadFileFromPath(fontLoadData);
+
+        io.Fonts->AddFontFromMemoryTTF(fontLoadData.buffer, fontLoadData.bufSize, 13, nullptr, io.Fonts->GetGlyphRangesJapanese());
+
         ImguiNvnBackend::InitBackend(initInfo);
 
         InputHelper::initKBM();
@@ -231,6 +261,8 @@ bool nvnImGui::InitImGui() {
         return true;
 
     } else {
+        Logger::log("Unable to create ImGui Renderer!\n");
+
         return false;
     }
 }

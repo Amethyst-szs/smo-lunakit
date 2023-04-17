@@ -1,19 +1,12 @@
 #pragma once
 
-#include "imgui.h"
-#include "imgui_internal.h"
-
-#include "al/collision/alCollisionUtil.h"
-#include "al/util.hpp"
-
 #include "primitives/PrimitiveQueue.h"
 #include "devgui/settings/PrimMenuSettings.h"
-
 #include "devgui/homemenu/HomeMenuBase.h"
 
 class HomeMenuPrims : public HomeMenuBase {
 public:
-    HomeMenuPrims(DevGuiManager* parent, const char* menuName);
+    HomeMenuPrims(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
     void updateMenu() override;
     void updateMenuDisplay() override;

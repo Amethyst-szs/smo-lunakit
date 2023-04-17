@@ -1,5 +1,23 @@
 #include "DevGuiSaveData.h"
 #include "devgui/DevGuiManager.h"
+#include "devgui/theme/DevGuiTheme.h"
+#include "devgui/settings/DevGuiSettings.h"
+#include "devgui/settings/PrimMenuSettings.h"
+
+#include "al/byaml/ByamlIter.h"
+#include "al/byaml/writer/ByamlWriter.h"
+#include "al/util.hpp"
+
+#include "nn/fs/fs_directories.hpp"
+#include "nn/fs/fs_files.hpp"
+#include "nn/fs/fs_types.hpp"
+
+#include "helpers/fsHelper.h"
+#include "helpers/DataStream.h"
+
+#include "update/UpdateHandler.h"
+
+#include "imgui.h"
 
 void DevGuiSaveData::init(DevGuiManager* parent)
 {
@@ -25,21 +43,23 @@ void DevGuiSaveData::read()
     FsHelper::loadFileFromPath(loadData);
     al::ByamlIter root = al::ByamlIter((u8*)loadData.buffer);
 
+    // Before checking if the save needs to be reset, check for if the user has updates silenced
+    bool isUpdatesSilenced;
+    if(root.tryGetBoolByKey(&isUpdatesSilenced, "UpdateShh"))
+        UpdateHandler::instance()->setSilenceState(isUpdatesSilenced);
+
     // Check if the program version matches the save file version, if so wipe the save and write a new one
     const char* saveVer;
-    if(!root.tryGetStringByKey(&saveVer, "Version") || !al::isEqualString(saveVer, LUNAKITVERSION)) {
-        Logger::log("Save file version does not match program version, resetting...\n");
-        write();
-        return;
-    }
+    if(!root.tryGetStringByKey(&saveVer, "Version") || !al::isEqualString(saveVer, GIT_VER))
+        Logger::log("Save file version does not match program version!\n");
 
     const char* theme;
     if(root.tryGetStringByKey(&theme, "Theme"))
         mParent->getTheme()->setWinThemeByName(theme);
 
-    int winAnchor;
-    if(root.tryGetIntByKey(&winAnchor, "WinAnchor"))
-        mParent->setAnchorType((WinAnchorType)winAnchor);
+    root.tryGetFloatByKey(&ImGui::GetStyle().Alpha, "Opacity");
+    root.tryGetFloatByKey(mParent->getScreenSizeMultiDocked(), "DockSize");
+    root.tryGetFloatByKey(mParent->getScreenSizeMultiHandheld(), "HandSize");
     
     if(root.isExistKey("ActiveWins")) {
         al::ByamlIter windows = root.getIterByKey("ActiveWins");
@@ -113,9 +133,12 @@ nn::Result DevGuiSaveData::write()
     file.pushHash();
 
     // General information
-    file.addString("Version", LUNAKITVERSION);
+    file.addString("Version", GIT_VER);
     file.addString("Theme", mParent->getTheme()->getThemeName());
-    file.addInt("WinAnchor", (int)mParent->getAnchorType());
+    file.addFloat("Opacity", ImGui::GetStyle().Alpha);
+    file.addFloat("DockSize", *mParent->getScreenSizeMultiDocked());
+    file.addFloat("HandSize", *mParent->getScreenSizeMultiHandheld());
+    file.addBool("UpdateShh", UpdateHandler::instance()->isUpdateSilenced());
 
     // Open/close state of all windows
     file.pushHash("ActiveWins");
@@ -176,4 +199,47 @@ nn::Result DevGuiSaveData::write()
         Logger::log("\n\n ! WARNING !\n The save file is close to the work buffer limit\n Consider increasing buffer size!\n\n");
 
     return result;
+}
+
+bool DevGuiSaveData::isExistImGuiLayoutFile()
+{
+    if(!FsHelper::isFileExist(IMGUILAYOUTPATH)) {
+        Logger::log("ImGui does not have a saved layout\n");
+        return false;
+    }
+
+    Logger::log("ImGui layout save exists at %s\n", IMGUILAYOUTPATH);
+    return true;
+}
+
+void DevGuiSaveData::readImGuiLayout()
+{
+    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
+
+    if(!FsHelper::isFileExist(IMGUILAYOUTPATH)) {
+        Logger::log("ImGui does not have a saved layout.\n");
+        return;
+    }
+
+    Logger::log("Loading ImGui layout from %s\n", IMGUILAYOUTPATH);
+
+    FsHelper::LoadData loadData = {
+        .path = IMGUILAYOUTPATH
+    };
+
+    FsHelper::loadFileFromPath(loadData);
+
+    ImGui::LoadIniSettingsFromMemory((const char*)loadData.buffer, loadData.bufSize);
+}
+
+void DevGuiSaveData::writeImGuiLayout()
+{
+    sead::ScopedCurrentHeapSetter heapSetter(mHeap);
+
+    size_t bufSize;
+    const char* buf = ImGui::SaveIniSettingsToMemory(&bufSize);
+
+    FsHelper::writeFileToPath((void*)buf, bufSize, IMGUILAYOUTPATH);
+
+    Logger::log("Wrote %u bytes to %s\n", bufSize, IMGUILAYOUTPATH);
 }

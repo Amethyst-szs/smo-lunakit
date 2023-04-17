@@ -11,67 +11,28 @@
 
 #pragma once
 
-#include "imgui.h"
-
-#include "al/util.hpp"
-
-#include "game/HakoniwaSequence/HakoniwaSequence.h"
-#include "game/System/GameSystem.h"
-
-#include "sead/container/seadPtrArray.h"
-#include "sead/heap/seadHeap.h"
-#include "sead/math/seadVector.h"
-
-#include "helpers/GetHelper.h"
 #include "devgui/categories/CategoryBase.h"
 
-#include "logger/Logger.hpp"
+#include "sead/container/seadPtrArray.h"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
+class WindowGroup; // Forward declaration
 
-/*
-    This class is used by each window to configure it's position, size, and flags (regardless of anchored or not)
-    For more information about different flags go these points in the imgui.h header
-*/
-struct DevGuiWindowConfig {
-    // Flags (Find different flag parameters in the imgui.h header)
-    ImGuiWindowFlags mWindowFlags = ImGuiWindowFlags_None;
-    ImGuiTabBarFlags mTabFlags = ImGuiTabBarFlags_None;
-    ImGuiTabItemFlags mTabItemFlags = ImGuiTabItemFlags_None;
-
-    // Default text size
-    float mFontSize = 1.5f;
-
-    // Controlled by the setupAnchor function of a window, not meant to be set otherwise
-    ImVec2 mTrans = ImVec2(0, 0);
-    ImVec2 mSize = ImVec2(100, 100);
-
-    // Constants
-    // Size of top bar, moves everything down below this point if above
-    const int mMinimumY = 25;
-
-    // Default X and Y size of window used in anchored windows on the perpendicular axis to anchor direction
-    const ImVec2 mSizeBase = ImVec2(427, 220); 
-
-    // Size of the display / resolution of screen
-    const ImVec2 mScrSize = ImVec2(1280, 720);
-};
+typedef int ImGuiWindowFlags; // Forward declaration from imgui.h
 
 class WindowBase {
 public:
-    WindowBase(DevGuiManager* parent, const char* winName, bool isActiveByDefault, bool isAnchor, int windowPages);
-
-    // Determines how the window is positioned
-    // Most non-anchored windows will override this function with their own placement code
-    virtual void setupAnchor(int totalAnchoredWindows, int anchorIdx);
+    WindowBase(DevGuiManager* parent, const char* winName, bool isActiveByDefault);
 
     // updateWin is called every frame (where the window is active) even if the LunaKit display is closed
     virtual void updateWin();
 
     // updateWinDisplay is only called if the window is open AND the LunaKit display is active
-    // If window does not have any categories, the implementation is responsible for running ImGui::End()
     virtual bool tryUpdateWinDisplay();
 
+    // updatePostDisplay is only called if the window is open AND the LunaKit display is active
+    // Mainly serves as a place to open popups or modals if needed
+    virtual void updatePostDisplay(){};
 
     // https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Documentation#categories
     template <class T> // Template function to create and add category to list
@@ -84,30 +45,33 @@ public:
     // Not recommended to override unless you have a very specific goal in mind
     virtual const char* getWindowName() { return mWinName; }
     virtual bool* getCloseInteractionPtr() { return &mIsCloseUnpressed; } // This value is set by clicking the X on the window
-    virtual DevGuiWindowConfig* getWindowConfig() { return &mConfig; }
     virtual int getCategoryCount() { return mCategories.size(); } // Will return 0 if no categories exist
     virtual bool* getActiveState() { return &mIsActive; }
+    virtual ImGuiWindowFlags getWindowFlags() { return mWindowFlags; }
 
     // Allows enabling/displaying the window from elsewhere
     virtual void setActiveState(bool isActive) { mIsActive = isActive; }
     
     virtual bool isActive() { return mIsActive; }
 
-    // If window is not anchored (defined in the constructor code) it will be placed independently from other windows
-    virtual bool isInAnchorList() { return mIsAnchorList; }
-    virtual int getAnchorPages() { return mAnchorPages; }
+    // WindowGroup functions
+    virtual bool isInGroup() { return mGroup; }
+    virtual void setGroup(WindowGroup* group) { mGroup = group; }
 
 protected:
-    bool mIsActive = true;
-    bool mIsCloseUnpressed = true;
-    const char* mWinName = "null";
-
+    // Parent info
     DevGuiManager* mParent;
-    DevGuiWindowConfig mConfig;
     sead::Heap* mHeap;
 
-    bool mIsAnchorList = true;
-    int mAnchorPages = 1;
+    // Current state
+    bool mIsActive = true;
+    bool mIsFirstStep = true;
+    bool mIsCloseUnpressed = true;
+
+    // Window information
+    const char* mWinName = "null";
+    WindowGroup* mGroup = nullptr;
+    ImGuiWindowFlags mWindowFlags = 0;
 
     sead::PtrArray<CategoryBase> mCategories;
 };

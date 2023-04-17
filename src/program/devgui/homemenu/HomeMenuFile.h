@@ -1,11 +1,8 @@
 #pragma once
 
-#include "imgui.h"
+#include "devgui/homemenu/HomeMenuBase.h"
 
 #include "game/GameData/GameDataHolder.h"
-#include "game/SaveData/SaveDataAccessFunction.h"
-
-#include "devgui/homemenu/HomeMenuBase.h"
 
 enum SaveFileIdx {
     NONE = -1,
@@ -19,9 +16,9 @@ enum SaveFileIdx {
 
 class HomeMenuFile : public HomeMenuBase {
 public:
-    HomeMenuFile(DevGuiManager* parent, const char* menuName);
+    HomeMenuFile(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
-    virtual void updateMenuDisplay();
+    void updateMenuDisplay() override;
 
 private:
     SaveFileIdx selectSaveFile(GameDataHolder* holder, bool isAllowCurrentSave);

@@ -1,19 +1,17 @@
 #pragma once
 
-#include "imgui.h"
-
-#include "game/Player/PlayerFunction.h"
-
 #include "cstages/CustomStage.h"
 #include "cstages/CustomStageManager.h"
+
+#include "game/GameData/GameDataHolderAccessor.h"
 
 #include "devgui/homemenu/HomeMenuBase.h"
 
 class HomeMenuCStages : public HomeMenuBase {
 public:
-    HomeMenuCStages(DevGuiManager* parent, const char* menuName);
+    HomeMenuCStages(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
-    virtual void updateMenuDisplay();
+    void updateMenuDisplay() override;
 
 private:
     void drawResource(CustomStageResource* res);

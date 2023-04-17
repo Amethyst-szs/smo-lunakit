@@ -2,6 +2,8 @@
 
 #include "program/devgui/categories/CategoryBase.h"
 
+class ImVec2; // Forward declaration
+
 class CategoryHomeShip : public CategoryBase {
 public:
     CategoryHomeShip(const char* catName, const char* catDesc, sead::Heap* heap);

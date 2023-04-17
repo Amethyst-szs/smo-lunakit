@@ -37,5 +37,9 @@ build/
 .idea/
 
 # specific files
-compile_commands.json
+compile_commands.jso
+deploy
 imgui/backends/vulkan/generate_spv.sh
+
+# promo assets
+promo_screenshots/

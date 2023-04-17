@@ -1,5 +1,6 @@
 #pragma once
 
+#include "actor/ActorCameraTarget.h"
 #include "al/scene/ISceneObj.h"
 #include "al/scene/SceneObjHolder.h"
 #include "al/util/AudioUtil.h"
@@ -173,6 +174,10 @@ namespace al {
     // camera stuff
 
     void setCameraTarget(al::IUseCamera *, al::CameraTargetBase *);
+    void resetCameraTarget(al::IUseCamera *, al::CameraTargetBase *);
+    al::ActorCameraTarget *createActorCameraTarget(al::LiveActor const*,float);
+    al::ActorCameraTarget *createActorCameraTarget(al::LiveActor const*,sead::Vector3<float> const*);
+    void requestCancelCameraInterpole(al::IUseCamera const*,int);
 
     // calc functions
 

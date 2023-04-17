@@ -48,7 +48,6 @@
 #include "al/collision/KCollisionServer.h"
 #include "al/collision/alCollisionUtil.h"
 
-#include "agl/utl.h"
 #include "imgui_nvn.h"
 #include "helpers/InputHelper.h"
 #include "init.h"
@@ -63,7 +62,9 @@
 
 #include "helpers/GetHelper.h"
 #include "devgui/DevGuiManager.h"
-#include "devgui/settings/HooksSettings.h"
+#include "devgui/DevGuiHooks.h"
+
+#include "update/UpdateHandler.h"
 
 #include <typeinfo>
 
@@ -136,7 +137,12 @@ HOOK_DEFINE_TRAMPOLINE(RedirectFileDevice) {
 HOOK_DEFINE_TRAMPOLINE(FileLoaderLoadArc) {
     static sead::ArchiveRes *
     Callback(al::FileLoader *thisPtr, sead::SafeString &path, const char *ext, sead::FileDevice *device) {
-        LoadLog::pushTextToVector(path.cstr());
+
+        ResourceLoadLogger* log = ResourceLoadLogger::instance();
+
+        if(log)
+            log->pushTextToVector(path.cstr());
+
         sead::FileDevice *sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
 
         if (sdFileDevice && sdFileDevice->isExistFile(path))
@@ -148,6 +154,11 @@ HOOK_DEFINE_TRAMPOLINE(FileLoaderLoadArc) {
 
 HOOK_DEFINE_TRAMPOLINE(FileLoaderIsExistFile) {
     static bool Callback(al::FileLoader *thisPtr, sead::SafeString &path, sead::FileDevice *device) {
+
+        ResourceLoadLogger* log = ResourceLoadLogger::instance();
+        
+        if(log)
+            log->pushTextToVector(path.cstr());
 
         sead::FileDevice *sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
 
@@ -189,13 +200,21 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
                                                               0x100000);
         }
 
-        sead::Heap* lkHeap = sead::ExpHeap::create(256000, "LunaKitHeap", al::getStationedHeap(), 8,
-            sead::Heap::HeapDirection::cHeapDirection_Reverse, false);
+        sead::Heap* lkHeap = sead::ExpHeap::create(5000000, "LunaKitHeap", al::getStationedHeap(), 8,
+            sead::Heap::HeapDirection::cHeapDirection_Forward, false);
+
+        sead::Heap* updaterHeap = sead::ExpHeap::create(2500000, "UpdateHeap", lkHeap, 8,
+            sead::Heap::HeapDirection::cHeapDirection_Forward, false);
 
         Logger::instance().init(lkHeap).value;
+        ResourceLoadLogger::createInstance(lkHeap);
+        ResourceLoadLogger::instance()->init(lkHeap);
 
         DevGuiManager::createInstance(lkHeap);
+        UpdateHandler::createInstance(updaterHeap);
+
         DevGuiManager::instance()->init(lkHeap);
+        UpdateHandler::instance()->init(updaterHeap);
 
         sead::TextWriter::setDefaultFont(sead::DebugFontMgrJis1Nvn::instance());
 
@@ -229,7 +248,10 @@ extern "C" void exl_main(void *x0, void *x1) {
     // envSetOwnProcessHandle(exl::util::proc_handle::Get());
     exl::hook::Initialize();
 
-    nn::os::SetUserExceptionHandler(exception_handler, nullptr, 0, nullptr);
+    handler::installExceptionHandler([](handler::ExceptionInfo& info) {
+        handler::printCrashReport(info);
+        return false;
+    });
 
     runCodePatches();
 
@@ -247,7 +269,7 @@ extern "C" void exl_main(void *x0, void *x1) {
     UpdateLunaKit::InstallAtOffset(0x50F1D8);
 
     // DevGui cheats
-    exlSetupSettingsHooks(); // Located in devgui/settings/HooksSettings
+    DevGuiHooks::exlInstallDevGuiHooks(); // Located in devgui/DevGuiHooks.cpp
 
     // ImGui Hooks
 #if IMGUI_ENABLED

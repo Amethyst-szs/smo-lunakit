@@ -1,17 +1,33 @@
 #pragma once
 
+#include "al/effect/Effect.h"
+#include "al/effect/EffectSystemInfo.h"
+
+#include "sead/math/seadVector.h"
+#include "sead/math/seadMatrix.h"
+
 namespace al
 {
-    class EffectKeeper;
+    class MtxPtrHolder;
 
-    class IUseEffectKeeper
-    {
+    class EffectKeeper {
     public:
-        virtual al::EffectKeeper* getEffectKeeper() const = 0;
+       EffectKeeper(al::EffectSystemInfo const*, char const*, sead::Vector3f const*, sead::Vector3f const*, sead::Matrix34f const*);
+
+       const char* mUnk;                // 0x00
+       unsigned int mTotalFX;           // 0x08
+       al::Effect** mEffects;           // 0x10
+       void* unk3;                      // 0x18
+       bool unkBool1;                   // 0x20
+       bool unkBool2;                   // 0x21
+       bool unkBool3;                   // 0x22
+       void* unk5;                      // 0x28
+       al::MtxPtrHolder* mMtxHolder;    // 0x30
+       
     };
 
-    class EffectKeeper
-    {
-    
+    class IUseEffectKeeper {
+    public:
+        virtual al::EffectKeeper* getEffectKeeper() const = 0;
     };
 }

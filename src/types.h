@@ -47,6 +47,7 @@ typedef unsigned long    undefined8;
 #define ON_INIT         __attribute__((constructor))
 #define NOINLINE        __attribute__((noinline))
 #define NORETURN        __attribute__((noreturn))
+#define PACKED       __attribute__((packed))
 #define UNREACHABLE __builtin_unreachable()
 #define PAGE_SIZE (0x1000)
 #define ALWAYS_INLINE inline __attribute__((always_inline))
@@ -71,3 +72,11 @@ typedef __builtin_va_list va_list;
 typedef u32 Result;
 typedef u32 Handle;
 typedef void (*ThreadFunc)(void*);
+
+// socket types
+
+typedef uint16_t in_port_t;
+typedef uint32_t in_addr_t;
+typedef uint16_t sa_family_t;
+
+typedef unsigned int socklen_t;

@@ -12,10 +12,19 @@ set(CMAKE_CXX_STANDARD 23)
 ## Title Id
 set(TITLE_ID 0100000000010000)
 set(CONFIG_TITLE_ID 0x${TITLE_ID})
-add_compile_definitions(EXL_PROGRAM_ID=${CONFIG_TITLE_ID} NNSDK=1 IMGUI_USER_CONFIG="imgui_backend/nvn_imgui_config.h")
+
+execute_process(
+  COMMAND git describe --tags --abbrev=0
+  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+  OUTPUT_VARIABLE GIT_VER
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+
+add_compile_definitions(EXL_PROGRAM_ID=${CONFIG_TITLE_ID} NNSDK=1 IMGUI_USER_CONFIG="imgui_backend/nvn_imgui_config.h" GIT_VER="${GIT_VER}")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/module/subsdk9.json.template ${CMAKE_CURRENT_BINARY_DIR}/subsdk9.json)
 
 ## Project sources
+include_directories(${PROJECT_SOURCE_DIR}/src/lib/zip)
 include_directories(${PROJECT_SOURCE_DIR}/src/lib)
 include_directories(${PROJECT_SOURCE_DIR}/src/nvn)
 include_directories(${PROJECT_SOURCE_DIR}/src/nn)
@@ -39,6 +48,9 @@ set(CMAKE_EXECUTABLE_SUFFIX ".elf")
 add_executable(subsdk9 ${SOURCES_ASM} ${SOURCES_C} ${SOURCES_H} ${SOURCES_CXX} ${IMGUI_SOURCES})
 add_compile_definitions(EXL_LOAD_KIND=Module EXL_LOAD_KIND_ENUM=EXL_LOAD_KIND_MODULE)
 target_link_libraries(subsdk9 ${LOCAL_LIBRARIES})
+
+# generate header file for imgui shader binary
+target_embed_binaries(subsdk9 "${PROJECT_SOURCE_DIR}/imgui.bin")
 
 ## Prepare subsdk ld
 set(SUBSDK_LD_PATH ${CMAKE_CURRENT_SOURCE_DIR}/module/subsdk9.ld)

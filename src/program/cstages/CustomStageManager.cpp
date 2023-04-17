@@ -1,5 +1,12 @@
 #include "cstages/CustomStageManager.h"
 
+#include "sead/filedevice/seadFileDeviceMgr.h"
+
+#include "nn/fs/fs_files.hpp"
+#include "nn/result.h"
+
+#include "logger/Logger.hpp"
+
 void CustomStageManager::init(sead::Heap* heap)
 {
     Logger::log("Starting custom stage plugin loader from %s\n", CUSTOMSTAGEPATH);

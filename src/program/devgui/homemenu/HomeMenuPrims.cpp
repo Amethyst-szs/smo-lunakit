@@ -1,8 +1,17 @@
 #include "devgui/homemenu/HomeMenuPrims.h"
 #include "devgui/DevGuiManager.h"
+#include "devgui/savedata/DevGuiSaveData.h"
 
-HomeMenuPrims::HomeMenuPrims(DevGuiManager* parent, const char* menuName)
-    : HomeMenuBase(parent, menuName)
+#include "al/collision/alCollisionUtil.h"
+#include "al/util.hpp"
+
+#include "helpers/GetHelper.h"
+
+#include "imgui.h"
+#include "imgui_internal.h"
+
+HomeMenuPrims::HomeMenuPrims(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
+    : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
 {
     mSettings = parent->getPrimitiveSettings();
 }
@@ -26,7 +35,14 @@ void HomeMenuPrims::updateMenu()
 
 void HomeMenuPrims::updateMenuDisplay()
 {
-    drawCategory(PrimMenuCat_NONE, nullptr);
+    ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+
+    PrimMenuEntry* entry = mSettings->getSettingEntryInCat(0, PrimMenuCat_NONE);
+    if(ImGui::Checkbox("Primitive Rendering", entry->getValuePtr()))
+        mParent->getSaveData()->queueSaveWrite();
+
+    ImGui::PopItemFlag();
+
     drawCategory(PrimMenuCat_PLAYER, "Player");
     drawCategory(PrimMenuCat_TRIANGLE, "Collision");
     drawCategory(PrimMenuCat_AREA, "Areas");
@@ -163,7 +179,7 @@ void HomeMenuPrims::renderHitSensorCategory(al::Scene* scene, PrimitiveQueue* qu
 
         float dist = al::calcDistance(playerBase, actor);
 
-        if(dist < mMaxDist)
+        if(dist < mMaxDist && isInStageScene())
             queue->pushHitSensor(actor, hitSensorTypesEnum, (1.f - (dist / mMaxDist)) * 0.45f);
     }
 }

@@ -1,6 +1,23 @@
+#include "DevGuiTheme.h"
 #include "devgui/DevGuiManager.h"
 
-#include "DevGuiTheme.h"
+#include "al/resource/Resource.h"
+#include "al/util.hpp"
+
+#include "sead/heap/seadExpHeap.h"
+#include "sead/heap/seadHeap.h"
+#include "sead/heap/seadHeapMgr.h"
+#include "sead/filedevice/seadFileDeviceMgr.h"
+
+#include "nn/fs/fs_files.hpp"
+#include "nn/result.h"
+#include "nn/init.h"
+
+#include "helpers/fsHelper.h"
+
+#include "imgui.h"
+
+#include "logger/Logger.hpp"
 
 void DevGuiTheme::init()
 {
@@ -29,6 +46,14 @@ void DevGuiTheme::init()
 
 void DevGuiTheme::tryUpdateTheme()
 {
+    ImVec2 &dispSize = ImGui::GetIO().DisplaySize;
+    bool isDockedMode = !(dispSize.x == 1280 && dispSize.y == 720);
+
+    if (isDockedMode != mIsDocked) {
+        mIsDocked = isDockedMode;
+        mIsRefreshTheme = true;
+    }
+
     if(!mIsRefreshTheme || !mThemes)
         return;
 
@@ -44,7 +69,6 @@ void DevGuiTheme::tryUpdateTheme()
     al::ByamlIter params = themeIter->getIterByKey("Parameters");
     al::ByamlIter colors = themeIter->getIterByKey("Colors");
 
-    setStyleParam(&style.Alpha, &params, "Alpha");
     setStyleParam(&style.WindowPadding, &params, "WindowPadding");
     setStyleParam(&style.WindowBorderSize, &params, "WindowBorderSize");
     setStyleParam(&style.WindowTitleAlign, &params, "WindowTitleAlign");
@@ -82,46 +106,65 @@ void DevGuiTheme::tryUpdateTheme()
 
     style.Colors[ImGuiCol_Text]              = Text;
     style.Colors[ImGuiCol_TextDisabled]      = TextDisabled;
+
     style.Colors[ImGuiCol_WindowBg]          = BackgroundMain;
     style.Colors[ImGuiCol_ChildBg]           = BackgroundMain;
     style.Colors[ImGuiCol_PopupBg]           = BackgroundPopup;
+
     style.Colors[ImGuiCol_Border]            = PrimaryInteract;
     style.Colors[ImGuiCol_BorderShadow]      = PrimaryHover;
+
     style.Colors[ImGuiCol_FrameBg]           = Primary;
     style.Colors[ImGuiCol_FrameBgHovered]    = PrimaryHover;
     style.Colors[ImGuiCol_FrameBgActive]     = PrimaryInteract;
+
     style.Colors[ImGuiCol_TitleBg]           = Primary;
     style.Colors[ImGuiCol_TitleBgActive]     = PrimaryHover;
     style.Colors[ImGuiCol_TitleBgCollapsed]  = BackgroundMain;
+
     style.Colors[ImGuiCol_MenuBarBg]         = Primary;
+
     style.Colors[ImGuiCol_ScrollbarBg]       = Primary;
     style.Colors[ImGuiCol_ScrollbarGrab]     = PrimaryHover;
     style.Colors[ImGuiCol_ScrollbarGrabHovered]= Highlight;
     style.Colors[ImGuiCol_ScrollbarGrabActive]= HighlightInteract;
+
     style.Colors[ImGuiCol_CheckMark]         = HighlightInteract;
+
     style.Colors[ImGuiCol_SliderGrab]        = PrimaryInteract;
     style.Colors[ImGuiCol_SliderGrabActive]  = HighlightInteract;
+
     style.Colors[ImGuiCol_Button]            = PrimaryHover;
     style.Colors[ImGuiCol_ButtonHovered]     = Highlight;
     style.Colors[ImGuiCol_ButtonActive]      = HighlightInteract;
+
     style.Colors[ImGuiCol_Header]            = Primary;
     style.Colors[ImGuiCol_HeaderHovered]     = PrimaryHover;
     style.Colors[ImGuiCol_HeaderActive]      = HighlightInteract;
+
     style.Colors[ImGuiCol_Separator]         = PrimaryHover;
     style.Colors[ImGuiCol_SeparatorHovered]  = PrimaryInteract;
     style.Colors[ImGuiCol_SeparatorActive]   = HighlightInteract;
+
     style.Colors[ImGuiCol_ResizeGrip]        = PrimaryHover;
     style.Colors[ImGuiCol_ResizeGripHovered] = Highlight;
     style.Colors[ImGuiCol_ResizeGripActive]  = HighlightInteract;
+
     style.Colors[ImGuiCol_Tab]               = Primary;
     style.Colors[ImGuiCol_TabHovered]        = Highlight;
     style.Colors[ImGuiCol_TabActive]         = PrimaryHover;
-    style.Colors[ImGuiCol_TabUnfocused]      = Primary;
-    style.Colors[ImGuiCol_TabUnfocusedActive]= PrimaryInteract;
+    style.Colors[ImGuiCol_TabUnfocused]      = BackgroundPopup;
+    style.Colors[ImGuiCol_TabUnfocusedActive]= BackgroundMain;
+
+    style.Colors[ImGuiCol_DockingPreview]    = Highlight;
+    style.Colors[ImGuiCol_DockingEmptyBg]    = PrimaryHover;
+
     style.Colors[ImGuiCol_PlotLines]         = Highlight;
     style.Colors[ImGuiCol_PlotLinesHovered]  = HighlightInteract;
+
     style.Colors[ImGuiCol_PlotHistogram]     = Highlight;
     style.Colors[ImGuiCol_PlotHistogramHovered]= Highlight;
+
     style.Colors[ImGuiCol_ModalWindowDimBg]  = ImVec4(BackgroundMain.x, BackgroundMain.y, BackgroundMain.z, 0.9f);
 
     mIsRefreshTheme = false;

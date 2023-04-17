@@ -1,9 +1,20 @@
 #include "devgui/DevGuiManager.h"
 #include "devgui/homemenu/HomeMenuExtra.h"
 #include "devgui/popups/PopupKeyboard.h"
+#include "devgui/savedata/DevGuiSaveData.h"
 
-HomeMenuExtra::HomeMenuExtra(DevGuiManager* parent, const char* menuName)
-    : HomeMenuBase(parent, menuName)
+#include "update/UpdateHandler.h"
+
+#include "helpers/ImGuiHelper.h"
+#include "helpers/InputHelper.h"
+
+#include "logger/Logger.hpp"
+
+#include "imgui.h"
+#include "imgui_internal.h"
+
+HomeMenuExtra::HomeMenuExtra(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
+    : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
 {}
 
 void HomeMenuExtra::updateMenu()
@@ -31,6 +42,19 @@ void HomeMenuExtra::updateMenu()
 void HomeMenuExtra::updateMenuDisplay()
 {
     ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
+    
+    ImGui::Text("Current Version: %s", GIT_VER);
+    if(UpdateHandler::instance()->isUpdateSilenced() && UpdateHandler::instance()->isUpdateAvailable()) {
+        ImGui::Text("Update: %s", UpdateHandler::instance()->getUpdateTag());
+        ImGui::SameLine();
+        if(ImGui::SmallButton("Unsilence")) {
+            UpdateHandler::instance()->setSilenceState(false);
+            mParent->getSaveData()->queueSaveWrite();
+        }
+    }
+
+    if(ImGui::MenuItem("Check for Updates (SWITCH ONLY)"))
+        UpdateHandler::instance()->checkForUpdates();
 
     if(!mIsLoggerDisabled && ImGui::MenuItem("Disable Logger")) {
         Logger::instance().writeLoggerSave(mHeap, true, "0", 0);
@@ -38,21 +62,20 @@ void HomeMenuExtra::updateMenuDisplay()
     }
 
     if(mIsLoggerDisabled && addMenu("Server Logging")) {
-        if(ImGui::MenuItem("IP", mIPString.cstr())) {
+        if(ImGui::MenuItem("IP", mIPString.cstr()))
             mParent->tryOpenKeyboard(15, KEYTYPE_IP, &mKeyboardString, &mIsIPKeyboardOpen);
-        }
         
-        if(ImGui::MenuItem("Port", mPortString.cstr())) {
+        if(ImGui::MenuItem("Port", mPortString.cstr()))
             mParent->tryOpenKeyboard(5, KEYTYPE_NUMBER, &mKeyboardString, &mIsPortKeyboardOpen);
-        }
         
         if(!mIPString.isEmpty() && !mPortString.isEmpty()) {
-            ImGui::MenuItem(" ", nullptr, false, false);
-            ImGui::MenuItem("Requires restart", nullptr, false, false);
-            ImGui::MenuItem("Server must run on startup", nullptr, false, false);
-            ImGui::MenuItem(" ", nullptr, false, false);
-            ImGui::MenuItem("Disable via menu or deleting:", nullptr, false, false);
-            ImGui::MenuItem("LunaKit/LKData/logger.byml", nullptr, false, false);
+            ImGui::NewLine();
+            ImGui::Text("Requires restart");
+            ImGui::Text("Server must run on startup");
+            ImGui::NewLine();
+            ImGui::Text("Disable via menu or deleting:");
+            ImGui::Text("LunaKit/LKData/logger.byml");
+
             if(ImGui::MenuItem("Activate Logger")) {
                 // Jank code, converts string to number without using stoi
                 mNewPort = 0;
@@ -71,19 +94,16 @@ void HomeMenuExtra::updateMenuDisplay()
         ImGui::EndMenu();
     }
 
+    static bool disableScroll = false;
+    ImGui::Checkbox("Disable Scroll (For Ryujinx)", &disableScroll);
+
+    if (disableScroll) {
+        InputHelper::scrollState(!disableScroll);
+    }
+
     bool* demoWinState = mParent->getImGuiDemoWindowState();
-    if (ImGui::MenuItem("ImGui Demo Window", NULL, *demoWinState)) {
+    if (ImGui::MenuItem("ImGui Demo Window", NULL, *demoWinState))
         *demoWinState = !(*demoWinState);
-    }
-
-    if(addMenu("Credits")) {
-        ImGui::MenuItem("Amethyst-szs", NULL, false, false);
-        ImGui::MenuItem("CraftyBoss", NULL, false, false);
-        ImGui::MenuItem("Mars", NULL, false, false);
-        ImGui::MenuItem("ExLaunch Devs", NULL, false, false);
-
-        ImGui::EndMenu();
-    }
 
     ImGui::PopItemFlag();
 }

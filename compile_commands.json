@@ -1,0 +1,38 @@
+[
+    {
+      "arguments": [
+        "clang++",
+        "-Wall",
+        "-O3",
+        "-DLOGGER_IP=\"192.168.1.99\"",
+        "-DLOGGER_PORT=1984",
+        "-DGIT_VER=\"v0.6.9\"",
+        "-D__thread=^-^",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/include",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/build",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/src",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/src/program",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/src/lib",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/src/lib/cjson",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/src/lib/zip",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/src/sead",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/src/nvn",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/src/nn",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/lib/NintendoSDK/include",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/imgui",
+        "-I/home/amethyst/wsl_edited_exlaunch/smo-lunakit/imguizmo",
+        "-D__SWITCH__",
+        "-DNNSDK",
+        "-DEXL_USE_FAKEHEAP",
+        "-DIMGUI_USER_CONFIG=\"imgui_backend/nvn_imgui_config.h\"",
+        "-D__RTLD_6XX__",
+        "-DEXL_LOAD_KIND=Module",
+        "-DEXL_LOAD_KIND_ENUM=2",
+        "-DEXL_PROGRAM_ID=0x010028600ebda000",
+        "-std=gnu++20",
+        "/home/amethyst/wsl_edited_exlaunch/smo-lunakit/src/program/main.cpp"
+      ],
+      "directory": "/home/amethyst/wsl_edited_exlaunch/smo-lunakit/build",
+      "file": "/home/amethyst/wsl_edited_exlaunch/smo-lunakit/src/program/main.cpp"
+    }
+  ]

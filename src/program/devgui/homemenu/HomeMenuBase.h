@@ -11,10 +11,6 @@
 
 #pragma once
 
-#include "imgui.h"
-
-#include "al/util.hpp"
-
 #include "container/seadPtrArray.h"
 #include "heap/seadDisposer.h"
 #include "heap/seadHeap.h"
@@ -23,12 +19,20 @@ class DevGuiManager; // Forward declaration (include is in cpp file)
 
 class HomeMenuBase {
 public:
-    HomeMenuBase(DevGuiManager* parent, const char* menuName);
+    HomeMenuBase(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault);
 
-    virtual void updateMenu() {} // Called every frame regardless of if the menu is currently open
-    virtual void updateMenuDisplay() = 0; // Called whenever this menu is opened
+    // updateMenu is called every frame even if the LunaKit display is closed
+    virtual void updateMenu(){};
 
-    virtual const char* getMenuName() { return mMenuName; };
+    // updateMenuDisplay is only called if the menu is open AND the LunaKit display is active
+    virtual void updateMenuDisplay() = 0;
+
+    // updatePostDisplay is only called if the menu is open AND the LunaKit display is active
+    // Mainly serves as a place to open popups or modals if needed
+    virtual void updatePostDisplay(){};
+
+    virtual const char* getMenuName() { return mMenuName; }
+    virtual bool isDisplayInList() { return mIsDisplayInList; }
 
 protected:
     // This function is used to preserve font sizing through sub-menus
@@ -38,5 +42,6 @@ protected:
     DevGuiManager* mParent = nullptr;
     sead::Heap* mHeap = nullptr;
 
+    bool mIsDisplayInList = true;
     const char* mMenuName = nullptr;
 };
