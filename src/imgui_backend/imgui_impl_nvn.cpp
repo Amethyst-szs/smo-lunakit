@@ -409,7 +409,7 @@ namespace ImguiNvnBackend {
 
         FsHelper::loadFileFromPath(fontLoadData);
 
-        io.Fonts->AddFontFromMemoryTTF(fontLoadData.buffer, fontLoadData.bufSize, 8, nullptr, io.Fonts->GetGlyphRangesJapanese());
+        io.Fonts->AddFontFromMemoryTTF(fontLoadData.buffer, fontLoadData.bufSize, 13, nullptr, io.Fonts->GetGlyphRangesJapanese());
 
         if (createShaders()) {
 
@@ -433,8 +433,8 @@ namespace ImguiNvnBackend {
         InputHelper::getMouseCoords(&mousePos.x, &mousePos.y);
         io.AddMousePosEvent(mousePos.x, mousePos.y);
 
-        ImVec2 scrollDelta(0, 0);
-        //InputHelper::getScrollDelta(&scrollDelta.x, &scrollDelta.y);
+        ImVec2 scrollDelta(0.f, 0.f);
+        InputHelper::getScrollDelta(&scrollDelta.x, &scrollDelta.y);
 
         if (scrollDelta.x != 0.0f)
             io.AddMouseWheelEvent(0.0f, scrollDelta.x > 0.0f ? 0.5f : -0.5f);

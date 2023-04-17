@@ -6,6 +6,7 @@
 #include "update/UpdateHandler.h"
 
 #include "helpers/ImGuiHelper.h"
+#include "helpers/InputHelper.h"
 
 #include "logger/Logger.hpp"
 
@@ -93,6 +94,7 @@ void HomeMenuExtra::updateMenuDisplay()
         ImGui::EndMenu();
     }
 
+    // non-functional, breaks
     static bool forceScreenSize = false;
     static int screenX = 1600.f;
     static int screenY = 900.f;
@@ -108,6 +110,14 @@ void HomeMenuExtra::updateMenuDisplay()
         ImGui::GetIO().DisplaySize = ImGuiHelper::getScreenSize();
     } else
         ImGuiHelper::unforceScreenSize();
+
+
+    static bool disableScroll = false;
+    ImGui::Checkbox("Disable Scroll", &disableScroll);
+
+    if (disableScroll) {
+        InputHelper::scrollState(!disableScroll);
+    }
 
     bool* demoWinState = mParent->getImGuiDemoWindowState();
     if (ImGui::MenuItem("ImGui Demo Window", NULL, *demoWinState))

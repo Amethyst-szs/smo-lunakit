@@ -28,6 +28,12 @@ public:
 
     static void setInputToggled(bool isEnableInput) { toggleInput = isEnableInput; }
 
+    // scroll disabling
+
+    static void scrollState(bool enable) { enableScroll = enable; }
+
+    static bool canScroll() { return enableScroll; }
+
     // keyboard key presses
 
     static bool isKeyHold(nn::hid::KeyboardKey key);
@@ -145,4 +151,5 @@ private:
 
     static bool isReadInput;
     static bool toggleInput;
+    static bool enableScroll;
 };
