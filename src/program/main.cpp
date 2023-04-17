@@ -248,7 +248,10 @@ extern "C" void exl_main(void *x0, void *x1) {
     // envSetOwnProcessHandle(exl::util::proc_handle::Get());
     exl::hook::Initialize();
 
-    nn::os::SetUserExceptionHandler(exception_handler, nullptr, 0, nullptr);
+    handler::installExceptionHandler([](handler::ExceptionInfo& info) {
+        handler::printCrashReport(info);
+        return false;
+    });
 
     runCodePatches();
 

@@ -9,7 +9,7 @@
 
 HomeMenuBase::HomeMenuBase(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
 {
-    Logger::log("Constructing HomeMenu: %s\n", menuName);
+    Logger::log("   Constructing HomeMenu: %s\n", menuName);
 
     mParent = parent;
     mHeap = parent->getHeap();

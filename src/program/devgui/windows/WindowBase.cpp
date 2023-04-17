@@ -28,7 +28,7 @@ WindowBase::WindowBase(DevGuiManager* parent, const char* winName, bool isActive
     mWindowFlags |= ImGuiWindowFlags_HorizontalScrollbar;
     mWindowFlags |= ImGuiWindowFlags_NoFocusOnAppearing;
 
-    Logger::log("Constructing Window: %s\n", winName);
+    Logger::log("   Constructing Window: %s\n", winName);
 }
 
 void WindowBase::updateWin()

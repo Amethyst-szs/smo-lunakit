@@ -95,7 +95,7 @@ void HomeMenuExtra::updateMenuDisplay()
     }
 
     static bool disableScroll = false;
-    ImGui::Checkbox("Disable Scroll", &disableScroll);
+    ImGui::Checkbox("Disable Scroll (For Ryujinx)", &disableScroll);
 
     if (disableScroll) {
         InputHelper::scrollState(!disableScroll);

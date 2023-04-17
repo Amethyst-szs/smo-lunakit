@@ -58,6 +58,7 @@ void DevGuiManager::createElements()
     sead::ScopedCurrentHeapSetter heapSetter(mHeap);
     
     // Create all display windows
+    Logger::log("Constructing all windows\n");
     createWindow<WindowEditor>(paramEditorWindowName, true);
     createWindow<WindowInfo>(infoWindowName, true);
     createWindow<WindowActorBrowse>(actorBrowseWindowName, false);
@@ -72,6 +73,7 @@ void DevGuiManager::createElements()
     createWindow<WindowGBuffer>(gbufferWindowName, false, graphicsGroup);
 
     // Create all home menu tabs
+    Logger::log("Constructing all home menu items\n");
     createHomeMenuItem<HomeMenuFile>("File", true);
     createHomeMenuItem<HomeMenuSettings>("Settings", true);
     createHomeMenuItem<HomeMenuWindows>("Windows", true);

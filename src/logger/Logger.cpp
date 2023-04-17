@@ -100,7 +100,7 @@ void Logger::log(const char *fmt, ...) {
             svcOutputDebugString(buffer, strlen(buffer));
         } else {
             char prefix[0x510];
-            nn::util::SNPrintf(prefix, sizeof(prefix), "[%s] %s", "LunaKit", buffer);
+            nn::util::SNPrintf(prefix, sizeof(prefix), "%s", buffer);
             nn::socket::Send(instance().mSocketFd, prefix, strlen(prefix), 0);
         }
     }
@@ -117,7 +117,7 @@ void Logger::log(const char *fmt, va_list args) {
 
     if (nn::util::VSNPrintf(buffer, sizeof(buffer), fmt, args) > 0) {
         char prefix[0x510];
-        nn::util::SNPrintf(prefix, sizeof(prefix), "[%s] %s", "LunaKit", buffer);
+        nn::util::SNPrintf(prefix, sizeof(prefix), "%s", buffer);
         nn::socket::Send(instance().mSocketFd, prefix, strlen(prefix), 0);
     }
 }

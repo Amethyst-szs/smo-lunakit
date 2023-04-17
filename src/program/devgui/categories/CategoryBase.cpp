@@ -6,7 +6,7 @@
 
 CategoryBase::CategoryBase(const char* catName, const char* catDesc, sead::Heap* heap)
 {
-    Logger::log("   Constructing Category: %s\n", catName);
+    Logger::log("      Constructing Category: %s\n", catName);
     mHeap = heap;
     mCatName = catName;
     mCatDesc = catDesc;
