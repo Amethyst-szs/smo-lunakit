@@ -12,6 +12,7 @@
 #define MAXFAVS 32
 
 #include "devgui/windows/WindowBase.h"
+#include "al/actor/ActorCameraTarget.h"
 #include "primitives/PrimitiveTypes.h"
 
 enum ActorBrowseFilterType_ {
@@ -114,6 +115,7 @@ private:
 
     // Selected actor
     al::LiveActor* mSelectedActor = nullptr;
+    al::ActorCameraTarget *mSelectedActorTarget = nullptr;
     HitSensorRenderTypes mHitSensorTypes = HitSensorType_ALL;
     unsigned int mRailPercision = 10;
 

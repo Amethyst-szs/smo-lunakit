@@ -2,6 +2,7 @@
 #include "WindowFPS.h"
 
 #include "game/System/Application.h"
+#include "nn/oe.h"
 
 #include "imgui.h"
 
@@ -19,7 +20,10 @@ bool WindowFPS::tryUpdateWinDisplay()
     if(!WindowBase::tryUpdateWinDisplay())
         return false;
     
-    ImGui::SetWindowPos(ImVec2(0.f, 690.f));
+    nn::oe::OperationMode mode = nn::oe::GetOperationMode();
+    auto pos = ImVec2(0.f, 690.f);
+    if (mode == nn::oe::OperationMode_Docked) pos.y = 870.f;
+    ImGui::SetWindowPos(pos);
     ImGui::SetWindowSize(ImVec2(150.f, 30.f));
 
     float curFPS = Application::instance()->mFramework->calcFps();

@@ -1,4 +1,4 @@
-#include "HooksSettings.h"
+#include "SettingsHooks.h"
 
 #include "al/util/NerveUtil.h"
 

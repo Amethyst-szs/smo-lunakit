@@ -6,9 +6,11 @@
 #include "helpers.h"
 
 #include "nn/os.h"
+#include "nn/oe.h"
 #include "nn/hid.h"
 
 #include "helpers/InputHelper.h"
+#include "helpers/ImGuiHelper.h"
 #include "MemoryPoolMaker.h"
 
 #include "logger/Logger.hpp"
@@ -16,14 +18,6 @@
 #define UBOSIZE 0x1000
 
 typedef float Matrix44f[4][4];
-
-// orthographic matrix used for shader
-static const Matrix44f projMatrix = {
-        {0.001563f, 0.0f,       0.0f,  0.0f},
-        {0.0f,      -0.002778f, 0.0f,  0.0f},
-        {0.0f,      0.0f,       -0.5f, 0.0f},
-        {-1.0f,     1.0f,       0.5f,  1.0f}
-};
 
 namespace ImguiNvnBackend {
 
@@ -181,6 +175,19 @@ namespace ImguiNvnBackend {
         bd->cmdBuf->BindProgram(&bd->shaderProgram, nvn::ShaderStageBits::VERTEX | nvn::ShaderStageBits::FRAGMENT);
 
         bd->cmdBuf->BindUniformBuffer(nvn::ShaderStage::VERTEX, 0, *bd->uniformMemory, UBOSIZE);
+
+        ImVec2 screenSize = ImGuiHelper::getScreenSize();
+        
+        auto scaleX = 2.0f/screenSize.x;
+        auto scaleY = 2.0f/screenSize.y;
+
+        Matrix44f projMatrix = {
+            {scaleX, 0.0f,       0.0f,  0.0f},
+            {0.0f,      -scaleY, 0.0f,  0.0f},
+            {0.0f,      0.0f,       -0.5f, 0.0f},
+            {-1.0f,     1.0f,       0.5f,  1.0f}
+        };
+
         bd->cmdBuf->UpdateUniformBuffer(*bd->uniformMemory, UBOSIZE, 0, sizeof(projMatrix), &projMatrix);
 
         bd->cmdBuf->BindVertexBuffer(0, (*bd->vtxBuffer), bd->vtxBuffer->GetPoolSize());
@@ -426,7 +433,7 @@ namespace ImguiNvnBackend {
         InputHelper::getMouseCoords(&mousePos.x, &mousePos.y);
         io.AddMousePosEvent(mousePos.x, mousePos.y);
 
-        ImVec2 scrollDelta(0, 0);
+        ImVec2 scrollDelta(0.f, 0.f);
         InputHelper::getScrollDelta(&scrollDelta.x, &scrollDelta.y);
 
         if (scrollDelta.x != 0.0f)
@@ -581,8 +588,20 @@ namespace ImguiNvnBackend {
 
         bd->cmdBuf->BindUniformBuffer(nvn::ShaderStage::VERTEX, 0, *bd->uniformMemory,
                                       UBOSIZE); // bind uniform block ptr
-        bd->cmdBuf->UpdateUniformBuffer(*bd->uniformMemory, UBOSIZE, 0, sizeof(projMatrix),
-                                        &projMatrix); // add projection matrix data to uniform data
+
+        ImVec2 screenSize = ImGuiHelper::getScreenSize();
+
+        auto scaleX = 2.0f/screenSize.x;
+        auto scaleY = 2.0f/screenSize.y;
+
+        Matrix44f projMatrix = {
+            {scaleX, 0.0f,       0.0f,  0.0f},
+            {0.0f,      -scaleY, 0.0f,  0.0f},
+            {0.0f,      0.0f,       -0.5f, 0.0f},
+            {-1.0f,     1.0f,       0.5f,  1.0f}
+        };
+        
+        bd->cmdBuf->UpdateUniformBuffer(*bd->uniformMemory, UBOSIZE, 0, sizeof(projMatrix), &projMatrix); // add projection matrix data to uniform data
 
         setRenderStates(); // sets up the rest of the render state, required so that our shader properly gets drawn to the screen
 
@@ -607,19 +626,10 @@ namespace ImguiNvnBackend {
 
             for (auto cmd: cmdList->CmdBuffer) {
 
-                // im not exactly sure this scaling is a good solution,
-                // for some reason imgui clipping coords are relative to 720p instead of whatever I set for disp size.
-                ImVec2 origRes(1280.0f, 720.0f);
-                ImVec2 newRes = io.DisplaySize; // (1600.0f, 900.0f);
-
-                ImVec4 clipRect = ImVec4((cmd.ClipRect.x / origRes.x) * newRes.x,
-                                         (cmd.ClipRect.y / origRes.y) * newRes.y,
-                                         (cmd.ClipRect.z / origRes.x) * newRes.x,
-                                         (cmd.ClipRect.w / origRes.y) * newRes.y);
-
-                ImVec2 clip_min(clipRect.x, clipRect.y);
-                ImVec2 clip_max(clipRect.z, clipRect.w);
+                ImVec2 clip_min(cmd.ClipRect.x, cmd.ClipRect.y);
+                ImVec2 clip_max(cmd.ClipRect.z, cmd.ClipRect.w);
                 ImVec2 clip_size(clip_max.x - clip_min.x, clip_max.y - clip_min.y);
+
 
                 if (clip_max.x <= clip_min.x || clip_max.y <= clip_min.y)
                     continue;

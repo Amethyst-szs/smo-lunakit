@@ -1,4 +1,5 @@
 #include "program/devgui/DevGuiManager.h"
+#include "program/devgui/DevGuiHooks.h"
 
 // sead
 #include "heap/seadDisposer.h"
@@ -29,6 +30,8 @@
 #include "devgui/windows/FPS/WindowFPS.h"
 #include "devgui/windows/MemoryTools/WindowMemoryManage.h"
 #include "devgui/windows/MemoryTools/WindowLoadLog.h"
+#include "devgui/windows/Graphics/WindowGBuffer.h"
+#include "devgui/windows/Graphics/WindowPresets.h"
 
 // All tabs on the bar the top of the screen
 #include "devgui/homemenu/HomeMenuFile.h"
@@ -63,6 +66,10 @@ void DevGuiManager::createElements()
     createWindow<WindowLoadLog>(loadLogWindowName, false, memoryGroup);
     createWindow<WindowMemoryManage>(memoryManageWindowName, true, memoryGroup);
 
+    WindowGroup* graphicsGroup = createWindowGroup("Graphics", 2);
+    createWindow<WindowPresets>(presetsWindowName, false, graphicsGroup);
+    createWindow<WindowGBuffer>(gbufferWindowName, false, graphicsGroup);
+
     // Create all home menu tabs
     createHomeMenuItem<HomeMenuFile>("File", true);
     createHomeMenuItem<HomeMenuSettings>("Settings", true);
@@ -84,6 +91,8 @@ void DevGuiManager::init(sead::Heap* heap)
     // Sets the DevGuiHeap to the heap passed in as an arg, along with setting the current scope to the heap
     mHeap = heap;
     sead::ScopedCurrentHeapSetter heapSetter(heap);
+
+    mHooks = new DevGuiHooks();
 
     // Allocate 0x20 (32) slots for windows, 0x10 (16) slots for win groups, and 0x10 (16) for tabs at the top
     // Please don't increase these unless you REALLY need more space for some ungodly reason

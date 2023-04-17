@@ -48,7 +48,6 @@
 #include "al/collision/KCollisionServer.h"
 #include "al/collision/alCollisionUtil.h"
 
-#include "agl/utl.h"
 #include "imgui_nvn.h"
 #include "helpers/InputHelper.h"
 #include "init.h"
@@ -63,7 +62,7 @@
 
 #include "helpers/GetHelper.h"
 #include "devgui/DevGuiManager.h"
-#include "devgui/settings/HooksSettings.h"
+#include "devgui/DevGuiHooks.h"
 
 #include "update/UpdateHandler.h"
 
@@ -267,7 +266,7 @@ extern "C" void exl_main(void *x0, void *x1) {
     UpdateLunaKit::InstallAtOffset(0x50F1D8);
 
     // DevGui cheats
-    exlSetupSettingsHooks(); // Located in devgui/settings/HooksSettings
+    DevGuiHooks::exlInstallDevGuiHooks(); // Located in devgui/DevGuiHooks.cpp
 
     // ImGui Hooks
 #if IMGUI_ENABLED

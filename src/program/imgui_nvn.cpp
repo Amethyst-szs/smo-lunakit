@@ -30,7 +30,7 @@ void setViewport(nvn::CommandBuffer *cmdBuf, int x, int y, int w, int h) {
     tempSetViewportFunc(cmdBuf, x, y, w, h);
 
     if (hasInitImGui)
-        ImGui::GetIO().DisplaySize = ImVec2(w - x, h - y);
+        ImGui::GetIO().DisplaySize = ImGuiHelper::getScreenSize();
 }
 
 void presentTexture(nvn::Queue *queue, nvn::Window *window, int texIndex) {

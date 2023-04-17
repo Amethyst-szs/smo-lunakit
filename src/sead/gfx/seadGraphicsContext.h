@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SEAD_GRAPHICS_CONTEXT_H_
 #define SEAD_GRAPHICS_CONTEXT_H_
 

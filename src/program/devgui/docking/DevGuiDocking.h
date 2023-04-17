@@ -32,6 +32,5 @@ private:
     ImGuiID mDockLeft;
     ImGuiID mDockRight;
 
-    // Constants
-    const ImVec2 mScreenSize = ImVec2(1280.f, 720.f + 2.f); // This just fixes some weird pixels on the bottom
+    ImVec2 mScreenSize = ImVec2(1280.f, 720.f + 2.f); // This just fixes some weird pixels on the bottom
 };

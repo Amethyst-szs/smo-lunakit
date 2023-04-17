@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nn/hid.h"
+#include "helpers/ImGuiHelper.h"
 
 class InputHelper {
 
@@ -26,6 +27,12 @@ public:
     static bool isInputToggled() { return toggleInput; }
 
     static void setInputToggled(bool isEnableInput) { toggleInput = isEnableInput; }
+
+    // scroll disabling
+
+    static void scrollState(bool enable) { enableScroll = enable; }
+
+    static bool canScroll() { return enableScroll; }
 
     // keyboard key presses
 
@@ -144,4 +151,5 @@ private:
 
     static bool isReadInput;
     static bool toggleInput;
+    static bool enableScroll;
 };

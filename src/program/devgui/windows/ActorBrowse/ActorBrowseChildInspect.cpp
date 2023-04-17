@@ -5,6 +5,7 @@
 #include "helpers/GetHelper.h"
 
 #include "imgui.h"
+#include "al/model/ModelFunction.h"
 #include "helpers/ImGuiHelper.h"
 
 #include <cxxabi.h>
@@ -33,9 +34,28 @@ void WindowActorBrowse::childActorInspector()
 
     ImGui::Spacing();
 
+    if (isInStageScene() && mSelectedActor->mPoseKeeper) {
+        mSelectedActorTarget->actor = mSelectedActor;
+        if (mSelectedActor->mModelKeeper) {
+            sead::BoundBox3f boundbox;
+            sead::Vector3f center;
+            alModelFunction::calcBoundingBox(&boundbox, mSelectedActor->mModelKeeper->mModelCtrl);
+            center = boundbox.getCenter();
+            mSelectedActorTarget->pos = &center;
+        }
+        
+        static bool focus = false;
+        ImGui::Checkbox("Focus Camera", &focus);
+        if (focus) {
+            al::setCameraTarget(mSelectedActor, mSelectedActorTarget);
+            al::requestCancelCameraInterpole(mSelectedActor, 0);
+        } else al::resetCameraTarget(mSelectedActor, mSelectedActorTarget);
+    }
+    
     if(ImGui::Button("Appear")) mSelectedActor->appear();
     ImGui::SameLine();
     if(ImGui::Button("Kill")) mSelectedActor->kill();
+    
     
     drawActorInspectorTreePose(mSelectedActor->mPoseKeeper);
     drawActorInspectorTreeFlags(mSelectedActor->mLiveActorFlag, listSize.x);
