@@ -9,19 +9,19 @@
 
 WindowGBuffer::WindowGBuffer(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
     : WindowBase(parent, winName, isActiveByDefault)
+{}
+
+bool WindowGBuffer::tryUpdateWinDisplay()
 {
-
-}
-
-bool WindowGBuffer::tryUpdateWinDisplay() {
-    ImGui::SetWindowFontScale(1.333f);
+    if(!WindowBase::tryUpdateWinDisplay())
+        return false;
 
     auto gbuffer = DevGuiManager::instance()->getHookSettings()->getGBufferSettings();
 
     ImGui::Checkbox("Enabled", &gbuffer->mEnable);
 
     const char* imageTypes[] = { "Base Color", "Normal", "Depth", "Light", "Motion" };
-    ImGui::Combo("Select Image Type", &gbuffer->mShowType, imageTypes, 5);
+    ImGui::Combo("Buffer Type", &gbuffer->mShowType, imageTypes, 5);
 
     ImGui::SliderInt("Channel", &gbuffer->mChannel, 0, 5);
     

@@ -5,7 +5,7 @@
 #include "program/devgui/windows/WindowBase.h"
 #include "al/graphics/GBufferArray.h"
 
-__attribute__((used)) static const char* gbufferWindowName = "Framebuffer Viewer";
+__attribute__((used)) static const char* gbufferWindowName = "Frame Buffers";
 
 struct GBufferSet {
     al::GBufferArray *mBuffer = nullptr;

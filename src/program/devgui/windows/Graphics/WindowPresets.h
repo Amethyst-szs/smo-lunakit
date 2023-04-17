@@ -19,7 +19,7 @@
 #include "program/devgui/categories/info/CategoryInfScene.h"
 #include "program/devgui/categories/info/CategoryInfPlayer.h"
 
-__attribute__((used)) static const char* presetsWindowName = "Preset Editor";
+__attribute__((used)) static const char* presetsWindowName = "GPresets";
 
 namespace al {
     class SkyParam;
@@ -40,11 +40,16 @@ struct GraphicsPresetSet {
 class WindowPresets : public WindowBase {
 public:
     WindowPresets(DevGuiManager* parent, const char* winName, bool isActiveByDefault);
+
+    void updateWin() override;
     bool tryUpdateWinDisplay() override;
+
 private:
+    void drawPresetDropdown(const char* header, const int totalOptions, const char** output);
     void drawDropdown(const char* header, const char* options[], const char* translatedOptions[], const int totalOptions, const char** output);
 
     ImGuiComboFlags mComboFlags;
+    bool mIsReloadScene = false;
 };
 
 __attribute__((used)) static const char* presetList[] = {

@@ -11,6 +11,8 @@
 #include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
 #include "devgui/windows/MemoryTools/WindowMemoryManage.h"
 #include "devgui/windows/MemoryTools/WindowLoadLog.h"
+#include "devgui/windows/Graphics/WindowGBuffer.h"
+#include "devgui/windows/Graphics/WindowPresets.h"
 
 #include "nn/oe.h"
 
@@ -81,10 +83,8 @@ void DevGuiDocking::update()
 
     ImGuiID dockLM = ImGui::DockBuilderSplitNode(mDockLeft, ImGuiDir_Left, 0.82f, nullptr, &mDockLeft);
     ImGui::DockBuilderSetNodeSize(dockLM, ImVec2(345.f, 695.f));
-
     ImGuiID dockLU = ImGui::DockBuilderSplitNode(dockLM, ImGuiDir_Up, 0.33f, nullptr, &dockLM);
     ImGui::DockBuilderSetNodeSize(dockLU, ImVec2(345.f, 231.6f));
-
     ImGuiID dockLD = ImGui::DockBuilderSplitNode(dockLM, ImGuiDir_Down, 0.5f, nullptr, &dockLM);
     ImGui::DockBuilderSetNodeSize(dockLD, ImVec2(345.f, 275.f));
 
@@ -94,6 +94,8 @@ void DevGuiDocking::update()
         ImGui::DockBuilderDockWindow(loadLogWindowName, dockLU);
         ImGui::DockBuilderDockWindow(paramEditorWindowName, dockLM);
         ImGui::DockBuilderDockWindow(infoWindowName, dockLD);
+        ImGui::DockBuilderDockWindow(presetsWindowName, dockLM);
+        ImGui::DockBuilderDockWindow(gbufferWindowName, dockLD);
         ImGui::DockBuilderDockWindow(actorBrowseWindowName, mDockRight);
     }
 

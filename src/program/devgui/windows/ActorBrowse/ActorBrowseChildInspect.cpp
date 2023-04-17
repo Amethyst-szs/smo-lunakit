@@ -34,23 +34,23 @@ void WindowActorBrowse::childActorInspector()
 
     ImGui::Spacing();
 
-    if (isInStageScene() && mSelectedActor->mPoseKeeper) {
-        mSelectedActorTarget->actor = mSelectedActor;
-        if (mSelectedActor->mModelKeeper) {
-            sead::BoundBox3f boundbox;
-            sead::Vector3f center;
-            alModelFunction::calcBoundingBox(&boundbox, mSelectedActor->mModelKeeper->mModelCtrl);
-            center = boundbox.getCenter();
-            mSelectedActorTarget->pos = &center;
-        }
+    // if (isInStageScene() && mSelectedActor->mPoseKeeper) {
+    //     mSelectedActorTarget->actor = mSelectedActor;
+    //     if (mSelectedActor->mModelKeeper) {
+    //         sead::BoundBox3f boundbox;
+    //         sead::Vector3f center;
+    //         alModelFunction::calcBoundingBox(&boundbox, mSelectedActor->mModelKeeper->mModelCtrl);
+    //         center = boundbox.getCenter();
+    //         mSelectedActorTarget->pos = &center;
+    //     }
         
-        static bool focus = false;
-        ImGui::Checkbox("Focus Camera", &focus);
-        if (focus) {
-            al::setCameraTarget(mSelectedActor, mSelectedActorTarget);
-            al::requestCancelCameraInterpole(mSelectedActor, 0);
-        } else al::resetCameraTarget(mSelectedActor, mSelectedActorTarget);
-    }
+    //     static bool focus = false;
+    //     ImGui::Checkbox("Focus Camera", &focus);
+    //     if (focus) {
+    //         al::setCameraTarget(mSelectedActor, mSelectedActorTarget);
+    //         al::requestCancelCameraInterpole(mSelectedActor, 0);
+    //     } else al::resetCameraTarget(mSelectedActor, mSelectedActorTarget);
+    // }
     
     if(ImGui::Button("Appear")) mSelectedActor->appear();
     ImGui::SameLine();
@@ -105,7 +105,7 @@ inline void WindowActorBrowse::drawActorInspectorTreeFlags(al::LiveActorFlag* fl
     if(ImGui::TreeNode("Flags")) {
         for(int i = 0; i < 12; i++) {
             ImGui::Checkbox(flagNames[i], (bool*)((uintptr_t)flag + i));
-            if(childWindowWidth >= 375.f && i % 2 == 0)
+            if(childWindowWidth >= (375.f * (*mParent->getCurrentScreenSizeMulti())) && i % 2 == 0)
                 ImGui::SameLine(childWindowWidth / 2.f);
         }
 

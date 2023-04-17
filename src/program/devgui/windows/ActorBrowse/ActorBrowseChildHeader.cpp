@@ -55,7 +55,7 @@ void WindowActorBrowse::childButtonHeader(al::Scene* scene)
         generateFilterList(scene);
     }
 
-    ImGui::SameLine(ImGui::GetWindowWidth() - 105);
+    ImGui::SameLine(ImGui::GetWindowWidth() - (105 * (*mParent->getCurrentScreenSizeMulti())));
 
     if (mSelectedActor && ImGui::Button("Close Actor"))
         mSelectedActor = nullptr;
