@@ -1,8 +1,14 @@
-#include "SettingsHooks.h"
+#include "HooksSettings.h"
+
+#include "al/util/NerveUtil.h"
+
+#include "game/Player/PlayerFunction.h"
 
 #include "rs/util.hpp"
 
 #include "helpers/GetHelper.h"
+#include "helpers/NrvFind/NrvFindHelper.h"
+#include "helpers/NrvFind/player/NrvPlayerActorHakoniwa.h"
 
 #include "logger/Logger.hpp"
 
@@ -41,10 +47,12 @@ HOOK_DEFINE_TRAMPOLINE(ControlHook) {
 
 HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
     static void Callback(PlayerActorHakoniwa *player) {
+        static bool wasNoclipOn = false;
         bool isNoclip = DevGuiManager::instance()->getSettings()->getStateByName("Noclip");
 
-        if(!isNoclip && !rs::isActiveDemo(player))
+        if (!isNoclip && wasNoclipOn)
             al::onCollide(player);
+        wasNoclipOn = isNoclip;
 
         if(!isNoclip) {
             Orig(player);
@@ -52,16 +60,20 @@ HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
         }
 
         if (isNoclip) {
-            static float speed = 25.0f;
-            static float speedMax = 150.0f;
-            static float vspeed = 20.0f;
+            static float speed = 20.0f;
+            static float speedMax = 250.0f;
+            static float vspeed = 10.0f;
             static float speedGain = 0.0f;
 
             sead::Vector3f *playerPos = al::getTransPtr(player);
             sead::Vector3f *cameraPos = al::getCameraPos(player, 0);
             sead::Vector2f *leftStick = al::getLeftStick(-1);
 
-            // Its better to do this here because loading zones reset this.
+            const al::Nerve* hipDropNrv = NrvFindHelper::getNerveAt(nrvPlayerActorHakoniwaHipDrop);
+            if(al::isNerve(player, hipDropNrv))
+                NrvFindHelper::setNerveAt(player, nrvPlayerActorHakoniwaWait);
+
+            player->exeJump();
             al::offCollide(player);
             al::setVelocityZero(player);
 
@@ -72,21 +84,19 @@ HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
             float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos->x);
             float vz = ((speed + speedGain) / d) * (playerPos->z - cameraPos->z);
 
-            if (!al::isPadHoldZR(-1)) {
-                playerPos->x -= leftStick->x * vz;
-                playerPos->z += leftStick->x * vx;
+            playerPos->x -= leftStick->x * vz;
+            playerPos->z += leftStick->x * vx;
 
-                playerPos->x += leftStick->y * vx;
-                playerPos->z += leftStick->y * vz;
+            playerPos->x += leftStick->y * vx;
+            playerPos->z += leftStick->y * vz;
 
-                if (al::isPadHoldX(-1)) speedGain -= 0.5f;
-                if (al::isPadHoldY(-1)) speedGain += 0.5f;
-                if (speedGain <= 0.0f) speedGain = 0.0f;
-                if (speedGain >= speedMax) speedGain = speedMax;
+            if (al::isPadHoldX(-1) || al::isPadHoldY(-1)) speedGain += 0.5f;
+            if (al::isPadHoldA(-1) || al::isPadHoldB(-1)) speedGain -= 0.5f;
+            if (speedGain <= 0.0f) speedGain = 0.0f;
+            if (speedGain >= speedMax) speedGain = speedMax;
 
-                if (al::isPadHoldZL(-1) || al::isPadHoldA(-1)) playerPos->y -= (vspeed + speedGain / 6);
-                if (al::isPadHoldB(-1)) playerPos->y += (vspeed + speedGain / 6);
-            }
+            if (al::isPadHoldZL(-1)) playerPos->y -= (vspeed + speedGain / 6);
+            if (al::isPadHoldZR(-1)) playerPos->y += (vspeed + speedGain / 6);
         }
 
         Orig(player);
@@ -134,7 +144,8 @@ HOOK_DEFINE_TRAMPOLINE(NoDamageHook){
     }
 };
 
-void exlSetupSettingsHooks() {
+void exlSetupSettingsHooks()
+{
     ControlHook::InstallAtSymbol("_ZN10StageScene7controlEv");
     NoclipMovementHook::InstallAtSymbol("_ZN19PlayerActorHakoniwa8movementEv");
     SaveHook::InstallAtSymbol("_ZNK10StageScene12isEnableSaveEv");
