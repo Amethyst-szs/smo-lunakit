@@ -21,10 +21,10 @@ DevGuiDocking::DevGuiDocking(DevGuiManager* parent)
 
 void DevGuiDocking::update()
 {
-    mScreenSize = ImGuiHelper::getScreenSize();
-
     ImGuiViewport* viewport = ImGui::GetMainViewport();
     ImGuiIO& io = ImGui::GetIO();
+
+    mScreenSize = io.DisplaySize;
 
     static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_PassthruCentralNode;
 

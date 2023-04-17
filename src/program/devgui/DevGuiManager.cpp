@@ -21,6 +21,7 @@
 #include "devgui/savedata/DevGuiSaveData.h"
 #include "devgui/settings/DevGuiSettings.h"
 #include "devgui/theme/DevGuiTheme.h"
+#include "devgui/DevGuiHooks.h"
 
 // All windows
 #include "devgui/windows/WindowGroup.h"

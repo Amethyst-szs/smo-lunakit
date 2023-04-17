@@ -94,24 +94,6 @@ void HomeMenuExtra::updateMenuDisplay()
         ImGui::EndMenu();
     }
 
-    // non-functional, breaks
-    static bool forceScreenSize = false;
-    static int screenX = 1600.f;
-    static int screenY = 900.f;
-    ImGui::Checkbox("Custom Screen Size", &forceScreenSize);
-
-    if (forceScreenSize) {
-        ImGui::SliderInt("X", &screenX, 1280.f, 1920.f);
-        ImGui::SliderInt("Y", &screenY, 720.f, 1080.f);
-
-        ImGuiHelper::forceScreenSize();
-        ImGuiHelper::setScreenX(screenX);
-        ImGuiHelper::setScreenY(screenY);
-        ImGui::GetIO().DisplaySize = ImGuiHelper::getScreenSize();
-    } else
-        ImGuiHelper::unforceScreenSize();
-
-
     static bool disableScroll = false;
     ImGui::Checkbox("Disable Scroll", &disableScroll);
 

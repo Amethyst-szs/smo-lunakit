@@ -130,6 +130,18 @@ public:
 
     static bool isReleasePadDown() { return isButtonRelease(nn::hid::NpadButton::Down); }
 
+    static bool isHoldStickL() { return isButtonHold(nn::hid::NpadButton::StickL); }
+
+    static bool isPressStickL() { return isButtonPress(nn::hid::NpadButton::StickL); }
+
+    static bool isReleaseStickL() { return isButtonRelease(nn::hid::NpadButton::StickL); }
+
+    static bool isHoldStickR() { return isButtonHold(nn::hid::NpadButton::StickR); }
+
+    static bool isPressStickR() { return isButtonPress(nn::hid::NpadButton::StickR); }
+
+    static bool isReleaseStickR() { return isButtonRelease(nn::hid::NpadButton::StickR); }
+
 
 private:
     static bool tryGetContState(nn::hid::NpadBaseState *state, ulong port);

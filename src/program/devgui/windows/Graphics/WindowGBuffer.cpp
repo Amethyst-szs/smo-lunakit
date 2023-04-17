@@ -4,6 +4,7 @@
 #include "game/GameData/GameDataFunction.h"
 #include "helpers.h"
 
+#include "devgui/DevGuiHooks.h"
 #include "devgui/DevGuiManager.h"
 
 WindowGBuffer::WindowGBuffer(DevGuiManager* parent, const char* winName, bool isActiveByDefault)

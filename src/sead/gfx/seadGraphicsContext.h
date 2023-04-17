@@ -311,40 +311,36 @@ namespace sead {
             return mStencilOpZPass;
         }
 
+        #ifdef cafe
+        
         Graphics::PolygonMode getPolygonModeFront() const
         {
-#ifdef cafe
+
             return mPolygonModeFront;
-#endif // cafe
+
         }
 
         Graphics::PolygonMode getPolygonModeBack() const
         {
-#ifdef cafe
             return mPolygonModeBack;
-#endif // cafe
         }
 
         bool getPolygonOffsetFrontEnable() const
         {
-#ifdef cafe
             return mPolygonOffsetFrontEnable;
-#endif // cafe
         }
 
         bool getPolygonOffsetBackEnable() const
         {
-#ifdef cafe
             return mPolygonOffsetBackEnable;
-#endif // cafe
         }
 
         bool getPolygonOffsetPointLineEnable() const
         {
-#ifdef cafe
             return mPolygonOffsetPointLineEnable;
-#endif // cafe
         }
+
+        #endif // cafe
 
         //private:
         bool mDepthTestEnable;

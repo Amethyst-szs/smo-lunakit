@@ -20,6 +20,7 @@
 #include "al/byaml/ByamlIter.h"
 
 #include "nn/fs/fs_directories.hpp"
+#include "nn/oe.h"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
 class ImVec2; // Forward declaration
@@ -56,6 +57,7 @@ private:
     DevGuiManager* mParent = nullptr;
 
     bool mIsRefreshTheme = true;
+    bool mIsDocked = false;
     int mThemeIdx = 0;
 
     s64 mEntryCount = -1;

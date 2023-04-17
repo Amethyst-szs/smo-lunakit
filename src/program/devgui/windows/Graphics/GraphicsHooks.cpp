@@ -1,3 +1,4 @@
+#include "devgui/DevGuiHooks.h"
 #include "GraphicsHooks.h"
 
 namespace al {

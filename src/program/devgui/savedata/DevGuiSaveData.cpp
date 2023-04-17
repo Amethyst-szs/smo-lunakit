@@ -57,9 +57,9 @@ void DevGuiSaveData::read()
     if(root.tryGetStringByKey(&theme, "Theme"))
         mParent->getTheme()->setWinThemeByName(theme);
 
-    float opacity;
-    if(root.tryGetFloatByKey(&opacity, "Opacity"))
-        ImGui::GetStyle().Alpha = opacity;
+    root.tryGetFloatByKey(&ImGui::GetStyle().Alpha, "Opacity");
+    root.tryGetFloatByKey(mParent->getScreenSizeMultiDocked(), "DockSize");
+    root.tryGetFloatByKey(mParent->getScreenSizeMultiHandheld(), "HandSize");
     
     if(root.isExistKey("ActiveWins")) {
         al::ByamlIter windows = root.getIterByKey("ActiveWins");
@@ -136,6 +136,8 @@ nn::Result DevGuiSaveData::write()
     file.addString("Version", GIT_VER);
     file.addString("Theme", mParent->getTheme()->getThemeName());
     file.addFloat("Opacity", ImGui::GetStyle().Alpha);
+    file.addFloat("DockSize", *mParent->getScreenSizeMultiDocked());
+    file.addFloat("HandSize", *mParent->getScreenSizeMultiHandheld());
     file.addBool("UpdateShh", UpdateHandler::instance()->isUpdateSilenced());
 
     // Open/close state of all windows

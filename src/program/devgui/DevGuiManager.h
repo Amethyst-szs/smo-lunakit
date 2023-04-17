@@ -19,6 +19,8 @@ Code Documentation: https://github.com/Amethyst-szs/smo-lunakit/wiki/Code-Docume
 #include "sead/container/seadPtrArray.h"
 #include "sead/heap/seadHeap.h"
 
+#include "nn/oe.h"
+
 // All popups
 #include "devgui/popups/PopupKeyboard.h"
 
@@ -32,8 +34,7 @@ class DevGuiDocking; // Forward declaration
 class DevGuiSettings; // Forward declaration
 class DevGuiSaveData; // Forward declaration
 class DevGuiTheme; // Forward declaration
-class DevGuiHooks;
-#include "devgui/DevGuiHooks.h"
+class DevGuiHooks; // Forward declaration
 
 class PrimitiveQueue; // Forward declaration
 class PrimMenuSettings; // Forward declaration
@@ -88,6 +89,10 @@ public:
     WindowGroup* getWindowGroup(int groupIdx) { return mWindowGroups.at(groupIdx); } // Get a window group at an idx
     int getWindowGroupCount() { return mWindowGroups.size(); } // Total window groups created
 
+    float* getCurrentScreenSizeMulti() { return nn::oe::GetOperationMode() ? &mScreenSizeDocked : &mScreenSizeHandheld; } // Get the current scale modifier for docked mode
+    float* getScreenSizeMultiDocked() { return &mScreenSizeDocked; } // Get the current scale modifier for docked mode
+    float* getScreenSizeMultiHandheld() { return &mScreenSizeHandheld; } // Get the current scale modifier for handheld mode
+
     sead::Heap* getHeap() { return mHeap; } // Heap where data is stored (same as the Stationed Heap)
     DevGuiDocking* getDockSystem() { return mDockSystem; } // Custom DockSpace system used by LunaKit for docking windows
     DevGuiSettings* getSettings() { return mSettings; } // Current settings (used in the settings home menu, written to save file)
@@ -106,6 +111,10 @@ private:
     bool mIsFirstStep = true; // Is this the first frame of the LunaKit display (retriggers each time it is opened)
     bool mIsRequestCursorShow = false; // Setting this bool to true will display the mouse cursor
     bool mIsDisplayWindows = true; // Are the windows hidden by pressing L-Stick?
+    bool mIsDisplayImGuiDemo = false; // Display the debug ImGui demo window for testing
+
+    float mScreenSizeDocked = 1.2f;
+    float mScreenSizeHandheld = 1.f;
 
     sead::Heap* mHeap = nullptr; // Uses the stationed heap
     DevGuiDocking* mDockSystem = nullptr; // Custom DockSpace system used by LunaKit for docking windows
@@ -113,17 +122,13 @@ private:
     PrimMenuSettings* mPrimitiveSettings = nullptr; // Settings for the prim home menu tab, written to save file
     DevGuiTheme* mTheme = nullptr; // Controls the theme, including reading data from the SD card
     DevGuiSaveData* mSaveData = nullptr; // Preferences and settings, written to the save file
+    DevGuiHooks *mHooks = nullptr; // Settings for hooks not stored in save file
 
     CustomStageManager* mCustomList = nullptr; // Custom stage plugin support
     PrimitiveQueue* mPrimQueue = nullptr; // Accessible primitive renderer queueing
 
     // Popups
     PopupKeyboard* mPopupKeyboard = nullptr; // On screen ImGui keyboard used by other modules
-
-    // Debug info
-    bool mIsDisplayImGuiDemo = false;
-
-    DevGuiHooks *mHooks = nullptr; // Settings for hooks, not stored in save file
 
     // Array of children classes (Manager holds each window and each home menu tab)
     sead::PtrArray<WindowBase> mWindows;

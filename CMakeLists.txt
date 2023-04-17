@@ -49,6 +49,9 @@ add_executable(subsdk9 ${SOURCES_ASM} ${SOURCES_C} ${SOURCES_H} ${SOURCES_CXX} $
 add_compile_definitions(EXL_LOAD_KIND=Module EXL_LOAD_KIND_ENUM=EXL_LOAD_KIND_MODULE)
 target_link_libraries(subsdk9 ${LOCAL_LIBRARIES})
 
+# generate header file for imgui shader binary
+target_embed_binaries(subsdk9 "${PROJECT_SOURCE_DIR}/imgui.bin")
+
 ## Prepare subsdk ld
 set(SUBSDK_LD_PATH ${CMAKE_CURRENT_SOURCE_DIR}/module/subsdk9.ld)
 execute_process(COMMAND uname OUTPUT_VARIABLE uname)

@@ -46,6 +46,14 @@ void DevGuiTheme::init()
 
 void DevGuiTheme::tryUpdateTheme()
 {
+    ImVec2 &dispSize = ImGui::GetIO().DisplaySize;
+    bool isDockedMode = !(dispSize.x == 1280 && dispSize.y == 720);
+
+    if (isDockedMode != mIsDocked) {
+        mIsDocked = isDockedMode;
+        mIsRefreshTheme = true;
+    }
+
     if(!mIsRefreshTheme || !mThemes)
         return;
 

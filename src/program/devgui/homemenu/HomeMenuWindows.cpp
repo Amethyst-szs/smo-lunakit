@@ -6,6 +6,7 @@
 
 #include "imgui.h"
 #include "imgui_internal.h"
+#include "imgui_backend/imgui_impl_nvn.hpp"
 
 HomeMenuWindows::HomeMenuWindows(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
     : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
@@ -25,9 +26,17 @@ void HomeMenuWindows::updateMenuDisplay()
     ImGui::SameLine();
     ImGui::Text("Layout");
     
-    ImGui::SetNextItemWidth(97.f);
+    ImGui::SetNextItemWidth(97.f * (*mParent->getCurrentScreenSizeMulti()));
     if(ImGui::SliderFloat("Opacity", &ImGui::GetStyle().Alpha, 0.7f, 1.f, "%.2f"))
         mParent->getSaveData()->queueSaveWrite();
+    
+    drawInterfaceSizeEditor(mParent->getScreenSizeMultiDocked(), "Dock Size");
+    if(ImGui::IsItemHovered())
+        ImGui::SetTooltip("Set the interface scaling factor for\nwhen the switch is in docked mode");
+
+    drawInterfaceSizeEditor(mParent->getScreenSizeMultiHandheld(), "Handheld Size");
+    if(ImGui::IsItemHovered())
+        ImGui::SetTooltip("Set the interface scaling factor for\nwhen the switch is in handheld mode");
 
     if (addMenu("Themes")) {
         ImGui::PushItemFlag(ImGuiItemFlags_SelectableDontClosePopup, true);
@@ -91,4 +100,19 @@ void HomeMenuWindows::updateMenuDisplay()
     }
 
     ImGui::PopItemFlag();
+}
+
+void HomeMenuWindows::drawInterfaceSizeEditor(float* sizePtr, const char* sliderName)
+{
+    ImGui::SetNextItemWidth(97.f  * (*mParent->getCurrentScreenSizeMulti()));
+
+    ImGui::SliderFloat(sliderName, sizePtr, 1.f, 1.5f, "%.1f");
+    if(ImGui::IsItemDeactivated()) {
+        ImVec2 &dispSize = ImGui::GetIO().DisplaySize;
+        bool isDockedMode = !(dispSize.x == 1280 && dispSize.y == 720);
+        ImguiNvnBackend::updateScale(isDockedMode, *mParent->getScreenSizeMultiDocked(), *mParent->getScreenSizeMultiHandheld());
+
+        mParent->getSaveData()->queueSaveWrite();
+        mParent->getTheme()->refreshTheme();
+    }
 }

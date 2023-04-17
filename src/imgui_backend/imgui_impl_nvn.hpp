@@ -15,6 +15,8 @@
 
 namespace ImguiNvnBackend {
 
+    typedef float Matrix44f[4][4];
+
     static constexpr int MaxTexDescriptors = 256 + 100;
     static constexpr int MaxSampDescriptors = 256 + 100;
 
@@ -77,7 +79,7 @@ namespace ImguiNvnBackend {
         nn::TimeSpanType lastTick;
         bool isInitialized;
 
-        bool isDisableInput = true;
+        Matrix44f mProjMatrix = {};
 
         CompiledData imguiShaderBinary;
 
@@ -101,6 +103,10 @@ namespace ImguiNvnBackend {
     void ShutdownBackend();
 
     void updateInput();
+
+    void updateProjection(ImVec2 dispSize);
+
+    void updateScale(bool isDocked, float dockedScale, float handheldScale);
 
     void newFrame();
 

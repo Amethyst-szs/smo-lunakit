@@ -4,6 +4,7 @@
 #include "game/GameData/GameDataFunction.h"
 #include "helpers/GetHelper.h"
 
+#include "devgui/DevGuiHooks.h"
 #include "devgui/DevGuiManager.h"
 
 WindowPresets::WindowPresets(DevGuiManager* parent, const char* winName, bool isActiveByDefault)

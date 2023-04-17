@@ -163,10 +163,8 @@ bool InputHelper::isMouseRelease(nn::hid::MouseButton button) {
 }
 
 void InputHelper::getMouseCoords(float *x, float *y) {
-    auto size = ImGuiHelper::getScreenSize();
-    *x = curMouseState.x / 1280.f * size.x;
-    *y = curMouseState.y / 720.f * size.y;
-    
+    *x = curMouseState.x;
+    *y = curMouseState.y;
 }
 
 void InputHelper::getScrollDelta(float *x, float *y) {
