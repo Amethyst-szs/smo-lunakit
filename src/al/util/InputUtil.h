@@ -168,9 +168,6 @@ bool isPadReleaseUiCursorDown(int);
 bool isPadReleaseUiCursorLeft(int);
 bool isPadReleaseUiCursorRight(int);
 
-const sead::Vector2f& getLeftStick(int);
-const sead::Vector2f& getRightStick(int);
-
 void getPadCrossDir(sead::Vector2f*, int);
 void getPadCrossDirSideways(sead::Vector2f*, int);
 

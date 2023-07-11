@@ -7,14 +7,15 @@
 #include "al/nerve/NerveStateCtrl.h"
 #include "al/util.hpp"
 
-#include "game/System/GameSystem.h"
+#include "game/GameData/GameDataFunction.h"
 #include "game/System/Application.h"
+#include "game/System/GameSystem.h"
 
 bool isInScene()
 {
-    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
-    if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
-        auto curScene = curSequence->mCurrentScene;
+    al::Sequence* mSequence = GameSystemFunction::getGameSystem()->mSequence;
+    if (mSequence && al::isEqualString(mSequence->getName().cstr(), "HakoniwaSequence")) {
+        auto curScene = mSequence->mCurrentScene;
 
         return curScene && curScene->mIsAlive;
     }
@@ -29,7 +30,7 @@ bool isInScene(al::Scene* curScene)
 
 bool isInStageScene()
 {
-    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
     if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
         auto gameSeq = (HakoniwaSequence*)curSequence;
         auto curScene = gameSeq->curScene;
@@ -47,12 +48,12 @@ bool isInStageScene(StageScene* curScene)
 
 al::Sequence* tryGetSequence()
 {
-    return GameSystemFunction::getGameSystem()->mCurSequence;
+    return GameSystemFunction::getGameSystem()->mSequence;
 }
 
 HakoniwaSequence* tryGetHakoniwaSequence()
 {
-    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
     if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
         return (HakoniwaSequence*)curSequence;
     }
@@ -62,7 +63,7 @@ HakoniwaSequence* tryGetHakoniwaSequence()
 
 al::Scene* tryGetScene()
 {
-    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
 
     if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
         auto curScene = curSequence->mCurrentScene;
@@ -96,7 +97,7 @@ al::Scene* tryGetScene(HakoniwaSequence* curSequence)
 
 StageScene* tryGetStageScene()
 {
-    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
     if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
         auto gameSeq = (HakoniwaSequence*)curSequence;
         auto curScene = gameSeq->curScene;
@@ -120,7 +121,7 @@ StageScene* tryGetStageScene(HakoniwaSequence* curSequence)
 
 GameDataHolder* tryGetGameDataHolder()
 {
-    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
     if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
         HakoniwaSequence* gameSequence = (HakoniwaSequence*)curSequence;
         return gameSequence->mGameDataHolder.mData;
@@ -141,7 +142,7 @@ GameDataHolder* tryGetGameDataHolder(StageScene* scene)
 
 GameDataHolderAccessor* tryGetGameDataHolderAccess()
 {
-    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
     if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
         HakoniwaSequence* gameSequence = (HakoniwaSequence*)curSequence;
         return &gameSequence->mGameDataHolder;
@@ -162,7 +163,7 @@ GameDataHolderAccessor* tryGetGameDataHolderAccess(StageScene* scene)
 
 PlayerActorBase* tryGetPlayerActor()
 {
-    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
     if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
         auto gameSeq = (HakoniwaSequence*)curSequence;
         auto curScene = gameSeq->curScene;
@@ -217,7 +218,7 @@ PlayerActorBase* tryGetPlayerActor(StageScene* scene)
 
 PlayerActorHakoniwa* tryGetPlayerActorHakoniwa()
 {
-    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
     if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
         auto gameSeq = (HakoniwaSequence*)curSequence;
         auto curScene = gameSeq->curScene;
@@ -253,7 +254,7 @@ PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(HakoniwaSequence* curSequence)
     return nullptr;
 }
 
-PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(StageScene* scene)
+PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(al::Scene* scene)
 {
     PlayerActorBase* playerBase = rs::getPlayerActor(scene);
     bool isYukimaru = !playerBase->getPlayerInfo();
@@ -262,4 +263,17 @@ PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(StageScene* scene)
         return (PlayerActorHakoniwa*)playerBase;
 
     return nullptr;
+}
+
+bool tryReloadStage() {
+    GameDataHolder* holder = tryGetGameDataHolder();
+    if(!holder)
+        return false;
+    StageScene* scene = tryGetStageScene();
+    if(!scene)
+        return false;
+
+    ChangeStageInfo stageInfo(holder, "start", GameDataFunction::getCurrentStageName(scene->mHolder), false, -1, ChangeStageInfo::SubScenarioType::UNK);
+    GameDataFunction::tryChangeNextStage(scene->mHolder, &stageInfo);
+    return true;
 }

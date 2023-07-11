@@ -33,8 +33,8 @@ public:
     void init(al::ActorInitInfo const&, char const*, int);
 
     void registerSubActor(al::LiveActor*, unsigned int);
-    void create(al::LiveActor*);
-    void tryCreate(al::LiveActor*, char const*, int);
+    static SubActorKeeper* create(al::LiveActor*);
+    static SubActorKeeper* tryCreate(al::LiveActor*, char const*, int);
 
     al::LiveActor* mRootActor;              //0x00
     int mMaxActorCount;                     //0x08

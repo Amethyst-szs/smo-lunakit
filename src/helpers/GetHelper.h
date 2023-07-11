@@ -16,6 +16,7 @@ bool isInScene();
 bool isInScene(al::Scene* scene);
 bool isInStageScene();
 bool isInStageScene(StageScene* scene);
+bool tryReloadStage();
 
 // Safe getters
 al::Sequence* tryGetSequence();
@@ -39,4 +40,4 @@ PlayerActorBase* tryGetPlayerActor(HakoniwaSequence* curSequence);
 PlayerActorBase* tryGetPlayerActor(StageScene* scene);
 PlayerActorHakoniwa* tryGetPlayerActorHakoniwa();
 PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(HakoniwaSequence* curSequence);
-PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(StageScene* scene);
+PlayerActorHakoniwa* tryGetPlayerActorHakoniwa(al::Scene* scene);

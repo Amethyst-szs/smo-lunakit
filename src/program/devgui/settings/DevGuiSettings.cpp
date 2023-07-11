@@ -24,6 +24,7 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
     registerNewSetting(true, true, "Autosave");
     registerNewSetting(true, true, "Display HUD");
     registerNewSetting(true, true, "Play Music");
+    registerNewSetting(false, true, "Always Manually Skip Cutscenes");
 
     Logger::log("   Created %i settings\n", mSettings.size());
 }

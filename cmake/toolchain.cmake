@@ -78,7 +78,7 @@ set_property(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS FALSE)
 
 add_definitions(-DSWITCH -D__SWITCH__ -D__RTLD_6XX__)
 
-set(ARCH "-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fpic -fvisibility=hidden")
+set(ARCH "-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fpic -fvisibility=default")
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -O3 -ffunction-sections -fdata-sections ${ARCH}" CACHE STRING "C flags")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_C_FLAGS} -Wno-invalid-offsetof -Wno-volatile -fno-exceptions -fno-asynchronous-unwind-tables -fno-unwind-tables" CACHE STRING "C++ flags")

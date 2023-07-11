@@ -95,6 +95,8 @@ namespace al
 
         virtual void updateCollider();
 
+        void initSubActorKeeper(al::SubActorKeeper*);
+
         const char *mActorName;                                // 0x48
         al::ActorPoseKeeperBase *mPoseKeeper;                  // 0x50
         al::ActorExecuteInfo *mLayoutExecuteInfo;              // 0x58

@@ -206,6 +206,7 @@ struct Vector4 : public Policies<T>::Vec4Base
 typedef Vector2<f32> Vector2f;
 typedef Vector3<f32> Vector3f;
 typedef Vector4<f32> Vector4f;
+typedef Vector2<int> Vector2i;
 
 template <>
 const Vector2<f32> Vector2<f32>::zero;

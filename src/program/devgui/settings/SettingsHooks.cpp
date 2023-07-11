@@ -12,6 +12,8 @@
 
 #include "logger/Logger.hpp"
 
+void exlSetupDemoHooks();
+
 namespace patch = exl::patch;
 namespace inst = exl::armv8::inst;
 namespace reg = exl::armv8::reg;
@@ -95,8 +97,8 @@ HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
             if (speedGain <= 0.0f) speedGain = 0.0f;
             if (speedGain >= speedMax) speedGain = speedMax;
 
-            if (al::isPadHoldZL(-1)) playerPos->y -= (vspeed + speedGain / 6);
-            if (al::isPadHoldZR(-1)) playerPos->y += (vspeed + speedGain / 6);
+            if (al::isPadHoldZL(-1)) playerPos->y -= (vspeed + speedGain / 3);
+            if (al::isPadHoldZR(-1)) playerPos->y += (vspeed + speedGain / 3);
         }
 
         Orig(player);
@@ -120,6 +122,7 @@ HOOK_DEFINE_TRAMPOLINE(CheckpointWarpHook) {
         return Orig(thisPtr);
     }
 };
+
 HOOK_DEFINE_TRAMPOLINE(GreyShineRefreshHook) {
     static bool Callback(GameDataHolderWriter writer, ShineInfo const* shineInfo) {
         if (DevGuiManager::instance()->getSettings()->getStateByName("Moon Refresh"))
@@ -128,6 +131,7 @@ HOOK_DEFINE_TRAMPOLINE(GreyShineRefreshHook) {
         return Orig(writer, shineInfo);
     }
 };
+
 HOOK_DEFINE_TRAMPOLINE(ButtonMotionRollHook) {
     static bool Callback(void* thisPtr) {
         if (DevGuiManager::instance()->getSettings()->getStateByName("Button Motion Roll"))
@@ -144,6 +148,7 @@ HOOK_DEFINE_TRAMPOLINE(NoDamageHook){
     }
 };
 
+
 void exlSetupSettingsHooks()
 {
     ControlHook::InstallAtSymbol("_ZN10StageScene7controlEv");
@@ -153,4 +158,5 @@ void exlSetupSettingsHooks()
     GreyShineRefreshHook::InstallAtSymbol("_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo");
     ButtonMotionRollHook::InstallAtSymbol("_ZNK23PlayerJudgeStartRolling21isTriggerRestartSwingEv");
     NoDamageHook::InstallAtSymbol("_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter");
+    exlSetupDemoHooks();
 }

@@ -1,9 +1,11 @@
 #include "fsHelper.h"
 #include "diag/assert.hpp"
 #include "init.h"
+#include "logger/Logger.hpp"
 
 namespace FsHelper {
     nn::Result writeFileToPath(void *buf, size_t size, const char *path) {
+        Logger::log("FsHelper Path:%s\n", path);
         nn::fs::FileHandle handle;
 
         if (isFileExist(path)) {
@@ -26,6 +28,24 @@ namespace FsHelper {
         nn::fs::CloseFile(handle);
 
         return 0;
+    }
+
+    nn::Result appendFileOnPath(void* buf, s64 pos, size_t size, const char* path) {
+        nn::fs::FileHandle handle = {};
+        if (!isFileExist(path)) {
+            if (nn::fs::CreateFile(path, size))
+                return 1;
+        }
+        if (nn::fs::OpenFile(&handle, path, nn::fs::OpenMode_Append)) {
+            return 1;
+        }
+        if (nn::fs::WriteFile(handle, pos, buf, size, nn::fs::WriteOption::CreateOption(nn::fs::WriteOptionFlag_Flush))) {
+            return 1;
+        }
+        nn::fs::CloseFile(handle);
+
+        return 0;
+
     }
 
     // make sure to free buffer after usage is done

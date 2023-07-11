@@ -1,6 +1,5 @@
 #pragma once
 
-#include "al/draw/ShaderHolder.h"
 #include "al/hio/HioNode.h"
 
 //#include "types.h"
@@ -59,7 +58,7 @@ namespace al {
     class MaterialLightDirector;
     class MaterialCategoryKeeper;
     class SkyDirector;
-    //class ShaderHolder;
+    class ShaderHolder;
     class OcclusionCullingJudge;
     class VignettingDrawer;
     class CameraBlurController;
