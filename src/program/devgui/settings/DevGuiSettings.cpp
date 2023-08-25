@@ -20,11 +20,12 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
     registerNewSetting(false, true, "Clear Wall Jump Limits");
     registerNewSetting(false, true, "Button Motion Roll");
     registerNewSetting(false, true, "Moon Refresh");
+    registerNewSetting(false, true, "Disable Kingdom Moon Lock");
+    registerNewSetting(false, true, "Always Manually Skip Cutscenes");
     registerNewSetting(false, true, "Always Allow Checkpoints");
     registerNewSetting(true, true, "Autosave");
     registerNewSetting(true, true, "Display HUD");
     registerNewSetting(true, true, "Play Music");
-    registerNewSetting(false, true, "Always Manually Skip Cutscenes");
 
     Logger::log("   Created %i settings\n", mSettings.size());
 }

@@ -14,12 +14,34 @@ void PrimitiveTypeLine::render()
 {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
     renderer->drawLine(mPoints[0], mPoints[1], mColor);
+
+    if(mPointsSize[0] > 0.f)
+        renderer->drawSphere4x8(mPoints[0], mPointsSize[0], mColor - sead::Color4f(0.f, 0.f, 0.f, 0.25f));
+    if(mPointsSize[1] > 0.f)
+        renderer->drawSphere4x8(mPoints[1], mPointsSize[1], mColor - sead::Color4f(0.f, 0.f, 0.f, 0.25f));
 }
 
 void PrimitiveTypeAxis::render()
 {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
     renderer->drawAxis(mTranslation, mSize);
+}
+
+void PrimitiveTypeBox::render()
+{
+    sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
+
+    sead::Matrix34f mtx = sead::Matrix34f::ident;
+    mtx.setTranslation(mPos);
+
+    renderer->setModelMatrix(mtx);
+
+    sead::PrimitiveDrawer::CubeArg shapeAreaSolid(sead::Vector3f::zero, mSize, mFillColor);
+    sead::PrimitiveDrawer::CubeArg shapeAreaWire(sead::Vector3f::zero, mSize, mFrameColor);
+    renderer->drawCube(shapeAreaSolid);
+    renderer->drawWireCube(shapeAreaWire);
+
+    renderer->setModelMatrix(sead::Matrix34f::ident);
 }
 
 void PrimitiveTypeArea::render()

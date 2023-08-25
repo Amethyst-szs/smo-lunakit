@@ -134,6 +134,17 @@ HOOK_DEFINE_TRAMPOLINE(GreyShineRefreshHook) {
     }
 };
 
+HOOK_DEFINE_TRAMPOLINE(DisableMoonLockHook) {
+    static int Callback(GameDataHolder *thisPtr, bool *isCrashList, int worldID) {
+        int lockSize = Orig(thisPtr, isCrashList, worldID);
+
+        if (DevGuiManager::instance()->getSettings()->getStateByName("Disable Kingdom Moon Lock"))
+            return 0;
+        
+        return lockSize;
+    }
+};
+
 HOOK_DEFINE_TRAMPOLINE(ButtonMotionRollHook) {
     static bool Callback(void* thisPtr) {
         if (DevGuiManager::instance()->getSettings()->getStateByName("Button Motion Roll"))
@@ -158,6 +169,7 @@ void exlSetupSettingsHooks()
     SaveHook::InstallAtSymbol("_ZNK10StageScene12isEnableSaveEv");
     CheckpointWarpHook::InstallAtSymbol("_ZNK9MapLayout22isEnableCheckpointWarpEv");
     GreyShineRefreshHook::InstallAtSymbol("_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo");
+    DisableMoonLockHook::InstallAtSymbol("_ZNK14GameDataHolder18findUnlockShineNumEPbi");
     ButtonMotionRollHook::InstallAtSymbol("_ZNK23PlayerJudgeStartRolling21isTriggerRestartSwingEv");
     NoDamageHook::InstallAtSymbol("_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter");
     exlSetupDemoHooks();

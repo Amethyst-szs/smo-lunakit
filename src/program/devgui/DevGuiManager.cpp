@@ -64,7 +64,7 @@ void DevGuiManager::createElements()
     createWindow<WindowInfo>(infoWindowName, true);
     createWindow<WindowActorBrowse>(actorBrowseWindowName, false);
     createWindow<WindowFPS>(fpsWindowName, true);
-    createWindow<WindowTAS>(tasWindowName, true);
+    createWindow<WindowTAS>(tasWindowName, false);
 
     WindowGroup* memoryGroup = createWindowGroup("Memory Tools", 2);
     createWindow<WindowLoadLog>(loadLogWindowName, false, memoryGroup);

@@ -38,7 +38,7 @@ private:
     s64 mEntryCount;
     nn::fs::DirectoryEntry* mEntries = nullptr;
     bool* mActiveReplays = nullptr;
-    int mMaxGhostNum = 8;
+    int mMaxGhostNum = 1;
     sead::PtrArray<Ghost> ghosts;
     al::Scene* mScene = nullptr;
     PlayerActorHakoniwa* mPlayer = nullptr;

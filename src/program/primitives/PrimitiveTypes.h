@@ -54,16 +54,19 @@ public:
 
 class PrimitiveTypeLine : public PrimitiveTypeBase {
 public:
-    PrimitiveTypeLine(sead::Vector3f point1, sead::Vector3f point2, sead::Color4f col)
+    PrimitiveTypeLine(sead::Vector3f point1, sead::Vector3f point2, sead::Color4f col, float pointSize1, float pointSize2)
         : PrimitiveTypeBase(PrimitiveTypes::PRIM_LINE)
     {
         mPoints[0] = point1;
         mPoints[1] = point2;
+        mPointsSize[0] = pointSize1;
+        mPointsSize[1] = pointSize2;
         mColor = col;
     }
     ~PrimitiveTypeLine() override {}
 
     sead::Vector3f mPoints[2];
+    float mPointsSize[2];
     sead::Color4f mColor;
 
     void render() override;
@@ -81,6 +84,26 @@ public:
 
     sead::Vector3f mTranslation;
     float mSize;
+
+    void render() override;
+};
+
+class PrimitiveTypeBox : public PrimitiveTypeBase {
+public:
+    PrimitiveTypeBox(sead::Vector3f pos, sead::Vector3f size, sead::Color4f frame, sead::Color4f fill)
+        : PrimitiveTypeBase(PrimitiveTypes::PRIM_AREA)
+    {
+        mPos = pos;
+        mSize = size;
+        mFrameColor = frame;
+        mFillColor = fill;
+    }
+    ~PrimitiveTypeBox() override {}
+
+    sead::Vector3f mPos;
+    sead::Vector3f mSize;
+    sead::Color4f mFrameColor;
+    sead::Color4f mFillColor;
 
     void render() override;
 };
