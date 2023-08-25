@@ -133,14 +133,14 @@ HOOK_DEFINE_TRAMPOLINE(GetTexBufferHook) {
 };
 
 void exlSetupGraphicsHooks() {
-    InitGraphicsInfoHook::InstallAtOffset(0x9D0294);
-    RegisterPresetHook::InstallAtOffset(0x8764C0);
-    RequestPresetHook::InstallAtOffset(0x876FF0);
-    RequestCubeMapHook::InstallAtOffset(0xA02F3C);
-    exl::patch::CodePatcher p(0x96F848);
+    InitGraphicsInfoHook::InstallAtSymbol("_ZN2al22initGraphicsSystemInfoEPNS_5SceneEPKci");
+    RegisterPresetHook::InstallAtSymbol("_ZN2al22GraphicsPresetDirector14registerPresetEPKcS2_S2_b");
+    RequestPresetHook::InstallAtSymbol("_ZN2al22GraphicsPresetDirector13requestPresetEPKciiiRKN4sead7Vector3IfEE");
+    RequestCubeMapHook::InstallAtSymbol("_ZN2al19ShaderCubeMapKeeper14requestCubeMapEiPKcS2_");
+    exl::patch::CodePatcher p("_ZN2al3Sky14initFromPresetERKNS_13ActorInitInfoE", 0x50);
     p.BranchLinkInst((void*)SkyInitHook);
 
-    GetTexBufferHook::InstallAtOffset(0x9FEB70);
-    exl::patch::CodePatcher render(0x0087FF74);
-    render.BranchLinkInst((void*) ViewportApplyHook);
+    GetTexBufferHook::InstallAtSymbol("_ZNK2al12GBufferArray21getGBufLightBufferTexEv");
+    p.Seek("_ZNK2al12ViewRenderer8drawViewERKNS_8ViewInfoEPNS_14DrawSystemInfoERKNS_10ProjectionERKN4sead6CameraEPKN3agl12RenderBufferERKNS9_8ViewportEbbb", 0x199C);
+    p.BranchLinkInst((void*) ViewportApplyHook);
 }

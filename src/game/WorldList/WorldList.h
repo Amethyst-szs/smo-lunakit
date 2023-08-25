@@ -61,6 +61,8 @@ public:
 
     void tryFindHintTransByScenarioNo(sead::Vector3f *, int, int);
 
+    sead::PtrArray<WorldListEntry> getWorldList() { return mWorldList; };
+
     sead::PtrArray<WorldListEntry> mWorldList;
     void *field_10;
     void *field_18;

@@ -1,4 +1,5 @@
 #include "PlayerHelper.h"
+#include "game/Player/PlayerAnimator.h"
 #include "al/util/OtherUtil.h"
 #include "game/GameData/GameDataFunction.h"
 

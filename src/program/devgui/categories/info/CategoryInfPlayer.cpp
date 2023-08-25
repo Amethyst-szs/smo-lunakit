@@ -6,6 +6,7 @@
 #include "game/Player/PlayerActorBase.h"
 #include "game/Player/PlayerActorHakoniwa.h"
 #include "game/Player/PlayerFunction.h"
+#include "game/Player/PlayerAnimator.h"
 
 #include "rs/util.hpp"
 #include "helpers/GetHelper.h"
@@ -54,7 +55,7 @@ void CategoryInfPlayer::updateCatDisplay()
     al::Nerve* playerNerve = player->getNerveKeeper()->getCurrentNerve();
     playerName = abi::__cxa_demangle(typeid(*player).name(), nullptr, nullptr, &status);
     
-    if(player->getNerveKeeper()->mStateCtrl) {
+    if (player->getNerveKeeper()->mStateCtrl) {
         al::State* state = player->getNerveKeeper()->mStateCtrl->findStateInfo(playerNerve);
         if(state) {
             al::Nerve* stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
@@ -63,7 +64,7 @@ void CategoryInfPlayer::updateCatDisplay()
         }
     }
 
-    if(playerName) {
+    if (playerName) {
         ImGui::Text("Class: %s", playerName);
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("Type of Player Actor\nHakoniwa is normal Mario\nYukimaru is Shiverian Racer");

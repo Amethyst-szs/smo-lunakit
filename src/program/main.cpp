@@ -8,7 +8,6 @@
 
 #include "lib.hpp"
 #include "imgui_backend/imgui_impl_nvn.hpp"
-#include "patches.hpp"
 #include "fs.h"
 
 #include "logger/Logger.hpp"
@@ -70,7 +69,9 @@
 
 #include "ExceptionHandler.h"
 #include "ghost/GhostManager.h"
+#include "random/seadGlobalRandom.h"
 #include "smo-tas/TAS.h"
+#include "xxhash.h"
 
 namespace patch = exl::patch;
 namespace inst = exl::armv8::inst;
@@ -87,6 +88,48 @@ sead::TextWriter *gTextWriter;
 void drawLunaKit() {
     DevGuiManager::instance()->updateDisplay();
 }
+
+void getSymbolName(char* buffer, uintptr_t address) {
+    nn::diag::GetSymbolName(buffer, 0x100, address);
+}
+
+HOOK_DEFINE_TRAMPOLINE(RandomGetU32) {
+    static uint Callback(sead::Random* random) {
+        if (random != sead::GlobalRandom::instance())
+            return Orig(random);
+        register handler::stack_frame* framePointer asm("x29");
+        register uintptr_t startingLink asm("x30");
+
+        handler::stack_frame* fp = framePointer;
+        uintptr_t lr = startingLink - exl::util::GetMainModuleInfo().m_Text.m_Start;
+
+//        auto state = XXH64_createState();
+
+//        XXH64_reset(state, 0x420);
+//        XXH64_update(state, &lr, sizeof(uintptr_t));
+
+
+        while (fp) {
+            MemoryInfo memInfo;
+            u32 pageInfo;
+            if (R_FAILED(svcQueryMemory(&memInfo, &pageInfo, (uintptr_t)fp)) || (memInfo.perm & Perm_R) == 0)
+                break;
+
+//            handler::stack_frame curFrame = *fp;
+//            curFrame.fp -= exl::util::mem_layout::s_Stack.m_Start;
+//            XXH64_update(state, &curFrame.lr, sizeof(uintptr_t));
+            lr += fp->lr - exl::util::GetMainModuleInfo().m_Text.m_Start;
+            fp = fp->fp;
+        }
+
+//        auto hash = XXH64_digest(state);
+//        XXH64_freeState(state);
+
+//        Logger::log("0x%llx     %s\n", lr, sead::ThreadMgr::instance()->getCurrentThread()->getName().cstr());
+
+        return Orig(random);
+    }
+};
 
 HOOK_DEFINE_TRAMPOLINE(SceneMovementHook) {
     static void Callback(al::Scene* scene) {
@@ -211,6 +254,10 @@ HOOK_DEFINE_REPLACE(ReplaceSeadPrint) {
     }
 };
 
+HOOK_DEFINE_REPLACE(DisableSocketInit) {
+    static void Callback() {}
+};
+
 HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
     static void Callback(GameSystem *thisPtr) {
         sead::Heap *curHeap = sead::HeapMgr::instance()->getCurrentHeap();
@@ -233,6 +280,12 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
 
 
         Logger::instance().init(lkHeap).value;
+        DisableSocketInit::InstallAtSymbol("_ZN2nn6socket10InitializeEPvmmi");
+        RandomGetU32::InstallAtSymbol("_ZN4sead6Random6getU32Ev");
+
+        // DevGui cheats
+        DevGuiHooks::exlInstallDevGuiHooks(); // Located in devgui/DevGuiHooks.cpp
+
         ResourceLoadLogger::createInstance(lkHeap);
         ResourceLoadLogger::instance()->init(lkHeap);
 
@@ -245,8 +298,8 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
         // create GhostManager instance on LunaKit heap
         GhostManager::createInstance(lkHeap);
 
-        DevGuiManager::instance()->init(lkHeap);
         UpdateHandler::instance()->init(updaterHeap);
+        DevGuiManager::instance()->init(lkHeap);
 
         sead::TextWriter::setDefaultFont(sead::DebugFontMgrJis1Nvn::instance());
 
@@ -285,8 +338,6 @@ extern "C" void exl_main(void *x0, void *x1) {
         return false;
     });
 
-    runCodePatches();
-
     GameSystemInit::InstallAtSymbol("_ZN10GameSystem4initEv");
     ReplaceSeadPrint::InstallAtSymbol("_ZN4sead6system5PrintEPKcz");
 
@@ -304,8 +355,6 @@ extern "C" void exl_main(void *x0, void *x1) {
     // Debug Text Writer Drawing
     UpdateLunaKit::InstallAtSymbol("_ZNK16HakoniwaSequence8drawMainEv");
 
-    // DevGui cheats
-    DevGuiHooks::exlInstallDevGuiHooks(); // Located in devgui/DevGuiHooks.cpp
 
     // ImGui Hooks
 #if IMGUI_ENABLED

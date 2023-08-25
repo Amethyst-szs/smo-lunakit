@@ -142,4 +142,10 @@ public:
 
     static void addCoin(GameDataHolderWriter, int);
 
+    static int getWorldNum(GameDataHolderAccessor* accessor);
+
+    static const char* getWorldDevelopName(GameDataHolderAccessor accessor, int worldId);
+
+//    static const char* get
+
 };

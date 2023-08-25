@@ -137,7 +137,7 @@ GameDataHolder* tryGetGameDataHolder(HakoniwaSequence* curSequence)
 
 GameDataHolder* tryGetGameDataHolder(StageScene* scene)
 {
-    return scene->mHolder.mData;
+    return scene->mGameDataHolder.mData;
 }
 
 GameDataHolderAccessor* tryGetGameDataHolderAccess()
@@ -158,7 +158,7 @@ GameDataHolderAccessor* tryGetGameDataHolderAccess(HakoniwaSequence* curSequence
 
 GameDataHolderAccessor* tryGetGameDataHolderAccess(StageScene* scene)
 {
-    return &scene->mHolder;
+    return &scene->mGameDataHolder;
 }
 
 PlayerActorBase* tryGetPlayerActor()
@@ -273,7 +273,7 @@ bool tryReloadStage() {
     if(!scene)
         return false;
 
-    ChangeStageInfo stageInfo(holder, "start", GameDataFunction::getCurrentStageName(scene->mHolder), false, -1, ChangeStageInfo::SubScenarioType::UNK);
-    GameDataFunction::tryChangeNextStage(scene->mHolder, &stageInfo);
+    ChangeStageInfo stageInfo(holder, "start", GameDataFunction::getCurrentStageName(scene->mGameDataHolder), false, -1, ChangeStageInfo::SubScenarioType::UNK);
+    GameDataFunction::tryChangeNextStage(scene->mGameDataHolder, &stageInfo);
     return true;
 }

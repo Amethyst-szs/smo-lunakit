@@ -174,7 +174,7 @@ void HomeMenuPrims::renderHitSensorCategory(al::Scene* scene, PrimitiveQueue* qu
         hitSensorTypes |= isEntryEnabled << (i - 1);
     }
 
-    HitSensorRenderTypes hitSensorTypesEnum = (HitSensorRenderTypes)hitSensorTypes;
+    auto hitSensorTypesEnum = (HitSensorRenderTypes)hitSensorTypes;
 
     for(int i = 0; i < group->mActorCount; i++) {
         al::LiveActor* actor = group->mActors[i];

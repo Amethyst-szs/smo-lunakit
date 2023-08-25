@@ -1,5 +1,5 @@
 #include "program/devgui/categories/edit/CategoryCoins.h"
-
+#include "game/StageScene/StageSceneLayout.h"
 #include "helpers/GetHelper.h"
 
 #include "imgui.h"
@@ -20,7 +20,7 @@ void CategoryCoins::updateCat()
 
         holder->mGameDataFile->mCoinCount = mTargetCoins;
         if(scene)
-            scene->mSceneLayout->coinCounter->updateCountImmidiate();
+            scene->mStageSceneLayout->coinCounter->updateCountImmidiate();
     }
 }
 

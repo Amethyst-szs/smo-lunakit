@@ -222,6 +222,7 @@ void TAS::exeWait() {
 }
 
 void TAS::exeWaitUpdate() {
+    Logger::log("TAS Wait Update\n");
     al::setNerve(this, &nrvTASUpdate);
 }
 

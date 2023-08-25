@@ -1,9 +1,9 @@
 #include "GhostManager.h"
+#include "PlayerAnims.h"
 #include "al/util/NerveUtil.h"
 #include "devgui/DevGuiManager.h"
 #include "helpers/GetHelper.h"
 #include "smo-tas/TAS.h"
-#include "PlayerAnims.h"
 #include "actors/Puppet/PuppetActor.h"
 
 namespace {

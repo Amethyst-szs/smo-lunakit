@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../armv8.hpp"
+#include "ro.h"
 #include "stream_patcher.hpp"
 
 namespace exl::patch {
@@ -13,6 +14,7 @@ namespace exl::patch {
 
         public:
         inline CodePatcher(uintptr_t start) : StreamPatcher(start) {}
+        inline CodePatcher(const char* symbol, uintptr_t offset = 0x0) : StreamPatcher(symbol, offset) {}
 
         inline void WriteInst(InstBitSet inst) {
             Write<InstBitSet>(inst);

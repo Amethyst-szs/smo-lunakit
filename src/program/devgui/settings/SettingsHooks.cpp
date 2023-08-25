@@ -1,4 +1,6 @@
 #include "SettingsHooks.h"
+#include <game/Layouts/MapMini.h>
+#include <game/StageScene/StageSceneLayout.h>
 
 #include "al/util/NerveUtil.h"
 
@@ -31,9 +33,9 @@ HOOK_DEFINE_TRAMPOLINE(ControlHook) {
         if(player && set->getStateByName("Clear Wall Jump Limits"))
             player->mPlayerWallActionHistory->reset();
 
-        if(!set->getStateByName("Display HUD") && scene->mSceneLayout->isWait()) {
-            scene->mSceneLayout->end();
-            MapMini* compass = scene->mSceneLayout->mMapMiniLyt;
+        if(!set->getStateByName("Display HUD") && scene->mStageSceneLayout->isWait()) {
+            scene->mStageSceneLayout->end();
+            MapMini* compass = scene->mStageSceneLayout->mMapMiniLyt;
             if (compass->mIsAlive) compass->end();
         }
 

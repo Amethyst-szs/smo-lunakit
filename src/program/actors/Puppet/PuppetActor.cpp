@@ -18,8 +18,10 @@
 #include "logger/Logger.hpp"
 #include "math/seadQuat.h"
 #include "math/seadVector.h"
+#include "ro.h"
 #include "rs/util/SensorUtil.h"
 #include "util/modules.hpp"
+#include "helpers/FunctionHelper.h"
 #include <cmath>
 #include <cstddef>
 #include <typeinfo>
@@ -60,8 +62,11 @@ void PuppetActor::init(al::ActorInitInfo const& initInfo)
 
     al::LiveActor* normalModel = new al::LiveActor("Normal");
 
-    auto* initMario =
-        (initMarioModelCommon*)(exl::util::modules::GetTargetOffset(0x444028));
+    uintptr_t address = FunctionHelper::findEndOfFunc("_ZN14PlayerFunction19initMarioModelActorEPN2al9LiveActorERKNS0_13ActorInitInfoEPKcS7_PNS0_11AudioKeeperEb");
+    auto* initMario = (initMarioModelCommon*)(address+4);
+
+    if (!initMario)
+        EXL_ABORT(8008, "Cannot find initMarioModelCommon!");
 
     mCostumeInfo = initMario(normalModel, initInfo, bodyName, capName, 0, false, nullptr, false, false);
 

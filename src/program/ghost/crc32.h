@@ -5,8 +5,8 @@
 #include <array>
 #include <algorithm>
 #include <set>
-#include <stdint.h>
-#include <stdio.h>
+#include <cstdint>
+#include <cstdio>
 #include <ranges>
 
 // Credits to Shadow for making a majority of this code for me!

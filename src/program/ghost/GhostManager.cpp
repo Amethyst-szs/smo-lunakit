@@ -5,6 +5,7 @@
 #include "helpers/fsHelper.h"
 #include "logger/Logger.hpp"
 #include "smo-tas/TAS.h"
+#include "game/Player/PlayerAnimator.h"
 
 namespace {
     NERVE_DEF(GhostManager, Record);
