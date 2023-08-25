@@ -7,8 +7,15 @@
 #include "game/Player/PlayerFunction.h"
 
 #include "helpers/GetHelper.h"
+#include "helpers/FunctionHelper.h"
 
 #include "imgui.h"
+#include "logger/Logger.hpp"
+
+static WorldList* getWorldList(GameDataHolderAccessor accessor) {
+//    Logger::log("Offset: %x\n", FunctionHelper::readLdrOffset("_ZN16GameDataFunction19getWorldScenarioNumE22GameDataHolderAccessori"));
+    return *(WorldList**)((uintptr_t)accessor.mData + FunctionHelper::readLdrOffset("_ZN16GameDataFunction19getWorldScenarioNumE22GameDataHolderAccessori"));
+}
 
 HomeMenuWorlds::HomeMenuWorlds(DevGuiManager* parent, const char* menuName, bool isDisplayInListByDefault)
     : HomeMenuBase(parent, menuName, isDisplayInListByDefault)
@@ -23,21 +30,21 @@ void HomeMenuWorlds::updateMenuDisplay()
         return;
     }
 
-    GameDataHolderAccessor* holder = tryGetGameDataHolderAccess(scene);
-
-    s32 worldID = GameDataFunction::getCurrentWorldId(*holder);
-    WorldListEntry* worldEntry = holder->mData->mWorldList->mWorldList.at(worldID);
-    const char* worldName = holder->mData->mWorldList->getWorldDevelopName(worldID);
+    GameDataHolderAccessor holder(scene);
+    s32 worldID = GameDataFunction::getCurrentWorldId(holder);
+    WorldListEntry* worldEntry = getWorldList(holder)->mWorldList.at(worldID);
+    const char* worldName = getWorldList(holder)->getWorldDevelopName(worldID);
 
     // Draw the top components to select kindom and scenario
     drawKingdomPicker(worldName, scene, holder);
-    if(GameDataFunction::isMainStage(*holder))
+    if(GameDataFunction::isMainStage(holder))
         drawScenarioPicker(*worldEntry, scene, holder);
 
     if(addMenu("Sub-Areas")) {
         ImGui::BeginChild("Sub-Area Child", ImVec2(525, 325), false, ImGuiWindowFlags_NoBackground);
 
         for (auto &dbEntry: worldEntry->mStageNames) {
+//            Logger::log("Stage name: %s\n", dbEntry.mStageName.cstr());
             bool isDemo = al::isEqualString(dbEntry.mStageCategory, "Demo");
 
             if(ImGui::MenuItem(dbEntry.mStageName.cstr(), dbEntry.mStageCategory.cstr(), false, !isDemo))
@@ -49,13 +56,13 @@ void HomeMenuWorlds::updateMenuDisplay()
     }
 }
 
-inline void HomeMenuWorlds::drawKingdomPicker(const char* worldName, StageScene* scene, GameDataHolderAccessor* holder)
+inline void HomeMenuWorlds::drawKingdomPicker(const char* worldName, StageScene* scene, GameDataHolderAccessor holder)
 {
     ImGui::SetNextItemWidth(140.f);
     if(ImGui::BeginCombo("Kingdom", worldName, ImGuiComboFlags_HeightLargest)) {
         ImGui::SetWindowFontScale(1.66f);
 
-        for (auto &entry: holder->mData->mWorldList->mWorldList) {
+        for (auto &entry: getWorldList(holder)->mWorldList) {
             if(ImGui::Selectable(entry.mWorldDevelopName, false)) {
                 warpToStage(holder, entry.mMainStageName, -1);
             }
@@ -65,7 +72,7 @@ inline void HomeMenuWorlds::drawKingdomPicker(const char* worldName, StageScene*
     }
 }
 
-inline void HomeMenuWorlds::drawScenarioPicker(WorldListEntry& entry, StageScene* scene, GameDataHolderAccessor* holder)
+inline void HomeMenuWorlds::drawScenarioPicker(WorldListEntry& entry, StageScene* scene, GameDataHolderAccessor holder)
 {
     PlayerActorBase* player = tryGetPlayerActor(scene);
     if(player && mScenarioPicker == -1)
@@ -95,7 +102,7 @@ inline const char* HomeMenuWorlds::getScenarioType(WorldListEntry& entry, int sc
     return "Unknown";
 }
 
-void HomeMenuWorlds::warpToStage(GameDataHolderAccessor* data, const char* stageName, int scenario)
+void HomeMenuWorlds::warpToStage(GameDataHolderAccessor data, const char* stageName, int scenario)
 {
     PlayerActorBase* player = tryGetPlayerActor();
     if(!player)
@@ -104,6 +111,6 @@ void HomeMenuWorlds::warpToStage(GameDataHolderAccessor* data, const char* stage
     if(PlayerFunction::isPlayerDeadStatus(player))
         return;
     
-    ChangeStageInfo stageInfo(data->mData, "start", stageName, false, scenario, ChangeStageInfo::SubScenarioType::UNK);
-    GameDataFunction::tryChangeNextStage(*data, &stageInfo);
+    ChangeStageInfo stageInfo(data.mData, "start", stageName, false, scenario, ChangeStageInfo::SubScenarioType::UNK);
+    GameDataFunction::tryChangeNextStage(data, &stageInfo);
 }

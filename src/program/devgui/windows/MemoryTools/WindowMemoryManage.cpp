@@ -29,7 +29,7 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
 
 void WindowMemoryManage::drawSimpleHeapView()
 {
-    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mCurSequence;
+    al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
     al::Scene* scene = nullptr;
 
     if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {

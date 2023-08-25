@@ -36,12 +36,21 @@ namespace exl::patch {
         inline ptrdiff_t RelativeAddressFromPointer(void* ptr) const {
             return AddrFromRoPointer(ptr) - m_Current;
         }
+        static uintptr_t GetSymbol(const char* symbol) {
+            uintptr_t address = 0;
+            R_ABORT_UNLESS(nn::ro::LookupSymbol(&address, symbol));
+
+            return address;
+        }
         
         uintptr_t m_Start;
         uintptr_t m_Current;
 
         public:
         inline StreamPatcher(uintptr_t start) : m_Start(start), m_Current(start) {}
+        inline StreamPatcher(const char* symbol, uintptr_t offset) {
+            m_Current = m_Start = AddrFromRo(GetSymbol(symbol) + offset);
+        }
 
         template<typename T>
         inline void Write(T v) {
@@ -74,6 +83,10 @@ namespace exl::patch {
         /* Absolute address. */
         inline void Seek(void* ptr) {
             SeekRel(RelativeAddressFromPointer(ptr));
+        }
+        /* Absolute address. */
+        inline void Seek(const char* symbol, uintptr_t offset = 0x0) {
+            SeekRel(AddrFromRo(GetSymbol(symbol) + offset));
         }
 
         inline ~StreamPatcher() {

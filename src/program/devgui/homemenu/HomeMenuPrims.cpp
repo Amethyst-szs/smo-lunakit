@@ -148,6 +148,10 @@ void HomeMenuPrims::renderAreaCategory(al::Scene* scene, PrimitiveQueue* queue)
     
     if(mSettings->getSettingEntryByName("CameraArea2D")->isTrue())
         queue->pushArea("CameraArea2D", {0.6f, 0.6f, 0.f, 0.65f}, {0.3f, 0.3f, 0.f, 0.005f});
+
+    if(mSettings->getSettingEntryByName("SnapMoveArea")->isTrue()) {
+        queue->pushArea("SnapMoveArea", {0.79f, 0.0f, 1.0f, 0.75f}, {0.f, 0.f, 0.f, 0.01f});
+    }
 }
 
 void HomeMenuPrims::renderHitSensorCategory(al::Scene* scene, PrimitiveQueue* queue)
@@ -170,7 +174,7 @@ void HomeMenuPrims::renderHitSensorCategory(al::Scene* scene, PrimitiveQueue* qu
         hitSensorTypes |= isEntryEnabled << (i - 1);
     }
 
-    HitSensorRenderTypes hitSensorTypesEnum = (HitSensorRenderTypes)hitSensorTypes;
+    auto hitSensorTypesEnum = (HitSensorRenderTypes)hitSensorTypes;
 
     for(int i = 0; i < group->mActorCount; i++) {
         al::LiveActor* actor = group->mActors[i];

@@ -82,6 +82,7 @@ private:
     inline void drawActorInspectorTreeRail(al::RailRider* railRide);
     inline void drawActorInspectorTreeSensor(al::HitSensorKeeper* sensor);
     inline void drawActorInspectorTreeSubActor(al::SubActorKeeper* subActorKeep);
+    inline void drawActorInspectorTreeKuriboDebug(al::LiveActor* actor);
 
     /*
         WindowActorBrowseUtil.cpp functions

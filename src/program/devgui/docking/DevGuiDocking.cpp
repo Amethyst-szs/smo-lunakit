@@ -13,6 +13,7 @@
 #include "devgui/windows/MemoryTools/WindowLoadLog.h"
 #include "devgui/windows/Graphics/WindowGBuffer.h"
 #include "devgui/windows/Graphics/WindowPresets.h"
+#include "devgui/windows/TAS/WindowTAS.h"
 
 #include "nn/oe.h"
 
@@ -97,6 +98,7 @@ void DevGuiDocking::update()
         ImGui::DockBuilderDockWindow(presetsWindowName, dockLM);
         ImGui::DockBuilderDockWindow(gbufferWindowName, dockLD);
         ImGui::DockBuilderDockWindow(actorBrowseWindowName, mDockRight);
+        ImGui::DockBuilderDockWindow(tasWindowName, dockLM);
     }
 
     ImGui::DockBuilderFinish(mDockSpace);

@@ -8,6 +8,7 @@ namespace al {
 
 Resource* findOrCreateResource(const sead::SafeString&, const char*);
 void* findOrCreateResourceCategory(sead::SafeString const&,sead::SafeString const&,char const*);
+ActorResource* findOrCreateActorResourceWithAnimResource(al::ActorResourceHolder*, const char*, const char*, const char*, bool);
 
 }
 
@@ -52,11 +53,3 @@ int getPlayerJumpCount(GameDataHolderAccessor);
 int getPlayerThrowCapCount(GameDataHolderAccessor);
 
 }  // namespace rs
-
-// FIXME this is absolutely wrong here and should be made its own class, not a namespace
-// used in resource/AchievementHolder.cpp
-namespace GameDataFunction {
-
-int getTotalShineNum(GameDataHolderAccessor, int);
-
-}

@@ -35,6 +35,7 @@ PrimMenuSettings::PrimMenuSettings(DevGuiManager* parent)
     registerNewSetting(false, "WaterArea", PrimMenuCat_AREA, true);
     registerNewSetting(false, "2DMoveArea", PrimMenuCat_AREA, true);
     registerNewSetting(false, "CameraArea2D", PrimMenuCat_AREA, true);
+    registerNewSetting(false, "SnapMoveArea", PrimMenuCat_AREA, true);
 
     // Hit sensor category
     registerNewSetting(false, "Draw Sensors", PrimMenuCat_HITSENSOR, false);

@@ -17,6 +17,7 @@
 
 #include "update/UpdateHandler.h"
 
+#include "ghost/GhostManager.h"
 #include "imgui.h"
 
 void DevGuiSaveData::init(DevGuiManager* parent)
@@ -60,6 +61,11 @@ void DevGuiSaveData::read()
     root.tryGetFloatByKey(&ImGui::GetStyle().Alpha, "Opacity");
     root.tryGetFloatByKey(mParent->getScreenSizeMultiDocked(), "DockSize");
     root.tryGetFloatByKey(mParent->getScreenSizeMultiHandheld(), "HandSize");
+
+    if (GhostManager::instance())
+        root.tryGetIntByKey(GhostManager::instance()->getMaxGhosts(), "MaxGhosts");
+    else
+        Logger::log("Could not load MaxGhosts. Is GhostManager null?\n");
     
     if(root.isExistKey("ActiveWins")) {
         al::ByamlIter windows = root.getIterByKey("ActiveWins");
@@ -128,7 +134,7 @@ nn::Result DevGuiSaveData::write()
 {
     mWriteStream->rewind();
 
-    al::ByamlWriter file = al::ByamlWriter(al::getSequenceHeap(), false);
+    al::ByamlWriter file = al::ByamlWriter(mHeap, false);
     
     file.pushHash();
 
@@ -139,6 +145,7 @@ nn::Result DevGuiSaveData::write()
     file.addFloat("DockSize", *mParent->getScreenSizeMultiDocked());
     file.addFloat("HandSize", *mParent->getScreenSizeMultiHandheld());
     file.addBool("UpdateShh", UpdateHandler::instance()->isUpdateSilenced());
+    file.addInt("MaxGhosts", *GhostManager::instance()->getMaxGhosts());
 
     // Open/close state of all windows
     file.pushHash("ActiveWins");

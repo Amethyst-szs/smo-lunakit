@@ -1,4 +1,6 @@
 #include "SettingsHooks.h"
+#include <game/Layouts/MapMini.h>
+#include <game/StageScene/StageSceneLayout.h>
 
 #include "al/util/NerveUtil.h"
 
@@ -11,6 +13,8 @@
 #include "helpers/NrvFind/player/NrvPlayerActorHakoniwa.h"
 
 #include "logger/Logger.hpp"
+
+void exlSetupDemoHooks();
 
 namespace patch = exl::patch;
 namespace inst = exl::armv8::inst;
@@ -29,9 +33,9 @@ HOOK_DEFINE_TRAMPOLINE(ControlHook) {
         if(player && set->getStateByName("Clear Wall Jump Limits"))
             player->mPlayerWallActionHistory->reset();
 
-        if(!set->getStateByName("Display HUD") && scene->mSceneLayout->isWait()) {
-            scene->mSceneLayout->end();
-            MapMini* compass = scene->mSceneLayout->mMapMiniLyt;
+        if(!set->getStateByName("Display HUD") && scene->mStageSceneLayout->isWait()) {
+            scene->mStageSceneLayout->end();
+            MapMini* compass = scene->mStageSceneLayout->mMapMiniLyt;
             if (compass->mIsAlive) compass->end();
         }
 
@@ -95,8 +99,8 @@ HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
             if (speedGain <= 0.0f) speedGain = 0.0f;
             if (speedGain >= speedMax) speedGain = speedMax;
 
-            if (al::isPadHoldZL(-1)) playerPos->y -= (vspeed + speedGain / 6);
-            if (al::isPadHoldZR(-1)) playerPos->y += (vspeed + speedGain / 6);
+            if (al::isPadHoldZL(-1)) playerPos->y -= (vspeed + speedGain / 3);
+            if (al::isPadHoldZR(-1)) playerPos->y += (vspeed + speedGain / 3);
         }
 
         Orig(player);
@@ -120,6 +124,7 @@ HOOK_DEFINE_TRAMPOLINE(CheckpointWarpHook) {
         return Orig(thisPtr);
     }
 };
+
 HOOK_DEFINE_TRAMPOLINE(GreyShineRefreshHook) {
     static bool Callback(GameDataHolderWriter writer, ShineInfo const* shineInfo) {
         if (DevGuiManager::instance()->getSettings()->getStateByName("Moon Refresh"))
@@ -128,6 +133,7 @@ HOOK_DEFINE_TRAMPOLINE(GreyShineRefreshHook) {
         return Orig(writer, shineInfo);
     }
 };
+
 HOOK_DEFINE_TRAMPOLINE(ButtonMotionRollHook) {
     static bool Callback(void* thisPtr) {
         if (DevGuiManager::instance()->getSettings()->getStateByName("Button Motion Roll"))
@@ -144,6 +150,7 @@ HOOK_DEFINE_TRAMPOLINE(NoDamageHook){
     }
 };
 
+
 void exlSetupSettingsHooks()
 {
     ControlHook::InstallAtSymbol("_ZN10StageScene7controlEv");
@@ -153,4 +160,5 @@ void exlSetupSettingsHooks()
     GreyShineRefreshHook::InstallAtSymbol("_ZN16GameDataFunction10isGotShineE22GameDataHolderAccessorPK9ShineInfo");
     ButtonMotionRollHook::InstallAtSymbol("_ZNK23PlayerJudgeStartRolling21isTriggerRestartSwingEv");
     NoDamageHook::InstallAtSymbol("_ZN16GameDataFunction12damagePlayerE20GameDataHolderWriter");
+    exlSetupDemoHooks();
 }

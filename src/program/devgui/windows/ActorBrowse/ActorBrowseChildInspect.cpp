@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "al/model/ModelFunction.h"
 #include "helpers/ImGuiHelper.h"
+#include "game/Actors/KuriboHack.h"
 
 #include <cxxabi.h>
 
@@ -63,6 +64,7 @@ void WindowActorBrowse::childActorInspector()
     drawActorInspectorTreeSensor(mSelectedActor->mHitSensorKeeper);
     drawActorInspectorTreeRail(mSelectedActor->getRailRider());
     drawActorInspectorTreeSubActor(mSelectedActor->mSubActorKeeper);
+    drawActorInspectorTreeKuriboDebug(mSelectedActor);
 
     ImGui::EndChild();
 }
@@ -90,7 +92,7 @@ inline void WindowActorBrowse::drawActorInspectorTreePose(al::ActorPoseKeeperBas
         ImGuiHelper::Vector3Slide("Front", "Pose Keeper Front", pose->getFrontPtr(), 1.f, true);
         ImGuiHelper::Vector3Slide("Up", "Pose Keeper Up", pose->getUpPtr(), 1.f, true);
         ImGuiHelper::Vector3Slide("Gravity", "Pose Keeper Gravity", pose->getGravityPtr(), 1.f, true);
-        ImGuiHelper::Vector3Drag("Eular", "Pose Keeper Rotation", pose->getRotatePtr(), 1.f, 360.f);
+        ImGuiHelper::Vector3Drag("Euler", "Pose Keeper Rotation", pose->getRotatePtr(), 1.f, 360.f);
         ImGuiHelper::Quat("Pose Keeper Quaternion", pose->getQuatPtr());
 
         ImGui::TreePop();
@@ -125,9 +127,32 @@ inline void WindowActorBrowse::drawActorInspectorTreeNrvs(al::NerveKeeper* nrvKe
 
         ImGui::Text("Nerve: %s", nrvName2 + 23 + strlen(actorClass->cstr()) + 3);
         ImGui::Text("Step: %i", nrvKeep->mStep);
+        free(nrvName2);
+
+        if (!nrvKeep->mStateCtrl) {
+            ImGui::TreePop();
+            return;
+        }
+        auto state = nrvKeep->mStateCtrl->mCurrentState;
+        if (!state) {
+            ImGui::TreePop();
+            return;
+        }
+
+        char* stateName = abi::__cxa_demangle(typeid(*state->mStateBase).name(), nullptr, nullptr, &status);
+        ImGui::Text("State: %s", stateName);
+        if (!state->mStateBase->getNerveKeeper()) {
+            free(stateName);
+            ImGui::TreePop();
+            return;
+        }
+        auto stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
+        char* stateNrv = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
+        ImGui::Text("State Nrv: %s", stateNrv + strlen("(anonymous namespace)::") + strlen(stateName) + strlen("nrv"));
+        free(stateName);
+        free(stateNrv);
 
         ImGui::TreePop();
-        free(nrvName2);
     }
 }
 
@@ -194,6 +219,22 @@ inline void WindowActorBrowse::drawActorInspectorTreeSubActor(al::SubActorKeeper
                 ImGui::SetScrollY(0.f);
             }
         }
+
+        ImGui::TreePop();
+    }
+}
+
+inline void WindowActorBrowse::drawActorInspectorTreeKuriboDebug(al::LiveActor* actor) {
+    if (!al::isEqualString(typeid(*actor).name(), typeid(KuriboHack).name())) {
+        return;
+    }
+    auto kuribo = static_cast<KuriboHack*>(actor);
+    if (ImGui::TreeNode("Kuribo-Debug")) {
+
+        ImGui::Text("Detach Timer: %d", kuribo->mDetachTimer);
+        ImGui::Text("KuriboTowerIdx: %d", kuribo->mKuriboTowerIdx);
+        ImGui::Checkbox("field_2e0", &kuribo->unused_2e0);
+        ImGui::Text("ColliderTimer: %u", kuribo->mColliderTimer);
 
         ImGui::TreePop();
     }

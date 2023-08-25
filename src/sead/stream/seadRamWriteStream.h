@@ -7,7 +7,7 @@ namespace sead {
 class RamStreamSrc : public StreamSrc {
 public:
     RamStreamSrc(void *buffer, u32 size);
-    ~RamStreamSrc();
+    virtual ~RamStreamSrc();
 
     u32 read(void *ptr,u32 size) override;
     u32 write(void const*,u32) override;

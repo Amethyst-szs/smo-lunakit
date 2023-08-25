@@ -20,6 +20,7 @@ namespace al {
     void hideModel(LiveActor *);
     void hideModelIfShow(const LiveActor*);
     void showModelIfHide(const LiveActor*);
+    void showModel(LiveActor*);
     void setModelAlphaMask(const LiveActor*, float);
     void resetPosition(const LiveActor*);
     void onSyncClippingSubActor(LiveActor*, const LiveActor*);
@@ -40,12 +41,27 @@ namespace al {
     void turnToTarget(LiveActor*, const al::LiveActor *, float);
 
     void expandClippingRadiusByShadowLength(LiveActor *,sead::Vector3f *, float);
+    void setEffectFollowPosPtr(al::IUseEffectKeeper*, char const*, sead::Vector3<float> const*);
+    void invalidateOcclusionQuery(al::LiveActor*);
 
     void initJointLocalXRotator(const LiveActor *,const float *,const char *);
     void initJointLocalYRotator(const LiveActor *,const float *,const char *);
     void initJointLocalZRotator(const LiveActor *,const float *,const char *);
 
     void expandClippingRadiusByShadowLength(LiveActor*, sead::Vector3f*, float);
+
+
+    void initActorSceneInfo(al::LiveActor*, al::ActorInitInfo const&);
+    void initActorSRT(al::LiveActor*, al::ActorInitInfo const&);
+    void initActorModelKeeper(al::LiveActor*, al::ActorInitInfo const&, const char*, int, const char*);
+    void initPartialSklAnim(al::LiveActor*, int, int, int);
+    void addPartialSklAnimPartsListRecursive(al::LiveActor*, const char*, int);
+    bool tryGetActorInitFileIter(ByamlIter*, al::Resource const*, const char*, const char*);
+    void initActorEffectKeeper(al::LiveActor*, al::ActorInitInfo const&, const char*);
+    void initActorActionKeeper(al::LiveActor*, al::ActorResource const*, char const*, char const*);
+    void initActorClipping(al::LiveActor*, al::ActorInitInfo const&);
+    void onSyncAppearSubActor(al::LiveActor*, al::LiveActor const*);
+    al::Resource* getModelResource(al::LiveActor const*);
 
     void initActorPoseTRSV(al::LiveActor *);
     void initActorPoseTRMSV(al::LiveActor *);
@@ -172,8 +188,11 @@ namespace al {
     bool listenStageSwitchOnAppear(IUseStageSwitch *, al::FunctorBase const &functor);
 }
 
+class SklAnimRetargettingInfo;
+
 namespace rs {
 
 sead::Vector3f* getPlayerPos(const al::LiveActor*);
+SklAnimRetargettingInfo* createPlayerSklRetargettingInfo(al::LiveActor*, sead::Vector3f const&);
 
 }

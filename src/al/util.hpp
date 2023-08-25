@@ -552,12 +552,6 @@ namespace al {
 
     al::AreaObj *tryFindAreaObj(al::LiveActor const *, const char *);
 
-    void tryGetAreaObjArg(int *, al::AreaObj const *, const char *);
-
-    void tryGetAreaObjArg(float *, al::AreaObj const *, const char *);
-
-    void tryGetAreaObjArg(bool *, al::AreaObj const *, const char *);
-
     void tryGetAreaObjStringArg(const char **, al::AreaObj const *, const char *);
 
     void offCollide(al::LiveActor *);
@@ -602,7 +596,7 @@ namespace al {
 
     void slerpQuat(sead::Quatf *result, sead::Quatf const &from, sead::Quatf const &to, float rate);
 
-    // dither anim stuff
+    // dither playerAnim stuff
 
     bool isExistDitherAnimator(al::LiveActor const *);
 

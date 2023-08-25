@@ -35,8 +35,8 @@ void CategoryOutfit::updateCat()
         if(!scene)
             return;
         
-        ChangeStageInfo stageInfo(holder, "start", GameDataFunction::getCurrentStageName(scene->mHolder), false, -1, ChangeStageInfo::SubScenarioType::UNK);
-        GameDataFunction::tryChangeNextStage(scene->mHolder, &stageInfo);
+        ChangeStageInfo stageInfo(holder, "start", GameDataFunction::getCurrentStageName(scene->mGameDataHolder), false, -1, ChangeStageInfo::SubScenarioType::UNK);
+        GameDataFunction::tryChangeNextStage(scene->mGameDataHolder, &stageInfo);
     }
 }
 

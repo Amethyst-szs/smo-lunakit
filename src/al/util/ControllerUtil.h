@@ -3,6 +3,8 @@
 #include "sead/math/seadVector.h"
 
 namespace al {
+    bool isPadTriggerAnyABXY(int port);
+
     bool isPadTriggerUp(int port);
     bool isPadTriggerDown(int port);
     bool isPadTriggerLeft(int port);

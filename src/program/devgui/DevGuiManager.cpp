@@ -33,6 +33,7 @@
 #include "devgui/windows/MemoryTools/WindowLoadLog.h"
 #include "devgui/windows/Graphics/WindowGBuffer.h"
 #include "devgui/windows/Graphics/WindowPresets.h"
+#include "devgui/windows/TAS/WindowTAS.h"
 
 // All tabs on the bar the top of the screen
 #include "devgui/homemenu/HomeMenuFile.h"
@@ -63,6 +64,7 @@ void DevGuiManager::createElements()
     createWindow<WindowInfo>(infoWindowName, true);
     createWindow<WindowActorBrowse>(actorBrowseWindowName, false);
     createWindow<WindowFPS>(fpsWindowName, true);
+    createWindow<WindowTAS>(tasWindowName, true);
 
     WindowGroup* memoryGroup = createWindowGroup("Memory Tools", 2);
     createWindow<WindowLoadLog>(loadLogWindowName, false, memoryGroup);
@@ -137,7 +139,7 @@ void DevGuiManager::update()
     }
 
     // Toggle display/hide of all anchored windows
-    if(mIsActive && al::isPadTriggerPressLeftStick(-1)) {
+    if(mIsActive && InputHelper::isPressStickL()) {
         mIsDisplayWindows = !mIsDisplayWindows;
         Logger::log("Window display %s\n", mIsDisplayWindows ? "Enabled" : "Disabled");
     }

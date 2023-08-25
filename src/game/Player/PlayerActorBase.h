@@ -1,67 +1,50 @@
 #pragma once
-/**
- * @file PlayerActorBase.h
- * @brief base class for PlayerActor
-* Vtable loc: 1D77980
- */
-
+#include <al/LiveActor/LiveActor.h>
 #include "PlayerHackKeeper.h"
-#include "al/LiveActor/LiveActor.h"
-#include "game/Interfaces/IUsePlayerCollision.h"
-#include "game/Interfaces/IUsePlayerHack.h"
-#include "game/Player/PlayerCollider.h"
-#include "game/Player/PlayerInfo.h"
-#include "game/Player/PlayerInitInfo.h"
-#include "game/Player/PlayerPuppet.h"
+
+class PlayerInitInfo;
+class IUsePlayerCollision;
+class PlayerInfo;
+class PlayerPuppet;
+class PlayerAnimator;
+
+namespace al {
+    class DemoActor;
+}
 
 class PlayerActorBase : public al::LiveActor, public IUsePlayerHack {
 public:
-    PlayerActorBase(char const*);
-
-    virtual void movement(void) override;
-    virtual void init(al::ActorInitInfo const&) override;
-    virtual void initPlayer(al::ActorInitInfo const&, PlayerInitInfo const&);
-    virtual int getPortNo(void);
-    virtual sead::Matrix34f *getViewMtx(void) const;
-    virtual IUsePlayerCollision* getPlayerCollision(void) const;
+    sead::Matrix34f* mViewMtx;
+    s32 mPortNo;
+    virtual void movement() override;
+    virtual void initPlayer(al::ActorInitInfo const&,PlayerInitInfo const&);
+    void init(const al::ActorInitInfo& info) override;
+    virtual IUsePlayerCollision* getPlayerCollision() const;
     virtual PlayerHackKeeper* getPlayerHackKeeper() const override;
-
-    virtual bool isEnableDemo(void);
-    virtual void startDemo(void);
-    virtual void endDemo(void);
-
-    virtual void startDemoPuppetable(void);
-    virtual void endDemoPuppetable(void);
-
-    virtual void startDemoShineGet(void);
-    virtual void endDemoShineGet(void);
-
-    virtual void startDemoMainShineGet(void);
-    virtual void endDemoMainShineGet(void);
-
-    virtual void startDemoHack(void);
-    virtual void endDemoHack(void);
-
-    virtual void startDemoKeepBind(void);
-    virtual void noticeDemoKeepBindExecute(void);
-    virtual void endDemoKeepBind(void);
-
-    virtual void startDemoKeepCarry(void);
-    virtual void endDemoKeepCarry(void);
-
-    virtual void getDemoActor(void);
-    virtual void getDemoAnimator(void);
-
-    virtual bool isDamageStopDemo(void) const;
-
-    virtual PlayerPuppet *getPlayerPuppet(void);
-    virtual PlayerInfo *getPlayerInfo(void) const;
-
-    virtual bool checkDeathArea(void);
-    virtual void sendCollisionMsg(void);
-
-    virtual bool receivePushMsg(al::SensorMsg const*,al::HitSensor *,al::HitSensor *,float);
-
-    sead::Matrix34f* mViewMtx;  // 0x110
-    int mPortNo; // 0x118
+    virtual bool isEnableDemo();
+    virtual void startDemo();
+    virtual void endDemo();
+    virtual void startDemoPuppetable();
+    virtual void endDemoPuppetable();
+    virtual void startDemoShineGet();
+    virtual void endDemoShineGet();
+    virtual void startDemoMainShineGet();
+    virtual void endDemoMainShineGet();
+    virtual void startDemoHack();
+    virtual void endDemoHack();
+    virtual void startDemoKeepBind();
+    virtual void noticeDemoKeepBindExecute();
+    virtual void endDemoKeepBind();
+    virtual void startDemoKeepCarry();
+    virtual void endDemoKeepCarry();
+    virtual al::DemoActor* getDemoActor();
+    virtual PlayerAnimator* getDemoAnimator();
+    virtual bool isDamageStopDemo() const;
+    virtual PlayerPuppet* getPlayerPuppet();
+    virtual PlayerInfo* getPlayerInfo() const;
+    virtual s32 getPortNo() const;
+    virtual void getViewMtx();
+    virtual void checkDeathArea();
+    virtual void sendCollisionMsg();
+    virtual void receivePushMsg(al::SensorMsg const*,al::HitSensor *,al::HitSensor *,float);
 };

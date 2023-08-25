@@ -56,15 +56,9 @@ namespace al {
 
     al::LiveActor *getSubActor(al::LiveActor const *, int);
 
-    sead::Vector3f *getVelocity(al::LiveActor const *);
-
-    sead::Quatf *getQuat(al::LiveActor const *);
-
     int getPlayerControllerPort(int);
 
     char const *getActionName(al::LiveActor const *);
-
-    float getActionFrame(al::LiveActor const *);
 
     sead::Vector3f *getCameraPos(al::IUseCamera const *, int);
 
@@ -143,8 +137,6 @@ namespace al {
     bool tryGetAreaObjArg(float *, al::AreaObj const *, const char *);
 
     bool tryGetAreaObjArg(bool *, al::AreaObj const *, const char *);
-
-    bool tryGetAreaObjStringArg(const char **, al::AreaObj const *, const char *);
 
     bool tryGetArg(int *, const al::ActorInitInfo &, const char *);
 

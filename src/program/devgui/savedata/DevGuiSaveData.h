@@ -35,7 +35,7 @@ public:
         LunaKit Save Data Management
     */
 
-    void read(); // Read can technically be called at any time, but it only recommended during initalization
+    void read(); // Read can technically be called at any time, but it only recommended during initialization
     void queueSaveWrite() // Called by any function looking to save LunaKit! Will start a 4 second timer before saving
     {
         mIsQueueSave = true;
