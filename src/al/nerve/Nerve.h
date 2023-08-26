@@ -19,7 +19,7 @@ namespace al
     class Nerve
     {
     public:
-        virtual void execute(NerveKeeper *) = 0;
-        virtual void executeOnEnd(NerveKeeper *) const;
+        virtual void execute(NerveKeeper* keeper) const = 0;
+        virtual void executeOnEnd(NerveKeeper* keeper) const;
     };
 };

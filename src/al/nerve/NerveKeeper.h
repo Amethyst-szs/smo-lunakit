@@ -2,30 +2,34 @@
 
 #include "Nerve.h"
 
-namespace al
-{
+namespace al {
     class NerveStateCtrl;
     class NerveActionCtrl;
 
-    class NerveKeeper
-    {
+    class NerveKeeper {
     public:
-        NerveKeeper(al::IUseNerve *, const al::Nerve *, int);
+        al::IUseNerve *mParent = nullptr;
+        const al::Nerve *mCurrentNerve = nullptr;
+        const al::Nerve *mNextNerve = nullptr;
+        s32 mStep = 0;
+        al::NerveStateCtrl *mStateCtrl = nullptr;
+        al::NerveActionCtrl *mActionCtrl = nullptr;
 
-        void initNerveAction(al::NerveActionCtrl*);
-
-        void update();
-
+    public:
+        NerveKeeper(al::IUseNerve *parent, const al::Nerve *nerve, s32 maxStates);
+        void initNerveAction(al::NerveActionCtrl *actionCtrl);
+        void setNerve(const al::Nerve *nextNerve);
         void tryChangeNerve();
-        void setNerve(const al::Nerve *);
-        al::Nerve* getCurrentNerve() const;
+        void update();
+        const al::Nerve *getCurrentNerve() const;
+        s32 getCurrentStep() const { return mStep; }
+        bool isNewNerve() const { return mNextNerve != nullptr; }
+        al::NerveStateCtrl *getStateCtrl() const { return mStateCtrl; }
+        al::NerveActionCtrl *getActionCtrl() const { return mActionCtrl; }
 
-        al::IUseNerve* mParent;             // 0x00
-        const al::Nerve* mPrevNrv;          // 0x08
-        const al::Nerve* mNrv;              // 0x10
-        int mStep;                          // 0x18
-        int padding;                        // 0x1c
-        al::NerveStateCtrl* mStateCtrl;     // 0x20
-        al::NerveActionCtrl* mActionCtrl;   // 0x28
+        template<typename T>
+        T *getParent() {
+            return static_cast<T *>(mParent);
+        }
     };
-};
+}

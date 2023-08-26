@@ -4,27 +4,17 @@
 #include "al/nerve/Nerve.h"
 #include "al/nerve/NerveStateBase.h"
 
-#define NERVE_HEADER(Class, Action) \
-    class Class##Nrv##Action : public al::Nerve { \
-    public: \
-        void execute(al::NerveKeeper*) override; \
-    }; \
-    Class##Nrv##Action nrv##Class##Action;
+#define NERVE_IMPL_(Class, Action, ActionFunc)                                                                                                       \
+    class Class##Nrv##Action : public al::Nerve {                                                                                                    \
+    public:                                                                                                                                          \
+        void execute(al::NerveKeeper* keeper) const override {                                                                                       \
+            (keeper->getParent<Class>())->exe##ActionFunc();                                                                                         \
+        }                                                                                                                                            \
+    };
 
-#define NERVE_IMPL_(Class, Action, ActionFunc)                                                     \
-    void Class##Nrv##Action::execute(al::NerveKeeper* keeper) {                                    \
-        static_cast<Class*>(keeper->mParent)->exe##ActionFunc();                                   \
-    }
 #define NERVE_IMPL(Class, Action) NERVE_IMPL_(Class, Action, Action)
 
-#define NERVE_DEF(CLASS, ACTION)                                                                   \
-    struct CLASS##Nrv##ACTION : public al::Nerve {                                                 \
-        inline void execute(al::NerveKeeper* keeper) override                                      \
-        {                                                                                          \
-            static_cast<CLASS*>(keeper->mParent)->exe##ACTION();                                   \
-        };                                                                                         \
-    };                                                                                             \
-    const CLASS##Nrv##ACTION nrv##CLASS##ACTION
+#define NERVE_MAKE(Class, Action) Class##Nrv##Action Action;
 
 namespace al
 {

@@ -4,8 +4,6 @@
     Head to src/program/devgui/DevGuiManager.h to get started!
 */
 
-
-
 #include "lib.hpp"
 #include "imgui_backend/imgui_impl_nvn.hpp"
 #include "fs.h"
@@ -103,21 +101,12 @@ HOOK_DEFINE_TRAMPOLINE(RandomGetU32) {
         handler::stack_frame* fp = framePointer;
         uintptr_t lr = startingLink - exl::util::GetMainModuleInfo().m_Text.m_Start;
 
-//        auto state = XXH64_createState();
-
-//        XXH64_reset(state, 0x420);
-//        XXH64_update(state, &lr, sizeof(uintptr_t));
-
-
         while (fp) {
             MemoryInfo memInfo;
             u32 pageInfo;
             if (R_FAILED(svcQueryMemory(&memInfo, &pageInfo, (uintptr_t)fp)) || (memInfo.perm & Perm_R) == 0)
                 break;
 
-//            handler::stack_frame curFrame = *fp;
-//            curFrame.fp -= exl::util::mem_layout::s_Stack.m_Start;
-//            XXH64_update(state, &curFrame.lr, sizeof(uintptr_t));
             lr += fp->lr - exl::util::GetMainModuleInfo().m_Text.m_Start;
             fp = fp->fp;
         }
