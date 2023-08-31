@@ -1,25 +1,20 @@
 #pragma once
 
-namespace al
-{
-    class NerveKeeper;
+#include "types.h"
 
-    class IUseNerve
-    {
-    public:
+namespace al {
+class NerveKeeper;
 
-        inline IUseNerve()
-        {
-            
-        }
+class IUseNerve {
+public:
+    inline IUseNerve() {}
 
-        virtual NerveKeeper* getNerveKeeper() const = 0;
-    };
-
-    class Nerve
-    {
-    public:
-        virtual void execute(NerveKeeper* keeper) const = 0;
-        virtual void executeOnEnd(NerveKeeper* keeper) const;
-    };
+    virtual NerveKeeper* getNerveKeeper() const = 0;
 };
+
+class Nerve {
+public:
+    virtual void execute(NerveKeeper* keeper) const = 0;
+    virtual void executeOnEnd(NerveKeeper* keeper) const;
+};
+};  // namespace al

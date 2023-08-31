@@ -26,7 +26,6 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
     registerNewSetting(true, true, "Autosave");
     registerNewSetting(true, true, "Display HUD");
     registerNewSetting(true, true, "Play Music");
-    registerNewSetting(false, false, "Pause Scene");
 
     Logger::log("   Created %i settings\n", mSettings.size());
 }

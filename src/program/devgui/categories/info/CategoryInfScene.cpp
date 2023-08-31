@@ -9,11 +9,9 @@
 
 #include <cxxabi.h>
 
-CategoryInfScene::CategoryInfScene(const char* catName, const char* catDesc, sead::Heap* heap)
-    : CategoryBase(catName, catDesc, heap) {}
+CategoryInfScene::CategoryInfScene(const char* catName, const char* catDesc, sead::Heap* heap) : CategoryBase(catName, catDesc, heap) {}
 
-void CategoryInfScene::updateCatDisplay()
-{
+void CategoryInfScene::updateCatDisplay() {
     HakoniwaSequence* sequence = tryGetHakoniwaSequence();
     if (!sequence) {
         ImGui::Text("Hakoniwa Sequence does not exist!");
@@ -37,9 +35,12 @@ void CategoryInfScene::updateCatDisplay()
     char* sceneName = abi::__cxa_demangle(typeid(*scene).name(), nullptr, nullptr, &status);
     ImGui::Text("Type: %s", sceneName);
 
-    al::Nerve* sceneNerve = sceneNerveKeeper->getCurrentNerve();
+    const al::Nerve* sceneNerve = sceneNerveKeeper->getCurrentNerve();
     char* sceneNerveName = abi::__cxa_demangle(typeid(*sceneNerve).name(), nullptr, nullptr, &status);
-    ImGui::Text("Nrv: %s", sceneNerveName + strlen("(anonymous namespace)::") + strlen(sceneName) + strlen("nrv"));
+    auto prefixLen = sceneNerveName[0] == '(' ? strlen("(anonymous namespace)::") : 0;
+    ImGui::Text("Nrv: %s", sceneNerveName + prefixLen + strlen(sceneName) + strlen("nrv"));
+    ImGui::SameLine();
+    ImGui::Text("\tStep: %d", sceneNerveKeeper->mStep);
 
     free(sceneName);
     free(sceneNerveName);
@@ -49,13 +50,14 @@ void CategoryInfScene::updateCatDisplay()
     al::State* state = scene->getNerveKeeper()->mStateCtrl->findStateInfo(sceneNerve);
     if (!state)
         return;
-    al::Nerve* stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
+    const al::Nerve* stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
     char* stateName = abi::__cxa_demangle(typeid(*state->mStateBase).name(), nullptr, nullptr, &status);
     char* stateNrvName = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
     ImGui::Text("State: %s", stateName);
     ImGui::Text("State Nrv: %s", stateNrvName + strlen("(anonymous namespace)::") + strlen(stateName) + strlen("nrv"));
+    ImGui::SameLine();
+    ImGui::Text("\tStep: %d", state->mStateBase->getNerveKeeper()->mStep);
 
     free(stateName);
     free(stateNrvName);
-
 }

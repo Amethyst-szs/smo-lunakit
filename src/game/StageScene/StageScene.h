@@ -1,6 +1,7 @@
 #pragma once
 
 #include <al/scene/Scene.h>
+#include <al/util/NerveUtil.h>
 
 class StageSceneStateWorldMap;
 class StageSceneStateShop;
@@ -56,22 +57,25 @@ class NpcEventDirector;
 class ProjectNfpDirector;
 class HelpAmiiboDirector;
 
+// custom state, used to pause the scene without opening the pause menu or snapshot
+class StageSceneStateStagePause;
+
 namespace al {
-    class PlacementInfo;
-    class WipeSimple;
-    class WipeHolder;
-    class LiveActorGroup;
-    class LiveActor;
-    class ParabolicPath;
-    class LayoutTextureRenderer;
-    class DemoSyncedEventKeeper;
-    class SimpleLayoutAppearWaitEnd;
-    class WindowConfirm;
-    class CameraTicket;
-    class SimpleAudioUser;
-    class HtmlViewer;
-    class ChromakeyDrawer;
-}
+class PlacementInfo;
+class WipeSimple;
+class WipeHolder;
+class LiveActorGroup;
+class LiveActor;
+class ParabolicPath;
+class LayoutTextureRenderer;
+class DemoSyncedEventKeeper;
+class SimpleLayoutAppearWaitEnd;
+class WindowConfirm;
+class CameraTicket;
+class SimpleAudioUser;
+class HtmlViewer;
+class ChromakeyDrawer;
+}  // namespace al
 
 class StageScene : public al::Scene {
 public:
@@ -115,7 +119,7 @@ public:
     CinemaCaption* mCinemaCaption;
     StageSceneLayout* mStageSceneLayout;
     bool mIsPlayerHackFukankun;
-    bool mIsKoopaHackDemo; // inference, only set around KoopaHackFunction of the same name
+    bool mIsKoopaHackDemo;  // inference, only set around KoopaHackFunction of the same name
     al::SimpleLayoutAppearWaitEnd* mScenarioStartLayout;
     al::SimpleLayoutAppearWaitEnd* mWorldStartCountryLayout;
     al::SimpleLayoutAppearWaitEnd* mWorldStartRegionLayout;
@@ -131,7 +135,7 @@ public:
     void* unused_368;
     MapLayout* mMapLayout;
     al::SimpleLayoutAppearWaitEnd* mPauseMenu;
-    al::LiveActorGroup* mShopGroup; // name unsure, 2 different LiveActorGroups inited in the same spot(?)
+    al::LiveActorGroup* mShopGroup;  // name unsure, 2 different LiveActorGroups inited in the same spot(?)
     CollectionList* mCollectionList;
     al::LiveActor* mKoopaLv1;
     TimeBalloonNpc* mTimeBalloonNpc;
@@ -163,15 +167,17 @@ public:
     BgmAnimeSyncDirector* mBgmAnimeSyncDirector;
     al::DemoSyncedEventKeeper* mDemoSyncedEventKeeper;
     const char* mActiveDemoName;
-    int mDemoSynchronizerTimer; // name unsure
+    int mDemoSynchronizerTimer;  // name unsure
     bool unused_494;
     bool mUpdateKitAndGraphics;
-    bool mAlwaysFalse; // supposed to be set in exeDemoHackStartFirst but presumed coding mistake prevents that
+    bool mAlwaysFalse;  // supposed to be set in exeDemoHackStartFirst but presumed coding mistake prevents that
     NpcEventDirector* mNpcEventDirector;
     al::ChromakeyDrawer* mChromakeyDrawer;
     al::HtmlViewer* mHtmlViewer;
     ProjectNfpDirector* mProjectNfpDirector;
     HelpAmiiboDirector* mHelpAmiiboDirector;
+    // custom state
+    StageSceneStateStagePause* mStatePause;
 
 public:
     StageScene();
@@ -261,4 +267,8 @@ public:
     void exeMiniGameRanking();
     void exeTimeBalloon();
     bool isOpenEndWorldMapWipe() const;
+    // custom nerve func
+    void exeStagePause();
 };
+
+NERVE_HEADER_INSTANCE_(StageScene, StagePause, StagePause);

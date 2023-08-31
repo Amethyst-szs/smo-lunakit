@@ -17,6 +17,9 @@ namespace al {
 
     public:
         NerveKeeper(al::IUseNerve *parent, const al::Nerve *nerve, s32 maxStates);
+
+        NerveKeeper() = default; // custom default ctor
+
         void initNerveAction(al::NerveActionCtrl *actionCtrl);
         void setNerve(const al::Nerve *nextNerve);
         void tryChangeNerve();

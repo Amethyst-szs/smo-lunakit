@@ -52,13 +52,13 @@ void CategoryInfPlayer::updateCatDisplay()
     char* stateNrvName = nullptr;
 
     int status;
-    al::Nerve* playerNerve = player->getNerveKeeper()->getCurrentNerve();
+    const al::Nerve* playerNerve = player->getNerveKeeper()->getCurrentNerve();
     playerName = abi::__cxa_demangle(typeid(*player).name(), nullptr, nullptr, &status);
     
     if (player->getNerveKeeper()->mStateCtrl) {
         al::State* state = player->getNerveKeeper()->mStateCtrl->findStateInfo(playerNerve);
         if(state) {
-            al::Nerve* stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
+            const al::Nerve* stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
             stateName = abi::__cxa_demangle(typeid(*state->mStateBase).name(), nullptr, nullptr, &status);
             stateNrvName = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
         }
