@@ -44,7 +44,7 @@ void WindowActorBrowse::childActorInspector()
     //         center = boundbox.getCenter();
     //         mSelectedActorTarget->pos = &center;
     //     }
-        
+
     //     static bool focus = false;
     //     ImGui::Checkbox("Focus Camera", &focus);
     //     if (focus) {
@@ -52,12 +52,12 @@ void WindowActorBrowse::childActorInspector()
     //         al::requestCancelCameraInterpole(mSelectedActor, 0);
     //     } else al::resetCameraTarget(mSelectedActor, mSelectedActorTarget);
     // }
-    
+
     if(ImGui::Button("Appear")) mSelectedActor->appear();
     ImGui::SameLine();
     if(ImGui::Button("Kill")) mSelectedActor->kill();
-    
-    
+
+
     drawActorInspectorTreePose(mSelectedActor->mPoseKeeper);
     drawActorInspectorTreeFlags(mSelectedActor->mLiveActorFlag, listSize.x);
     drawActorInspectorTreeNrvs(mSelectedActor->getNerveKeeper(), &actorClass);
@@ -88,7 +88,7 @@ inline void WindowActorBrowse::drawActorInspectorTreePose(al::ActorPoseKeeperBas
     if (ImGui::TreeNode("Actor Pose")) {
         ImGuiHelper::Vector3Drag("Trans", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
         ImGuiHelper::Vector3Drag("Scale", "Pose Keeper Scale", pose->getScalePtr(), 0.05f, 0.f);
-        ImGuiHelper::Vector3Drag("Velcoity", "Pose Keeper Velocity", pose->getVelocityPtr(), 1.f, 0.f);
+        ImGuiHelper::Vector3Drag("Velocity", "Pose Keeper Velocity", pose->getVelocityPtr(), 1.f, 0.f);
         ImGuiHelper::Vector3Slide("Front", "Pose Keeper Front", pose->getFrontPtr(), 1.f, true);
         ImGuiHelper::Vector3Slide("Up", "Pose Keeper Up", pose->getUpPtr(), 1.f, true);
         ImGuiHelper::Vector3Slide("Gravity", "Pose Keeper Gravity", pose->getGravityPtr(), 1.f, true);
@@ -207,7 +207,7 @@ inline void WindowActorBrowse::drawActorInspectorTreeSubActor(al::SubActorKeeper
                 ImGui::TextDisabled("Actor name not found!");
                 continue;
             }
-            
+
             bool isFalse = false;
 
             ImGui::Selectable(trimName.cstr(), &isFalse, 0, ImVec2(ImGui::GetWindowWidth(), mLineSize));
