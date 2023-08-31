@@ -8,9 +8,14 @@
 #include "game/Player/PlayerAnimator.h"
 
 namespace {
-    NERVE_DEF(GhostManager, Record);
-    NERVE_DEF(GhostManager, Wait);
-    NERVE_DEF(GhostManager, RecordEnd);
+    NERVE_IMPL(GhostManager, Record);
+    NERVE_IMPL(GhostManager, Wait);
+    NERVE_IMPL(GhostManager, RecordEnd);
+    struct {
+        NERVE_MAKE(GhostManager, Record);
+        NERVE_MAKE(GhostManager, Wait);
+        NERVE_MAKE(GhostManager, RecordEnd);
+    } nrvGhostManager;
 }
 
 SEAD_SINGLETON_DISPOSER_IMPL(GhostManager);
@@ -21,7 +26,7 @@ GhostManager::GhostManager() : al::NerveExecutor("GhostManager") {
     for (int i = 0; i < ghosts.capacity(); i++) {
         ghosts.pushBack(new Ghost());
     }
-    initNerve(&nrvGhostManagerWait, 0);
+    initNerve(&nrvGhostManager.Wait, 0);
     nn::fs::CreateDirectory("sd:/smo/tas");
     nn::fs::CreateDirectory(REPLAY_SAVEPATH);
     updateDir();
@@ -68,12 +73,12 @@ bool GhostManager::tryStartRecord() {
 //    sead::Stream::Modes streamMode = sead::Stream::Modes::Binary;
 //    mRamStream = new sead::RamStreamSrc(mWorkBuf, workBufSize);
 //    mWriteStream = new DevGuiWriteStream(mRamStream, streamMode);
-    al::setNerve(this, &nrvGhostManagerRecord);
+    al::setNerve(this, &nrvGhostManager.Record);
     return true;
 }
 
 void GhostManager::endRecord() {
-    al::setNerve(this, &nrvGhostManagerWait);
+    al::setNerve(this, &nrvGhostManager.Wait);
     recordEnd();
 }
 
@@ -131,7 +136,7 @@ void GhostManager::exeRecord() {
         return;
     int step = al::getNerveStep(this);
     if (TAS::instance()->getFrameIndex() >= TAS::instance()->getFrameCount()) {
-        al::setNerve(this, &nrvGhostManagerRecordEnd);
+        al::setNerve(this, &nrvGhostManager.RecordEnd);
         return;
     }
     sead::SafeString pAnim = mPlayer->mPlayerAnimator->curAnim;
@@ -159,7 +164,7 @@ void GhostManager::exeRecordEnd() {
         write();
         recordEnd();
     }
-    al::setNerve(this, &nrvGhostManagerWait);
+    al::setNerve(this, &nrvGhostManager.Wait);
 }
 
 void GhostManager::updateDir() {
@@ -192,9 +197,9 @@ nn::Result GhostManager::write() {
 }
 
 void GhostManager::setNerveRecordEnd() {
-    al::setNerve(this, &nrvGhostManagerRecordEnd);
+    al::setNerve(this, &nrvGhostManager.RecordEnd);
 }
 
 bool GhostManager::isRecording() {
-    return al::isNerve(this, &nrvGhostManagerRecord);
+    return al::isNerve(this, &nrvGhostManager.Record);
 }

@@ -12,7 +12,6 @@ WindowTAS::WindowTAS(DevGuiManager* parent, const char* winName, bool isActiveBy
     : WindowBase(parent, winName, isActiveByDefault) {
     createCategory<CategoryTASScripts>("Scripts", "TAS Scripts");
     createCategory<CategoryTASReplay>("Replay", "Replay TASes");
-
 }
 
 bool WindowTAS::tryUpdateWinDisplay() {

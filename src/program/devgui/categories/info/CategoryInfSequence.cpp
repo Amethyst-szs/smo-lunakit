@@ -28,7 +28,7 @@ void CategoryInfSequence::updateCatDisplay()
         char* sequenceName = abi::__cxa_demangle(typeid(*sequence).name(), nullptr, nullptr, &status);
         ImGui::Text("Type: %s", sequenceName);
 
-        al::Nerve* sequenceNerve = sequenceNerveKeeper->getCurrentNerve();
+        const al::Nerve* sequenceNerve = sequenceNerveKeeper->getCurrentNerve();
         char* sequenceNerveName = abi::__cxa_demangle(typeid(*sequenceNerve).name(), nullptr, nullptr, &status);
         ImGui::Text("Nrv: %s", sequenceNerveName + 23 + strlen(sequenceName) + 3);
 

@@ -162,6 +162,7 @@ HOOK_DEFINE_TRAMPOLINE(NoDamageHook){
 };
 
 
+
 void exlSetupSettingsHooks()
 {
     ControlHook::InstallAtSymbol("_ZN10StageScene7controlEv");

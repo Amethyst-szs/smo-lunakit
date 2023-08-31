@@ -1,7 +1,7 @@
 #pragma once
 
-#include "al/hio/HioNode.h"
 #include "al/collision/CollisionDirector.h"
+#include "al/hio/HioNode.h"
 
 namespace al {
 class GraphicsInitArg;
@@ -47,6 +47,7 @@ public:
     void preDrawGraphics();
 
     al::CameraDirector* getCameraDirector() const { return mCameraDirector; }
+    al::EffectSystem* getEffectSystem() const { return mEffectSystem; }
 
     int mMaxActors;
     al::ActorResourceHolder* mActorResourceHolder;
@@ -57,8 +58,8 @@ public:
     al::GraphicsSystemInfo* mGraphicsSystemInfo;
     void* gap_0;
     al::ModelDrawBufferUpdater* mModelDrawBufferUpdater;
-    al::ExecuteAsyncExecutor* mExecuteAsyncExecutor1; // View Update (Core 1)
-    al::ExecuteAsyncExecutor* mExecuteAsyncExecutor2; // View Update (Core 2)
+    al::ExecuteAsyncExecutor* mExecuteAsyncExecutor1;  // View Update (Core 1)
+    al::ExecuteAsyncExecutor* mExecuteAsyncExecutor2;  // View Update (Core 2)
     al::ModelDisplayListController* mModelDisplayListController;
     al::ExecuteDirector* mExecuteDirector2;
     al::LiveActorGroup* mLiveActorGroup;

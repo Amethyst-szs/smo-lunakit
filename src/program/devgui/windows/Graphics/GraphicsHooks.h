@@ -14,7 +14,7 @@
 #include "al/util/LiveActorUtil.h"
 #include <gfx/seadViewport.h>
 
-#include "program/devgui/DevGuiManager.h"
+#include "devgui/DevGuiManager.h"
 
 void exlSetupGraphicsHooks();
 

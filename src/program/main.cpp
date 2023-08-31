@@ -4,64 +4,61 @@
     Head to src/program/devgui/DevGuiManager.h to get started!
 */
 
-
-
-#include "lib.hpp"
-#include "imgui_backend/imgui_impl_nvn.hpp"
 #include "fs.h"
+#include "imgui_backend/imgui_impl_nvn.hpp"
+#include "lib.hpp"
 
-#include "logger/Logger.hpp"
 #include "logger/LoadLogger.hpp"
+#include "logger/Logger.hpp"
 
 #include <basis/seadRawPrint.h>
-#include <prim/seadSafeString.h>
-#include <resource/seadResourceMgr.h>
+#include <devenv/seadDebugFontMgrNvn.h>
 #include <filedevice/nin/seadNinSDFileDeviceNin.h>
 #include <filedevice/seadFileDeviceMgr.h>
 #include <filedevice/seadPath.h>
-#include <resource/seadArchiveRes.h>
-#include <heap/seadHeapMgr.h>
-#include <devenv/seadDebugFontMgrNvn.h>
+#include <gfx/seadPrimitiveRenderer.h>
 #include <gfx/seadTextWriter.h>
 #include <gfx/seadViewport.h>
-#include <gfx/seadPrimitiveRenderer.h>
+#include <heap/seadHeapMgr.h>
+#include <prim/seadSafeString.h>
+#include <resource/seadArchiveRes.h>
+#include <resource/seadResourceMgr.h>
 
 #include "rs/util.hpp"
 
-#include "game/StageScene/StageScene.h"
-#include "game/System/GameSystem.h"
-#include "game/System/Application.h"
+#include "game/GameData/GameDataFile.h"
+#include "game/GameData/GameDataHolderWriter.h"
+#include "game/GameData/GameProgressData.h"
 #include "game/HakoniwaSequence/HakoniwaSequence.h"
 #include "game/Player/PlayerFunction.h"
 #include "game/Player/PlayerTrigger.h"
-#include "game/GameData/GameProgressData.h"
-#include "game/GameData/GameDataHolderWriter.h"
-#include "game/GameData/GameDataFile.h"
+#include "game/StageScene/StageScene.h"
+#include "game/System/Application.h"
+#include "game/System/GameSystem.h"
 
-
-#include "al/util.hpp"
-#include "al/util/LiveActorUtil.h"
 #include "al/byaml/ByamlIter.h"
-#include "al/fs/FileLoader.h"
-#include "al/resource/Resource.h"
 #include "al/collision/KCollisionServer.h"
 #include "al/collision/alCollisionUtil.h"
+#include "al/fs/FileLoader.h"
+#include "al/resource/Resource.h"
+#include "al/util.hpp"
+#include "al/util/LiveActorUtil.h"
 
-#include "imgui_nvn.h"
-#include "helpers/InputHelper.h"
-#include "init.h"
-#include "helpers/PlayerHelper.h"
-#include "helpers.h"
-#include "game/GameData/GameDataFunction.h"
 #include "al/LiveActor/LiveActor.h"
+#include "game/GameData/GameDataFunction.h"
 #include "game/StageScene/StageScene.h"
+#include "helpers.h"
+#include "helpers/InputHelper.h"
+#include "helpers/PlayerHelper.h"
+#include "imgui_nvn.h"
+#include "init.h"
 #include "logger/Logger.hpp"
 #include "os/os_tick.hpp"
 #include "patch/code_patcher.hpp"
 
-#include "helpers/GetHelper.h"
-#include "devgui/DevGuiManager.h"
 #include "devgui/DevGuiHooks.h"
+#include "devgui/DevGuiManager.h"
+#include "helpers/GetHelper.h"
 
 #include "update/UpdateHandler.h"
 
@@ -83,7 +80,7 @@ static const char* DBG_TBL_PATH = "ImGuiData/Font/nvn_font_jis1_tbl.bin";
 
 #define IMGUI_ENABLED true
 
-sead::TextWriter *gTextWriter;
+sead::TextWriter* gTextWriter;
 
 void drawLunaKit() {
     DevGuiManager::instance()->updateDisplay();
@@ -93,54 +90,39 @@ void getSymbolName(char* buffer, uintptr_t address) {
     nn::diag::GetSymbolName(buffer, 0x100, address);
 }
 
+// clang-format off
 HOOK_DEFINE_TRAMPOLINE(RandomGetU32) {
     static uint Callback(sead::Random* random) {
-        if (random != sead::GlobalRandom::instance())
-            return Orig(random);
+        if (random != sead::GlobalRandom::instance()) return Orig(random);
         register handler::stack_frame* framePointer asm("x29");
         register uintptr_t startingLink asm("x30");
-
         handler::stack_frame* fp = framePointer;
         uintptr_t lr = startingLink - exl::util::GetMainModuleInfo().m_Text.m_Start;
-
-//        auto state = XXH64_createState();
-
-//        XXH64_reset(state, 0x420);
-//        XXH64_update(state, &lr, sizeof(uintptr_t));
-
-
         while (fp) {
             MemoryInfo memInfo;
             u32 pageInfo;
             if (R_FAILED(svcQueryMemory(&memInfo, &pageInfo, (uintptr_t)fp)) || (memInfo.perm & Perm_R) == 0)
                 break;
 
-//            handler::stack_frame curFrame = *fp;
-//            curFrame.fp -= exl::util::mem_layout::s_Stack.m_Start;
-//            XXH64_update(state, &curFrame.lr, sizeof(uintptr_t));
             lr += fp->lr - exl::util::GetMainModuleInfo().m_Text.m_Start;
             fp = fp->fp;
         }
-
-//        auto hash = XXH64_digest(state);
-//        XXH64_freeState(state);
-
-//        Logger::log("0x%llx     %s\n", lr, sead::ThreadMgr::instance()->getCurrentThread()->getName().cstr());
-
         return Orig(random);
     }
 };
 
 HOOK_DEFINE_TRAMPOLINE(SceneMovementHook) {
     static void Callback(al::Scene* scene) {
-        auto* tas = TAS::instance();
-        tas->setScene(scene);
-        tas->updateNerve();
-        auto* ghostManager = GhostManager::instance();
-        ghostManager->setScene(scene);
-        ghostManager->updateNerve();
-        ghostManager->updateGhostNerve();
-        Orig(scene);
+        if (!al::isNerve(scene, &StageSceneNrvStagePause::sInstance)) {
+            auto* tas = TAS::instance();
+            tas->setScene(scene);
+            tas->updateNerve();
+            auto* ghostManager = GhostManager::instance();
+            ghostManager->setScene(scene);
+            ghostManager->updateNerve();
+            ghostManager->updateGhostNerve();
+        }
+            Orig(scene);
     }
 };
 
@@ -152,40 +134,27 @@ HOOK_DEFINE_TRAMPOLINE(SceneEndInitHook) {
 };
 
 HOOK_DEFINE_TRAMPOLINE(CreateFileDeviceMgr) {
-    static void Callback(sead::FileDeviceMgr *thisPtr) {
-
+    static void Callback(sead::FileDeviceMgr* thisPtr) {
         Orig(thisPtr);
-
         thisPtr->mMountedSd = nn::fs::MountSdCardForDebug("sd");
-
-        sead::NinSDFileDevice *sdFileDevice = new sead::NinSDFileDevice();
-
+        sead::NinSDFileDevice* sdFileDevice = new sead::NinSDFileDevice();
         thisPtr->mount(sdFileDevice);
     }
 };
 
 HOOK_DEFINE_TRAMPOLINE(RedirectFileDevice) {
-    static sead::FileDevice *
-    Callback(sead::FileDeviceMgr *thisPtr, sead::SafeString &path, sead::BufferedSafeString *pathNoDrive) {
-
+    static sead::FileDevice* Callback(sead::FileDeviceMgr* thisPtr, sead::SafeString& path, sead::BufferedSafeString* pathNoDrive) {
         sead::FixedSafeString<32> driveName;
-        sead::FileDevice *device;
-
+        sead::FileDevice* device;
         if (!sead::Path::getDriveName(&driveName, path)) {
-
             device = thisPtr->findDevice("sd");
-
             if (!(device && device->isExistFile(path))) {
-
                 device = thisPtr->getDefaultFileDevice();
-
                 if (!device) {
                     return nullptr;
                 }
-
             } else {
             }
-
         } else
             device = thisPtr->findDevice(driveName);
 
@@ -200,15 +169,13 @@ HOOK_DEFINE_TRAMPOLINE(RedirectFileDevice) {
 };
 
 HOOK_DEFINE_TRAMPOLINE(FileLoaderLoadArc) {
-    static sead::ArchiveRes *
-    Callback(al::FileLoader *thisPtr, sead::SafeString &path, const char *ext, sead::FileDevice *device) {
+    static sead::ArchiveRes* Callback(al::FileLoader* thisPtr, sead::SafeString& path, const char* ext, sead::FileDevice* device) {
+       ResourceLoadLogger* log = ResourceLoadLogger::instance();
 
-        ResourceLoadLogger* log = ResourceLoadLogger::instance();
-
-        if(log)
+        if (log)
             log->pushTextToVector(path.cstr());
 
-        sead::FileDevice *sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
+        sead::FileDevice* sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
 
         if (sdFileDevice && sdFileDevice->isExistFile(path))
             device = sdFileDevice;
@@ -218,14 +185,13 @@ HOOK_DEFINE_TRAMPOLINE(FileLoaderLoadArc) {
 };
 
 HOOK_DEFINE_TRAMPOLINE(FileLoaderIsExistFile) {
-    static bool Callback(al::FileLoader *thisPtr, sead::SafeString &path, sead::FileDevice *device) {
-
+    static bool Callback(al::FileLoader* thisPtr, sead::SafeString& path, sead::FileDevice* device) {
         ResourceLoadLogger* log = ResourceLoadLogger::instance();
-        
-        if(log)
+
+        if (log)
             log->pushTextToVector(path.cstr());
 
-        sead::FileDevice *sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
+        sead::FileDevice* sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
 
         if (sdFileDevice && sdFileDevice->isExistFile(path))
             device = sdFileDevice;
@@ -235,8 +201,8 @@ HOOK_DEFINE_TRAMPOLINE(FileLoaderIsExistFile) {
 };
 
 HOOK_DEFINE_TRAMPOLINE(FileLoaderIsExistArchive) {
-    static bool Callback(al::FileLoader *thisPtr, sead::SafeString &path, sead::FileDevice *device) {
-        sead::FileDevice *sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
+    static bool Callback(al::FileLoader* thisPtr, sead::SafeString& path, sead::FileDevice* device) {
+        sead::FileDevice* sdFileDevice = sead::FileDeviceMgr::instance()->findDevice("sd");
 
         if (sdFileDevice && sdFileDevice->isExistFile(path))
             device = sdFileDevice;
@@ -246,7 +212,7 @@ HOOK_DEFINE_TRAMPOLINE(FileLoaderIsExistArchive) {
 };
 
 HOOK_DEFINE_REPLACE(ReplaceSeadPrint) {
-    static void Callback(const char *format, ...) {
+    static void Callback(const char* format, ...) {
         va_list args;
         va_start(args, format);
         Logger::log(format, args);
@@ -254,37 +220,31 @@ HOOK_DEFINE_REPLACE(ReplaceSeadPrint) {
     }
 };
 
-HOOK_DEFINE_REPLACE(DisableSocketInit) {
-    static void Callback() {}
-};
+HOOK_DEFINE_REPLACE(DisableSocketInit) {static void Callback(){}};
 
 HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
-    static void Callback(GameSystem *thisPtr) {
-        sead::Heap *curHeap = sead::HeapMgr::instance()->getCurrentHeap();
+    static void Callback(GameSystem* thisPtr) {
+        sead::Heap* curHeap = sead::HeapMgr::instance()->getCurrentHeap();
 
         sead::DebugFontMgrJis1Nvn::createInstance(curHeap);
 
         if (al::isExistFile(DBG_SHADER_PATH) && al::isExistFile(DBG_FONT_PATH) && al::isExistFile(DBG_TBL_PATH)) {
-            sead::DebugFontMgrJis1Nvn::instance()->initialize(curHeap, DBG_SHADER_PATH, DBG_FONT_PATH, DBG_TBL_PATH,
-                                                              0x100000);
+            sead::DebugFontMgrJis1Nvn::instance()->initialize(curHeap, DBG_SHADER_PATH, DBG_FONT_PATH, DBG_TBL_PATH, 0x100000);
         }
 
-
         // creates heap for LunaKit at 7MB directly off the Stationed heap
-        sead::Heap* lkHeap = sead::ExpHeap::create(7000000, "LunaKitHeap", al::getStationedHeap(), 8,
-            sead::Heap::HeapDirection::cHeapDirection_Forward, false);
+        sead::Heap* lkHeap =
+            sead::ExpHeap::create(7000000, "LunaKitHeap", al::getStationedHeap(), 8, sead::Heap::HeapDirection::cHeapDirection_Forward, false);
         lkHeap->enableLock(true);
 
-        sead::Heap* updaterHeap = sead::ExpHeap::create(2500000, "UpdateHeap", lkHeap, 8,
-            sead::Heap::HeapDirection::cHeapDirection_Forward, false);
-
+        sead::Heap* updaterHeap = sead::ExpHeap::create(2500000, "UpdateHeap", lkHeap, 8, sead::Heap::HeapDirection::cHeapDirection_Forward, false);
 
         Logger::instance().init(lkHeap).value;
         DisableSocketInit::InstallAtSymbol("_ZN2nn6socket10InitializeEPvmmi");
         RandomGetU32::InstallAtSymbol("_ZN4sead6Random6getU32Ev");
 
         // DevGui cheats
-        DevGuiHooks::exlInstallDevGuiHooks(); // Located in devgui/DevGuiHooks.cpp
+        DevGuiHooks::exlInstallDevGuiHooks();  // Located in devgui/DevGuiHooks.cpp
 
         ResourceLoadLogger::createInstance(lkHeap);
         ResourceLoadLogger::instance()->init(lkHeap);
@@ -303,12 +263,12 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
 
         sead::TextWriter::setDefaultFont(sead::DebugFontMgrJis1Nvn::instance());
 
-        al::GameDrawInfo *drawInfo = Application::instance()->mDrawInfo;
+        al::GameDrawInfo* drawInfo = Application::instance()->mDrawInfo;
 
-        agl::DrawContext *context = drawInfo->mDrawContext;
-        agl::RenderBuffer *renderBuffer = drawInfo->mFirstRenderBuffer;
+        agl::DrawContext* context = drawInfo->mDrawContext;
+        agl::RenderBuffer* renderBuffer = drawInfo->mFirstRenderBuffer;
 
-        sead::Viewport *viewport = new sead::Viewport(*renderBuffer);
+        sead::Viewport* viewport = new sead::Viewport(*renderBuffer);
 
         gTextWriter = new sead::TextWriter(context, viewport);
 
@@ -317,26 +277,26 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
         gTextWriter->mColor = sead::Color4f(1.f, 1.f, 1.f, 0.8f);
 
         Orig(thisPtr);
-
     }
 };
 
 HOOK_DEFINE_TRAMPOLINE(UpdateLunaKit) {
-    static void Callback(HakoniwaSequence *thisPtr) {
+    static void Callback(HakoniwaSequence* thisPtr){
         Orig(thisPtr);
         DevGuiManager::instance()->update();
     }
 };
+// clang-format on
 
-extern "C" void exl_main(void *x0, void *x1) {
+extern "C" void exl_main(void* x0, void* x1) {
     /* Setup hooking enviroment. */
     // envSetOwnProcessHandle(exl::util::proc_handle::Get());
     exl::hook::Initialize();
 
-    handler::installExceptionHandler([](handler::ExceptionInfo& info) {
-        handler::printCrashReport(info);
-        return false;
-    });
+    //    handler::installExceptionHandler([](handler::ExceptionInfo& info) {
+    //        handler::printCrashReport(info);
+    //        return false;
+    //    });
 
     GameSystemInit::InstallAtSymbol("_ZN10GameSystem4initEv");
     ReplaceSeadPrint::InstallAtSymbol("_ZN4sead6system5PrintEPKcz");
@@ -354,7 +314,6 @@ extern "C" void exl_main(void *x0, void *x1) {
 
     // Debug Text Writer Drawing
     UpdateLunaKit::InstallAtSymbol("_ZNK16HakoniwaSequence8drawMainEv");
-
 
     // ImGui Hooks
 #if IMGUI_ENABLED

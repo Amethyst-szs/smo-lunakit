@@ -43,3 +43,4 @@ imgui/backends/vulkan/generate_spv.sh
 
 # promo assets
 promo_screenshots/
+compile_commands.json
