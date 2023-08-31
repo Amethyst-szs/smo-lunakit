@@ -134,53 +134,56 @@ nn::Result DevGuiSaveData::write()
 {
     mWriteStream->rewind();
 
-    al::ByamlWriter file = al::ByamlWriter(mHeap, false);
+    sead::Heap* writerHeap = sead::ExpHeap::create(1500000, "GDWriterHeap", mHeap, 8,
+        sead::Heap::HeapDirection::cHeapDirection_Forward, false);
+
+    al::ByamlWriter* file = new (writerHeap) al::ByamlWriter(writerHeap, false);
     
-    file.pushHash();
+    file->pushHash();
 
     // General information
-    file.addString("Version", GIT_VER);
-    file.addString("Theme", mParent->getTheme()->getThemeName());
-    file.addFloat("Opacity", ImGui::GetStyle().Alpha);
-    file.addFloat("DockSize", *mParent->getScreenSizeMultiDocked());
-    file.addFloat("HandSize", *mParent->getScreenSizeMultiHandheld());
-    file.addBool("UpdateShh", UpdateHandler::instance()->isUpdateSilenced());
-    file.addInt("MaxGhosts", *GhostManager::instance()->getMaxGhosts());
+    file->addString("Version", GIT_VER);
+    file->addString("Theme", mParent->getTheme()->getThemeName());
+    file->addFloat("Opacity", ImGui::GetStyle().Alpha);
+    file->addFloat("DockSize", *mParent->getScreenSizeMultiDocked());
+    file->addFloat("HandSize", *mParent->getScreenSizeMultiHandheld());
+    file->addBool("UpdateShh", UpdateHandler::instance()->isUpdateSilenced());
+    file->addInt("MaxGhosts", *GhostManager::instance()->getMaxGhosts());
 
     // Open/close state of all windows
-    file.pushHash("ActiveWins");
+    file->pushHash("ActiveWins");
 
     for(int i = 0; i < mParent->getWindowCount(); i++) {
-        file.addBool(mParent->getWindowNameAtIdx(i), *mParent->getWindowActiveStateAtIdx(i));
+        file->addBool(mParent->getWindowNameAtIdx(i), *mParent->getWindowActiveStateAtIdx(i));
     }
 
-    file.pop();
+    file->pop();
 
     // Current settings in the setting menu
     DevGuiSettings* set = mParent->getSettings();
-    file.pushHash("Settings");
+    file->pushHash("Settings");
 
     for(int i = 0; i < set->getTotalSettings(); i++) {
         sead::FormatFixedSafeString<0x5> idxName("%X", i);
-        file.addBool(idxName.cstr(), set->getStateByIdx(i));
+        file->addBool(idxName.cstr(), set->getStateByIdx(i));
     }
 
-    file.pop();
+    file->pop();
 
     // Current primitive menu settings
     PrimMenuSettings* primSet = mParent->getPrimitiveSettings();
-    file.pushHash("PrimSet");
+    file->pushHash("PrimSet");
 
     for(int i = 0; i < primSet->getTotalSettings(); i++) {
         sead::FormatFixedSafeString<0x5> idxName("%X", i);
-        file.addBool(idxName.cstr(), primSet->getSettingEntry(i)->isTrue());
+        file->addBool(idxName.cstr(), primSet->getSettingEntry(i)->isTrue());
     }
 
-    file.pop();
+    file->pop();
 
     // Write the Actor Browser's favorites into array
 
-    file.pushHash("FavActorBrowser");
+    file->pushHash("FavActorBrowser");
 
     for(int i = 0; i < MAXFAVS; i++) {
         sead::FixedSafeString<0x40> favName = getActorBrowserFavoriteAtIdx(i);
@@ -188,23 +191,24 @@ nn::Result DevGuiSaveData::write()
             continue;
 
         sead::FormatFixedSafeString<0x5> idxName("%X", i);
-        file.addString(idxName.cstr(), favName.cstr());
+        file->addString(idxName.cstr(), favName.cstr());
     }
 
-    file.pop();
+    file->pop();
 
     // Close inital hash and write data
-    file.pop();
-    file.write(mWriteStream);
+    file->pop();
+    file->write(mWriteStream);
 
-    uint size = file.calcPackSize();
+    uint size = file->calcPackSize();
     nn::Result result = FsHelper::writeFileToPath(mWorkBuf, size, SAVEPATH);
 
     Logger::log("Saved data to %s\n", SAVEPATH);
 
     if(static_cast<float>(size) / static_cast<float>(mWorkBufSize) > 0.8f)
         Logger::log("\n\n ! WARNING !\n The save file is close to the work buffer limit\n Consider increasing buffer size!\n\n");
-
+    
+    writerHeap->destroy();
     return result;
 }
 

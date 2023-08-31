@@ -232,9 +232,9 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
             sead::DebugFontMgrJis1Nvn::instance()->initialize(curHeap, DBG_SHADER_PATH, DBG_FONT_PATH, DBG_TBL_PATH, 0x100000);
         }
 
-        // creates heap for LunaKit at 7MB directly off the Stationed heap
+        // creates heap for LunaKit at 9MB directly off the Stationed heap
         sead::Heap* lkHeap =
-            sead::ExpHeap::create(7000000, "LunaKitHeap", al::getStationedHeap(), 8, sead::Heap::HeapDirection::cHeapDirection_Forward, false);
+            sead::ExpHeap::create(9000000, "LunaKitHeap", al::getStationedHeap(), 8, sead::Heap::HeapDirection::cHeapDirection_Forward, false);
         lkHeap->enableLock(true);
 
         sead::Heap* updaterHeap = sead::ExpHeap::create(2500000, "UpdateHeap", lkHeap, 8, sead::Heap::HeapDirection::cHeapDirection_Forward, false);
