@@ -54,8 +54,10 @@ HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
         static bool wasNoclipOn = false;
         bool isNoclip = DevGuiManager::instance()->getSettings()->getStateByName("Noclip");
 
-        if (!isNoclip && wasNoclipOn)
+        if (!isNoclip && wasNoclipOn) {
             al::onCollide(player);
+            al::setGravity(player, {0, -1, 0});
+        }
         wasNoclipOn = isNoclip;
 
         if(!isNoclip) {
@@ -73,16 +75,14 @@ HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
             sead::Vector3f *cameraPos = al::getCameraPos(player, 0);
             sead::Vector2f *leftStick = al::getLeftStick(-1);
 
-            const al::Nerve* hipDropNrv = NrvFindHelper::getNerveAt(nrvPlayerActorHakoniwaHipDrop);
-            if(al::isNerve(player, hipDropNrv))
-                NrvFindHelper::setNerveAt(player, nrvPlayerActorHakoniwaWait);
+            player->exeWait();
 
-            player->exeJump();
             al::offCollide(player);
             al::setVelocityZero(player);
+            al::setGravity(player, {0, 0, 0});
 
             // Mario slightly goes down even when velocity is 0. This is a hacky fix for that.
-            playerPos->y += 1.5f;
+            //playerPos->y += 1.5f;
 
             float d = sqrt(al::powerIn(playerPos->x - cameraPos->x, 2) + (al::powerIn(playerPos->z - cameraPos->z, 2)));
             float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos->x);
@@ -140,7 +140,7 @@ HOOK_DEFINE_TRAMPOLINE(DisableMoonLockHook) {
 
         if (DevGuiManager::instance()->getSettings()->getStateByName("Disable Kingdom Moon Lock"))
             return 0;
-        
+
         return lockSize;
     }
 };
