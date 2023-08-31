@@ -293,10 +293,10 @@ extern "C" void exl_main(void* x0, void* x1) {
     // envSetOwnProcessHandle(exl::util::proc_handle::Get());
     exl::hook::Initialize();
 
-    //    handler::installExceptionHandler([](handler::ExceptionInfo& info) {
-    //        handler::printCrashReport(info);
-    //        return false;
-    //    });
+    handler::installExceptionHandler([](handler::ExceptionInfo& info) {
+        handler::printCrashReport(info);
+        return false;
+    });
 
     GameSystemInit::InstallAtSymbol("_ZN10GameSystem4initEv");
     ReplaceSeadPrint::InstallAtSymbol("_ZN4sead6system5PrintEPKcz");
