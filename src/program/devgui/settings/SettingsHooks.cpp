@@ -52,58 +52,76 @@ HOOK_DEFINE_TRAMPOLINE(ControlHook) {
 HOOK_DEFINE_TRAMPOLINE(NoclipMovementHook) {
     static void Callback(PlayerActorHakoniwa *player) {
         static bool wasNoclipOn = false;
+        static bool wasFreeCamOn = false;
+        static sead::Vector3f initialPlayerPos;
         bool isNoclip = DevGuiManager::instance()->getSettings()->getStateByName("Noclip");
+        bool isFreeCam = DevGuiManager::instance()->getSettings()->getStateByName("Free Camera In Noclip");
+        sead::Vector3f *playerPos = al::getTransPtr(player);
+
+        if ((isFreeCam && !wasFreeCamOn) || (isNoclip && !wasNoclipOn && isFreeCam)) {
+            initialPlayerPos = al::getTrans(player);
+        }
 
         if (!isNoclip && wasNoclipOn) {
             al::onCollide(player);
+            // Reset gravity
             al::setGravity(player, {0, -1, 0});
         }
+
+        if ((!isFreeCam && wasFreeCamOn) || (!isNoclip && wasNoclipOn && wasFreeCamOn)) {
+            // Reset playerPos
+            playerPos->x = initialPlayerPos.x;
+            playerPos->y = initialPlayerPos.y;
+            playerPos->z = initialPlayerPos.z;
+        }
+
         wasNoclipOn = isNoclip;
+        wasFreeCamOn = isFreeCam;
 
         if(!isNoclip) {
             Orig(player);
             return;
         }
 
-        if (isNoclip) {
-            static float speed = 20.0f;
-            static float speedMax = 250.0f;
-            static float vspeed = 10.0f;
-            static float speedGain = 0.0f;
+        static float speed = 20.0f;
+        static float speedMax = 250.0f;
+        static float vspeed = 10.0f;
+        static float speedGain = 0.0f;
 
-            sead::Vector3f *playerPos = al::getTransPtr(player);
-            sead::Vector3f *cameraPos = al::getCameraPos(player, 0);
-            sead::Vector2f *leftStick = al::getLeftStick(-1);
+        sead::Vector3f *cameraPos = al::getCameraPos(player, 0);
+        sead::Vector2f *leftStick = al::getLeftStick(-1);
 
-            player->exeWait();
+        player->exeWait();
 
-            al::offCollide(player);
-            al::setVelocityZero(player);
+        al::offCollide(player);
+        al::setVelocityZero(player);
+        if (!isFreeCam) {
+            // Set gravity to 0 in order to fix Mario going down
             al::setGravity(player, {0, 0, 0});
-
-            // Mario slightly goes down even when velocity is 0. This is a hacky fix for that.
-            //playerPos->y += 1.5f;
-
-            float d = sqrt(al::powerIn(playerPos->x - cameraPos->x, 2) + (al::powerIn(playerPos->z - cameraPos->z, 2)));
-            float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos->x);
-            float vz = ((speed + speedGain) / d) * (playerPos->z - cameraPos->z);
-
-            playerPos->x -= leftStick->x * vz;
-            playerPos->z += leftStick->x * vx;
-
-            playerPos->x += leftStick->y * vx;
-            playerPos->z += leftStick->y * vz;
-
-            if (al::isPadHoldX(-1) || al::isPadHoldY(-1)) speedGain += 0.5f;
-            if (al::isPadHoldA(-1) || al::isPadHoldB(-1)) speedGain -= 0.5f;
-            if (speedGain <= 0.0f) speedGain = 0.0f;
-            if (speedGain >= speedMax) speedGain = speedMax;
-
-            if (al::isPadHoldZL(-1)) playerPos->y -= (vspeed + speedGain / 3);
-            if (al::isPadHoldZR(-1)) playerPos->y += (vspeed + speedGain / 3);
         }
 
-        Orig(player);
+        // Mario slightly goes down even when velocity is 0. This is a hacky fix for that.
+        //playerPos->y += 1.5f;
+
+        float d = sqrt(al::powerIn(playerPos->x - cameraPos->x, 2) + (al::powerIn(playerPos->z - cameraPos->z, 2)));
+        float vx = ((speed + speedGain) / d) * (playerPos->x - cameraPos->x);
+        float vz = ((speed + speedGain) / d) * (playerPos->z - cameraPos->z);
+
+        playerPos->x -= leftStick->x * vz;
+        playerPos->z += leftStick->x * vx;
+
+        playerPos->x += leftStick->y * vx;
+        playerPos->z += leftStick->y * vz;
+
+        if (al::isPadHoldX(-1) || al::isPadHoldY(-1)) speedGain += 0.5f;
+        if (al::isPadHoldA(-1) || al::isPadHoldB(-1)) speedGain -= 0.5f;
+        if (speedGain <= 0.0f) speedGain = 0.0f;
+        if (speedGain >= speedMax) speedGain = speedMax;
+
+        if (al::isPadHoldZL(-1)) playerPos->y -= (vspeed + speedGain / 3);
+        if (al::isPadHoldZR(-1)) playerPos->y += (vspeed + speedGain / 3);
+
+        if (!isFreeCam) Orig(player);
     }
 };
 

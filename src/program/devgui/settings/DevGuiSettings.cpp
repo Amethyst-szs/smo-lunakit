@@ -15,6 +15,7 @@ DevGuiSettings::DevGuiSettings(DevGuiManager* parent)
     mSettings.allocBuffer(0x20, parent->getHeap());
 
     registerNewSetting(false, false, "Noclip");
+    registerNewSetting(false, true, "Free Camera In Noclip");
     registerNewSetting(false, true, "No Damage");
     registerNewSetting(false, true, "Infinite Cap Bounce");
     registerNewSetting(false, true, "Clear Wall Jump Limits");
