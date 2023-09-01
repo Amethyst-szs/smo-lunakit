@@ -1,5 +1,6 @@
 #include "PlayerHelper.h"
 #include <al/area/ChangeStageInfo.h>
+#include <game/GameData/GameDataHolderAccessor.h>
 #include "al/util/OtherUtil.h"
 #include "game/GameData/GameDataFunction.h"
 #include "game/Player/PlayerAnimator.h"

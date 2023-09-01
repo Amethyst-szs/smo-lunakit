@@ -11,7 +11,7 @@ struct Gyro {
 
 struct InputFrame {
     u32 mStep = 0;
-    bool secondPlayer = false;
+    bool mSecondPlayer = false;
     u32 mButtons = 0;
     sead::Vector2f mLeftStick = sead::Vector2f::zero;
     sead::Vector2f mRightStick = sead::Vector2f::zero;
@@ -21,12 +21,11 @@ struct InputFrame {
     Gyro mRightGyro;
 };
 
-
 struct Script {
-    static const u32 magic = 0x424f4f42; // BOOB
+    static const u32 magic = 0x424f4f42;  // BOOB
     u32 mMagic;
-    u32 mFrameCount; // how many individual lines there are, NOT just the highest step number
-    bool isTwoPlayer;
+    u32 mFrameCount;  // how many individual lines there are, NOT just the highest step number
+    bool mIsTwoPlayer;
     s32 mScenarioNo;
     char mChangeStageName[0x80];
     char mChangeStageId[0x80];

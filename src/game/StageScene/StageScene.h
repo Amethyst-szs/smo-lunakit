@@ -2,6 +2,7 @@
 
 #include <al/scene/Scene.h>
 #include <al/util/NerveUtil.h>
+#include <game/GameData/GameDataHolderAccessor.h>
 
 class StageSceneStateWorldMap;
 class StageSceneStateShop;
@@ -31,7 +32,6 @@ class StageSceneStateTalk;
 class StageSceneStateWarp;
 class StageSceneStateWorldIntroCamera;
 class ScenarioStartCameraHolder;
-class GameDataHolderBase;
 class PlayGuideSkip;
 class CinemaCaption;
 class StageSceneLayout;

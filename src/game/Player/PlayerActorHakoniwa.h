@@ -1,7 +1,7 @@
 #pragma once
 
-#include "PlayerActorBase.h"
 #include <game/Interfaces/IUseDimension.h>
+#include "PlayerActorBase.h"
 
 class PlayerConst;
 class PlayerTrigger;
@@ -119,7 +119,6 @@ class PlayerJudgeWallKeep;
 
 class PlayerActorHakoniwa : public PlayerActorBase, public IUseDimension {
 public:
-
     PlayerInfo* mPlayerInfo;
     PlayerConst* mPlayerConst;
     PlayerInput* mPlayerInput;
@@ -253,8 +252,8 @@ public:
     s32 getPortNo() const override;
     IUsePlayerCollision* getPlayerCollision() const override;
     PlayerHackKeeper* getPlayerHackKeeper() const override;
-    void startDemo() override;
     bool isEnableDemo() override;
+    void startDemo() override;
     void endDemo() override;
     void startDemoPuppetable() override;
     void endDemoPuppetable() override;

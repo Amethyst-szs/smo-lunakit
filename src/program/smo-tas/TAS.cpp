@@ -12,26 +12,26 @@
 #include "fs/fs_directories.hpp"
 #include "fs/fs_files.hpp"
 #include "game/Controller/ControllerAppletFunction.h"
+#include "game/StageScene/StageScene.h"
 #include "game/System/GameSystem.h"
 #include "ghost/GhostManager.h"
 #include "logger/Logger.hpp"
 #include "result.h"
 #include "rs/util/LiveActorUtil.h"
 #include "sead/basis/seadNew.h"
-#include "game/StageScene/StageScene.h"
 
 namespace {
-    NERVE_IMPL(TAS, Update);
-    NERVE_IMPL(TAS, Wait);
-    NERVE_IMPL(TAS, WaitUpdate);
-    NERVE_IMPL(TAS, Record);
-    struct {
-        NERVE_MAKE(TAS, Update);
-        NERVE_MAKE(TAS, Wait);
-        NERVE_MAKE(TAS, WaitUpdate);
-        NERVE_MAKE(TAS, Record);
-    } nrvTAS;
-}
+NERVE_IMPL(TAS, Update);
+NERVE_IMPL(TAS, Wait);
+NERVE_IMPL(TAS, WaitUpdate);
+NERVE_IMPL(TAS, Record);
+struct {
+    NERVE_MAKE(TAS, Update);
+    NERVE_MAKE(TAS, Wait);
+    NERVE_MAKE(TAS, WaitUpdate);
+    NERVE_MAKE(TAS, Record);
+} nrvTAS;
+}  // namespace
 
 SEAD_SINGLETON_DISPOSER_IMPL(TAS);
 
@@ -49,7 +49,8 @@ void TAS::updateDir() {
     sead::ScopedCurrentHeapSetter heapSetter(DevGuiManager::instance()->getHeap());
     nn::fs::DirectoryHandle handle = {};
     nn::Result r = nn::fs::OpenDirectory(&handle, TAS_SCRIPTPATH, nn::fs::OpenDirectoryMode_File);
-    if (R_FAILED(r)) return;
+    if (R_FAILED(r))
+        return;
     s64 entryCount = 0;
     r = nn::fs::GetDirectoryEntryCount(&entryCount, handle);
     if (R_FAILED(r)) {
@@ -87,13 +88,15 @@ bool TAS::tryLoadScript() {
             isEntryExist = true;
         }
     }
-    if (!isEntryExist) return false;
+    if (!isEntryExist)
+        return false;
     sead::FormatFixedSafeString<256> scriptPath(TAS_SCRIPTPATH "/%s", mLoadedEntry.m_Name);
     nn::fs::FileHandle handle;
-    nn::Result r = nn::fs::OpenFile(&handle,scriptPath.cstr(),nn::fs::OpenMode::OpenMode_Read);
-    if (R_FAILED(r)) return false;
+    nn::Result r = nn::fs::OpenFile(&handle, scriptPath.cstr(), nn::fs::OpenMode::OpenMode_Read);
+    if (R_FAILED(r))
+        return false;
     mScript = (Script*)new u8[mLoadedEntry.m_FileSize];
-    r = nn::fs::ReadFile(handle, 0,mScript, mLoadedEntry.m_FileSize);
+    r = nn::fs::ReadFile(handle, 0, mScript, mLoadedEntry.m_FileSize);
     nn::fs::CloseFile(handle);
     if (R_FAILED(r)) {
         endScript();
@@ -110,14 +113,16 @@ void TAS::startScript() {
     bool isWait = false;
 
     // check if script uses 2-player mode
-    if (mScript->isTwoPlayer != rs::isSeparatePlay(mScene)) {
+    if (mScript->mIsTwoPlayer != rs::isSeparatePlay(mScene)) {
         al::GamePadSystem* gamePadSystem = GameSystemFunction::getGameSystem()->mGamePadSystem;
-        if (mScript->isTwoPlayer) {
-            if (!ControllerAppletFunction::connectControllerSeparatePlay(gamePadSystem)) return;
+        if (mScript->mIsTwoPlayer) {
+            if (!ControllerAppletFunction::connectControllerSeparatePlay(gamePadSystem))
+                return;
             rs::changeSeparatePlayMode(mScene, true);
             isWait = true;
         } else {
-            if (!ControllerAppletFunction::connectControllerSinglePlay(gamePadSystem)) return;
+            if (!ControllerAppletFunction::connectControllerSinglePlay(gamePadSystem))
+                return;
             rs::changeSeparatePlayMode(mScene, false);
             isWait = true;
         }
@@ -125,9 +130,8 @@ void TAS::startScript() {
 
     // check if script metadata has StageName and scenario
     GameDataHolderAccessor accessor(mScene);
-    if (!al::isEqualString(mScript->mChangeStageName,"")) {
-        ChangeStageInfo info(accessor.mData, mScript->mChangeStageId,
-                             mScript->mChangeStageName, false, mScript->mScenarioNo, ChangeStageInfo::UNK);
+    if (!al::isEqualString(mScript->mChangeStageName, "")) {
+        ChangeStageInfo info(accessor.mData, mScript->mChangeStageId, mScript->mChangeStageName, false, mScript->mScenarioNo, ChangeStageInfo::UNK);
         accessor.mData->changeNextStage(&info, 0);
         isWait = true;
     }
@@ -149,8 +153,8 @@ void TAS::endScript() {
 void TAS::applyFrame(InputFrame& frame) {
     sead::ScopedCurrentHeapSetter heapSetter(DevGuiManager::instance()->getHeap());
     sead::ControllerMgr* controllerMgr = sead::ControllerMgr::instance();
-    auto* controller = (al::NpadController*)controllerMgr->getController(al::getPlayerControllerPort(frame.secondPlayer));
-    controller->mPadAccelerationDeviceNum = 2; // number of accelerometers for joycons
+    auto* controller = (al::NpadController*)controllerMgr->getController(al::getPlayerControllerPort(frame.mSecondPlayer));
+    controller->mPadAccelerationDeviceNum = 2;  // number of accelerometers for joycons
     auto* accelLeft = (al::JoyPadAccelerometerAddon*)controller->getAddonByOrder(sead::ControllerDefine::cAccel, 0);
     auto* accelRight = (al::JoyPadAccelerometerAddon*)controller->getAddonByOrder(sead::ControllerDefine::cAccel, 1);
     auto* gyroLeft = (al::PadGyroAddon*)controller->getAddonByOrder(sead::ControllerDefine::cGyro, 0);
@@ -165,8 +169,8 @@ void TAS::applyFrame(InputFrame& frame) {
     gyroLeft->mAngularVel = frame.mLeftGyro.mAngularV;
     gyroRight->mAngularVel = frame.mRightGyro.mAngularV;
 
-    controller->mPadTrig = frame.mButtons & ~mPrevButtons[frame.secondPlayer];
-    controller->mPadRelease = frame.mButtons & mPrevButtons[frame.secondPlayer];
+    controller->mPadTrig = frame.mButtons & ~mPrevButtons[frame.mSecondPlayer];
+    controller->mPadRelease = frame.mButtons & mPrevButtons[frame.mSecondPlayer];
     controller->mPadHold = frame.mButtons;
 }
 
@@ -179,7 +183,7 @@ void TAS::exeUpdate() {
         if (al::isEqualString(typeid(*mScene).name(), typeid(StageScene).name())) {
             PlayerActorBase* playerBase = rs::getPlayerActor(mScene);
             if (playerBase && !(mScript->mStartPosition.x == 0 && mScript->mStartPosition.y == 0 &&
-                                mScript->mStartPosition.z == 0)) { // teleport unless position is (0, 0, 0)
+                                mScript->mStartPosition.z == 0)) {  // teleport unless position is (0, 0, 0)
                 playerBase->startDemoPuppetable();
                 al::setTrans(playerBase, mScript->mStartPosition);
                 playerBase->endDemoPuppetable();
@@ -188,53 +192,49 @@ void TAS::exeUpdate() {
     }
     int step = al::getNerveStep(this);
 
-    bool updated[2] = { false, false };
+    bool updated[2] = {false, false};
 
     while (mFrameIndex < mScript->mFrameCount) {
-        //Logger::log("Frame Index: %d, Step: %d\n", mFrameIndex, al::getNerveStep(this));
+        // Logger::log("Frame Index: %d, Step: %d\n", mFrameIndex, al::getNerveStep(this));
         InputFrame& curFrame = mScript->mFrames[mFrameIndex];
-        if (step < curFrame.mStep) break;
-        mFrameIndex++; // increment after checking step
-        updated[curFrame.secondPlayer] = true;
+        if (step < curFrame.mStep)
+            break;
+        mFrameIndex++;  // increment after checking step
+        updated[curFrame.mSecondPlayer] = true;
         applyFrame(curFrame);
 
-        mPrevButtons[curFrame.secondPlayer] = curFrame.mButtons;
-        //Logger::log("Applied frame: %d, step: %d\n", mFrameIndex, curFrame.mStep);
+        mPrevButtons[curFrame.mSecondPlayer] = curFrame.mButtons;
+        // Logger::log("Applied frame: %d, step: %d\n", mFrameIndex, curFrame.mStep);
     }
 
     if (!updated[0]) {
         mPrevButtons[0] = 0;
-        InputFrame frame = {.secondPlayer = false};
+        InputFrame frame = {.mSecondPlayer = false};
         applyFrame(frame);
     }
     if (!updated[1]) {
         mPrevButtons[1] = 0;
-        InputFrame frame = {.secondPlayer = true};
+        InputFrame frame = {.mSecondPlayer = true};
         applyFrame(frame);
     }
     if (mFrameIndex >= mScript->mFrameCount) {
         auto* ghostMgr = GhostManager::instance();
         if (ghostMgr->isRecording())
             ghostMgr->setNerveRecordEnd();
-        //Logger::log("Ended Script on Step: %d\n", al::getNerveStep(this));
-        //al::setNerve(this, &nrvTASWait);
+        // Logger::log("Ended Script on Step: %d\n", al::getNerveStep(this));
+        // al::setNerve(this, &nrvTASWait);
         endScript();
     }
-
 }
 
-void TAS::exeWait() {
-
-}
+void TAS::exeWait() {}
 
 void TAS::exeWaitUpdate() {
     Logger::log("TAS Wait Update\n");
     al::setNerve(this, &nrvTAS.Update);
 }
 
-void TAS::exeRecord() {
-
-}
+void TAS::exeRecord() {}
 
 bool TAS::isRunning() {
     return al::isNerve(this, &nrvTAS.Update);

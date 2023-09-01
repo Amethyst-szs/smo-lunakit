@@ -1,19 +1,18 @@
 #include "WindowActorBrowse.h"
+#include "al/actor/LiveActorKit.h"
 #include "devgui/DevGuiManager.h"
-
 #include "imgui.h"
 
-void WindowActorBrowse::childActorList(al::Scene* scene)
-{
+void WindowActorBrowse::childActorList(al::Scene* scene) {
     al::LiveActorKit* kit = scene->mLiveActorKit;
-    if(!kit) {
+    if (!kit) {
         ImGui::TextDisabled("No LiveActorKit!");
         mSelectedActor = nullptr;
         return;
     }
 
     al::LiveActorGroup* group = kit->mLiveActorGroup2;
-    if(!group) {
+    if (!group) {
         ImGui::TextDisabled("No LiveActorGroup!");
         mSelectedActor = nullptr;
         return;
@@ -26,11 +25,11 @@ void WindowActorBrowse::childActorList(al::Scene* scene)
         group = mFilterActorGroup;
 
     ImVec2 listSize = ImGui::GetContentRegionAvail();
-    if(mIsWindowVertical)
+    if (mIsWindowVertical)
         listSize.y -= mHeaderSize - 2.f;
 
     if (mSelectedActor) {
-        if(mIsWindowVertical)
+        if (mIsWindowVertical)
             listSize.y *= 0.3f;
         else
             listSize.x *= 0.45f;
@@ -57,7 +56,7 @@ void WindowActorBrowse::childActorList(al::Scene* scene)
         al::LiveActor* actor = group->mActors[i];
         sead::FixedSafeString<0x30> actorName = getActorName(actor);
         sead::FixedSafeString<0x30> className;
-        if(isNameDisplayClass())
+        if (isNameDisplayClass())
             className = actorName;
         else
             className = getActorName(actor, ActorBrowseNameDisplayType_CLASS);
@@ -67,7 +66,7 @@ void WindowActorBrowse::childActorList(al::Scene* scene)
         sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName);
         sead::FormatFixedSafeString<0x9> buttonName("%i", i);
 
-        if(trimName.isEmpty()) {
+        if (trimName.isEmpty()) {
             ImGui::TextDisabled("Actor name not found!");
             continue;
         }
@@ -77,7 +76,7 @@ void WindowActorBrowse::childActorList(al::Scene* scene)
         if (ImGui::IsItemHovered())
             showActorTooltip(actor);
 
-        if (ImGui::IsItemClicked()) 
+        if (ImGui::IsItemClicked())
             mSelectedActor = actor;
 
         ImGui::SameLine();

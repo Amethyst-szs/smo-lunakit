@@ -4,6 +4,7 @@
 #include <al/util/ControllerUtil.h>
 #include <al/util/GraphicsUtil.h>
 #include <al/util/NerveUtil.h>
+#include "al/actor/LiveActorKit.h"
 #include "game/StageScene/SceneAudioSystemPauseController.h"
 
 namespace ScenePlayerFunction {

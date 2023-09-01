@@ -1,13 +1,13 @@
 #pragma once
 
-#include "al/sequence/Sequence.h"
 #include "al/scene/Scene.h"
+#include "al/sequence/Sequence.h"
 
-#include "game/HakoniwaSequence/HakoniwaSequence.h"
-#include "game/StageScene/StageScene.h"
 #include "game/GameData/GameDataHolder.h"
+#include "game/HakoniwaSequence/HakoniwaSequence.h"
 #include "game/Player/PlayerActorBase.h"
 #include "game/Player/PlayerActorHakoniwa.h"
+#include "game/StageScene/StageScene.h"
 
 #include "rs/util.hpp"
 
@@ -15,7 +15,7 @@
 bool isInScene();
 bool isInScene(al::Scene* scene);
 bool isInStageScene();
-bool isInStageScene(StageScene* scene);
+bool isInStageScene(al::Scene* scene);
 bool tryReloadStage();
 
 // Safe getters
