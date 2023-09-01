@@ -21,16 +21,22 @@
 #include "game/StageScene/StageScene.h"
 
 namespace {
-    NERVE_DEF(TAS, Update);
-    NERVE_DEF(TAS, Wait);
-    NERVE_DEF(TAS, WaitUpdate);
-    NERVE_DEF(TAS, Record);
+    NERVE_IMPL(TAS, Update);
+    NERVE_IMPL(TAS, Wait);
+    NERVE_IMPL(TAS, WaitUpdate);
+    NERVE_IMPL(TAS, Record);
+    struct {
+        NERVE_MAKE(TAS, Update);
+        NERVE_MAKE(TAS, Wait);
+        NERVE_MAKE(TAS, WaitUpdate);
+        NERVE_MAKE(TAS, Record);
+    } nrvTAS;
 }
 
 SEAD_SINGLETON_DISPOSER_IMPL(TAS);
 
 TAS::TAS() : al::NerveExecutor("TAS") {
-    initNerve(&nrvTASWait, 0);
+    initNerve(&nrvTAS.Wait, 0);
     nn::fs::CreateDirectory("sd:/smo/tas");
     nn::fs::CreateDirectory(TAS_SCRIPTPATH);
 
@@ -128,14 +134,14 @@ void TAS::startScript() {
 
     // if stage and/or 2p, wait for 1 frame before starting script
     if (isWait)
-        al::setNerve(this, &nrvTASWaitUpdate);
+        al::setNerve(this, &nrvTAS.WaitUpdate);
     else
-        al::setNerve(this, &nrvTASUpdate);
+        al::setNerve(this, &nrvTAS.Update);
 }
 
 void TAS::endScript() {
     sead::ScopedCurrentHeapSetter heapSetter(DevGuiManager::instance()->getHeap());
-    al::setNerve(this, &nrvTASWait);
+    al::setNerve(this, &nrvTAS.Wait);
     mFrameIndex = 0;
     delete[] mScript;
 }
@@ -223,7 +229,7 @@ void TAS::exeWait() {
 
 void TAS::exeWaitUpdate() {
     Logger::log("TAS Wait Update\n");
-    al::setNerve(this, &nrvTASUpdate);
+    al::setNerve(this, &nrvTAS.Update);
 }
 
 void TAS::exeRecord() {
@@ -231,5 +237,5 @@ void TAS::exeRecord() {
 }
 
 bool TAS::isRunning() {
-    return al::isNerve(this, &nrvTASUpdate);
+    return al::isNerve(this, &nrvTAS.Update);
 }

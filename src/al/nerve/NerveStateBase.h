@@ -9,7 +9,7 @@ namespace al
     public:
         NerveStateBase(const char *);
 
-        virtual ~NerveStateBase();
+        virtual ~NerveStateBase() {};
         virtual void init();
         virtual void appear();
         virtual void kill();

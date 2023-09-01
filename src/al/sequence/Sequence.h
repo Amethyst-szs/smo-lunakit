@@ -7,58 +7,40 @@
 #include "game/System/GameDrawInfo.h"
 
 namespace al {
-
+    
     class GameSystemInfo;
-
     class SequenceInitInfo;
-
     class AudioSystemInfo;
-
     class Scene;
 
     class Sequence : public al::NerveExecutor, public al::IUseAudioKeeper, public al::IUseSceneCreator {
     public:
-        Sequence(const char *name);
-
+        Sequence(const char* name);
         virtual ~Sequence() override;
-
         virtual void init(const al::SequenceInitInfo &initInfo);
-
         virtual void update();
-
         virtual void kill();
-
         virtual void drawMain() const;
-
         virtual void drawSub() const;
-
         virtual bool isDisposable() { return false; }
-
-        virtual al::Scene *getCurrentScene() const;
-
-        virtual al::SceneCreator *getSceneCreator() const override;
-
-        virtual void setSceneCreator(al::SceneCreator *sceneCreator) override;
-
-        virtual al::AudioKeeper *getAudioKeeper() const override;
-
-        void initAudio(const al::GameSystemInfo &, const char *, int, int, int, const char *);
-
-        void initAudioKeeper(const char *);
-
+        virtual al::Scene* getCurrentScene() const;
+        virtual al::SceneCreator* getSceneCreator() const override;
+        virtual void setSceneCreator(al::SceneCreator* sceneCreator) override;
+        virtual al::AudioKeeper* getAudioKeeper() const override;
+        void initAudio(const al::GameSystemInfo &, const char* , int, int, int, const char*);
+        void initAudioKeeper(const char*);
         void initDrawSystemInfo(const al::SequenceInitInfo &);
+        al::AudioSystemInfo* getAudioSystemInfo();
 
-        al::AudioSystemInfo *getAudioSystemInfo();
-
-        al::GameDrawInfo *getDrawInfo() const {
+        al::GameDrawInfo* getDrawInfo() const {
             return mGameDrawInfo;
         }
 
-        al::AudioDirector *getAudioDirector() const {
+        al::AudioDirector* getAudioDirector() const {
             return mAudioDirector;
         }
 
-        void setNextScene(al::Scene *scene) {
+        void setNextScene(al::Scene* scene) {
             mNextScene = scene;
         }
 
@@ -67,12 +49,12 @@ namespace al {
         }
 
         const sead::FixedSafeString<0x40> mName;
-        al::Scene *mCurrentScene;
-        al::Scene *mNextScene;
-        al::SceneCreator *mSceneCreator;
-        al::AudioDirector *mAudioDirector;
-        al::AudioKeeper *mAudioKeeper;
-        al::GameDrawInfo *mGameDrawInfo;
+        al::Scene* mCurrentScene;
+        al::Scene* mNextScene;
+        al::SceneCreator* mSceneCreator;
+        al::AudioDirector* mAudioDirector;
+        al::AudioKeeper* mAudioKeeper;
+        al::GameDrawInfo* mGameDrawInfo;
         bool mIsAlive;
     };
 }

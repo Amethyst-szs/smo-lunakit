@@ -7,12 +7,16 @@
 #include "actors/Puppet/PuppetActor.h"
 
 namespace {
-    NERVE_DEF(Ghost, Play);
-    NERVE_DEF(Ghost, Wait);
+    NERVE_IMPL(Ghost, Play);
+    NERVE_IMPL(Ghost, Wait);
+    struct {
+        NERVE_MAKE(Ghost, Play);
+        NERVE_MAKE(Ghost, Wait);
+    } nrvGhost;
 }
 
 Ghost::Ghost() : al::NerveExecutor("Ghost") {
-    initNerve(&nrvGhostWait, 0);
+    initNerve(&nrvGhost.Wait, 0);
 }
 
 Ghost::~Ghost() = default;
@@ -33,7 +37,7 @@ void Ghost::removePuppet() {
 void Ghost::startReplay(ReplayFrame* frames, s32 frameCount) {
     mFrames = frames;
     mFrameCount = frameCount;
-    al::setNerve(this, &nrvGhostPlay);
+    al::setNerve(this, &nrvGhost.Play);
     if (mPuppet) {
         mPuppet->appear();
     }
@@ -43,7 +47,7 @@ void Ghost::startReplay(ReplayFrame* frames, s32 frameCount) {
 void Ghost::endReplay() {
     delete[] mFrames;
     mFrameCount = 0;
-    al::setNerve(this, &nrvGhostWait);
+    al::setNerve(this, &nrvGhost.Wait);
     if (mPuppet) {
         mPuppet->kill();
         mPuppet->mPuppetCap->kill();
@@ -51,7 +55,7 @@ void Ghost::endReplay() {
 }
 
 bool Ghost::isRunning() {
-    return al::isNerve(this, &nrvGhostPlay);
+    return al::isNerve(this, &nrvGhost.Play);
 }
 
 void Ghost::exeWait() {

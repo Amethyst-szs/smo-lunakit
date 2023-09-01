@@ -5,7 +5,6 @@
 
 namespace FsHelper {
     nn::Result writeFileToPath(void *buf, size_t size, const char *path) {
-        Logger::log("FsHelper Path:%s\n", path);
         nn::fs::FileHandle handle;
 
         if (isFileExist(path)) {

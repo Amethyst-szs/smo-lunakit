@@ -27,7 +27,6 @@ public:
     void exeWait();
     void exePlay();
 
-
 private:
     ReplayFrame* mFrames = nullptr;
     s32 mFrameCount = 0;
