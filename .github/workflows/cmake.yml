@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     
     # Use a container with Devkitpro already setup
-    container: devkitpro/devkita64:latest
+    container: pixelkiri/devkitpro-alpine-switch:latest
     steps:
     - name: Setup Checkout and Submodules
       uses: actions/checkout@v3
@@ -35,4 +35,4 @@ jobs:
         cmake-version: '3.26.x'
     
     - name: Build LunaKit
-      run: cmake -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -S . -B build && make -C build subsdk9_meta
+      run: cmake -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -S . -B build && make -C build subsdk9_meta -j4
