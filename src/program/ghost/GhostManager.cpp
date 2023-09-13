@@ -1,22 +1,22 @@
 #include "GhostManager.h"
 #include "al/util/NerveUtil.h"
 #include "devgui/DevGuiManager.h"
+#include "game/Player/PlayerAnimator.h"
 #include "helpers/GetHelper.h"
 #include "helpers/fsHelper.h"
 #include "logger/Logger.hpp"
 #include "smo-tas/TAS.h"
-#include "game/Player/PlayerAnimator.h"
 
 namespace {
-    NERVE_IMPL(GhostManager, Record);
-    NERVE_IMPL(GhostManager, Wait);
-    NERVE_IMPL(GhostManager, RecordEnd);
-    struct {
-        NERVE_MAKE(GhostManager, Record);
-        NERVE_MAKE(GhostManager, Wait);
-        NERVE_MAKE(GhostManager, RecordEnd);
-    } nrvGhostManager;
-}
+NERVE_IMPL(GhostManager, Record);
+NERVE_IMPL(GhostManager, Wait);
+NERVE_IMPL(GhostManager, RecordEnd);
+struct {
+    NERVE_MAKE(GhostManager, Record);
+    NERVE_MAKE(GhostManager, Wait);
+    NERVE_MAKE(GhostManager, RecordEnd);
+} nrvGhostManager;
+}  // namespace
 
 SEAD_SINGLETON_DISPOSER_IMPL(GhostManager);
 
@@ -30,7 +30,6 @@ GhostManager::GhostManager() : al::NerveExecutor("GhostManager") {
     nn::fs::CreateDirectory("sd:/smo/tas");
     nn::fs::CreateDirectory(REPLAY_SAVEPATH);
     updateDir();
-
 }
 
 GhostManager::~GhostManager() {
@@ -39,13 +38,12 @@ GhostManager::~GhostManager() {
 
 void GhostManager::init(al::ActorInitInfo const& info) {
     int ghostIdx = 0;
-    for (auto &ghost : ghosts) {
+    for (auto& ghost : ghosts) {
         if (ghostIdx >= mMaxGhostNum)
             return;
         ghost.init(info);
         ghostIdx++;
     }
-
 }
 
 void GhostManager::updateGhostNerve() {
@@ -66,13 +64,13 @@ bool GhostManager::tryStartRecord() {
     mReplayPath = sead::FormatFixedSafeString<256>(REPLAY_SAVEPATH "/%s", tas->getScriptName());
     Logger::log("%s\n", mReplayPath.cstr());
     Script* script = tas->getScript();
-    mFrameLength = script->mFrames[script->mFrameCount-1].mStep;
+    mFrameLength = script->mFrames[script->mFrameCount - 1].mStep;
     mFrames = new ReplayFrame[mFrameLength];
-//    static const uint workBufSize = sizeof(ReplayFrame)* mFrameLength;
-//    mWorkBuf = new u8[workBufSize];
-//    sead::Stream::Modes streamMode = sead::Stream::Modes::Binary;
-//    mRamStream = new sead::RamStreamSrc(mWorkBuf, workBufSize);
-//    mWriteStream = new DevGuiWriteStream(mRamStream, streamMode);
+    //    static const uint workBufSize = sizeof(ReplayFrame)* mFrameLength;
+    //    mWorkBuf = new u8[workBufSize];
+    //    sead::Stream::Modes streamMode = sead::Stream::Modes::Binary;
+    //    mRamStream = new sead::RamStreamSrc(mWorkBuf, workBufSize);
+    //    mWriteStream = new DevGuiWriteStream(mRamStream, streamMode);
     al::setNerve(this, &nrvGhostManager.Record);
     return true;
 }
@@ -87,9 +85,9 @@ void GhostManager::recordEnd() {
     mFrameLength = 0;
     mPlayer = nullptr;
     delete[] mFrames;
-//    delete[] mWorkBuf;
-//    delete mRamStream;
-//    delete mWriteStream;
+    //    delete[] mWorkBuf;
+    //    delete mRamStream;
+    //    delete mWriteStream;
 }
 
 void GhostManager::tryStartReplay() {
@@ -99,13 +97,14 @@ void GhostManager::tryStartReplay() {
     for (int i = 0; i < mEntryCount; i++) {
         if (!mActiveReplays[i])
             continue;
-        nn::fs::DirectoryEntry &curEntry = mEntries[i];
+        nn::fs::DirectoryEntry& curEntry = mEntries[i];
         sead::FormatFixedSafeString<256> scriptPath(REPLAY_SAVEPATH "/%s", curEntry.m_Name);
         nn::fs::FileHandle handle;
-        nn::Result r = nn::fs::OpenFile(&handle,scriptPath.cstr(),nn::fs::OpenMode::OpenMode_Read);
-        if (R_FAILED(r)) continue;
+        nn::Result r = nn::fs::OpenFile(&handle, scriptPath.cstr(), nn::fs::OpenMode::OpenMode_Read);
+        if (R_FAILED(r))
+            continue;
         auto* frames = (ReplayFrame*)new u8[curEntry.m_FileSize];
-        r = nn::fs::ReadFile(handle, 0,frames, curEntry.m_FileSize);
+        r = nn::fs::ReadFile(handle, 0, frames, curEntry.m_FileSize);
         nn::fs::CloseFile(handle);
         if (R_FAILED(r)) {
             delete[] frames;
@@ -114,34 +113,38 @@ void GhostManager::tryStartReplay() {
         if (!ghosts.at(ghostIdx))
             Logger::log("Current Ghost is null!\n");
         ghosts.at(ghostIdx++)->startReplay(frames, curEntry.m_FileSize / sizeof(ReplayFrame));
-
     }
 }
 
 void GhostManager::endReplay() {
-    for (auto &ghost : ghosts) {
+    for (auto& ghost : ghosts) {
         ghost.endReplay();
     }
 }
 
-void GhostManager::exeWait() {
-
-}
+void GhostManager::exeWait() {}
 
 void GhostManager::exeRecord() {
+    Logger::log("Ghost Manager: exeRecord\n");
     if (!TAS::instance()->isRunning())
         return;
+    Logger::log("    TAS is running!\n");
     mPlayer = tryGetPlayerActorHakoniwa(mScene);
     if (!mPlayer)
         return;
+    Logger::log("    Player exists!\n");
     int step = al::getNerveStep(this);
     if (TAS::instance()->getFrameIndex() >= TAS::instance()->getFrameCount()) {
         al::setNerve(this, &nrvGhostManager.RecordEnd);
         return;
     }
+    Logger::log("    TAS is still running!\n");
     sead::SafeString pAnim = mPlayer->mPlayerAnimator->curAnim;
+    Logger::log("    Player Animation: %s\n", pAnim.cstr());
     const char* capAnim = al::getActionName(mPlayer->mHackCap);
+    Logger::log("    Cap Anim: %s\n", capAnim);
     mFrames[step].playerAnim = PlayerAnims::FindEnum(pAnim.cstr());
+    Logger::log("    PlayerAnims::FindEnum: %d\n", PlayerAnims::FindEnum(pAnim.cstr()));
     if (capAnim)
         mFrames[step].capAnim = PlayerAnims::FindEnum(capAnim);
     for (int i = 0; i < 6; i++) {
@@ -156,7 +159,7 @@ void GhostManager::exeRecord() {
     mFrames[step].isCapVisible = !mPlayer->mHackCap->mLiveActorFlag->mIsModelVisible;
     mFrames[step].is2D = rs::isPlayer2D(mPlayer);
     mFrames[step].isHack = false;
-
+    Logger::log("    End of GhostManager::exeRecord()\n");
 }
 
 void GhostManager::exeRecordEnd() {
@@ -171,7 +174,8 @@ void GhostManager::updateDir() {
     sead::ScopedCurrentHeapSetter heapSetter(DevGuiManager::instance()->getHeap());
     nn::fs::DirectoryHandle handle = {};
     nn::Result r = nn::fs::OpenDirectory(&handle, REPLAY_SAVEPATH, nn::fs::OpenDirectoryMode_File);
-    if (R_FAILED(r)) return;
+    if (R_FAILED(r))
+        return;
     s64 entryCount = 0;
     r = nn::fs::GetDirectoryEntryCount(&entryCount, handle);
     if (R_FAILED(r)) {
@@ -193,7 +197,7 @@ void GhostManager::updateDir() {
 }
 
 nn::Result GhostManager::write() {
-    return FsHelper::writeFileToPath(mFrames, sizeof(ReplayFrame)* mFrameLength, mReplayPath.cstr());
+    return FsHelper::writeFileToPath(mFrames, sizeof(ReplayFrame) * mFrameLength, mReplayPath.cstr());
 }
 
 void GhostManager::setNerveRecordEnd() {

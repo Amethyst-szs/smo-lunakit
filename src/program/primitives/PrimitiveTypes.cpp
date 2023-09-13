@@ -1,34 +1,30 @@
 #include "PrimitiveTypes.h"
 
+#include "al/actor/LiveActorKit.h"
+#include "helpers/GetHelper.h"
 #include "sead/gfx/seadPrimitiveRenderer.h"
 
-#include "helpers/GetHelper.h"
-
-void PrimitiveTypePoint::render()
-{
+void PrimitiveTypePoint::render() {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
     renderer->drawSphere4x8(mTranslation, mSize, mColor);
 }
 
-void PrimitiveTypeLine::render()
-{
+void PrimitiveTypeLine::render() {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
     renderer->drawLine(mPoints[0], mPoints[1], mColor);
 
-    if(mPointsSize[0] > 0.f)
+    if (mPointsSize[0] > 0.f)
         renderer->drawSphere4x8(mPoints[0], mPointsSize[0], mColor - sead::Color4f(0.f, 0.f, 0.f, 0.25f));
-    if(mPointsSize[1] > 0.f)
+    if (mPointsSize[1] > 0.f)
         renderer->drawSphere4x8(mPoints[1], mPointsSize[1], mColor - sead::Color4f(0.f, 0.f, 0.f, 0.25f));
 }
 
-void PrimitiveTypeAxis::render()
-{
+void PrimitiveTypeAxis::render() {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
     renderer->drawAxis(mTranslation, mSize);
 }
 
-void PrimitiveTypeBox::render()
-{
+void PrimitiveTypeBox::render() {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
 
     sead::Matrix34f mtx = sead::Matrix34f::ident;
@@ -44,18 +40,17 @@ void PrimitiveTypeBox::render()
     renderer->setModelMatrix(sead::Matrix34f::ident);
 }
 
-void PrimitiveTypeArea::render()
-{
+void PrimitiveTypeArea::render() {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
     al::Scene* scene = tryGetScene();
 
     al::AreaObjGroup* group = scene->mLiveActorKit->mAreaObjDirector->getAreaObjGroup(mGroupName);
-    if(!group)
+    if (!group)
         return;
-    
+
     sead::Color4f cyl = mFrameColor;
     cyl.a *= 0.11f;
-    
+
     for (int i = 0; i < group->mCurCount; i++) {
         al::AreaObj* area = group->mAreas[i];
         const char* shapeType;
@@ -68,7 +63,7 @@ void PrimitiveTypeArea::render()
         pos.z = area->mAreaMtx.m[2][3];
         renderer->setModelMatrix(area->mAreaMtx);
 
-        if (al::isEqualString(shapeType, "AreaCubeBase")) { // origin is at the bottom
+        if (al::isEqualString(shapeType, "AreaCubeBase")) {  // origin is at the bottom
             sead::PrimitiveDrawer::CubeArg shapeAreaSolid(sead::Vector3f(0, (scale.y / 2 * 1000), 0), scale * 1000.0f, mFillColor);
             sead::PrimitiveDrawer::CubeArg shapeAreaWire(sead::Vector3f(0, (scale.y / 2 * 1000), 0), scale * 1000.0f, mFrameColor);
             renderer->drawCube(shapeAreaSolid);
@@ -91,41 +86,39 @@ void PrimitiveTypeArea::render()
 
         if (al::isEqualString(shapeType, "AreaSphere"))
             renderer->drawSphere8x16(sead::Vector3f(0, 0, 0), scale.x * 1000, cyl);
-        
-        if (al::isEqualString(shapeType, "AreaCylinder")) // origin is at the bottom
+
+        if (al::isEqualString(shapeType, "AreaCylinder"))  // origin is at the bottom
             renderer->drawCylinder32(sead::Vector3f(0, (scale.y / 2 * 1000), 0), scale.x * 1000, scale.y * 1000, cyl);
-        
+
         if (al::isEqualString(shapeType, "AreaCylinderCenter"))
             renderer->drawCylinder32(sead::Vector3f(0, 0, 0), scale.x * 1000, scale.y * 1000, cyl);
 
-        if (al::isEqualString(shapeType, "AreaCylinderTop")) 
+        if (al::isEqualString(shapeType, "AreaCylinderTop"))
             renderer->drawCylinder32(sead::Vector3f(0, -(scale.y / 2 * 1000), 0), scale.x * 1000, scale.y * 1000, cyl);
     }
 
     renderer->setModelMatrix(sead::Matrix34f::ident);
 }
 
-void PrimitiveTypeTriangle::render()
-{
+void PrimitiveTypeTriangle::render() {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
 
     renderer->drawLine(mTriangle.mPosition1, mTriangle.mPosition2, mColor);
     renderer->drawLine(mTriangle.mPosition2, mTriangle.mPosition3, mColor);
     renderer->drawLine(mTriangle.mPosition3, mTriangle.mPosition1, mColor);
-    
+
     renderer->drawSphere4x8(mTriangle.mPosition1, 9.f, mColor);
     renderer->drawSphere4x8(mTriangle.mPosition2, 9.f, mColor);
     renderer->drawSphere4x8(mTriangle.mPosition3, 9.f, mColor);
 }
 
-void PrimitiveTypeHitSensor::render()
-{
+void PrimitiveTypeHitSensor::render() {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
 
     al::HitSensorKeeper* sensorKeeper = mActor->mHitSensorKeeper;
     if (!sensorKeeper)
         return;
-    
+
     for (int i = 0; i < sensorKeeper->mSensorNum; i++) {
         al::HitSensor* curSensor = sensorKeeper->mSensors[i];
         if (!curSensor)
@@ -137,70 +130,69 @@ void PrimitiveTypeHitSensor::render()
         float sensorRadius = al::getSensorRadius(curSensor);
         const char* sensorName = curSensor->mName;
 
-        if(mSensorTypes & HitSensorType_ATTACK && al::isEqualSubString(sensorName, "Attack")) {
-            mColor = {0.f, 0.5f, 0.5f, mOpacity}; // Cyan / Light BLue
+        if (mSensorTypes & HitSensorType_ATTACK && al::isEqualSubString(sensorName, "Attack")) {
+            mColor = {0.f, 0.5f, 0.5f, mOpacity};  // Cyan / Light BLue
             renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
             continue;
         }
 
-        if(mSensorTypes & HitSensorType_EYE && (al::isSensorEye(curSensor) || al::isSensorPlayerEye(curSensor))) {
-            mColor = {0.f, 0.f, 1.f, mOpacity * 0.85f}; // Blue
+        if (mSensorTypes & HitSensorType_EYE && (al::isSensorEye(curSensor) || al::isSensorPlayerEye(curSensor))) {
+            mColor = {0.f, 0.f, 1.f, mOpacity * 0.85f};  // Blue
             renderer->drawCircle32(sensorTrans, sensorRadius, mColor);
             continue;
         }
 
-        if(mSensorTypes & HitSensorType_TRAMPLE && al::isEqualSubString("Trample", sensorName)) {
-            mColor = {0.3f, 0.f, 0.75f, mOpacity * 0.5f}; // Deep Purple
+        if (mSensorTypes & HitSensorType_TRAMPLE && al::isEqualSubString("Trample", sensorName)) {
+            mColor = {0.3f, 0.f, 0.75f, mOpacity * 0.5f};  // Deep Purple
             renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
             continue;
         }
 
-        if(mSensorTypes & HitSensorType_NPC && al::isSensorNpc(curSensor)) {
-            mColor = {0.f, 1.f, 0.f, mOpacity * 0.75f}; // Green
+        if (mSensorTypes & HitSensorType_NPC && al::isSensorNpc(curSensor)) {
+            mColor = {0.f, 1.f, 0.f, mOpacity * 0.75f};  // Green
             renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
             continue;
         }
 
-        if(mSensorTypes & HitSensorType_BIND && al::isSensorBindableAll(curSensor)) {
-            mColor = {0.5f, 0.5f, 0.f, mOpacity}; // Yellow
+        if (mSensorTypes & HitSensorType_BIND && al::isSensorBindableAll(curSensor)) {
+            mColor = {0.5f, 0.5f, 0.f, mOpacity};  // Yellow
             renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
             continue;
         }
 
-        if(mSensorTypes & HitSensorType_ENEMYBODY && al::isSensorEnemyBody(curSensor)) {
-            mColor = {0.9761f, 0.3014f, 0.012f, mOpacity}; // Orange
+        if (mSensorTypes & HitSensorType_ENEMYBODY && al::isSensorEnemyBody(curSensor)) {
+            mColor = {0.9761f, 0.3014f, 0.012f, mOpacity};  // Orange
             renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
             continue;
         }
 
-        if(mSensorTypes & HitSensorType_MAPOBJ && al::isSensorMapObj(curSensor)) {
-            mColor = {0.8f, 0.05f, 0.5f, mOpacity}; // Pink
+        if (mSensorTypes & HitSensorType_MAPOBJ && al::isSensorMapObj(curSensor)) {
+            mColor = {0.8f, 0.05f, 0.5f, mOpacity};  // Pink
             renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
             continue;
         }
 
-        if(mSensorTypes & HitSensorType_PLAYERALL && al::isSensorPlayerAll(curSensor)) {
-            mColor = {1.f, 0.f, 0.f, mOpacity * 0.3f}; // Red
+        if (mSensorTypes & HitSensorType_PLAYERALL && al::isSensorPlayerAll(curSensor)) {
+            mColor = {1.f, 0.f, 0.f, mOpacity * 0.3f};  // Red
             renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
             continue;
         }
 
-        if(mSensorTypes & HitSensorType_HOLDOBJ && al::isSensorHoldObj(curSensor)) {
-            mColor = {0.05f, 0.75f, 0.5f, mOpacity}; // Minty green
+        if (mSensorTypes & HitSensorType_HOLDOBJ && al::isSensorHoldObj(curSensor)) {
+            mColor = {0.05f, 0.75f, 0.5f, mOpacity};  // Minty green
             renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
             continue;
         }
 
-        if(mSensorTypes & HitSensorType_MISC) {
-            mColor = {0.85f, 0.85f, 0.85f, mOpacity}; // White
+        if (mSensorTypes & HitSensorType_MISC) {
+            mColor = {0.85f, 0.85f, 0.85f, mOpacity};  // White
             renderer->drawSphere4x8(sensorTrans, sensorRadius, mColor);
             continue;
         }
     }
 }
 
-void PrimitiveTypeBezierCurve::render()
-{
+void PrimitiveTypeBezierCurve::render() {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
     float percisionRate = 1.f / static_cast<float>(mPercision);
     float rangePoint = 0.f;
@@ -208,7 +200,7 @@ void PrimitiveTypeBezierCurve::render()
     sead::Vector3f startPos;
     sead::Vector3f endPos;
 
-    while(rangePoint <= 1.f) {
+    while (rangePoint <= 1.f) {
         mCurve->calcPos(&startPos, rangePoint);
         rangePoint += percisionRate;
         mCurve->calcPos(&endPos, rangePoint);
@@ -223,8 +215,7 @@ void PrimitiveTypeBezierCurve::render()
     renderer->drawSphere4x8(endPos, 15.f, mColor);
 }
 
-void PrimitiveTypeRail::render()
-{
+void PrimitiveTypeRail::render() {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
     float railLength = mRail->getTotalLength();
     float percisionRate = railLength / static_cast<float>(mPercision);
@@ -233,7 +224,7 @@ void PrimitiveTypeRail::render()
     sead::Vector3f startPos;
     sead::Vector3f endPos;
 
-    while(rangePoint <= railLength) {
+    while (rangePoint <= railLength) {
         mRail->calcPos(&startPos, rangePoint);
         rangePoint += percisionRate;
         mRail->calcPos(&endPos, rangePoint);

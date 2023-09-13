@@ -1,12 +1,11 @@
 #pragma once
 
+#include <al/audio/AudioKeeper.h>
+#include <al/camera/CameraDirector.h>
+#include <al/nerve/NerveExecutor.h>
+#include <al/nerve/NerveKeeper.h>
+#include <al/scene/SceneObjHolder.h>
 #include <prim/seadSafeString.h>
-#include "al/actor/LiveActorKit.h"
-#include "al/audio/AudioKeeper.h"
-#include "al/camera/CameraDirector.h"
-#include "al/nerve/NerveExecutor.h"
-#include "al/scene/SceneInitInfo.h"
-#include "al/scene/SceneObjHolder.h"
 
 namespace al {
 class StageResourceKeeper;
@@ -15,22 +14,28 @@ class LayoutKit;
 class SceneStopCtrl;
 class SceneMsgCtrl;
 class ScreenCoverCtrl;
-class AudioDirector;
-class AudioKeeper;
-class NerveKeeper;
+class SceneInitInfo;
 class GraphicsInitArg;
-
-#define GETTER(type, name, field, suffix)                                                                                                            \
-    type name() suffix { return field; }
-
-#define GETTER_NOIMPL(type, name, suffix) type name() suffix;
-
+struct DrawSystemInfo;
 class Scene : public al::NerveExecutor, public al::IUseAudioKeeper, public al::IUseCamera, public al::IUseSceneObjHolder {
+public:
+    bool mIsAlive;
+    sead::FixedSafeString<64> mName;
+    al::StageResourceKeeper* mStageResourceKeeper;
+    al::LiveActorKit* mLiveActorKit;
+    al::LayoutKit* mLayoutKit;
+    al::SceneObjHolder* mSceneObjHolder;
+    al::SceneStopCtrl* mSceneStopCtrl;
+    al::SceneMsgCtrl* mSceneMsgCtrl;
+    al::ScreenCoverCtrl* mScreenCoverCtrl;
+    al::AudioDirector* mAudioDirector;
+    al::AudioKeeper* mAudioKeeper;
+    al::DrawSystemInfo* mDrawSystemInfo;
+
 public:
     Scene(const char* name);
     virtual ~Scene();
-
-    virtual void init(const al::SceneInitInfo&);
+    virtual void init(const al::SceneInitInfo& initInfo);
     virtual void appear();
     virtual void kill();
     virtual void movement();
@@ -38,44 +43,24 @@ public:
     virtual void drawMain();
     virtual void drawSub();
 
-    GETTER_NOIMPL(AudioKeeper*, getAudioKeeper, const override);
-    GETTER_NOIMPL(SceneObjHolder*, getSceneObjHolder, const override);
-    GETTER_NOIMPL(CameraDirector*, getCameraDirector, const override);
-
-    GETTER(LayoutKit*, getLayoutKit, mLayoutKit, const);
-    GETTER(SceneStopCtrl*, getSceneStopCtrl, mSceneStopCtrl, const);
-    GETTER(SceneMsgCtrl*, getSceneMsgCtrl, mSceneMsgCtrl, const);
-
-    void initializeAsync(const al::SceneInitInfo&);
-    void initDrawSystemInfo(const al::SceneInitInfo&);
+    void initializeAsync(const al::SceneInitInfo& initInfo);
     void initSceneObjHolder(al::SceneObjHolder*);
-    void initAndLoadStageResource(const char*, int);
-    void initLiveActorKit(const al::SceneInitInfo&, int, int, int);
-    void initLiveActorKitWithGraphics(const al::GraphicsInitArg&, const al::SceneInitInfo&, int, int, int);
-    void initLayoutKit(const al::SceneInitInfo&);
+    void initAndLoadStageResource(const char*, s32);
+    void initLiveActorKit(const al::SceneInitInfo& initInfo, s32 maxActors, s32 maxPlayers, s32 maxCameras);
+    void initLiveActorKitImpl(const al::SceneInitInfo& initInfo, s32 maxActors, s32 maxPlayers, s32 maxCameras);
+    void initDrawSystemInfo(const al::SceneInitInfo& initInfo);
+    void initLiveActorKitWithGraphics(const al::GraphicsInitArg& graphicsInitArg, const al::SceneInitInfo& initInfo, s32 maxActors, s32 maxPlayers,
+                                      s32 maxCameras);
+    void initLayoutKit(const al::SceneInitInfo& initInfo);
     void initSceneStopCtrl();
     void initSceneMsgCtrl();
     void initScreenCoverCtrl();
-    void endInit(const al::ActorInitInfo&);
+    void endInit(const al::ActorInitInfo& initInfo);
+
+    al::AudioKeeper* getAudioKeeper() const override;
+    al::SceneObjHolder* getSceneObjHolder() const override;
+    al::CameraDirector* getCameraDirector() const override;
 
     al::LiveActorKit* getLiveActorKit() const { return mLiveActorKit; }
-
-    //    private:
-    void initLiveActorKitImpl(const al::SceneInitInfo&, int, int, int);
-
-    bool mIsAlive;
-    sead::FixedSafeString<0x40> mName;
-    StageResourceKeeper* mStageResourceKeeper;
-    LiveActorKit* mLiveActorKit;
-    LayoutKit* mLayoutKit;
-    SceneObjHolder* mSceneObjHolder;
-    SceneStopCtrl* mSceneStopCtrl;
-    SceneMsgCtrl* mSceneMsgCtrl;
-    ScreenCoverCtrl* mScreenCoverCtrl;
-    AudioDirector* mAudioDirector;
-    AudioKeeper* mAudioKeeper;
-    NerveKeeper* mNerveKeeper;
 };
-
-static_assert(sizeof(al::Scene) == 0xd8, "Scene size is not 0xd8");
 }  // namespace al

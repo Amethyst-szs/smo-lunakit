@@ -1,8 +1,8 @@
 #include "WindowActorBrowse.h"
+#include "al/actor/LiveActorKit.h"
+#include "al/util.hpp"
 #include "devgui/DevGuiManager.h"
 #include "devgui/savedata/DevGuiSaveData.h"
-
-#include "al/util.hpp"
 
 #include "primitives/PrimitiveQueue.h"
 
@@ -12,19 +12,18 @@
 
 #include "imgui.h"
 
-void WindowActorBrowse::generateFilterList(al::Scene* scene)
-{
+void WindowActorBrowse::generateFilterList(al::Scene* scene) {
     mFilterActorGroup->removeActorAll();
 
-    if(isFilterBySearch() && !mSearchString) 
+    if (isFilterBySearch() && !mSearchString)
         return;
 
     al::LiveActorGroup* sceneGroup = scene->mLiveActorKit->mLiveActorGroup2;
 
     int requiredFilters = 0;
-    if(isFilterByFavorites())
+    if (isFilterByFavorites())
         requiredFilters++;
-    if(isFilterBySearch())
+    if (isFilterBySearch())
         requiredFilters++;
 
     for (int i = 0; i < sceneGroup->mActorCount; i++) {
@@ -32,20 +31,19 @@ void WindowActorBrowse::generateFilterList(al::Scene* scene)
         sead::FixedSafeString<0x30> modelName = getActorName(sceneGroup->mActors[i], ActorBrowseNameDisplayType_MODEL);
 
         int filtersHit = 0;
-        
+
         if (isFilterByFavorites() && isActorInFavorites(className.cstr()))
             filtersHit++;
 
         if (isFilterBySearch() && (al::isEqualSubString(className.cstr(), mSearchString) || al::isEqualSubString(modelName.cstr(), mSearchString)))
             filtersHit++;
-        
-        if(filtersHit >= requiredFilters)
+
+        if (filtersHit >= requiredFilters)
             mFilterActorGroup->registerActor(sceneGroup->mActors[i]);
     }
 }
 
-bool WindowActorBrowse::isActorInFavorites(const char* actorName)
-{
+bool WindowActorBrowse::isActorInFavorites(const char* actorName) {
     for (int i = 0; i < mMaxFavs; i++) {
         if (al::isEqualString(actorName, mFavActorNames[i].cstr()))
             return true;
@@ -54,8 +52,7 @@ bool WindowActorBrowse::isActorInFavorites(const char* actorName)
     return false;
 }
 
-void WindowActorBrowse::toggleFavorite(const char* actorName)
-{
+void WindowActorBrowse::toggleFavorite(const char* actorName) {
     // Check for removing a favorite
     for (int i = 0; i < mMaxFavs; i++) {
         if (al::isEqualString(actorName, mFavActorNames[i].cstr())) {
@@ -82,38 +79,35 @@ void WindowActorBrowse::toggleFavorite(const char* actorName)
     }
 }
 
-void WindowActorBrowse::publishFavoritesToSave()
-{
+void WindowActorBrowse::publishFavoritesToSave() {
     DevGuiSaveData* save = mParent->getSaveData();
 
-    for(int i = 0; i < mMaxFavs; i++) {
+    for (int i = 0; i < mMaxFavs; i++) {
         save->setActorBrowserFavoriteAtIdx(mFavActorNames[i], i);
     }
 
     save->queueSaveWrite();
 }
 
-void WindowActorBrowse::getFavoritesFromSave()
-{
-    if(mIsSaveDataInited)
+void WindowActorBrowse::getFavoritesFromSave() {
+    if (mIsSaveDataInited)
         return;
 
     DevGuiSaveData* save = mParent->getSaveData();
 
-    for(int i = 0; i < mMaxFavs; i++) {
+    for (int i = 0; i < mMaxFavs; i++) {
         mFavActorNames[i] = save->getActorBrowserFavoriteAtIdx(i);
-        if(!mFavActorNames[i].isEmpty())
+        if (!mFavActorNames[i].isEmpty())
             mTotalFavs++;
     }
 
     mIsSaveDataInited = true;
 }
 
-sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor)
-{
+sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor) {
     al::ModelKeeper* model = actor->mModelKeeper;
 
-    if(isNameDisplayClass() || (!model && isNameDisplayModel())) {
+    if (isNameDisplayClass() || (!model && isNameDisplayModel())) {
         int status = 0;
         char* actName = nullptr;
         actName = abi::__cxa_demangle(typeid(*actor).name(), nullptr, nullptr, &status);
@@ -124,12 +118,12 @@ sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor
         return classNameSafe;
     }
 
-    if(model && isNameDisplayModel()) {
+    if (model && isNameDisplayModel()) {
         sead::FixedSafeString<0x30> modelNameSafe(model->mResourceName);
         return modelNameSafe;
     }
 
-    if(isNameDisplayName()) {
+    if (isNameDisplayName()) {
         sead::FixedSafeString<0x30> baseNameSafe(actor->getName());
         return baseNameSafe;
     }
@@ -138,11 +132,10 @@ sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor
     return failName;
 }
 
-sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor, ActorBrowseNameDisplayType nameType)
-{
+sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor, ActorBrowseNameDisplayType nameType) {
     al::ModelKeeper* model = actor->mModelKeeper;
 
-    if(nameType == ActorBrowseNameDisplayType_CLASS || (!model && isNameDisplayModel())) {
+    if (nameType == ActorBrowseNameDisplayType_CLASS || (!model && isNameDisplayModel())) {
         int status = 0;
         char* actName = nullptr;
         actName = abi::__cxa_demangle(typeid(*actor).name(), nullptr, nullptr, &status);
@@ -153,12 +146,12 @@ sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor
         return classNameSafe;
     }
 
-    if(model && nameType == ActorBrowseNameDisplayType_MODEL) {
+    if (model && nameType == ActorBrowseNameDisplayType_MODEL) {
         sead::FixedSafeString<0x30> modelNameSafe(model->mResourceName);
         return modelNameSafe;
     }
 
-    if(nameType == ActorBrowseNameDisplayType_NAME) {
+    if (nameType == ActorBrowseNameDisplayType_NAME) {
         sead::FixedSafeString<0x30> baseNameSafe(actor->getName());
         return baseNameSafe;
     }
@@ -167,8 +160,7 @@ sead::FixedSafeString<0x30> WindowActorBrowse::getActorName(al::LiveActor* actor
     return failName;
 }
 
-sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(sead::FixedSafeString<0x30> text)
-{
+sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(sead::FixedSafeString<0x30> text) {
     int textLen = text.calcLength();
     sead::FixedSafeString<0x30> trimName;
 
@@ -187,8 +179,7 @@ sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(sead::Fixed
     return trimName;
 }
 
-sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(sead::FixedSafeString<0x30> text, int maxChars)
-{
+sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(sead::FixedSafeString<0x30> text, int maxChars) {
     int textLen = text.calcLength();
     sead::FixedSafeString<0x30> trimName;
 
@@ -207,13 +198,12 @@ sead::FixedSafeString<0x30> WindowActorBrowse::calcTrimNameFromRight(sead::Fixed
     return trimName;
 }
 
-void WindowActorBrowse::showActorTooltip(al::LiveActor* actor)
-{
+void WindowActorBrowse::showActorTooltip(al::LiveActor* actor) {
     al::ModelKeeper* model = actor->mModelKeeper;
     sead::FixedSafeString<0x30> className = getActorName(actor, ActorBrowseNameDisplayType_CLASS);
 
     sead::FormatFixedSafeString<0x200> tooltipText("Class: %s\nName: %s\n", className.cstr(), actor->mActorName);
-    if(actor->mModelKeeper) {
+    if (actor->mModelKeeper) {
         tooltipText.append("Model: ");
         tooltipText.append(model->mResourceName);
         tooltipText.append("\n");
@@ -222,15 +212,14 @@ void WindowActorBrowse::showActorTooltip(al::LiveActor* actor)
     tooltipText.append("Click to open actor");
     ImGui::SetTooltip(tooltipText.cstr());
 
-    if(actor->mPoseKeeper)
+    if (actor->mPoseKeeper)
         mParent->getPrimitiveQueue()->pushAxis(actor->mPoseKeeper->mTranslation, 400.f);
 
-    if(actor->mHitSensorKeeper && isInStageScene())
+    if (actor->mHitSensorKeeper && isInStageScene())
         mParent->getPrimitiveQueue()->pushHitSensor(actor, mHitSensorTypes, 0.15f);
 }
 
-int WindowActorBrowse::calcRoundedNum(int numToRound, int multiple)
-{
+int WindowActorBrowse::calcRoundedNum(int numToRound, int multiple) {
     if (multiple == 0)
         return numToRound;
 
