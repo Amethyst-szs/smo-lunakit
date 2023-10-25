@@ -37,6 +37,7 @@ SEAD_SINGLETON_DISPOSER_IMPL(TAS);
 
 TAS::TAS() : al::NerveExecutor("TAS") {
     initNerve(&nrvTAS.Wait, 0);
+    nn::fs::CreateDirectory("sd:/smo");
     nn::fs::CreateDirectory("sd:/smo/tas");
     nn::fs::CreateDirectory(TAS_SCRIPTPATH);
 

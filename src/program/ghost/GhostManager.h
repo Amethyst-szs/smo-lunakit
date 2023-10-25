@@ -45,9 +45,7 @@ private:
     al::Scene* mScene = nullptr;
     PlayerActorHakoniwa* mPlayer = nullptr;
     sead::FixedSafeString<256> mReplayPath;
+    int mStep = 0;
     u32 mFrameLength = 0;
-    u8* mWorkBuf = nullptr;
-    sead::RamStreamSrc* mRamStream = nullptr;
-    DevGuiWriteStream* mWriteStream = nullptr;
     ReplayFrame* mFrames;
 };

@@ -28,6 +28,7 @@ GhostManager::GhostManager() : al::NerveExecutor("GhostManager") {
         ghosts.pushBack(new Ghost());
     }
     initNerve(&nrvGhostManager.Wait, 0);
+    nn::fs::CreateDirectory("sd:/smo");
     nn::fs::CreateDirectory("sd:/smo/tas");
     nn::fs::CreateDirectory(REPLAY_SAVEPATH);
     updateDir();
@@ -65,7 +66,7 @@ bool GhostManager::tryStartRecord() {
     mReplayPath = sead::FormatFixedSafeString<256>(REPLAY_SAVEPATH "/%s", tas->getScriptName());
     Logger::log("%s\n", mReplayPath.cstr());
     Script* script = tas->getScript();
-    mFrameLength = script->mFrames[script->mInputCount - 1].mFrame;
+    mFrameLength = script->mFrames[script->mInputCount - 1].mFrame + 1;
     mFrames = new ReplayFrame[mFrameLength];
     //    static const uint workBufSize = sizeof(ReplayFrame)* mFrameLength;
     //    mWorkBuf = new u8[workBufSize];
@@ -126,39 +127,41 @@ void GhostManager::endReplay() {
 void GhostManager::exeWait() {}
 
 void GhostManager::exeRecord() {
-    int step = al::getNerveStep(this);
-    if (!TAS::instance()->isRunning())
+    if (al::isFirstStep(this)) {
+        mStep = 0;
+    }
+    auto tas = TAS::instance();
+    if (!tas->isRunning())
         return;
     mPlayer = tryGetPlayerActorHakoniwa(mScene);
-    if (!mPlayer) {
-        mFrames[step] = {};
+    if (!mPlayer)
         return;
-    }
 
-    if (TAS::instance()->getFrameIndex() >= TAS::instance()->getFrameCount()) {
+    if (tas->getFrameIndex() >= tas->getFrameCount()) {
         al::setNerve(this, &nrvGhostManager.RecordEnd);
         return;
     }
 
     sead::SafeString pAnim = mPlayer->mPlayerAnimator->curAnim;
     const char* capAnim = al::getActionName(mPlayer->mHackCap);
-    mFrames[step].playerAnim = PlayerAnims::FindEnum(pAnim.cstr());
+    mFrames[mStep].playerAnim = PlayerAnims::FindEnum(pAnim.cstr());
     if (capAnim)
-        mFrames[step].capAnim = PlayerAnims::FindEnum(capAnim);
+        mFrames[mStep].capAnim = PlayerAnims::FindEnum(capAnim);
 
     for (int i = 0; i < 6; i++)
-        mFrames[step].blendWeights[i] = mPlayer->mPlayerAnimator->getBlendWeight(i);
+        mFrames[mStep].blendWeights[i] = mPlayer->mPlayerAnimator->getBlendWeight(i);
 
-    mFrames[step].pTrans = al::getTrans(mPlayer);
-    mFrames[step].pRotation = al::getQuat(mPlayer);
-    mFrames[step].cTrans = al::getTrans(mPlayer->mHackCap);
-    mFrames[step].cRotation = al::getQuat(mPlayer->mHackCap);
-    mFrames[step].cJoint = mPlayer->mHackCap->mJointKeeper->mJointRot;
-    mFrames[step].cSkew = mPlayer->mHackCap->mJointKeeper->mSkew;
-    mFrames[step].isCapVisible = !mPlayer->mHackCap->mLiveActorFlag->mIsModelVisible;
-    mFrames[step].is2D = rs::isPlayer2D(mPlayer);
+    mFrames[mStep].pTrans = al::getTrans(mPlayer);
+    mFrames[mStep].pRotation = al::getQuat(mPlayer);
+    mFrames[mStep].cTrans = al::getTrans(mPlayer->mHackCap);
+    mFrames[mStep].cRotation = al::getQuat(mPlayer->mHackCap);
+    mFrames[mStep].cJoint = mPlayer->mHackCap->mJointKeeper->mJointRot;
+    mFrames[mStep].cSkew = mPlayer->mHackCap->mJointKeeper->mSkew;
+    mFrames[mStep].isCapVisible = !mPlayer->mHackCap->mLiveActorFlag->mIsModelVisible;
+    mFrames[mStep].is2D = rs::isPlayer2D(mPlayer);
     //    mFrames[step].isHack = mPlayer->mPlayerHackKeeper->mIsHack;
-    mFrames[step].isHack = false;
+    mFrames[mStep].isHack = false;
+    mStep++;
 }
 
 void GhostManager::exeRecordEnd() {

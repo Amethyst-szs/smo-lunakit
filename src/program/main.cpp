@@ -114,13 +114,13 @@ HOOK_DEFINE_TRAMPOLINE(RandomGetU32) {
 HOOK_DEFINE_TRAMPOLINE(SceneMovementHook) {
     static void Callback(al::Scene* scene) {
         if (!al::isNerve(scene, &StageSceneNrvStagePause::sInstance)) {
-            auto* tas = TAS::instance();
-            tas->setScene(scene);
-            tas->updateNerve();
             auto* ghostManager = GhostManager::instance();
             ghostManager->setScene(scene);
             ghostManager->updateNerve();
             ghostManager->updateGhostNerve();
+            auto* tas = TAS::instance();
+            tas->setScene(scene);
+            tas->updateNerve();
         }
             Orig(scene);
     }
@@ -232,9 +232,9 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
             sead::DebugFontMgrJis1Nvn::instance()->initialize(curHeap, DBG_SHADER_PATH, DBG_FONT_PATH, DBG_TBL_PATH, 0x100000);
         }
 
-        // creates heap for LunaKit at 9MB directly off the Stationed heap
+        // creates heap for LunaKit at 14MB directly off the Stationed heap
         sead::Heap* lkHeap =
-            sead::ExpHeap::create(9000000, "LunaKitHeap", al::getStationedHeap(), 8, sead::Heap::HeapDirection::cHeapDirection_Forward, false);
+            sead::ExpHeap::create(14000000, "LunaKitHeap", al::getStationedHeap(), 8, sead::Heap::HeapDirection::cHeapDirection_Forward, false);
         lkHeap->enableLock(true);
 
         sead::Heap* updaterHeap = sead::ExpHeap::create(2500000, "UpdateHeap", lkHeap, 8, sead::Heap::HeapDirection::cHeapDirection_Forward, false);

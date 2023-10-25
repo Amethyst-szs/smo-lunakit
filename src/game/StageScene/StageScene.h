@@ -21,6 +21,9 @@ class StageSceneStateCarryMeat;
 
 #if GAME_VERSION == 100
 class StageSceneStateTimeBalloon;
+class TimeBalloonDirector;
+class TimeBalloonSequenceInfo;
+class TimeBalloonNpc;
 #elif GAME_VERSION == 120
 class StageSceneStateBalloonGame;
 class StageSceneStateBalloonGameEntry;
@@ -52,15 +55,12 @@ class LocationNameCtrl;
 class MiniGameMenu;
 class MapLayout;
 class CollectionList;
-class TimeBalloonNpc;
 class ProjectItemDirector;
 class Pyramid;
 class OpeningStageStartDemo;
 class SceneAudioSystemPauseController;
 class DemoSoundSynchronizer;
 class ProjectSeNamedList;
-class TimeBalloonDirector;
-class TimeBalloonSequenceInfo;
 class CollectBgmPlayer;
 class CollectBgmRegister;
 class BgmAnimeSyncDirector;
@@ -157,12 +157,14 @@ public:
     al::LiveActorGroup* mShopGroup;  // name unsure, 2 different LiveActorGroups inited in the same spot(?)
     CollectionList* mCollectionList;
     al::LiveActor* mKoopaLv1;
+
 #if GAME_VERSION == 100
     TimeBalloonNpc* mTimeBalloonNpc;
 #elif GAME_VERSION == 120
     BalloonGameNpc* mBalloonGameNpc;
     void* unused_3b0;
 #endif
+
     ProjectItemDirector* mProjectItemDirector;
     Pyramid* mPyramid;
     OpeningStageStartDemo* mOpeningStageStartDemo;
@@ -174,6 +176,7 @@ public:
     al::SimpleAudioUser* mSnapShotCameraCtrl;
     ProjectSeNamedList* mSeNamedList;
     void* unused_3f0;
+
 #if GAME_VERSION == 100
     TimeBalloonDirector* mTimeBalloonDirector;
     TimeBalloonSequenceInfo* mTimeBalloonSequenceInfo;
@@ -183,6 +186,7 @@ public:
     void* unused_420;
     void* unused_428;
 #endif
+
     void* unused_408;
     al::CameraTicket* mCheckpointWarpArriveCamera;
     sead::Vector3f mCheckpointWarpTargetPos;
@@ -203,9 +207,11 @@ public:
     bool mUpdateKitAndGraphics;
     bool mAlwaysFalse;  // supposed to be set in exeDemoHackStartFirst but presumed coding mistake prevents that
     NpcEventDirector* mNpcEventDirector;
+
 #if GAME_VERSION == 120
     PlayReportFootPrintHolder* mPlayReportFootPrintHolder;
 #endif
+    
     al::ChromakeyDrawer* mChromakeyDrawer;
     al::HtmlViewer* mHtmlViewer;
     ProjectNfpDirector* mProjectNfpDirector;
