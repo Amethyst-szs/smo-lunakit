@@ -4,19 +4,18 @@
 
 #include "helpers/GetHelper.h"
 
-#include "imgui.h"
 #include "al/model/ModelFunction.h"
-#include "helpers/ImGuiHelper.h"
 #include "game/Actors/KuriboHack.h"
+#include "helpers/ImGuiHelper.h"
+#include "imgui.h"
 
 #include <cxxabi.h>
 
-void WindowActorBrowse::childActorInspector()
-{
+void WindowActorBrowse::childActorInspector() {
     ImGui::SetWindowFontScale(1.4f);
 
     ImVec2 listSize = ImGui::GetContentRegionAvail();
-    if(mIsWindowVertical)
+    if (mIsWindowVertical)
         listSize.y -= mHeaderSize - 2.f;
 
     ImGui::BeginChild("ActorInfo", listSize, true);
@@ -25,7 +24,7 @@ void WindowActorBrowse::childActorInspector()
 
     ImGui::LabelText("Class", "%s", actorClass.cstr());
 
-    if(mSelectedActor->mModelKeeper) {
+    if (mSelectedActor->mModelKeeper) {
         ImGui::Separator();
         ImGui::LabelText("Model", "%s", mSelectedActor->mModelKeeper->mResourceName);
     }
@@ -44,7 +43,7 @@ void WindowActorBrowse::childActorInspector()
     //         center = boundbox.getCenter();
     //         mSelectedActorTarget->pos = &center;
     //     }
-        
+
     //     static bool focus = false;
     //     ImGui::Checkbox("Focus Camera", &focus);
     //     if (focus) {
@@ -52,16 +51,17 @@ void WindowActorBrowse::childActorInspector()
     //         al::requestCancelCameraInterpole(mSelectedActor, 0);
     //     } else al::resetCameraTarget(mSelectedActor, mSelectedActorTarget);
     // }
-    
-    if(ImGui::Button("Appear")) mSelectedActor->appear();
+
+    if (ImGui::Button("Appear"))
+        mSelectedActor->appear();
     ImGui::SameLine();
-    if(ImGui::Button("Kill")) mSelectedActor->kill();
-    
-    
+    if (ImGui::Button("Kill"))
+        mSelectedActor->kill();
+
     drawActorInspectorTreePose(mSelectedActor->mPoseKeeper);
     drawActorInspectorTreeFlags(mSelectedActor->mLiveActorFlag, listSize.x);
     drawActorInspectorTreeNrvs(mSelectedActor->getNerveKeeper(), &actorClass);
-    drawActorInspectorTreeSensor(mSelectedActor->mHitSensorKeeper);
+    //    drawActorInspectorTreeSensor(mSelectedActor->mHitSensorKeeper);
     drawActorInspectorTreeRail(mSelectedActor->getRailRider());
     drawActorInspectorTreeSubActor(mSelectedActor->mSubActorKeeper);
     drawActorInspectorTreeKuriboDebug(mSelectedActor);
@@ -69,21 +69,21 @@ void WindowActorBrowse::childActorInspector()
     ImGui::EndChild();
 }
 
-inline void WindowActorBrowse::drawActorInspectorTreePose(al::ActorPoseKeeperBase* pose)
-{
-    if(!pose)
+inline void WindowActorBrowse::drawActorInspectorTreePose(al::ActorPoseKeeperBase* pose) {
+    if (!pose)
         return;
 
-    mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
+    //    mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
 
     PlayerActorBase* player = tryGetPlayerActor();
 
     ImGui::SameLine();
-    if(player && ImGui::Button("Warp to Object")) {
+    if (player && ImGui::Button("Warp to Object")) {
         player->startDemoPuppetable();
         player->mPoseKeeper->mTranslation = pose->mTranslation;
         player->endDemoPuppetable();
-    } else ImGui::NewLine();
+    } else
+        ImGui::NewLine();
 
     if (ImGui::TreeNode("Actor Pose")) {
         ImGuiHelper::Vector3Drag("Trans", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
@@ -99,15 +99,14 @@ inline void WindowActorBrowse::drawActorInspectorTreePose(al::ActorPoseKeeperBas
     }
 }
 
-inline void WindowActorBrowse::drawActorInspectorTreeFlags(al::LiveActorFlag* flag, float childWindowWidth)
-{
-    if(!flag)
+inline void WindowActorBrowse::drawActorInspectorTreeFlags(al::LiveActorFlag* flag, float childWindowWidth) {
+    if (!flag)
         return;
 
-    if(ImGui::TreeNode("Flags")) {
-        for(int i = 0; i < 12; i++) {
+    if (ImGui::TreeNode("Flags")) {
+        for (int i = 0; i < 12; i++) {
             ImGui::Checkbox(flagNames[i], (bool*)((uintptr_t)flag + i));
-            if(childWindowWidth >= (375.f * (*mParent->getCurrentScreenSizeMulti())) && i % 2 == 0)
+            if (childWindowWidth >= (375.f * (*mParent->getCurrentScreenSizeMulti())) && i % 2 == 0)
                 ImGui::SameLine(childWindowWidth / 2.f);
         }
 
@@ -115,12 +114,11 @@ inline void WindowActorBrowse::drawActorInspectorTreeFlags(al::LiveActorFlag* fl
     }
 }
 
-inline void WindowActorBrowse::drawActorInspectorTreeNrvs(al::NerveKeeper* nrvKeep, sead::FixedSafeString<0x30>* actorClass)
-{
-    if(!nrvKeep)
+inline void WindowActorBrowse::drawActorInspectorTreeNrvs(al::NerveKeeper* nrvKeep, sead::FixedSafeString<0x30>* actorClass) {
+    if (!nrvKeep)
         return;
 
-    if(ImGui::TreeNode("Nerves")) {
+    if (ImGui::TreeNode("Nerves")) {
         int status = 0;
         const al::Nerve* pNrv2 = nrvKeep->getCurrentNerve();
         char* nrvName2 = abi::__cxa_demangle(typeid(*pNrv2).name(), nullptr, nullptr, &status);
@@ -156,14 +154,13 @@ inline void WindowActorBrowse::drawActorInspectorTreeNrvs(al::NerveKeeper* nrvKe
     }
 }
 
-inline void WindowActorBrowse::drawActorInspectorTreeRail(al::RailRider* railRide)
-{
-    if(!railRide)
+inline void WindowActorBrowse::drawActorInspectorTreeRail(al::RailRider* railRide) {
+    if (!railRide)
         return;
 
     mParent->getPrimitiveQueue()->pushRail(railRide->mRail, mRailPercision, {0.7f, 0.1f, 0.5f, 1.f});
 
-    if(ImGui::TreeNode("Rail")) {
+    if (ImGui::TreeNode("Rail")) {
         int percisonEdit = mRailPercision;
         ImGui::SliderInt("Percision", &percisonEdit, 2, 40, "%d", ImGuiSliderFlags_NoRoundToFormat);
         mRailPercision = percisonEdit;
@@ -173,41 +170,42 @@ inline void WindowActorBrowse::drawActorInspectorTreeRail(al::RailRider* railRid
 
         ImGui::Text(railRide->mIsMoveForwardOnRail ? "Forward" : "Backward");
         ImGui::SameLine();
-        if(ImGui::Button("Flip")) railRide->reverse();
+        if (ImGui::Button("Flip"))
+            railRide->reverse();
 
-        if(ImGui::Button("Go Start")) railRide->setMoveGoingStart();
+        if (ImGui::Button("Go Start"))
+            railRide->setMoveGoingStart();
         ImGui::SameLine();
-        if(ImGui::Button("Go End")) railRide->setMoveGoingEnd();
+        if (ImGui::Button("Go End"))
+            railRide->setMoveGoingEnd();
 
         ImGui::TreePop();
     }
 }
 
-inline void WindowActorBrowse::drawActorInspectorTreeSensor(al::HitSensorKeeper* sensor)
-{
-    if(!sensor || !isInStageScene())
+inline void WindowActorBrowse::drawActorInspectorTreeSensor(al::HitSensorKeeper* sensor) {
+    if (!sensor || !isInStageScene())
         return;
 
     mParent->getPrimitiveQueue()->pushHitSensor(mSelectedActor, mHitSensorTypes, 0.4f);
 }
 
-inline void WindowActorBrowse::drawActorInspectorTreeSubActor(al::SubActorKeeper* subActorKeep)
-{
-    if(!subActorKeep)
+inline void WindowActorBrowse::drawActorInspectorTreeSubActor(al::SubActorKeeper* subActorKeep) {
+    if (!subActorKeep)
         return;
 
-    if(ImGui::TreeNode("Sub-Actors")) {
-        for(int i = 0; i < subActorKeep->mActorCount; i++) {
+    if (ImGui::TreeNode("Sub-Actors")) {
+        for (int i = 0; i < subActorKeep->mActorCount; i++) {
             al::LiveActor* subActor = subActorKeep->mInfoList[i]->mSubActor;
 
             sead::FixedSafeString<0x30> actorName = getActorName(subActor);
             sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName);
 
-            if(trimName.isEmpty()) {
+            if (trimName.isEmpty()) {
                 ImGui::TextDisabled("Actor name not found!");
                 continue;
             }
-            
+
             bool isFalse = false;
 
             ImGui::Selectable(trimName.cstr(), &isFalse, 0, ImVec2(ImGui::GetWindowWidth(), mLineSize));
@@ -230,7 +228,6 @@ inline void WindowActorBrowse::drawActorInspectorTreeKuriboDebug(al::LiveActor* 
     }
     auto kuribo = static_cast<KuriboHack*>(actor);
     if (ImGui::TreeNode("Kuribo-Debug")) {
-
         ImGui::Text("Detach Timer: %d", kuribo->mDetachTimer);
         ImGui::Text("KuriboTowerIdx: %d", kuribo->mKuriboTowerIdx);
         ImGui::Checkbox("field_2e0", &kuribo->unused_2e0);

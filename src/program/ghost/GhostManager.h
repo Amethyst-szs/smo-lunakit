@@ -6,12 +6,13 @@
 #include "heap/seadDisposer.h"
 
 #define REPLAY_SAVEPATH "sd:/smo/tas/replay"
-#define MAX_GHOST_COUNT 8
+#define MAX_GHOST_COUNT 4
 
-class GhostManager  : public al::NerveExecutor {
+class GhostManager : public al::NerveExecutor {
     SEAD_SINGLETON_DISPOSER(GhostManager);
     GhostManager();
     ~GhostManager();
+
 public:
     void init(al::ActorInitInfo const& info);
     void exeWait();
@@ -27,8 +28,9 @@ public:
     void updateDir();
     void setNerveRecordEnd();
     bool isRecording();
-    bool* getActiveReplays() { return mActiveReplays; } ;
+    bool* getActiveReplays() { return mActiveReplays; };
     int* getMaxGhosts() { return &mMaxGhostNum; };
+    Ghost* getGhost(int idx) { return ghosts.at(idx); }
     nn::fs::DirectoryEntry* getReplays() const { return mEntries; };
     s64 getEntryCount() const { return mEntryCount; };
     void setMaxGhosts(int max) { mMaxGhostNum = max; };

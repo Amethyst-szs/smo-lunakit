@@ -26,6 +26,7 @@ public:
     bool isRunning();
     void exeWait();
     void exePlay();
+    s32 getFrameCount() const { return mFrameCount; }
 
 private:
     ReplayFrame* mFrames = nullptr;
@@ -33,4 +34,3 @@ private:
     GhostManager* mParent = nullptr;
     PuppetActor* mPuppet = nullptr;
 };
-

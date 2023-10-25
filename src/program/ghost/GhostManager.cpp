@@ -1,6 +1,7 @@
 #include "GhostManager.h"
 #include "al/util/NerveUtil.h"
 #include "devgui/DevGuiManager.h"
+#include "game/Player/HackCap.h"
 #include "game/Player/PlayerAnimator.h"
 #include "helpers/GetHelper.h"
 #include "helpers/fsHelper.h"
@@ -64,7 +65,7 @@ bool GhostManager::tryStartRecord() {
     mReplayPath = sead::FormatFixedSafeString<256>(REPLAY_SAVEPATH "/%s", tas->getScriptName());
     Logger::log("%s\n", mReplayPath.cstr());
     Script* script = tas->getScript();
-    mFrameLength = script->mFrames[script->mFrameCount - 1].mStep;
+    mFrameLength = script->mFrames[script->mInputCount - 1].mFrame;
     mFrames = new ReplayFrame[mFrameLength];
     //    static const uint workBufSize = sizeof(ReplayFrame)* mFrameLength;
     //    mWorkBuf = new u8[workBufSize];
@@ -125,31 +126,29 @@ void GhostManager::endReplay() {
 void GhostManager::exeWait() {}
 
 void GhostManager::exeRecord() {
-    Logger::log("Ghost Manager: exeRecord\n");
+    int step = al::getNerveStep(this);
     if (!TAS::instance()->isRunning())
         return;
-    Logger::log("    TAS is running!\n");
     mPlayer = tryGetPlayerActorHakoniwa(mScene);
-    if (!mPlayer)
+    if (!mPlayer) {
+        mFrames[step] = {};
         return;
-    Logger::log("    Player exists!\n");
-    int step = al::getNerveStep(this);
+    }
+
     if (TAS::instance()->getFrameIndex() >= TAS::instance()->getFrameCount()) {
         al::setNerve(this, &nrvGhostManager.RecordEnd);
         return;
     }
-    Logger::log("    TAS is still running!\n");
+
     sead::SafeString pAnim = mPlayer->mPlayerAnimator->curAnim;
-    Logger::log("    Player Animation: %s\n", pAnim.cstr());
     const char* capAnim = al::getActionName(mPlayer->mHackCap);
-    Logger::log("    Cap Anim: %s\n", capAnim);
     mFrames[step].playerAnim = PlayerAnims::FindEnum(pAnim.cstr());
-    Logger::log("    PlayerAnims::FindEnum: %d\n", PlayerAnims::FindEnum(pAnim.cstr()));
     if (capAnim)
         mFrames[step].capAnim = PlayerAnims::FindEnum(capAnim);
-    for (int i = 0; i < 6; i++) {
+
+    for (int i = 0; i < 6; i++)
         mFrames[step].blendWeights[i] = mPlayer->mPlayerAnimator->getBlendWeight(i);
-    }
+
     mFrames[step].pTrans = al::getTrans(mPlayer);
     mFrames[step].pRotation = al::getQuat(mPlayer);
     mFrames[step].cTrans = al::getTrans(mPlayer->mHackCap);
@@ -158,8 +157,8 @@ void GhostManager::exeRecord() {
     mFrames[step].cSkew = mPlayer->mHackCap->mJointKeeper->mSkew;
     mFrames[step].isCapVisible = !mPlayer->mHackCap->mLiveActorFlag->mIsModelVisible;
     mFrames[step].is2D = rs::isPlayer2D(mPlayer);
+    //    mFrames[step].isHack = mPlayer->mPlayerHackKeeper->mIsHack;
     mFrames[step].isHack = false;
-    Logger::log("    End of GhostManager::exeRecord()\n");
 }
 
 void GhostManager::exeRecordEnd() {

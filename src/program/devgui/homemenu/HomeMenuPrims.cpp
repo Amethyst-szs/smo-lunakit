@@ -1,6 +1,7 @@
 #include "devgui/homemenu/HomeMenuPrims.h"
 #include "devgui/DevGuiManager.h"
 #include "devgui/savedata/DevGuiSaveData.h"
+#include "game/Player/HackCap.h"
 
 #include "al/actor/LiveActorKit.h"
 #include "al/collision/alCollisionUtil.h"

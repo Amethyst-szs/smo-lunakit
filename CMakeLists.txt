@@ -3,7 +3,7 @@ project(subsdk CXX C ASM)
 
 ## Error if not using switch toolchain file
 if (NOT SWITCH)
-  message(FATAL_ERROR "Not targeting switch, make sure to specify -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake")
+    message(FATAL_ERROR "Not targeting switch, make sure to specify -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake")
 endif ()
 
 set(CMAKE_C_STANDARD 17)
@@ -14,11 +14,11 @@ set(TITLE_ID 0100000000010000)
 set(CONFIG_TITLE_ID 0x${TITLE_ID})
 
 execute_process(
-  COMMAND git describe --tags --abbrev=0
-  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-  OUTPUT_VARIABLE GIT_VER
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
+        COMMAND git describe --tags --abbrev=0
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+        OUTPUT_VARIABLE GIT_VER
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
 add_compile_definitions(EXL_PROGRAM_ID=${CONFIG_TITLE_ID} NNSDK=1 IMGUI_USER_CONFIG="imgui_backend/nvn_imgui_config.h" GIT_VER="${GIT_VER}")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/module/subsdk9.json.template ${CMAKE_CURRENT_BINARY_DIR}/subsdk9.json)
@@ -56,7 +56,7 @@ target_embed_binaries(subsdk9 "${PROJECT_SOURCE_DIR}/imgui.bin")
 set(SUBSDK_LD_PATH ${CMAKE_CURRENT_SOURCE_DIR}/module/subsdk9.ld)
 execute_process(COMMAND uname OUTPUT_VARIABLE uname)
 if (uname MATCHES "^MINGW")
-  string(REGEX REPLACE "^/([a-zA-Z])/" "\\1:/" SUBSDK_LD_PATH "${SUBSDK_LD_PATH}")
+    string(REGEX REPLACE "^/([a-zA-Z])/" "\\1:/" SUBSDK_LD_PATH "${SUBSDK_LD_PATH}")
 endif ()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/module/subsdk9.specs.template ${CMAKE_CURRENT_BINARY_DIR}/subsdk9.specs)
 
@@ -68,11 +68,15 @@ set_target_properties(subsdk9 PROPERTIES LINK_FLAGS "-specs ${CMAKE_BINARY_DIR}/
 
 add_custom_target(subsdk9_meta DEPENDS create_npdm subsdk9_nso)
 if (FTP_IP)
-  ## Upload to target switch
-  add_custom_command(TARGET subsdk9_meta POST_BUILD COMMAND ncftpput -u crafty -p boss -P 5000 ${FTP_IP} atmosphere/contents/${TITLE_ID}/exefs ${CMAKE_BINARY_DIR}/main.npdm ${CMAKE_BINARY_DIR}/subsdk9)
-endif()
+    ## Upload to target switch
+    add_custom_command(TARGET subsdk9_meta POST_BUILD COMMAND ncftpput -u crafty -p boss -P 5000 ${FTP_IP} atmosphere/contents/${TITLE_ID}/exefs ${CMAKE_BINARY_DIR}/main.npdm ${CMAKE_BINARY_DIR}/subsdk9)
+endif ()
 
-if(RYU_PATH)
-  add_custom_command(TARGET subsdk9_meta POST_BUILD COMMAND cp ${CMAKE_BINARY_DIR}/main.npdm ${RYU_PATH}/mods/contents/${TITLE_ID}/mods/exefs/main.npdm)
-  add_custom_command(TARGET subsdk9_meta POST_BUILD COMMAND cp ${CMAKE_BINARY_DIR}/subsdk9 ${RYU_PATH}/mods/contents/${TITLE_ID}/mods/exefs/subsdk9)
+if (RYU_PATH)
+    add_custom_command(TARGET subsdk9_meta POST_BUILD COMMAND cp ${CMAKE_BINARY_DIR}/main.npdm ${RYU_PATH}/mods/contents/${TITLE_ID}/mods/exefs/main.npdm)
+    add_custom_command(TARGET subsdk9_meta POST_BUILD COMMAND cp ${CMAKE_BINARY_DIR}/subsdk9 ${RYU_PATH}/mods/contents/${TITLE_ID}/mods/exefs/subsdk9)
+endif ()
+
+if (GAME_VERSION)
+    add_compile_definitions("GAME_VERSION=${GAME_VERSION}")
 endif ()

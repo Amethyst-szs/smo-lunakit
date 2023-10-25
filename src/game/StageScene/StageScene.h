@@ -18,7 +18,18 @@ class StageSceneStateCloset;
 class StageSceneStateSkipDemo;
 class StageSceneStateCheckpointWarp;
 class StageSceneStateCarryMeat;
+
+#if GAME_VERSION == 100
 class StageSceneStateTimeBalloon;
+#elif GAME_VERSION == 120
+class StageSceneStateBalloonGame;
+class StageSceneStateBalloonGameEntry;
+class BalloonGameNpc;
+class BalloonGameData;
+class BalloonGameDataAccessor;
+class PlayReportFootPrintHolder;
+#endif
+
 class StageSceneStateTitleLogo;
 class StageSceneStateMiss;
 class StageSceneStateYukimaruRace;
@@ -95,7 +106,15 @@ public:
     StageSceneStateSkipDemo* mStateSkipDemo;
     StageSceneStateCheckpointWarp* mStateCheckpointWarp;
     StageSceneStateCarryMeat* mStateCarryMeat;
+
+#if GAME_VERSION == 100
     StageSceneStateTimeBalloon* mStateTimeBalloon;
+#elif GAME_VERSION == 120
+    StageSceneStateBalloonGame* mStateBalloonGame;
+    StageSceneStateBalloonGameEntry* mStateBalloonGameEntry;
+    void* unused_1b8;
+#endif
+
     StageSceneStateTitleLogo* mStateTitleLogo;
     StageSceneStateMiss* mStateMiss;
     StageSceneStateYukimaruRace* mStateYukimaruRace;
@@ -138,7 +157,12 @@ public:
     al::LiveActorGroup* mShopGroup;  // name unsure, 2 different LiveActorGroups inited in the same spot(?)
     CollectionList* mCollectionList;
     al::LiveActor* mKoopaLv1;
+#if GAME_VERSION == 100
     TimeBalloonNpc* mTimeBalloonNpc;
+#elif GAME_VERSION == 120
+    BalloonGameNpc* mBalloonGameNpc;
+    void* unused_3b0;
+#endif
     ProjectItemDirector* mProjectItemDirector;
     Pyramid* mPyramid;
     OpeningStageStartDemo* mOpeningStageStartDemo;
@@ -150,8 +174,15 @@ public:
     al::SimpleAudioUser* mSnapShotCameraCtrl;
     ProjectSeNamedList* mSeNamedList;
     void* unused_3f0;
+#if GAME_VERSION == 100
     TimeBalloonDirector* mTimeBalloonDirector;
     TimeBalloonSequenceInfo* mTimeBalloonSequenceInfo;
+#elif GAME_VERSION == 120
+    BalloonGameData* mBalloonGameData;
+    BalloonGameDataAccessor* mBalloonGameDataAccessor;
+    void* unused_420;
+    void* unused_428;
+#endif
     void* unused_408;
     al::CameraTicket* mCheckpointWarpArriveCamera;
     sead::Vector3f mCheckpointWarpTargetPos;
@@ -172,6 +203,9 @@ public:
     bool mUpdateKitAndGraphics;
     bool mAlwaysFalse;  // supposed to be set in exeDemoHackStartFirst but presumed coding mistake prevents that
     NpcEventDirector* mNpcEventDirector;
+#if GAME_VERSION == 120
+    PlayReportFootPrintHolder* mPlayReportFootPrintHolder;
+#endif
     al::ChromakeyDrawer* mChromakeyDrawer;
     al::HtmlViewer* mHtmlViewer;
     ProjectNfpDirector* mProjectNfpDirector;

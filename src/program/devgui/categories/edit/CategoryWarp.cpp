@@ -1,54 +1,59 @@
 #include "program/devgui/categories/edit/CategoryWarp.h"
-#include "game/Player/PlayerStainControl.h"
 #include "al/util.hpp"
+#include "game/Player/PlayerStainControl.h"
 
 #include "helpers/GetHelper.h"
 
 #include "imgui.h"
 
-CategoryWarp::CategoryWarp(const char* catName, const char* catDesc, sead::Heap* heap)
-    : CategoryBase(catName, catDesc, heap) {}
+CategoryWarp::CategoryWarp(const char* catName, const char* catDesc, sead::Heap* heap) : CategoryBase(catName, catDesc, heap) {}
 
-void CategoryWarp::updateCat()
-{
-    if(!mIsUseHotkeys)
+void CategoryWarp::updateCat() {
+    if (!mIsUseHotkeys)
         return;
-    
+
     PlayerActorHakoniwa* player = tryGetPlayerActorHakoniwa();
-    if(!player)
+    if (!player)
         return;
 
-    if(al::isPadTriggerLeft(-1)) { saveTeleportData(player); }
-    if(al::isPadTriggerRight(-1)) { loadTeleportData(player); }
+    if (al::isPadTriggerLeft(-1)) {
+        saveTeleportData(player);
+    }
+    if (al::isPadTriggerRight(-1)) {
+        loadTeleportData(player);
+    }
 }
 
-void CategoryWarp::updateCatDisplay()
-{
+void CategoryWarp::updateCatDisplay() {
     CategoryBase::updateCatDisplay();
-    
+
     PlayerActorHakoniwa* player = tryGetPlayerActorHakoniwa();
 
-    if(!player) {
+    if (!player) {
         ImGui::TextDisabled("Player does not exist!");
         return;
     }
 
     ImGui::SliderInt("Teleport Idx", &mCurStateIdx, 0, mMaxSaves - 1);
-    if(ImGui::IsItemHovered())
+    if (ImGui::IsItemHovered())
         ImGui::SetTooltip("The index of the teleport position\nto save/load to/from");
 
-    if(ImGui::Button("Save")) { saveTeleportData(player); }
-    if(ImGui::IsItemHovered())
+    if (ImGui::Button("Save")) {
+        saveTeleportData(player);
+    }
+    if (ImGui::IsItemHovered())
         ImGui::SetTooltip("Saves the current position and rotation\nof the player to the selected index");
 
     ImGui::SameLine();
-    if(ImGui::Button("Load")) { loadTeleportData(player); }
-    if(ImGui::IsItemHovered())
+    if (ImGui::Button("Load")) {
+        loadTeleportData(player);
+    }
+    if (ImGui::IsItemHovered())
         ImGui::SetTooltip("Loads the position and rotation of the\nplayer from the selected index");
 
     ImGui::SameLine();
     ImGui::Checkbox("Hotkeys", &mIsUseHotkeys);
-    if(ImGui::IsItemHovered())
+    if (ImGui::IsItemHovered())
         ImGui::SetTooltip("Enables hotkeys\nSave - D-Pad Left\nLoad - D-Pad Right");
 
     WarpSaveState& curState = mStates[mCurStateIdx];
@@ -66,7 +71,7 @@ void CategoryWarp::saveTeleportData(PlayerActorHakoniwa* player) {
 
 void CategoryWarp::loadTeleportData(PlayerActorHakoniwa* player) {
     WarpSaveState& curState = mStates[mCurStateIdx];
-    al::LiveActor* hack = player->mPlayerHackKeeper->currentHackActor;
+    al::LiveActor* hack = player->mPlayerHackKeeper->mHackActor;
 
     if (hack) {
         al::offCollide(hack);

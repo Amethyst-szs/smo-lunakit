@@ -1,15 +1,14 @@
 #include "CategoryTASReplay.h"
 #include "devgui/DevGuiManager.h"
+#include "devgui/savedata/DevGuiSaveData.h"
 #include "fs/fs_types.hpp"
 #include "game/StageScene/StageScene.h"
 #include "ghost/GhostManager.h"
+#include "helpers/GetHelper.h"
 #include "imgui.h"
 #include "imgui_internal.h"
-#include "helpers/GetHelper.h"
-#include "devgui/savedata/DevGuiSaveData.h"
 
-CategoryTASReplay::CategoryTASReplay(const char* catName, const char* catDesc, sead::Heap* heap)
-    : CategoryBase(catName, catDesc, heap) {}
+CategoryTASReplay::CategoryTASReplay(const char* catName, const char* catDesc, sead::Heap* heap) : CategoryBase(catName, catDesc, heap) {}
 
 void CategoryTASReplay::updateCatDisplay() {
     auto* ghostMgr = GhostManager::instance();
@@ -29,7 +28,7 @@ void CategoryTASReplay::updateCatDisplay() {
     }
     ImGui::Text("\n");
     CategoryBase::updateCatDisplay();
-    ImGui::BeginChild("Scripts", ImVec2(0,-(ImGui::GetFontSize()*8.5)), true);
+    ImGui::BeginChild("Scripts", ImVec2(0, -(ImGui::GetFontSize() * 9.5)), true);
 
     nn::fs::DirectoryEntry* entries = ghostMgr->getReplays();
 

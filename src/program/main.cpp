@@ -290,7 +290,7 @@ HOOK_DEFINE_TRAMPOLINE(UpdateLunaKit) {
 
 extern "C" void exl_main(void* x0, void* x1) {
     /* Setup hooking enviroment. */
-    // envSetOwnProcessHandle(exl::util::proc_handle::Get());
+    //     envSetOwnProcessHandle(exl::util::proc_handle::Get());
     exl::hook::Initialize();
 
     handler::installExceptionHandler([](handler::ExceptionInfo& info) {

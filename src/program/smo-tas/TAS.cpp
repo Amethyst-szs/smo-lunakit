@@ -110,7 +110,7 @@ bool TAS::tryLoadScript() {
 }
 
 void TAS::startScript() {
-    bool isWait = false;
+    mIsWait = false;
 
     // check if script uses 2-player mode
     if (mScript->mIsTwoPlayer != rs::isSeparatePlay(mScene)) {
@@ -119,12 +119,12 @@ void TAS::startScript() {
             if (!ControllerAppletFunction::connectControllerSeparatePlay(gamePadSystem))
                 return;
             rs::changeSeparatePlayMode(mScene, true);
-            isWait = true;
+            mIsWait = true;
         } else {
             if (!ControllerAppletFunction::connectControllerSinglePlay(gamePadSystem))
                 return;
             rs::changeSeparatePlayMode(mScene, false);
-            isWait = true;
+            mIsWait = true;
         }
     }
 
@@ -133,11 +133,11 @@ void TAS::startScript() {
     if (!al::isEqualString(mScript->mChangeStageName, "")) {
         ChangeStageInfo info(accessor.mData, mScript->mChangeStageId, mScript->mChangeStageName, false, mScript->mScenarioNo, ChangeStageInfo::UNK);
         accessor.mData->changeNextStage(&info, 0);
-        isWait = true;
+        mIsWait = true;
     }
 
     // if stage and/or 2p, wait for 1 frame before starting script
-    if (isWait)
+    if (mIsWait)
         al::setNerve(this, &nrvTAS.WaitUpdate);
     else
         al::setNerve(this, &nrvTAS.Update);
@@ -182,8 +182,7 @@ void TAS::exeUpdate() {
         mPrevButtons[1] = 0;
         if (al::isEqualString(typeid(*mScene).name(), typeid(StageScene).name())) {
             PlayerActorBase* playerBase = rs::getPlayerActor(mScene);
-            if (playerBase && !(mScript->mStartPosition.x == 0 && mScript->mStartPosition.y == 0 &&
-                                mScript->mStartPosition.z == 0)) {  // teleport unless position is (0, 0, 0)
+            if (playerBase && (mScript->mStartPosition != sead::Vector3f::zero)) {  // teleport unless position is (0, 0, 0)
                 playerBase->startDemoPuppetable();
                 al::setTrans(playerBase, mScript->mStartPosition);
                 playerBase->endDemoPuppetable();
@@ -194,35 +193,31 @@ void TAS::exeUpdate() {
 
     bool updated[2] = {false, false};
 
-    while (mFrameIndex < mScript->mFrameCount) {
-        // Logger::log("Frame Index: %d, Step: %d\n", mFrameIndex, al::getNerveStep(this));
-        InputFrame& curFrame = mScript->mFrames[mFrameIndex];
-        if (step < curFrame.mStep)
-            break;
-        mFrameIndex++;  // increment after checking step
-        updated[curFrame.mSecondPlayer] = true;
+    while (mFrameIndex < mScript->mInputCount) {               // while the current index into the script is less than the number of maximum lines
+        InputFrame& curFrame = mScript->mFrames[mFrameIndex];  //
+        if (step < curFrame.mFrame)              // if the current nerve step is less than the current frame number, skip until we reach that point
+            break;                               //
+        mFrameIndex++;                           // increment after checking step
+        updated[curFrame.mSecondPlayer] = true;  // lets us know we updated one of the controller inputs
         applyFrame(curFrame);
 
         mPrevButtons[curFrame.mSecondPlayer] = curFrame.mButtons;
-        // Logger::log("Applied frame: %d, step: %d\n", mFrameIndex, curFrame.mStep);
     }
 
-    if (!updated[0]) {
+    if (!updated[0]) {  // if player 1 did not get updated, apply a frame of nothing to player 1.
         mPrevButtons[0] = 0;
         InputFrame frame = {.mSecondPlayer = false};
         applyFrame(frame);
     }
-    if (!updated[1]) {
+    if (!updated[1]) {  // if player 2 did not get updated, apply a frame of nothing to player 2.
         mPrevButtons[1] = 0;
         InputFrame frame = {.mSecondPlayer = true};
         applyFrame(frame);
     }
-    if (mFrameIndex >= mScript->mFrameCount) {
+    if (mFrameIndex >= mScript->mInputCount) {  // if we are going to go out of bounds on the next frame, end the TAS (and recording)
         auto* ghostMgr = GhostManager::instance();
         if (ghostMgr->isRecording())
             ghostMgr->setNerveRecordEnd();
-        // Logger::log("Ended Script on Step: %d\n", al::getNerveStep(this));
-        // al::setNerve(this, &nrvTASWait);
         endScript();
     }
 }

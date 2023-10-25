@@ -12,6 +12,7 @@ class TAS : public al::NerveExecutor {
     SEAD_SINGLETON_DISPOSER(TAS);
     TAS();
     ~TAS();
+
 public:
     bool tryLoadScript();
     void startScript();
@@ -29,14 +30,16 @@ public:
     nn::fs::DirectoryEntry* getScripts() const { return mEntries; };
     s64 getEntryCount() const { return mEntryCount; };
     u32 getFrameIndex() const { return mFrameIndex; };
-    u32 getFrameCount() const { return mScript->mFrameCount; };
+    u32 getFrameCount() const { return mScript->mInputCount; };
     Script* getScript() { return mScript; };
     sead::Vector3f getStartPosition() const { return mScript->mStartPosition; };
     bool hasScript() const { return mScript != nullptr; };
+    bool isWait() const { return mIsWait; };
     void updateDir();
     bool tryStartScript();
 
 private:
+    bool mIsWait = false;
     s64 mEntryCount;
     nn::fs::DirectoryEntry* mEntries = nullptr;
     nn::fs::DirectoryEntry mLoadedEntry;

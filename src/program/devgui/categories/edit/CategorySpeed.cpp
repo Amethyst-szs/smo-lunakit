@@ -1,17 +1,12 @@
 #include "program/devgui/categories/edit/CategorySpeed.h"
-
+#include "game/Player/PlayerConst.h"
 #include "helpers/GetHelper.h"
-
+#include "imgui.h"
 #include "logger/Logger.hpp"
 
-#include "imgui.h"
+CategorySpeed::CategorySpeed(const char* catName, const char* catDesc, sead::Heap* heap) : CategoryBase(catName, catDesc, heap) {}
 
-CategorySpeed::CategorySpeed(const char* catName, const char* catDesc, sead::Heap* heap)
-    : CategoryBase(catName, catDesc, heap)
-{}
-
-void CategorySpeed::updateCat()
-{
+void CategorySpeed::updateCat() {
     // Get the player actor and check if they are dead
     PlayerActorHakoniwa* playerHak = tryGetPlayerActorHakoniwa();
     if (!playerHak)
@@ -30,8 +25,7 @@ void CategorySpeed::updateCat()
     playerHak->mPlayerConst->mJumpMoveSpeedMax = mTargetSpeed + 50;
 }
 
-void CategorySpeed::updateCatDisplay()
-{
+void CategorySpeed::updateCatDisplay() {
     CategoryBase::updateCatDisplay();
 
     ImGui::Checkbox("Edit Speed", &mIsOverride);
