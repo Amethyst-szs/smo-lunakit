@@ -1,6 +1,7 @@
 #pragma once
 
 #include <game/Interfaces/IUseDimension.h>
+#include "game/Player/PlayerRecoverySafetyPoint.h"
 #include "PlayerActorBase.h"
 
 class PlayerConst;

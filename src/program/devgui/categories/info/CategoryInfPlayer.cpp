@@ -97,4 +97,7 @@ void CategoryInfPlayer::updateCatDisplay()
     PlayerAnimator* anim = playerHak->mPlayerAnimator;
     ImGui::Text("Anim: %s (%.00f/%.00f)", anim->curAnim.cstr(), anim->getAnimFrame(), anim->getAnimFrameMax());
     ImGui::Text("Sub Anim: %s (%.00f/%.00f)", anim->curSubAnim.cstr(), anim->getSubAnimFrame(), anim->getSubAnimFrameMax());
+
+    sead::Vector3f kidsPos = playerHak->mPlayerRecoverySafetyPoint->mSafetyPointPos;
+    ImGui::InputFloat3("Assist Pos", &kidsPos.x, "%.00f", ImGuiInputTextFlags_ReadOnly);
 }

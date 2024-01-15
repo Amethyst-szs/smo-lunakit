@@ -82,6 +82,13 @@ void HomeMenuPrims::renderPlayerCategory(al::Scene* scene, PrimitiveQueue* queue
             queue->pushLine(capPos, capTarget, {0.9f, 0.2f, 0.2f, 1.f});
         }
     }
+
+    if (mSettings->getSettingEntryByName("Assist Bubble")->isTrue()) {
+        PlayerActorHakoniwa* playerHak = tryGetPlayerActorHakoniwa();
+        if (playerHak) {
+            queue->pushPoint(playerHak->mPlayerRecoverySafetyPoint->mSafetyPointPos, 15.f, sead::Color4f::cGreen);
+        }
+    }
 }
 
 void HomeMenuPrims::renderTriangleCategory(al::Scene* scene, PrimitiveQueue* queue) {

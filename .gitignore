@@ -40,6 +40,7 @@ build/
 compile_commands.jso
 deploy
 imgui/backends/vulkan/generate_spv.sh
+.vscode/
 
 # promo assets
 promo_screenshots/
