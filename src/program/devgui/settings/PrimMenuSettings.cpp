@@ -20,6 +20,7 @@ PrimMenuSettings::PrimMenuSettings(DevGuiManager* parent)
     registerNewSetting(false, "World Axis", PrimMenuCat_PLAYER, false);
     registerNewSetting(false, "Player Front", PrimMenuCat_PLAYER, false);
     registerNewSetting(false, "Cappy Info", PrimMenuCat_PLAYER, false);
+    registerNewSetting(false, "Assist Bubble", PrimMenuCat_PLAYER, false);
 
     // Collision / Triangle category
     registerNewSetting(false, "Collision", PrimMenuCat_TRIANGLE, false);

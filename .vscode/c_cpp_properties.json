@@ -6,7 +6,8 @@
                 "${workspaceFolder}/src/**",
                 "${workspaceFolder}/src/nn/**",
                 "${workspaceFolder}/src/sead/**",
-                "${workspaceFolder}/src/lib/**"
+                "${workspaceFolder}/src/lib/**",
+                "${workspaceFolder}/imgui"
             ],
             "defines": [],
             "compilerPath": "/opt/devkitpro/devkitA64/bin/aarch64-none-elf-g++",
