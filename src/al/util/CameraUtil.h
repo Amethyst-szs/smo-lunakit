@@ -2,7 +2,7 @@
 
 #include <sead/math/seadVector.h>
 
-#include "al/camera/CameraDirector.h"
+#include "Library/Camera/CameraDirector.h"
 #include "al/camera/Projection.h"
 #include "gfx/seadProjection.h"
 

@@ -4,11 +4,11 @@
 #include <sead/math/seadQuat.h>
 #include <sead/math/seadVector.h>
 #include <sead/prim/seadSafeString.h>
-#include "al/LiveActor/LiveActor.h"
-#include "al/async/FunctorBase.h"
-#include "al/collision/Collider.h"
+#include "Library/LiveActor/LiveActor.h"
+#include "Library/Thread/FunctorV0M.h"
+#include "Library/Collision/Collider.h"
 #include "game/Player/PlayerActorHakoniwa.h"
-#include "al/layout/LayoutActor.h"
+#include "Library/Layout/LayoutActor.h"
 #include "al/layout/LayoutInitInfo.h"
 
 typedef unsigned int uint;
@@ -120,24 +120,11 @@ namespace al {
     sead::Vector3f *getClippingObb(al::LiveActor *);
     sead::Vector3f *getClippingCenterPos(al::LiveActor const*);
 
-    sead::Vector3f& getTrans(const LiveActor*);
-    sead::Vector3f* getTransPtr(LiveActor*);
-    sead::Vector3f& getGravity(const LiveActor*);
-    sead::Vector3f* getGravityPtr(const LiveActor*);
-    sead::Vector3f& getFront(const LiveActor*);
-    sead::Vector3f* getFrontPtr(LiveActor*);
     sead::Vector3f& getVelocity(const LiveActor*);
     sead::Vector3f* getVelocityPtr(LiveActor*);
-    sead::Quatf& getQuat(LiveActor const*);
-    sead::Quatf* getQuatPtr(LiveActor*);
-    float *getScaleX(LiveActor const *);
-    float *getScaleY(LiveActor const *);
-    float *getScaleZ(LiveActor const *);
     Collider* getActorCollider(LiveActor const *);
 
     sead::Matrix34f* getJointMtxPtr(const LiveActor*, const char*); //return type might be const
-
-    sead::Quatf* getQuatPtr(LiveActor *);
 
     sead::Vector3f* getOnGroundNormal(const LiveActor *, uint);
 
@@ -182,8 +169,6 @@ namespace al {
     f32* findActorParamF32(const LiveActor*, const char*);
 
     s32* findActorParamS32(const LiveActor*, const char*);
-
-    LiveActor* getSubActor(const LiveActor*, const char*); //NOTE: unknown return type
 
     bool listenStageSwitchOnAppear(IUseStageSwitch *, al::FunctorBase const &functor);
 }

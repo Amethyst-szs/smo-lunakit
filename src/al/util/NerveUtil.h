@@ -1,8 +1,9 @@
 #pragma once
 
-#include "al/LiveActor/LiveActor.h"
-#include "al/nerve/Nerve.h"
-#include "al/nerve/NerveStateBase.h"
+#include "Library/LiveActor/LiveActor.h"
+#include "Library/Nerve/Nerve.h"
+#include "Library/Nerve/NerveKeeper.h"
+#include "Library/Nerve/NerveStateBase.h"
 
 // clang-format off
 #define NERVE_IMPL_(Class, Action, ActionFunc)                                                                                                       \

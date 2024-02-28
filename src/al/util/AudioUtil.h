@@ -1,6 +1,6 @@
 #pragma once
 
-#include "al/audio/AudioKeeper.h"
+#include "Library/Audio/AudioKeeper.h"
 #include "sead/prim/seadSafeString.h"
 
 namespace al {

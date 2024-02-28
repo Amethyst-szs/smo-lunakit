@@ -1,10 +1,6 @@
 #pragma once
 
-#include "al/sensor/HitSensor.h"
-#include "al/sensor/HitSensorKeeper.h"
-#include "al/sensor/SensorHitGroup.h"
-
-#include "al/LiveActor/LiveActor.h" // for SensorMsg
+#include "Library/LiveActor/LiveActor.h" // for SensorMsg
 
 #include <sead/math/seadVector.h>
 
@@ -24,6 +20,9 @@ typedef unsigned int uint;
 
 namespace al
 {
+    class HitSensor;
+    class HitSensorKeeper;
+    class HitSensorGroup;
 
     struct ComboCounter;
     struct EventFlowExecutor;

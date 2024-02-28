@@ -1,8 +1,8 @@
 #pragma once
 
-#include "actor/ActorCameraTarget.h"
-#include "al/scene/ISceneObj.h"
-#include "al/scene/SceneObjHolder.h"
+#include "al/actor/ActorCameraTarget.h"
+#include "Library/Scene/ISceneObj.h"
+#include "Library/Scene/SceneObjHolder.h"
 #include "al/util/AudioUtil.h"
 #include "al/util/ControllerUtil.h"
 #include "al/util/GraphicsUtil.h"
@@ -11,7 +11,7 @@
 #include "al/util/MathUtil.h"
 #include "al/util/NerveUtil.h"
 #include "al/util/CameraUtil.h"
-#include "al/LiveActor/LiveActor.h"
+#include "Library/LiveActor/LiveActor.h"
 #include "al/area/AreaObjGroup.h"
 
 #include <sead/math/seadVector.hpp>
@@ -20,25 +20,22 @@
 #include <sead/basis/seadNew.h>
 #include <sead/gfx/seadFrameBuffer.h>
 
-#include "al/scene/Scene.h"
-#include "al/PlayerHolder/PlayerHolder.h"
-#include "al/audio/AudioKeeper.h"
+#include "Library/Scene/Scene.h"
+#include "Library/Player/PlayerHolder.h"
+#include "Library/Audio/AudioKeeper.h"
 #include "al/camera/Projection.h"
 #include "al/camera/CameraTargetBase.h"
-#include "al/layout/IUseLayout.h"
+#include "Library/Layout/IUseLayout.h"
 #include "al/layout/LayoutKit.h"
-#include "al/layout/LayoutActor.h"
-#include "al/sensor/SensorMsg.h"
-#include "al/stage/StageInfo.h"
+#include "Library/Layout/LayoutActor.h"
+#include "Library/Stage/StageInfo.h"
 #include "al/area/AreaObjGroup.h"
-#include "al/async/FunctorBase.h"
-#include "al/execute/ExecuteDirector.h"
+#include "Library/Thread/FunctorV0M.h"
+#include "Library/Execute/ExecuteDirector.h"
 
 #include "game/Player/PlayerActorHakoniwa.h"
 
-#include "agl/DrawContext.h"
-
-#include "nn/ui2d/Texture.h"
+#include "agl/common/aglDrawContext.h"
 
 #include "types.h"
 
@@ -46,19 +43,12 @@ template<class T>
 al::LiveActor *createActorFunction(const char *name);
 
 namespace al {
+class HitSensor;
 // getters
 
     struct SceneMsgCtrl;
 
     sead::Vector3f *getCameraUp(al::IUseCamera const *, int);
-
-    sead::Vector3f *getScale(al::LiveActor const *);
-
-    float *getScaleX(al::LiveActor const *);
-
-    float *getScaleY(al::LiveActor const *);
-
-    float *getScaleZ(al::LiveActor const *);
 
     al::PlayerHolder *getScenePlayerHolder(al::Scene const *);
 
@@ -72,14 +62,6 @@ namespace al {
     sead::Heap *getWorldResourceHeap(void);
 
     al::Projection *getProjection(al::IUseCamera const *, int);
-
-    int getSubActorNum(al::LiveActor const *);
-
-    al::LiveActor *getSubActor(al::LiveActor const *, const char *);
-
-    al::LiveActor *tryGetSubActor(al::LiveActor const *, const char *);
-
-    al::LiveActor *getSubActor(al::LiveActor const *, int);
 
     int getPlayerControllerPort(int);
 
@@ -126,8 +108,6 @@ namespace al {
     void setEffectParticleScale(al::IUseEffectKeeper *actor, char const *effectName, float scale);
 
     // layout stuff
-
-    al::LayoutInitInfo *getLayoutInitInfo(al::ActorInitInfo const &);
 
     void requestCaptureRecursive(al::LayoutActor const *);
 
@@ -338,8 +318,6 @@ namespace al {
     bool
     tryEmitEffect(al::IUseEffectKeeper *effectKeeper, char const *effectName, sead::Vector3f const *effectPosition);
 
-    void tryDeleteEffect(al::IUseEffectKeeper *effectKeeper, char const *effectName);
-
     // sensor stuff
 
     // enum SensorType {
@@ -429,8 +407,6 @@ namespace al {
     void initPlacementObjectDesign(al::Scene *, al::ActorInitInfo const &, char const *);
 
     void initPlacementObjectSound(al::Scene *, al::ActorInitInfo const &, char const *);
-
-    LiveActor *createPlacementActorFromFactory(al::ActorInitInfo const &, al::PlacementInfo const *);
 
     // layout init stuff
 

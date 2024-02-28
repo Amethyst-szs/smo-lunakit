@@ -1,8 +1,8 @@
 #pragma once
 
 #include <sead/prim/seadSafeString.h>
-#include "game/GameData/GameDataHolderAccessor.h"
-#include "al/resource/Resource.h"
+#include "game/System/GameDataHolderAccessor.h"
+#include "Library/Resource/Resource.h"
 
 namespace al {
 

@@ -1,7 +1,7 @@
 #include <sead/math/seadQuat.h>
 #include <sead/math/seadVector.h>
 #include <sead/prim/seadSafeString.h>
-#include "al/layout/LayoutActor.h"
+#include "Library/Layout/LayoutActor.h"
 #include "al/layout/LayoutInitInfo.h"
 
 typedef unsigned short int ushort;
