@@ -1,6 +1,8 @@
 #include "program/devgui/categories/edit/CategoryWarp.h"
 #include "game/Player/PlayerStainControl.h"
+#include "game/Player/PlayerHackKeeper.h"
 #include "al/util.hpp"
+#include "Library/LiveActor/ActorPoseKeeper.h"
 
 #include "helpers/GetHelper.h"
 
@@ -66,7 +68,7 @@ void CategoryWarp::saveTeleportData(PlayerActorHakoniwa* player) {
 
 void CategoryWarp::loadTeleportData(PlayerActorHakoniwa* player) {
     WarpSaveState& curState = mStates[mCurStateIdx];
-    al::LiveActor* hack = player->mPlayerHackKeeper->currentHackActor;
+    al::LiveActor* hack = player->mHackKeeper->currentHackActor;
 
     if (hack) {
         al::offCollide(hack);
@@ -76,7 +78,7 @@ void CategoryWarp::loadTeleportData(PlayerActorHakoniwa* player) {
     } else {
         al::offCollide(player);
         player->startDemoPuppetable();
-        player->mPlayerStainControl->clearStain();
+        player->mStainControl->clearStain();
         al::setTrans(player, curState.mTrans);
         al::updatePoseQuat(player, curState.mQuat);
         al::setVelocityZero(player);

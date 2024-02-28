@@ -1,7 +1,8 @@
 #include "program/devgui/categories/edit/CategoryOutfit.h"
 
-#include "game/GameData/GameDataHolder.h"
-#include "game/GameData/GameDataFunction.h"
+#include "game/System/GameDataHolder.h"
+#include "game/System/GameDataFunction.h"
+#include "game/System/GameDataFile.h"
 
 #include "helpers/GetHelper.h"
 #include "helpers.h"

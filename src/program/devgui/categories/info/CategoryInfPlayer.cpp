@@ -1,12 +1,14 @@
 #include "program/devgui/categories/info/CategoryInfPlayer.h"
 
-#include "al/nerve/Nerve.h"
-#include "al/nerve/NerveKeeper.h"
+#include "Library/Nerve/Nerve.h"
+#include "Library/Nerve/NerveKeeper.h"
+#include "Library/Nerve/NerveStateCtrl.h"
 
 #include "game/Player/PlayerActorBase.h"
 #include "game/Player/PlayerActorHakoniwa.h"
 #include "game/Player/PlayerFunction.h"
 #include "game/Player/PlayerAnimator.h"
+#include "game/Player/PlayerRecoverySafetyPoint.h"
 
 #include "rs/util.hpp"
 #include "helpers/GetHelper.h"
@@ -56,10 +58,10 @@ void CategoryInfPlayer::updateCatDisplay()
     playerName = abi::__cxa_demangle(typeid(*player).name(), nullptr, nullptr, &status);
     
     if (player->getNerveKeeper()->mStateCtrl) {
-        al::State* state = player->getNerveKeeper()->mStateCtrl->findStateInfo(playerNerve);
+        al::NerveStateCtrl::State* state = player->getNerveKeeper()->mStateCtrl->findStateInfo(playerNerve);
         if(state) {
-            const al::Nerve* stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
-            stateName = abi::__cxa_demangle(typeid(*state->mStateBase).name(), nullptr, nullptr, &status);
+            const al::Nerve* stateNerve = state->state->getNerveKeeper()->getCurrentNerve();
+            stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
             stateNrvName = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
         }
     }
@@ -94,10 +96,10 @@ void CategoryInfPlayer::updateCatDisplay()
         return;
     }
 
-    PlayerAnimator* anim = playerHak->mPlayerAnimator;
+    PlayerAnimator* anim = playerHak->mAnimator;
     ImGui::Text("Anim: %s (%.00f/%.00f)", anim->curAnim.cstr(), anim->getAnimFrame(), anim->getAnimFrameMax());
     ImGui::Text("Sub Anim: %s (%.00f/%.00f)", anim->curSubAnim.cstr(), anim->getSubAnimFrame(), anim->getSubAnimFrameMax());
 
-    sead::Vector3f kidsPos = playerHak->mPlayerRecoverySafetyPoint->mSafetyPointPos;
+    sead::Vector3f kidsPos = playerHak->mRecoverySafetyPoint->mSafetyPointPos;
     ImGui::InputFloat3("Assist Pos", &kidsPos.x, "%.00f", ImGuiInputTextFlags_ReadOnly);
 }

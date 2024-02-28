@@ -4,7 +4,7 @@
 namespace curlHelper {
     int DataDownloader::CreateSslCtx(CURL* curl, void* ssl_ctx, void* clientp) {
         auto *ctx = (nn::ssl::Context*)ssl_ctx;
-        if(ctx->Create(nn::ssl::Context::SslVersion::UNK2).isSuccess()) {
+        if(ctx->Create(nn::ssl::Context::SslVersion::Auto).IsSuccess()) {
             return CURLE_OK;
         }
         return -1;

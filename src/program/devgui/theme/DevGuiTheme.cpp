@@ -1,7 +1,7 @@
 #include "DevGuiTheme.h"
 #include "devgui/DevGuiManager.h"
 
-#include "al/resource/Resource.h"
+#include "Library/Resource/Resource.h"
 #include "al/util.hpp"
 
 #include "sead/heap/seadExpHeap.h"
@@ -10,7 +10,7 @@
 #include "sead/filedevice/seadFileDeviceMgr.h"
 
 #include "nn/fs/fs_files.hpp"
-#include "nn/result.h"
+#include "vapours/results.hpp"
 #include "nn/init.h"
 
 #include "helpers/fsHelper.h"
@@ -249,17 +249,17 @@ void DevGuiTheme::setupDirectoryInfo()
 {
     nn::fs::DirectoryHandle handle;
     nn::Result r = nn::fs::OpenDirectory(&handle, "sd:/LunaKit/LKData/Themes/", nn::fs::OpenDirectoryMode_File);
-    if (R_FAILED(r)) return;
+    if (r.IsFailure()) return;
     s64 entryCount;
     r = nn::fs::GetDirectoryEntryCount(&entryCount, handle);
-    if (R_FAILED(r)) {
+    if (r.IsFailure()) {
         nn::fs::CloseDirectory(handle);
         return;
     }
     nn::fs::DirectoryEntry* entryBuffer = (nn::fs::DirectoryEntry*)nn::init::GetAllocator()->Allocate(sizeof(nn::fs::DirectoryEntry) * entryCount);
     r = nn::fs::ReadDirectory(&entryCount, entryBuffer, handle, entryCount);
     nn::fs::CloseDirectory(handle);
-    if (R_FAILED(r)) {
+    if (r.IsFailure()) {
         delete[] entryBuffer;
         return;
     }

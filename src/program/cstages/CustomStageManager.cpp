@@ -2,8 +2,8 @@
 
 #include "sead/filedevice/seadFileDeviceMgr.h"
 
+#include "vapours/results.hpp"
 #include "nn/fs/fs_files.hpp"
-#include "nn/result.h"
 
 #include "logger/Logger.hpp"
 
@@ -30,17 +30,17 @@ void CustomStageManager::setupDirectoryInfo()
 {
     nn::fs::DirectoryHandle handle;
     nn::Result r = nn::fs::OpenDirectory(&handle, CUSTOMSTAGEPATH, nn::fs::OpenDirectoryMode_File);
-    if (R_FAILED(r)) return;
+    if (r.IsFailure()) return;
     s64 entryCount;
     r = nn::fs::GetDirectoryEntryCount(&entryCount, handle);
-    if (R_FAILED(r)) {
+    if (r.IsFailure()) {
         nn::fs::CloseDirectory(handle);
         return;
     }
     nn::fs::DirectoryEntry* entryBuffer = new nn::fs::DirectoryEntry[entryCount];
     r = nn::fs::ReadDirectory(&entryCount, entryBuffer, handle, entryCount);
     nn::fs::CloseDirectory(handle);
-    if (R_FAILED(r)) {
+    if (r.IsFailure()) {
         delete[] entryBuffer;
         return;
     }

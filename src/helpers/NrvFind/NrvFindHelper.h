@@ -1,7 +1,7 @@
 #pragma once
 
-#include "al/LiveActor/LiveActor.h"
-#include "al/nerve/Nerve.h"
+#include "Library/LiveActor/LiveActor.h"
+#include "Library/Nerve/Nerve.h"
 #include "al/util/NerveUtil.h"
 
 namespace NrvFindHelper {

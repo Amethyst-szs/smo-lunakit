@@ -1,10 +1,7 @@
 #pragma once
 
-#include "al/sensor/HitSensor.h"
-#include "al/sensor/SensorHitGroup.h"
-
-#include "al/LiveActor/LiveActor.h" // for SensorMsg
-#include "game/Interfaces/IUsePlayerCollision.h"
+#include "Library/LiveActor/LiveActor.h" // for SensorMsg
+#include "game/Player/IUsePlayerCollision.h"
 
 #include <sead/math/seadVector.h>
 
@@ -12,6 +9,8 @@ namespace al {
 class ComboCounter;
 class ParabolicPath;
 class EventFlowExecutor;
+class HitSensor;
+class HitSensorGroup;
 }
 
 namespace rs

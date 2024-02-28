@@ -1,7 +1,6 @@
 #pragma once
 
-#include "nn/fs.h"
-#include "nn/result.h"
+#include "nn/types.h"
 
 namespace FsHelper {
 

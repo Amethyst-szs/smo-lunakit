@@ -3,6 +3,12 @@
 #include "al/actor/LiveActorKit.h"
 #include "helpers/GetHelper.h"
 #include "sead/gfx/seadPrimitiveRenderer.h"
+#include "al/area/AreaObjGroup.h"
+#include "Library/Area/AreaObjDirector.h"
+#include "Library/Area/AreaObjUtil.h"
+#include "Library/Base/String.h"
+#include "Library/HitSensor/HitSensorKeeper.h"
+#include "Project/HitSensor/HitSensor.h"
 
 void PrimitiveTypePoint::render() {
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
@@ -119,7 +125,7 @@ void PrimitiveTypeHitSensor::render() {
     if (!sensorKeeper)
         return;
 
-    for (int i = 0; i < sensorKeeper->mSensorNum; i++) {
+    for (int i = 0; i < sensorKeeper->mSensorCount; i++) {
         al::HitSensor* curSensor = sensorKeeper->mSensors[i];
         if (!curSensor)
             continue;

@@ -5,6 +5,7 @@
 #include "helpers/GetHelper.h"
 #include "smo-tas/TAS.h"
 #include "actors/Puppet/PuppetActor.h"
+#include "Library/LiveActor/SubActorKeeper.h"
 
 namespace {
     NERVE_IMPL(Ghost, Play);

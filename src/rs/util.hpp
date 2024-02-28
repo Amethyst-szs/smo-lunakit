@@ -1,12 +1,15 @@
 #pragma once
 
-#include "al/scene/Scene.h"
+#include "Library/Scene/Scene.h"
 #include "game/Player/PlayerActorBase.h"
 #include "sead/math/seadVector.h"
-#include "al/util.hpp"
-#include "al/sensor/SensorMsg.h"
 #include "game/Player/PlayerActorHakoniwa.h"
 #include "al/area/ChangeStageInfo.h"
+
+namespace al {
+class SensorMsg;
+class AreaObj;
+}
 
 namespace rs
 {

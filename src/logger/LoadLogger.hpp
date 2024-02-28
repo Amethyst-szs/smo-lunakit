@@ -5,7 +5,7 @@
 #include "sead/heap/seadDisposer.h"
 #include "sead/prim/seadSafeString.h"
 
-#include "nn/result.h"
+#include "vapours/results.hpp"
 
 #include "helpers/fsHelper.h"
 

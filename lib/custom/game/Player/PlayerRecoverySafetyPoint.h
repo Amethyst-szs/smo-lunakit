@@ -1,9 +1,9 @@
 #pragma once
 
-#include "al/LiveActor/LiveActor.h"
-#include "al/collision/Collider.h"
-#include "al/sensor/HitSensor.h"
-#include "game/Interfaces/IUseDimension.h"
+#include "Library/LiveActor/LiveActor.h"
+#include "Library/Collision/Collider.h"
+#include "Project/HitSensor/HitSensor.h"
+#include "game/Util/IUseDimension.h"
 #include "game/Player/HackCap.h"
 #include "sead/math/seadVector.h"
 

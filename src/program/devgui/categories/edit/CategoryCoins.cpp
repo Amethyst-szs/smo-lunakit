@@ -1,6 +1,7 @@
 #include "program/devgui/categories/edit/CategoryCoins.h"
-#include "game/StageScene/StageSceneLayout.h"
+#include "game/Scene/StageSceneLayout.h"
 #include "helpers/GetHelper.h"
+#include "game/System/GameDataFile.h"
 
 #include "imgui.h"
 

@@ -1,24 +1,28 @@
 #include "PuppetActor.h"
 #include "PuppetCapActor.h"
-#include "al/LiveActor/LiveActor.h"
+#include "Library/LiveActor/LiveActor.h"
+#include "Library/LiveActor/ActorPoseKeeper.h"
+#include "Library/LiveActor/SubActorKeeper.h"
+#include "al/actor/ActorActionKeeper.h"
 #include "al/graphics/GraphicsSystemInfo.h"
 #include "al/layout/BalloonMessage.h"
 #include "al/layout/LayoutInitInfo.h"
 #include "al/model/ModelMaterialCategory.h"
 #include "al/model/PartsModel.h"
-#include "al/string/StringTmp.h"
+#include "al/model/ModelKeeper.h"
+#include "Library/Base/String.h"
 #include "al/util.hpp"
 #include "al/util/LiveActorUtil.h"
 #include "al/util/ResourceUtil.h"
 #include "al/util/SensorUtil.h"
 #include "devgui/DevGuiManager.h"
-#include "game/GameData/GameDataFunction.h"
+#include "game/System/GameDataFunction.h"
 #include "game/Player/PlayerCostumeFunction.h"
 #include "game/Player/PlayerCostumeInfo.h"
 #include "logger/Logger.hpp"
 #include "math/seadQuat.h"
 #include "math/seadVector.h"
-#include "ro.h"
+#include "nn/ro.h"
 #include "rs/util/SensorUtil.h"
 #include "util/modules.hpp"
 #include "helpers/FunctionHelper.h"
@@ -76,7 +80,7 @@ void PuppetActor::init(al::ActorInitInfo const& initInfo)
 
     al::LiveActor* normal2DModel = new al::LiveActor("Normal2D");
 
-    PlayerFunction::initMarioModelActor2D(normal2DModel, initInfo, al::StringTmp<0x40>("%s2D", mCostumeInfo->mBodyInfo->costumeName).cstr(), PlayerFunction::isInvisibleCap(mCostumeInfo));
+    PlayerFunction::initMarioModelActor2D(normal2DModel, initInfo, al::StringTmp<0x40>("%s2D", mCostumeInfo->mBodyInfo->mCostumeName).cstr(), PlayerFunction::isInvisibleCap(mCostumeInfo));
 
     mModelHolder->registerModel(normal2DModel, "Normal2D");
 
@@ -204,7 +208,7 @@ void PuppetActor::hairControl()
     if (mCostumeInfo->isSyncStrap()) {
         PlayerFunction::syncMarioHeadStrapVisibility(al::getSubActor(curModel, "頭"));
     }
-    if (PlayerFunction::isNeedHairControl(mCostumeInfo->mBodyInfo, mCostumeInfo->mHeadInfo->costumeName)) {
+    if (PlayerFunction::isNeedHairControl(mCostumeInfo->mBodyInfo, mCostumeInfo->mHeadInfo->mCostumeName)) {
         PlayerFunction::hideHairVisibility(al::getSubActor(curModel, "頭"));
     }
 }
@@ -249,6 +253,8 @@ void PuppetActor::emitJoinEffect()
     al::tryEmitEffect(this, "Disappear", nullptr);
 }
 
+/*
+// Probably unused, but not sure
 const char* executorName = "ＮＰＣ";
 
 PlayerCostumeInfo* initMarioModelPuppet(al::LiveActor* player,
@@ -258,7 +264,7 @@ PlayerCostumeInfo* initMarioModelPuppet(al::LiveActor* player,
     al::AudioKeeper* audioKeeper)
 {
     al::ActorResource* modelRes = al::findOrCreateActorResourceWithAnimResource(
-        initInfo.mResourceHolder, al::StringTmp<0x100>("ObjectData/%s", bodyName).cstr(),
+        initInfo.mActorResourceHolder, al::StringTmp<0x100>("ObjectData/%s", bodyName).cstr(),
         al::StringTmp<0x100>("ObjectData/%s", "PlayerAnimation").cstr(), 0, false);
 
     PlayerBodyCostumeInfo* bodyInfo = PlayerCostumeFunction::createBodyCostumeInfo(modelRes->mResourceModel, bodyName);
@@ -273,7 +279,7 @@ PlayerCostumeInfo* initMarioModelPuppet(al::LiveActor* player,
 
     al::ModelMaterialCategory::tryCreate(
         player->mModelKeeper->mModelCtrl, "Player",
-        initInfo.mActorSceneInfo.mGfxSysInfo->mMaterialCategoryKeeper);
+        initInfo.mActorSceneInfo.mGraphicsSystemInfo->mMaterialCategoryKeeper);
 
     al::initPartialSklAnim(player, 1, 1, 32);
     al::addPartialSklAnimPartsListRecursive(player, "Spine1", 0);
@@ -323,7 +329,7 @@ PlayerCostumeInfo* initMarioModelPuppet(al::LiveActor* player,
     const char* capModelName;
 
     if (bodyInfo->mIsUseHeadSuffix) {
-        if (al::isEqualString(bodyInfo->costumeName, capName)) {
+        if (al::isEqualString(bodyInfo->mCostumeName, capName)) {
             capModelName = "";
         } else {
             capModelName = capName;
@@ -340,9 +346,9 @@ PlayerCostumeInfo* initMarioModelPuppet(al::LiveActor* player,
         } else {
             headType = "";
         }
-    } else if (al::isEqualString(bodyInfo->costumeName, "Mario64")) {
+    } else if (al::isEqualString(bodyInfo->mCostumeName, "Mario64")) {
         headType = "";
-    } else if (al::isEqualString(bodyInfo->costumeName, "Mario64Metal")) {
+    } else if (al::isEqualString(bodyInfo->mCostumeName, "Mario64Metal")) {
         headType = "Metal";
     } else {
         headType = "Other";
@@ -423,3 +429,4 @@ PlayerHeadCostumeInfo* initMarioHeadCostumeInfo(al::LiveActor* player,
 
     return PlayerCostumeFunction::createHeadCostumeInfo(al::getModelResource(headModel), capModelName, false);
 }
+*/

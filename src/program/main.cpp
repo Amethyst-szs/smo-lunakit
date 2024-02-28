@@ -4,7 +4,10 @@
     Head to src/program/devgui/DevGuiManager.h to get started!
 */
 
-#include "fs.h"
+#include "nn/fs/fs_directories.hpp"
+#include "nn/fs/fs_files.hpp"
+#include "nn/fs/fs_mount.hpp"
+#include "nn/fs/fs_types.hpp"
 #include "imgui_backend/imgui_impl_nvn.hpp"
 #include "lib.hpp"
 
@@ -12,7 +15,7 @@
 #include "logger/Logger.hpp"
 
 #include <basis/seadRawPrint.h>
-#include <devenv/seadDebugFontMgrNvn.h>
+#include <devenv/seadFontMgr.h>
 #include <filedevice/nin/seadNinSDFileDeviceNin.h>
 #include <filedevice/seadFileDeviceMgr.h>
 #include <filedevice/seadPath.h>
@@ -26,34 +29,33 @@
 
 #include "rs/util.hpp"
 
-#include "game/GameData/GameDataFile.h"
-#include "game/GameData/GameDataHolderWriter.h"
-#include "game/GameData/GameProgressData.h"
-#include "game/HakoniwaSequence/HakoniwaSequence.h"
+#include "game/System/GameDataFile.h"
+#include "game/System/GameDataHolderWriter.h"
+#include "game/Sequence/HakoniwaSequence.h"
 #include "game/Player/PlayerFunction.h"
 #include "game/Player/PlayerTrigger.h"
-#include "game/StageScene/StageScene.h"
+#include "game/Scene/StageScene.h"
 #include "game/System/Application.h"
 #include "game/System/GameSystem.h"
+#include "game/System/GameDrawInfo.h"
 
-#include "al/byaml/ByamlIter.h"
+#include "Library/Yaml/ByamlIter.h"
 #include "al/collision/KCollisionServer.h"
 #include "al/collision/alCollisionUtil.h"
 #include "al/fs/FileLoader.h"
-#include "al/resource/Resource.h"
+#include "Library/Resource/Resource.h"
 #include "al/util.hpp"
 #include "al/util/LiveActorUtil.h"
 
-#include "al/LiveActor/LiveActor.h"
-#include "game/GameData/GameDataFunction.h"
-#include "game/StageScene/StageScene.h"
+#include "Library/LiveActor/LiveActor.h"
+#include "game/System/GameDataFunction.h"
+#include "game/Scene/StageScene.h"
 #include "helpers.h"
 #include "helpers/InputHelper.h"
 #include "helpers/PlayerHelper.h"
 #include "imgui_nvn.h"
-#include "init.h"
+#include "nn/init.h"
 #include "logger/Logger.hpp"
-#include "os/os_tick.hpp"
 #include "patch/code_patcher.hpp"
 
 #include "devgui/DevGuiHooks.h"
@@ -239,7 +241,7 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
 
         sead::Heap* updaterHeap = sead::ExpHeap::create(2500000, "UpdateHeap", lkHeap, 8, sead::Heap::HeapDirection::cHeapDirection_Forward, false);
 
-        Logger::instance().init(lkHeap).value;
+        Logger::instance().init(lkHeap);
         DisableSocketInit::InstallAtSymbol("_ZN2nn6socket10InitializeEPvmmi");
         RandomGetU32::InstallAtSymbol("_ZN4sead6Random6getU32Ev");
 
@@ -263,7 +265,7 @@ HOOK_DEFINE_TRAMPOLINE(GameSystemInit) {
 
         sead::TextWriter::setDefaultFont(sead::DebugFontMgrJis1Nvn::instance());
 
-        al::GameDrawInfo* drawInfo = Application::instance()->mDrawInfo;
+        al::GameDrawInfo* drawInfo = Application::instance()->mGameDrawInfo;
 
         agl::DrawContext* context = drawInfo->mDrawContext;
         agl::RenderBuffer* renderBuffer = drawInfo->mFirstRenderBuffer;

@@ -1,7 +1,12 @@
 #include "fsHelper.h"
 #include "diag/assert.hpp"
-#include "init.h"
+#include "nn/init.h"
+#include "nn/fs/fs_directories.hpp"
+#include "nn/fs/fs_files.hpp"
+#include "nn/fs/fs_mount.hpp"
+#include "nn/fs/fs_types.hpp"
 #include "logger/Logger.hpp"
+#include "vapours/results.hpp"
 
 namespace FsHelper {
     nn::Result writeFileToPath(void *buf, size_t size, const char *path) {
@@ -11,40 +16,44 @@ namespace FsHelper {
             nn::fs::DeleteFile(path); // remove previous file
         }
 
-        if (nn::fs::CreateFile(path, size)) {
-            return 1;
+        nn::Result r = nn::fs::CreateFile(path, size);
+        if (r.IsFailure()) {
+            return r;
         }
 
-        if (nn::fs::OpenFile(&handle, path, nn::fs::OpenMode_Write)) {
-            return 1;
+        r = nn::fs::OpenFile(&handle, path, nn::fs::OpenMode_Write);
+        if (r.IsFailure()) {
+            return r;
         }
 
-        if (nn::fs::WriteFile(handle, 0, buf, size, nn::fs::WriteOption::CreateOption(nn::fs::WriteOptionFlag_Flush))) {
-            return 1;
+        r = nn::fs::WriteFile(handle, 0, buf, size, nn::fs::WriteOption::CreateOption(nn::fs::WriteOptionFlag_Flush));
+        if (r.IsFailure()) {
+            return r;
         }
-
 
         nn::fs::CloseFile(handle);
 
-        return 0;
+        return nn::ResultSuccess{};
     }
 
     nn::Result appendFileOnPath(void* buf, s64 pos, size_t size, const char* path) {
         nn::fs::FileHandle handle = {};
+        nn::Result r;
         if (!isFileExist(path)) {
-            if (nn::fs::CreateFile(path, size))
-                return 1;
+            r = nn::fs::CreateFile(path, size);
+            if (r.IsFailure())
+                return r;
         }
-        if (nn::fs::OpenFile(&handle, path, nn::fs::OpenMode_Append)) {
-            return 1;
+        r = nn::fs::OpenFile(&handle, path, nn::fs::OpenMode_Append);
+        if (r.IsFailure()) {
+            return r;
         }
-        if (nn::fs::WriteFile(handle, pos, buf, size, nn::fs::WriteOption::CreateOption(nn::fs::WriteOptionFlag_Flush))) {
-            return 1;
+        r = nn::fs::WriteFile(handle, pos, buf, size, nn::fs::WriteOption::CreateOption(nn::fs::WriteOptionFlag_Flush));
+        if (r.IsFailure()) {
+            return r;
         }
         nn::fs::CloseFile(handle);
-
-        return 0;
-
+        return nn::ResultSuccess{};
     }
 
     // make sure to free buffer after usage is done
@@ -54,7 +63,7 @@ namespace FsHelper {
 
         EXL_ASSERT(FsHelper::isFileExist(loadData.path), "Failed to Find File!\nPath: %s", loadData.path);
 
-        R_ABORT_UNLESS(nn::fs::OpenFile(&handle, loadData.path, nn::fs::OpenMode_Read))
+        R_ABORT_UNLESS(nn::fs::OpenFile(&handle, loadData.path, nn::fs::OpenMode_Read).IsFailure())
 
         long size = 0;
         nn::fs::GetFileSize(&size, handle);
@@ -63,7 +72,7 @@ namespace FsHelper {
 
         EXL_ASSERT(loadData.buffer, "Failed to Allocate Buffer! File Size: %ld", size);
 
-        R_ABORT_UNLESS(nn::fs::ReadFile(handle, 0, loadData.buffer, size))
+        R_ABORT_UNLESS(nn::fs::ReadFile(handle, 0, loadData.buffer, size).IsFailure())
 
         nn::fs::CloseFile(handle);
     }
@@ -75,7 +84,7 @@ namespace FsHelper {
 
         nn::Result openResult = nn::fs::OpenFile(&handle, path, nn::fs::OpenMode::OpenMode_Read);
 
-        if (openResult.isSuccess()) {
+        if (openResult.IsSuccess()) {
             nn::fs::GetFileSize(&result, handle);
             nn::fs::CloseFile(handle);
         }

@@ -1,10 +1,9 @@
 #pragma once
 
-#include "al/LiveActor/LiveActor.h"
-#include "al/async/FunctorBase.h"
-#include "al/async/FunctorV0M.hpp"
+#include "Library/LiveActor/LiveActor.h"
+#include "Library/Thread/FunctorV0M.h"
 #include "al/layout/BalloonMessage.h"
-#include "al/string/StringTmp.h"
+#include "Library/Base/String.h"
 #include "al/util.hpp"
 
 #include "game/Player/PlayerConst.h"
@@ -66,8 +65,9 @@ private:
     bool mIs2DModel = false;
     bool mIsCaptureModel = false;
 };
-
+/*
 PlayerCostumeInfo* initMarioModelPuppet(al::LiveActor* player, const al::ActorInitInfo& initInfo,
                                         char const* bodyName, char const* capName, int subActorNum,
                                         al::AudioKeeper* audioKeeper);
 PlayerHeadCostumeInfo* initMarioHeadCostumeInfo(al::LiveActor* player, const al::ActorInitInfo& initInfo, const char* headModelName, const char* capModelName, const char* headType, const char* headSuffix);
+*/

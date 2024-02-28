@@ -2,7 +2,7 @@
 
 #include "Ghost.h"
 #include "container/seadPtrArray.h"
-#include "fs/fs_types.hpp"
+#include "nn/fs/fs_types.hpp"
 #include "heap/seadDisposer.h"
 
 #define REPLAY_SAVEPATH "sd:/smo/tas/replay"

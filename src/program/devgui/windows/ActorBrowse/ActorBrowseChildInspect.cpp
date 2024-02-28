@@ -1,6 +1,13 @@
 #include "WindowActorBrowse.h"
 #include "devgui/DevGuiManager.h"
 #include "primitives/PrimitiveQueue.h"
+#include "al/model/ModelKeeper.h"
+#include "Library/LiveActor/ActorPoseKeeper.h"
+#include "Library/LiveActor/SubActorKeeper.h"
+#include <Library/Nerve/NerveStateCtrl.h>
+#include "Library/Base/String.h"
+#include "Library/Nerve/NerveKeeper.h"
+#include "Library/Rail/RailRider.h"
 
 #include "helpers/GetHelper.h"
 
@@ -59,7 +66,7 @@ void WindowActorBrowse::childActorInspector()
     
     
     drawActorInspectorTreePose(mSelectedActor->mPoseKeeper);
-    drawActorInspectorTreeFlags(mSelectedActor->mLiveActorFlag, listSize.x);
+    drawActorInspectorTreeFlags(mSelectedActor->mFlags, listSize.x);
     drawActorInspectorTreeNrvs(mSelectedActor->getNerveKeeper(), &actorClass);
     drawActorInspectorTreeSensor(mSelectedActor->mHitSensorKeeper);
     drawActorInspectorTreeRail(mSelectedActor->getRailRider());
@@ -74,19 +81,19 @@ inline void WindowActorBrowse::drawActorInspectorTreePose(al::ActorPoseKeeperBas
     if(!pose)
         return;
 
-    mParent->getPrimitiveQueue()->pushAxis(pose->mTranslation, 800.f);
+    mParent->getPrimitiveQueue()->pushAxis(pose->mTrans, 800.f);
 
     PlayerActorBase* player = tryGetPlayerActor();
 
     ImGui::SameLine();
     if(player && ImGui::Button("Warp to Object")) {
         player->startDemoPuppetable();
-        player->mPoseKeeper->mTranslation = pose->mTranslation;
+        player->mPoseKeeper->mTrans = pose->mTrans;
         player->endDemoPuppetable();
     } else ImGui::NewLine();
 
     if (ImGui::TreeNode("Actor Pose")) {
-        ImGuiHelper::Vector3Drag("Trans", "Pose Keeper Translation", &pose->mTranslation, 50.f, 0.f);
+        ImGuiHelper::Vector3Drag("Trans", "Pose Keeper Translation", &pose->mTrans, 50.f, 0.f);
         ImGuiHelper::Vector3Drag("Scale", "Pose Keeper Scale", pose->getScalePtr(), 0.05f, 0.f);
         ImGuiHelper::Vector3Drag("Velocity", "Pose Keeper Velocity", pose->getVelocityPtr(), 1.f, 0.f);
         ImGuiHelper::Vector3Slide("Front", "Pose Keeper Front", pose->getFrontPtr(), 1.f, true);
@@ -98,6 +105,21 @@ inline void WindowActorBrowse::drawActorInspectorTreePose(al::ActorPoseKeeperBas
         ImGui::TreePop();
     }
 }
+
+static const char* flagNames[] = {
+    "Dead",
+    "Clipped",
+    "Cannot Clip",
+    "Draw Clipped",
+    "Calc Anim On",
+    "Model Visible",
+    "No Collide",
+    "Unknown 8",
+    "Valid Mat Code",
+    "Area Target",
+    "Move FX Sensor",
+    "Unknown 12"
+};
 
 inline void WindowActorBrowse::drawActorInspectorTreeFlags(al::LiveActorFlag* flag, float childWindowWidth)
 {
@@ -139,14 +161,14 @@ inline void WindowActorBrowse::drawActorInspectorTreeNrvs(al::NerveKeeper* nrvKe
             return;
         }
 
-        char* stateName = abi::__cxa_demangle(typeid(*state->mStateBase).name(), nullptr, nullptr, &status);
+        char* stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
         ImGui::Text("State: %s", stateName);
-        if (!state->mStateBase->getNerveKeeper()) {
+        if (!state->state->getNerveKeeper()) {
             free(stateName);
             ImGui::TreePop();
             return;
         }
-        auto stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
+        auto stateNerve = state->state->getNerveKeeper()->getCurrentNerve();
         char* stateNrv = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
         ImGui::Text("State Nrv: %s", stateNrv + strlen("(anonymous namespace)::") + strlen(stateName) + strlen("nrv"));
         free(stateName);
@@ -168,10 +190,10 @@ inline void WindowActorBrowse::drawActorInspectorTreeRail(al::RailRider* railRid
         ImGui::SliderInt("Percision", &percisonEdit, 2, 40, "%d", ImGuiSliderFlags_NoRoundToFormat);
         mRailPercision = percisonEdit;
 
-        ImGui::Text("Progress: %.02f", railRide->mRailProgress);
-        ImGui::DragFloat("Speed", &railRide->mMoveSpeed, 0.1f, 1000.f, -1000.f, "%.1f", ImGuiSliderFlags_NoRoundToFormat);
+        ImGui::Text("Progress: %.02f", railRide->mCoord);
+        ImGui::DragFloat("Speed", &railRide->mRate, 0.1f, 1000.f, -1000.f, "%.1f", ImGuiSliderFlags_NoRoundToFormat);
 
-        ImGui::Text(railRide->mIsMoveForwardOnRail ? "Forward" : "Backward");
+        ImGui::Text(railRide->mIsMoveForwards ? "Forward" : "Backward");
         ImGui::SameLine();
         if(ImGui::Button("Flip")) railRide->reverse();
 
@@ -197,8 +219,8 @@ inline void WindowActorBrowse::drawActorInspectorTreeSubActor(al::SubActorKeeper
         return;
 
     if(ImGui::TreeNode("Sub-Actors")) {
-        for(int i = 0; i < subActorKeep->mActorCount; i++) {
-            al::LiveActor* subActor = subActorKeep->mInfoList[i]->mSubActor;
+        for(int i = 0; i < subActorKeep->mCurActorCount; i++) {
+            al::LiveActor* subActor = subActorKeep->mBuffer[i]->mSubActor;
 
             sead::FixedSafeString<0x30> actorName = getActorName(subActor);
             sead::FixedSafeString<0x30> trimName = calcTrimNameFromRight(actorName);
