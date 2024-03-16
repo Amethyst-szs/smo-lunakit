@@ -1,7 +1,7 @@
 
 #include "ImguiShaderCompiler.h"
 #include "nn/fs.h"
-#include "helpers.h"
+#include "helpers/helpers.h"
 #include "nn/init.h"
 #include "glslc/glslc.h"
 #include "vapours/results.hpp"

@@ -3,6 +3,7 @@
 #include "Library/Yaml/ByamlIter.h"
 #include "Library/Yaml/Writer/ByamlWriter.h"
 
+#include "nn/types.h"
 #include "sead/heap/seadDisposer.h"
 #include "vapours/results.hpp"
 
@@ -30,7 +31,7 @@ public:
     static void log(const char *fmt, ...);
     static void log(const char *fmt, va_list args);
 
-    s32 writeLoggerSave(sead::Heap* heap, bool disable, const char* ip, uint port);
+    s32 writeLoggerSave(sead::Heap* heap, bool disable, const char* ip, u32 port);
 
     static bool getDisabledState() { return instance().mIsDisabled; }
 

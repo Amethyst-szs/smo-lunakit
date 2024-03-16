@@ -29,13 +29,13 @@ include_directories(${PROJECT_SOURCE_DIR}/lib/custom/sead)
 include_directories(${PROJECT_SOURCE_DIR}/lib/custom/agl)
 include_directories(${PROJECT_SOURCE_DIR}/lib/exlaunch)
 include_directories(${PROJECT_SOURCE_DIR}/lib/exlaunch/lib)
-include_directories(${PROJECT_SOURCE_DIR}/lib/game)
-include_directories(${PROJECT_SOURCE_DIR}/lib/game/aarch64)
-include_directories(${PROJECT_SOURCE_DIR}/lib/game/agl)
-include_directories(${PROJECT_SOURCE_DIR}/lib/game/al)
-include_directories(${PROJECT_SOURCE_DIR}/lib/game/game)
-include_directories(${PROJECT_SOURCE_DIR}/lib/game/sead)
-include_directories(${PROJECT_SOURCE_DIR}/lib/game/NintendoSDK)
+include_directories(${PROJECT_SOURCE_DIR}/lib/smo)
+include_directories(${PROJECT_SOURCE_DIR}/lib/smo/aarch64)
+include_directories(${PROJECT_SOURCE_DIR}/lib/smo/agl)
+include_directories(${PROJECT_SOURCE_DIR}/lib/smo/al)
+include_directories(${PROJECT_SOURCE_DIR}/lib/smo/game)
+include_directories(${PROJECT_SOURCE_DIR}/lib/smo/sead)
+include_directories(${PROJECT_SOURCE_DIR}/lib/smo/NintendoSDK)
 
 ## Project sources
 include_directories(${PROJECT_SOURCE_DIR}/src/program)
@@ -49,6 +49,8 @@ file(GLOB_RECURSE LOCAL_LIBRARIES ${PROJECT_SOURCE_DIR}/libs/*.a)
 
 ## Include nx tools
 include(${CMAKE_SOURCE_DIR}/cmake/SwitchTools.cmake)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 ## subsdk9
 set(CMAKE_EXECUTABLE_SUFFIX ".elf")

@@ -58,9 +58,11 @@ HakoniwaSequence* tryGetHakoniwaSequence() {
 
 al::Scene* tryGetScene() {
     al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
+    Logger::log("Found sequence named %s!\n", curSequence ? curSequence->mName.cstr() : "nullptr");
 
     if (curSequence && al::isEqualString(curSequence->mName.cstr(), "HakoniwaSequence")) {
         auto curScene = curSequence->mCurrentScene;
+        Logger::log("Scene is alive: %s\n", curScene ? (curScene->mIsAlive ? "true" : "false") : "nullptr");
 
         if (curScene && curScene->mIsAlive)
             return curScene;
