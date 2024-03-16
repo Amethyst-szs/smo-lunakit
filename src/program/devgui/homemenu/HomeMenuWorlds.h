@@ -2,8 +2,9 @@
 
 #include "devgui/homemenu/HomeMenuBase.h"
 
-#include "game/GameData/GameDataHolderAccessor.h"
-#include "game/StageScene/StageScene.h"
+#include "game/System/GameDataHolderAccessor.h"
+#include "game/System/WorldList.h"
+#include "game/Scene/StageScene.h"
 
 class HomeMenuWorlds : public HomeMenuBase {
 public:

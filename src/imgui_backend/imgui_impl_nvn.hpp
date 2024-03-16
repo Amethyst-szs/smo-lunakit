@@ -4,12 +4,11 @@
 
 #include "ImguiShaderCompiler.h"
 #include "imgui.h"
-#include "nvn_Cpp.h"
-#include "nvn_CppMethods.h"
-#include "types.h"
+#include "nvn/nvn_Cpp.h"
+#include "nvn/nvn_CppMethods.h"
+#include "nn/types.h"
+#include "nn/time.h"
 #include "MemoryBuffer.h"
-
-#include "os/os_tick.hpp"
 
 #ifdef __cplusplus
 
@@ -76,7 +75,7 @@ namespace ImguiNvnBackend {
 
         // misc data
 
-        nn::TimeSpanType lastTick;
+        nn::TimeSpan lastTick;
         bool isInitialized;
 
         Matrix44f mProjMatrix = {};

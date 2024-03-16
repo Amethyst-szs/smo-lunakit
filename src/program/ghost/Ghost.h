@@ -2,14 +2,14 @@
 
 #include "HashedEnum.h"
 #include "ReplayFrame.h"
-#include "al/nerve/NerveExecutor.h"
-#include "al/scene/Scene.h"
+#include "Library/Nerve/NerveExecutor.h"
+#include "Library/Scene/Scene.h"
 #include "al/util/NerveUtil.h"
 #include "devgui/savedata/DevGuiWriteStream.h"
-#include "fs/fs_types.hpp"
+#include "nn/fs/fs_types.hpp"
 #include "game/Player/PlayerActorHakoniwa.h"
 #include "heap/seadHeap.h"
-#include "nn/result.h"
+#include "vapours/results.hpp"
 #include "stream/seadRamWriteStream.h"
 
 class GhostManager;

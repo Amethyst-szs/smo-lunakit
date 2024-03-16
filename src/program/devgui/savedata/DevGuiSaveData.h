@@ -20,7 +20,7 @@
 
 #include "devgui/windows/ActorBrowse/WindowActorBrowse.h"
 
-#include "nn/result.h"
+#include "vapours/results.hpp"
 
 #include "types.h"
 

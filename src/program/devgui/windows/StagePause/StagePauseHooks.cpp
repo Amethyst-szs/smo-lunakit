@@ -1,6 +1,6 @@
 #include "StagePauseHooks.h"
 #include <al/util/NerveUtil.h>
-#include <game/StageScene/StageScene.h>
+#include <game/Scene/StageScene.h>
 #include <lib.hpp>
 #include "stage-pause/StageSceneStateStagePause.h"
 

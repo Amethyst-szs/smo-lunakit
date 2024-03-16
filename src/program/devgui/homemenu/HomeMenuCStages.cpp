@@ -2,7 +2,7 @@
 #include "devgui/homemenu/HomeMenuCStages.h"
 
 #include "game/Player/PlayerFunction.h"
-#include "game/GameData/GameDataFunction.h"
+#include "game/System/GameDataFunction.h"
 
 #include "helpers/GetHelper.h"
 

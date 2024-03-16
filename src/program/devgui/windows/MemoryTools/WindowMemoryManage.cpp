@@ -3,11 +3,13 @@
 
 #include "al/actor/LiveActorKit.h"
 #include "al/util.hpp"
+#include "Library/LiveActor/LiveActorGroup.h"
 
-#include "game/HakoniwaSequence/HakoniwaSequence.h"
+#include "game/Sequence/HakoniwaSequence.h"
 #include "game/System/GameSystem.h"
 #include "game/System/Application.h"
 
+#include <heap/seadHeapMgr.h>
 #include "imgui.h"
 
 WindowMemoryManage::WindowMemoryManage(DevGuiManager* parent, const char* winName, bool isActiveByDefault)
@@ -22,7 +24,7 @@ bool WindowMemoryManage::tryUpdateWinDisplay()
 
     ImGui::Separator();
 
-    drawComplexHeapTreeItem(sead::HeapMgr::instance()->sRootHeaps[0]);
+    drawComplexHeapTreeItem(sead::HeapMgr::instance()->getRootHeap(0));
 
     return true;
 }
@@ -32,7 +34,7 @@ void WindowMemoryManage::drawSimpleHeapView()
     al::Sequence* curSequence = GameSystemFunction::getGameSystem()->mSequence;
     al::Scene* scene = nullptr;
 
-    if (curSequence && al::isEqualString(curSequence->getName().cstr(), "HakoniwaSequence")) {
+    if (curSequence && al::isEqualString(curSequence->mName.cstr(), "HakoniwaSequence")) {
         auto gameSeq = (HakoniwaSequence*)curSequence;
         scene = gameSeq->curScene;
     }

@@ -1,10 +1,10 @@
 
 #include "ImguiShaderCompiler.h"
-#include "fs.h"
-#include "helpers.h"
-#include "init.h"
+#include "nn/fs.h"
+#include "helpers/helpers.h"
+#include "nn/init.h"
 #include "glslc/glslc.h"
-#include "result.hpp"
+#include "vapours/results.hpp"
 #include <cstring>
 #include <cstdio>
 
@@ -101,7 +101,7 @@ CompiledData NOINLINE CreateShaderBinary(GLSLCoutput *compileData, const char *s
         char fullPath[0x40] = {};
         createPath(fullPath, "sd:/LunaKit/ImGuiData/", shaderName, ".bin");
 
-        R_ABORT_UNLESS(FsHelper::writeFileToPath(binaryBuffer, binarySize, fullPath))
+        R_ABORT_UNLESS(FsHelper::writeFileToPath(binaryBuffer, binarySize, fullPath).IsFailure())
 
     }
 
@@ -114,13 +114,13 @@ const char *GetShaderSource(const char *path) {
 
     EXL_ASSERT(FsHelper::isFileExist(path), "Failed to Find File!");
 
-    R_ABORT_UNLESS(nn::fs::OpenFile(&handle, path, nn::fs::OpenMode_Read))
+    R_ABORT_UNLESS(nn::fs::OpenFile(&handle, path, nn::fs::OpenMode_Read).IsFailure())
 
     long size = 0;
     nn::fs::GetFileSize(&size, handle);
     char *sourceFile = (char *) glslc_Alloc(size + 1, 8);
 
-    R_ABORT_UNLESS(nn::fs::ReadFile(handle, 0, sourceFile, size))
+    R_ABORT_UNLESS(nn::fs::ReadFile(handle, 0, sourceFile, size).IsFailure())
 
     nn::fs::CloseFile(handle);
 

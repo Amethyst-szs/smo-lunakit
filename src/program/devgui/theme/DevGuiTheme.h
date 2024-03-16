@@ -17,7 +17,7 @@
 
 #define THEMEPATH "sd:/LunaKit/LKData/Themes/"
 
-#include "al/byaml/ByamlIter.h"
+#include "Library/Yaml/ByamlIter.h"
 
 #include "nn/fs/fs_directories.hpp"
 #include "nn/oe.h"

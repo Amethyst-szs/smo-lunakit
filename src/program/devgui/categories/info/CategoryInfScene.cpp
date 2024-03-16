@@ -1,7 +1,8 @@
 #include "program/devgui/categories/info/CategoryInfScene.h"
 
-#include "al/nerve/Nerve.h"
-#include "al/nerve/NerveKeeper.h"
+#include "Library/Nerve/Nerve.h"
+#include "Library/Nerve/NerveKeeper.h"
+#include "Library/Nerve/NerveStateCtrl.h"
 
 #include "helpers/GetHelper.h"
 
@@ -47,16 +48,16 @@ void CategoryInfScene::updateCatDisplay() {
 
     if (!scene->getNerveKeeper()->mStateCtrl)
         return;
-    al::State* state = scene->getNerveKeeper()->mStateCtrl->findStateInfo(sceneNerve);
+    al::NerveStateCtrl::State* state = scene->getNerveKeeper()->mStateCtrl->findStateInfo(sceneNerve);
     if (!state)
         return;
-    const al::Nerve* stateNerve = state->mStateBase->getNerveKeeper()->getCurrentNerve();
-    char* stateName = abi::__cxa_demangle(typeid(*state->mStateBase).name(), nullptr, nullptr, &status);
+    const al::Nerve* stateNerve = state->state->getNerveKeeper()->getCurrentNerve();
+    char* stateName = abi::__cxa_demangle(typeid(*state->state).name(), nullptr, nullptr, &status);
     char* stateNrvName = abi::__cxa_demangle(typeid(*stateNerve).name(), nullptr, nullptr, &status);
     ImGui::Text("State: %s", stateName);
     ImGui::Text("State Nrv: %s", stateNrvName + strlen("(anonymous namespace)::") + strlen(stateName) + strlen("nrv"));
     ImGui::SameLine();
-    ImGui::Text("\tStep: %d", state->mStateBase->getNerveKeeper()->mStep);
+    ImGui::Text("\tStep: %d", state->state->getNerveKeeper()->mStep);
 
     free(stateName);
     free(stateNrvName);

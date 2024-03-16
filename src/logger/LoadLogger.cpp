@@ -1,8 +1,8 @@
 #include "LoadLogger.hpp"
 #include "devgui/DevGuiManager.h"
 #include "lib.hpp"
-#include "nifm.h"
-#include "util.h"
+#include "nn/nifm.h"
+#include "nn/util.h"
 
 #include "sead/time/seadDateTime.h"
 

@@ -1,11 +1,20 @@
 #include "GhostManager.h"
 #include "al/util/NerveUtil.h"
+#include "Library/LiveActor/LiveActorFlag.h"
 #include "devgui/DevGuiManager.h"
+#include "game/Player/HackCap.h"
 #include "game/Player/PlayerAnimator.h"
 #include "helpers/GetHelper.h"
 #include "helpers/fsHelper.h"
+#include "nn/fs/fs_directories.hpp"
+#include "nn/fs/fs_files.hpp"
+#include "nn/fs/fs_mount.hpp"
+#include "nn/fs/fs_types.hpp"
 #include "logger/Logger.hpp"
 #include "smo-tas/TAS.h"
+#include <heap/seadHeapMgr.h>
+#include "Library/LiveActor/ActorPoseKeeper.h"
+#include "al/util.hpp"
 
 namespace {
 NERVE_IMPL(GhostManager, Record);
@@ -101,12 +110,12 @@ void GhostManager::tryStartReplay() {
         sead::FormatFixedSafeString<256> scriptPath(REPLAY_SAVEPATH "/%s", curEntry.m_Name);
         nn::fs::FileHandle handle;
         nn::Result r = nn::fs::OpenFile(&handle, scriptPath.cstr(), nn::fs::OpenMode::OpenMode_Read);
-        if (R_FAILED(r))
+        if (r.IsFailure())
             continue;
         auto* frames = (ReplayFrame*)new u8[curEntry.m_FileSize];
         r = nn::fs::ReadFile(handle, 0, frames, curEntry.m_FileSize);
         nn::fs::CloseFile(handle);
-        if (R_FAILED(r)) {
+        if (r.IsFailure()) {
             delete[] frames;
             continue;
         }
@@ -139,7 +148,7 @@ void GhostManager::exeRecord() {
         return;
     }
     Logger::log("    TAS is still running!\n");
-    sead::SafeString pAnim = mPlayer->mPlayerAnimator->curAnim;
+    sead::SafeString pAnim = mPlayer->mAnimator->curAnim;
     Logger::log("    Player Animation: %s\n", pAnim.cstr());
     const char* capAnim = al::getActionName(mPlayer->mHackCap);
     Logger::log("    Cap Anim: %s\n", capAnim);
@@ -148,7 +157,7 @@ void GhostManager::exeRecord() {
     if (capAnim)
         mFrames[step].capAnim = PlayerAnims::FindEnum(capAnim);
     for (int i = 0; i < 6; i++) {
-        mFrames[step].blendWeights[i] = mPlayer->mPlayerAnimator->getBlendWeight(i);
+        mFrames[step].blendWeights[i] = mPlayer->mAnimator->getBlendWeight(i);
     }
     mFrames[step].pTrans = al::getTrans(mPlayer);
     mFrames[step].pRotation = al::getQuat(mPlayer);
@@ -156,7 +165,7 @@ void GhostManager::exeRecord() {
     mFrames[step].cRotation = al::getQuat(mPlayer->mHackCap);
     mFrames[step].cJoint = mPlayer->mHackCap->mJointKeeper->mJointRot;
     mFrames[step].cSkew = mPlayer->mHackCap->mJointKeeper->mSkew;
-    mFrames[step].isCapVisible = !mPlayer->mHackCap->mLiveActorFlag->mIsModelVisible;
+    mFrames[step].isCapVisible = !mPlayer->mHackCap->mFlags->isModelVisible;
     mFrames[step].is2D = rs::isPlayer2D(mPlayer);
     mFrames[step].isHack = false;
     Logger::log("    End of GhostManager::exeRecord()\n");
@@ -174,18 +183,18 @@ void GhostManager::updateDir() {
     sead::ScopedCurrentHeapSetter heapSetter(DevGuiManager::instance()->getHeap());
     nn::fs::DirectoryHandle handle = {};
     nn::Result r = nn::fs::OpenDirectory(&handle, REPLAY_SAVEPATH, nn::fs::OpenDirectoryMode_File);
-    if (R_FAILED(r))
+    if (r.IsFailure())
         return;
     s64 entryCount = 0;
     r = nn::fs::GetDirectoryEntryCount(&entryCount, handle);
-    if (R_FAILED(r)) {
+    if (r.IsFailure()) {
         nn::fs::CloseDirectory(handle);
         return;
     }
     auto* entryBuffer = new nn::fs::DirectoryEntry[entryCount];
     r = nn::fs::ReadDirectory(&entryCount, entryBuffer, handle, entryCount);
     nn::fs::CloseDirectory(handle);
-    if (R_FAILED(r)) {
+    if (r.IsFailure()) {
         delete[] entryBuffer;
         return;
     }

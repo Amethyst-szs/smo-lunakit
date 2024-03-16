@@ -109,7 +109,7 @@ void UpdateHandler::downloadUpdate()
     // Write downloaded data from memory to disk
     Logger::log("Writing data to disk\n");
 
-    if(FsHelper::writeFileToPath(npdmData.getData(), npdmData.getSize(), NPDM_PATH).isFailure()) {
+    if(FsHelper::writeFileToPath(npdmData.getData(), npdmData.getSize(), NPDM_PATH).IsFailure()) {
         Logger::log("Auto-updater: Failed to write main.npdm to SD card!\n");
         mStatus = UpdateHandlerStatus_INSTALLFAILSDCARD;
         return;
@@ -118,7 +118,7 @@ void UpdateHandler::downloadUpdate()
     Logger::log("main.npdm written to %s\n", NPDM_PATH);
     npdmData.~DataStream();
 
-    if(FsHelper::writeFileToPath(subsdkData.getData(), subsdkData.getSize(), SUBSDK_PATH).isFailure()) {
+    if(FsHelper::writeFileToPath(subsdkData.getData(), subsdkData.getSize(), SUBSDK_PATH).IsFailure()) {
         Logger::log("Auto-updater: Failed to write subsdk9 to SD card!\n");
         mStatus = UpdateHandlerStatus_INSTALLFAILSDCARD;
         return;

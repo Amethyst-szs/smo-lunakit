@@ -1,8 +1,8 @@
 #include "Logger.hpp"
-#include "socket.h"
-#include "socket.hpp"
-#include "nifm.h"
-#include "util.h"
+#include "nn/socket.h"
+#include "nn/socket.hpp"
+#include "nn/nifm.h"
+#include "nn/util.h"
 #include "lib.hpp"
 
 char socketPool[0x600000 + 0x20000] __attribute__((aligned(0x1000)));
@@ -12,7 +12,7 @@ Logger &Logger::instance() {
     return instance;
 }
 
-nn::Result Logger::init(sead::Heap* heap) {
+s32 Logger::init(sead::Heap* heap) {
     if (mState != LoggerState::UNINITIALIZED)
         return -1;
 
@@ -76,13 +76,13 @@ nn::Result Logger::init(sead::Heap* heap) {
 
     nn::Result result = nn::socket::Connect(mSocketFd, &serverAddress, sizeof(serverAddress));
 
-    mState = result.isSuccess() ? LoggerState::CONNECTED : LoggerState::DISCONNECTED;
+    mState = result.IsSuccess() ? LoggerState::CONNECTED : LoggerState::DISCONNECTED;
 
     if (mState == LoggerState::CONNECTED) {
         Logger::log("Connected!\n");
     }
 
-    return result;
+    return result.GetInnerValueForDebug();
 }
 
 void Logger::log(const char *fmt, ...) {
@@ -122,7 +122,7 @@ void Logger::log(const char *fmt, va_list args) {
     }
 }
 
-nn::Result Logger::writeLoggerSave(sead::Heap* heap, bool disable, const char* ip, uint port) {
+s32 Logger::writeLoggerSave(sead::Heap* heap, bool disable, const char* ip, uint port) {
     if(disable && !mIsDisabled)
         Logger::log("Logger disabled! Goodbye!\n");
     
@@ -138,7 +138,7 @@ nn::Result Logger::writeLoggerSave(sead::Heap* heap, bool disable, const char* i
     file.pop();
     file.write(mWriteStream);
 
-    nn::Result result = FsHelper::writeFileToPath(mWorkBuf, file.calcPackSize(), LOGGERSAVEPATH);
+    s32 result = FsHelper::writeFileToPath(mWorkBuf, file.calcPackSize(), LOGGERSAVEPATH).GetInnerValueForDebug();
 
     return result;
 }

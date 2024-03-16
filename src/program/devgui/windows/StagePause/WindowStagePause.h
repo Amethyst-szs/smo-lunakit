@@ -1,7 +1,7 @@
 #pragma once
 
-#include <al/nerve/NerveKeeper.h>
-#include <al/nerve/NerveStateCtrl.h>
+#include <Library/Nerve/NerveKeeper.h>
+#include <Library/Nerve/NerveStateCtrl.h>
 #include <devgui/windows/WindowBase.h>
 
 __attribute__((used)) static const char* stagePauseWindowName = "Stage Pauser";
@@ -11,8 +11,8 @@ private:
     bool mIsStagePaused = false;
     bool mIsPauseAudio = false;
     bool mIsAdvanceFrame = false;
-    al::NerveKeeper mPreviousNerveKeeper;
-    al::State* mPreviousState = nullptr;
+    al::NerveKeeper mPreviousNerveKeeper = {nullptr, nullptr, 0};
+    al::NerveStateCtrl::State* mPreviousState = nullptr;
 
 public:
     WindowStagePause(DevGuiManager* parent, const char* winName, bool isActiveByDefault);

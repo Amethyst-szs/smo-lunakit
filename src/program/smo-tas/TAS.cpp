@@ -9,14 +9,14 @@
 #include "al/util/OtherUtil.h"
 #include "devgui/DevGuiManager.h"
 #include "filedevice/seadFileDeviceMgr.h"
-#include "fs/fs_directories.hpp"
-#include "fs/fs_files.hpp"
-#include "game/Controller/ControllerAppletFunction.h"
-#include "game/StageScene/StageScene.h"
+#include "nn/fs/fs_directories.hpp"
+#include "nn/fs/fs_files.hpp"
+#include "game/Util/ControllerAppletFunction.h"
+#include "game/Scene/StageScene.h"
 #include "game/System/GameSystem.h"
 #include "ghost/GhostManager.h"
 #include "logger/Logger.hpp"
-#include "result.h"
+#include "vapours/results.hpp"
 #include "rs/util/LiveActorUtil.h"
 #include "sead/basis/seadNew.h"
 
@@ -49,18 +49,18 @@ void TAS::updateDir() {
     sead::ScopedCurrentHeapSetter heapSetter(DevGuiManager::instance()->getHeap());
     nn::fs::DirectoryHandle handle = {};
     nn::Result r = nn::fs::OpenDirectory(&handle, TAS_SCRIPTPATH, nn::fs::OpenDirectoryMode_File);
-    if (R_FAILED(r))
+    if (r.IsFailure())
         return;
     s64 entryCount = 0;
     r = nn::fs::GetDirectoryEntryCount(&entryCount, handle);
-    if (R_FAILED(r)) {
+    if (r.IsFailure()) {
         nn::fs::CloseDirectory(handle);
         return;
     }
     auto* entryBuffer = new nn::fs::DirectoryEntry[entryCount];
     r = nn::fs::ReadDirectory(&entryCount, entryBuffer, handle, entryCount);
     nn::fs::CloseDirectory(handle);
-    if (R_FAILED(r)) {
+    if (r.IsFailure()) {
         delete[] entryBuffer;
         return;
     }
@@ -93,12 +93,12 @@ bool TAS::tryLoadScript() {
     sead::FormatFixedSafeString<256> scriptPath(TAS_SCRIPTPATH "/%s", mLoadedEntry.m_Name);
     nn::fs::FileHandle handle;
     nn::Result r = nn::fs::OpenFile(&handle, scriptPath.cstr(), nn::fs::OpenMode::OpenMode_Read);
-    if (R_FAILED(r))
+    if (r.IsFailure())
         return false;
     mScript = (Script*)new u8[mLoadedEntry.m_FileSize];
     r = nn::fs::ReadFile(handle, 0, mScript, mLoadedEntry.m_FileSize);
     nn::fs::CloseFile(handle);
-    if (R_FAILED(r)) {
+    if (r.IsFailure()) {
         endScript();
         return false;
     }

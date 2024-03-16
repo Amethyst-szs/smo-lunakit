@@ -1,9 +1,9 @@
 #pragma once
 
-#include "game/GameData/GameDataHolder.h"
-#include "game/GameData/GameDataHolderWriter.h"
+#include "game/System/GameDataHolder.h"
+#include "game/System/GameDataHolderWriter.h"
 #include "game/GameData/PlayerHitPointData.h"
-#include "game/StageScene/StageScene.h"
+#include "game/Scene/StageScene.h"
 
 #include "devgui/DevGuiManager.h"
 #include "devgui/settings/DevGuiSettings.h"

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "InputFrame.h"
-#include "al/nerve/NerveExecutor.h"
-#include "al/scene/Scene.h"
-#include "fs/fs_types.hpp"
+#include "Library/Nerve/NerveExecutor.h"
+#include "Library/Scene/Scene.h"
+#include "nn/fs/fs_types.hpp"
 #include "heap/seadDisposer.h"
 
 #define TAS_SCRIPTPATH "sd:/smo/tas/scripts"

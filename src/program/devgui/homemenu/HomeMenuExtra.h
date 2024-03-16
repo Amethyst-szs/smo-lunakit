@@ -1,5 +1,6 @@
 #pragma once
 
+#include "nn/types.h"
 #include "devgui/homemenu/HomeMenuBase.h"
 
 class HomeMenuExtra : public HomeMenuBase {
@@ -20,5 +21,5 @@ private:
     sead::FixedSafeString<0x10> mIPString;
     sead::FixedSafeString<0x6> mPortString;
     
-    uint mNewPort = 0;
+    u32 mNewPort = 0;
 };
