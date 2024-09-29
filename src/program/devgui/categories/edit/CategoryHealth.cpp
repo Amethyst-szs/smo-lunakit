@@ -4,6 +4,7 @@
 
 #include "helpers/GetHelper.h"
 #include "helpers/PlayerHelper.h"
+#include "game/System/GameDataFile.h"
 
 #include "imgui.h"
 

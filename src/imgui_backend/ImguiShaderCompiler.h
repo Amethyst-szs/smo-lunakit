@@ -1,9 +1,9 @@
 #pragma once
 
-#include "nvn.h"
-#include "nvn_Cpp.h"
-#include "nvn_CppMethods.h"
-#include "types.h"
+#include "nvn/nvn.h"
+#include "nvn/nvn_Cpp.h"
+#include "nvn/nvn_CppMethods.h"
+#include "nn/types.h"
 
 struct CompiledData {
     u8 *ptr;

@@ -5,7 +5,8 @@
 #include <al/util/GraphicsUtil.h>
 #include <al/util/NerveUtil.h>
 #include "al/actor/LiveActorKit.h"
-#include "game/StageScene/SceneAudioSystemPauseController.h"
+#include "Library/Scene/Scene.h"
+#include "game/Scene/SceneAudioSystemPauseController.h"
 
 namespace ScenePlayerFunction {
 void startSnapShotMode(const al::Scene*);
@@ -49,7 +50,7 @@ void StageSceneStateStagePause::exeWait() {
         alGraphicsFunction::setFogNoiseUpdateFlag(mParent, false);
     }
 
-    mParent->getLiveActorKit()->getEffectSystem()->setIsUpdateKit(true);
+    mParent->mLiveActorKit->getEffectSystem()->setIsUpdateKit(true);
     al::updateKitListPrev(mParent);
     //    al::updateKitList(mParent, "カメラ");                // camera
     al::updateKitList(mParent, "クリッピング");          // clipping
@@ -59,7 +60,7 @@ void StageSceneStateStagePause::exeWait() {
     al::updateKitList(mParent, "２Ｄ（ポーズ無視）");    // 2D (ignore pose)
     ScenePlayerFunction::updatePlayerDither(mParent);
     rs::updateKitListPostSnapShot(mParent);
-    mParent->getLiveActorKit()->getEffectSystem()->setIsUpdateKit(false);
+    mParent->mLiveActorKit->getEffectSystem()->setIsUpdateKit(false);
 
     if (mIsPaused)
         return;

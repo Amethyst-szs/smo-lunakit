@@ -1,13 +1,13 @@
 #pragma once
 
-#include "al/scene/Scene.h"
-#include "al/sequence/Sequence.h"
+#include "Library/Scene/Scene.h"
+#include "Library/Sequence/Sequence.h"
 
-#include "game/GameData/GameDataHolder.h"
-#include "game/HakoniwaSequence/HakoniwaSequence.h"
+#include "game/System/GameDataHolder.h"
+#include "game/Sequence/HakoniwaSequence.h"
 #include "game/Player/PlayerActorBase.h"
 #include "game/Player/PlayerActorHakoniwa.h"
-#include "game/StageScene/StageScene.h"
+#include "game/Scene/StageScene.h"
 
 #include "rs/util.hpp"
 

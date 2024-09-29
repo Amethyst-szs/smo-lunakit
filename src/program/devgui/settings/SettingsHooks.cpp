@@ -1,10 +1,12 @@
 #include "SettingsHooks.h"
-#include <game/Layouts/MapMini.h>
-#include <game/StageScene/StageSceneLayout.h>
+#include <game/Layout/MapMini.h>
+#include <game/Scene/StageSceneLayout.h>
 
 #include "al/util/NerveUtil.h"
+#include "Library/LiveActor/ActorPoseKeeper.h"
 
 #include "game/Player/PlayerFunction.h"
+#include "game/Player/HackCap.h"
 
 #include "rs/util.hpp"
 
@@ -31,7 +33,7 @@ HOOK_DEFINE_TRAMPOLINE(ControlHook) {
         }
 
         if(player && set->getStateByName("Clear Wall Jump Limits"))
-            player->mPlayerWallActionHistory->reset();
+            player->mWallActionHistory->reset();
 
         if(!set->getStateByName("Display HUD") && scene->mStageSceneLayout->isWait()) {
             scene->mStageSceneLayout->end();
@@ -124,6 +126,8 @@ HOOK_DEFINE_TRAMPOLINE(CheckpointWarpHook) {
         return Orig(thisPtr);
     }
 };
+
+class ShineInfo;
 
 HOOK_DEFINE_TRAMPOLINE(GreyShineRefreshHook) {
     static bool Callback(GameDataHolderWriter writer, ShineInfo const* shineInfo) {

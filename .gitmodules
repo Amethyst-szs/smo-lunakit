@@ -2,3 +2,6 @@
 	path = imgui
 	url = https://github.com/ocornut/imgui.git
 	branch = docking
+[submodule "lib/game"]
+	path = lib/smo
+	url = https://github.com/MonsterDruide1/OdysseyHeaders

@@ -1,10 +1,10 @@
 #include "imgui_nvn.h"
 #include "imgui_backend/imgui_impl_nvn.hpp"
-#include "init.h"
+#include "nn/init.h"
 #include "lib.hpp"
 #include "logger/Logger.hpp"
 #include "helpers/InputHelper.h"
-#include "nvn_CppFuncPtrImpl.h"
+#include "nvn/nvn_CppFuncPtrImpl.h"
 
 #include "devgui/DevGuiManager.h"
 

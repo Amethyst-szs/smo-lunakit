@@ -17,9 +17,9 @@
 
 #define THEMEPATH "sd:/LunaKit/LKData/Themes/"
 
-#include "al/byaml/ByamlIter.h"
+#include "Library/Yaml/ByamlIter.h"
 
-#include "nn/fs/fs_directories.hpp"
+#include "nn/fs/fs_directories.h"
 #include "nn/oe.h"
 
 class DevGuiManager; // Forward declaration (include is in cpp file)
@@ -44,7 +44,7 @@ public:
 
 private:
     nn::fs::DirectoryEntry getFile(int idx) const { return mEntries[idx]; }
-    const char* getFileName(int idx) const { return mEntries[idx].m_Name; }
+    const char* getFileName(int idx) const { return mEntries[idx].mName; }
     s64 getFileCount() const { return mEntryCount; }
     
     void loadColorData(ImVec4* result, al::ByamlIter* colors, const char* colorName);

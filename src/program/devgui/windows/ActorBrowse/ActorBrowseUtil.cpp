@@ -1,8 +1,10 @@
 #include "WindowActorBrowse.h"
 #include "al/actor/LiveActorKit.h"
+#include "al/model/ModelKeeper.h"
 #include "al/util.hpp"
 #include "devgui/DevGuiManager.h"
 #include "devgui/savedata/DevGuiSaveData.h"
+#include "Library/LiveActor/ActorPoseKeeper.h"
 
 #include "primitives/PrimitiveQueue.h"
 
@@ -213,7 +215,7 @@ void WindowActorBrowse::showActorTooltip(al::LiveActor* actor) {
     ImGui::SetTooltip(tooltipText.cstr());
 
     if (actor->mPoseKeeper)
-        mParent->getPrimitiveQueue()->pushAxis(actor->mPoseKeeper->mTranslation, 400.f);
+        mParent->getPrimitiveQueue()->pushAxis(actor->mPoseKeeper->mTrans, 400.f);
 
     if (actor->mHitSensorKeeper && isInStageScene())
         mParent->getPrimitiveQueue()->pushHitSensor(actor, mHitSensorTypes, 0.15f);

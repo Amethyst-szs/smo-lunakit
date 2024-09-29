@@ -3,6 +3,7 @@
 #include "primitives/PrimitiveQueue.h"
 #include "devgui/settings/PrimMenuSettings.h"
 #include "devgui/homemenu/HomeMenuBase.h"
+#include "Library/Scene/Scene.h"
 
 class HomeMenuPrims : public HomeMenuBase {
 public:

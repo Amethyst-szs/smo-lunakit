@@ -1,7 +1,7 @@
 #include "WindowPresets.h"
 
-#include "game/GameData/GameDataHolder.h"
-#include "game/GameData/GameDataFunction.h"
+#include "game/System/GameDataHolder.h"
+#include "game/System/GameDataFunction.h"
 #include "helpers/GetHelper.h"
 
 #include "devgui/DevGuiHooks.h"

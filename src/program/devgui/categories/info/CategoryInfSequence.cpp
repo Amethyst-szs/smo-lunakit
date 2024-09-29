@@ -1,7 +1,8 @@
 #include "program/devgui/categories/info/CategoryInfSequence.h"
 
-#include "al/nerve/Nerve.h"
-#include "al/nerve/NerveKeeper.h"
+#include "Library/Nerve/Nerve.h"
+#include "Library/Nerve/NerveKeeper.h"
+#include "Library/Nerve/NerveStateCtrl.h"
 
 #include "helpers/GetHelper.h"
 

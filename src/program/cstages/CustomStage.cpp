@@ -2,8 +2,8 @@
 
 #include "al/util.hpp"
 
-#include "nn/fs/fs_files.hpp"
-#include "nn/result.h"
+#include "nn/fs/fs_files.h"
+#include "vapours/results.hpp"
 #include "nn/init.h"
 
 #include "helpers/fsHelper.h"

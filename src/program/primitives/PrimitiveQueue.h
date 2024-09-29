@@ -81,9 +81,9 @@ public:
         mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
     }
     
-    void pushRail(al::Rail* rail, uint percision, sead::Color4f color)
+    void pushRail(const al::Rail* rail, uint percision, sead::Color4f color)
     {   
-        auto* entry = new (mHeap) PrimitiveTypeRail(rail, percision, color);
+        auto* entry = new (mHeap) PrimitiveTypeRail(const_cast<al::Rail*>(rail), percision, color);
         mRenderQueue.pushBack((PrimitiveTypeBase*)entry);
     }
 

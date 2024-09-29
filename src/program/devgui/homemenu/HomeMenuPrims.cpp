@@ -5,6 +5,11 @@
 #include "al/actor/LiveActorKit.h"
 #include "al/collision/alCollisionUtil.h"
 #include "al/util.hpp"
+#include "Library/LiveActor/ActorPoseKeeper.h"
+#include "game/Player/PlayerRecoverySafetyPoint.h"
+
+#include "game/Player/HackCap.h"
+
 #include "helpers/GetHelper.h"
 
 #include "imgui.h"
@@ -86,7 +91,7 @@ void HomeMenuPrims::renderPlayerCategory(al::Scene* scene, PrimitiveQueue* queue
     if (mSettings->getSettingEntryByName("Assist Bubble")->isTrue()) {
         PlayerActorHakoniwa* playerHak = tryGetPlayerActorHakoniwa();
         if (playerHak) {
-            queue->pushPoint(playerHak->mPlayerRecoverySafetyPoint->mSafetyPointPos, 15.f, sead::Color4f::cGreen);
+            queue->pushPoint(playerHak->mRecoverySafetyPoint->mSafetyPointPos, 15.f, sead::Color4f::cGreen);
         }
     }
 }

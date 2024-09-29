@@ -12,7 +12,7 @@ void CategoryTASScripts::updateCatDisplay() {
     s64 entryCount = tas->getEntryCount();
     nn::fs::DirectoryEntry* entries = tas->getScripts();
     for (int i = 0; i < entryCount; i++) {
-        if (ImGui::Button(entries[i].m_Name)) {
+        if (ImGui::Button(entries[i].mName)) {
             //Logger::log("2 Script Name: %s\n", tas->getScriptName());
             tas->setScript(entries[i]);
             //Logger::log("3 Script Name: %s\n", tas->getScriptName());

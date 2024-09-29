@@ -3,8 +3,10 @@
 #pragma once
 
 #include "al/collision/Triangle.h"
-#include "al/LiveActor/LiveActor.h"
+#include "Library/LiveActor/LiveActor.h"
 #include "al/util/SensorUtil.h"
+#include "Project/Rail/BezierCurve.h"
+#include "Library/Rail/Rail.h"
 
 #include "sead/gfx/seadColor.h"
 #include "sead/math/seadVector.h"

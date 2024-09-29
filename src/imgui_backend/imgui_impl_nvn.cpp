@@ -1,5 +1,5 @@
 #include "imgui_impl_nvn.hpp"
-#include "helpers.h"
+#include "helpers/helpers.h"
 #include "imgui_bin.h"
 #include "imgui_hid_mappings.h"
 #include "lib.hpp"
@@ -601,9 +601,9 @@ namespace ImguiNvnBackend {
         ImGuiIO &io = ImGui::GetIO();
         auto *bd = getBackendData();
 
-        nn::TimeSpan curTick = nn::os::GetSystemTick().ToTimeSpan();
+        nn::TimeSpan curTick = nn::TimeSpan { nn::os::GetSystemTick() };
         nn::TimeSpan prevTick(bd->lastTick);
-        io.DeltaTime = fabsf((float) (curTick - prevTick).GetNanoSeconds() / 1e9f);
+        io.DeltaTime = fabsf((float) (curTick.nanoseconds - prevTick.nanoseconds) / 1e9f);
 
         bd->lastTick = curTick;
 

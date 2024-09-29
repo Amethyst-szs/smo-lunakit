@@ -1,8 +1,8 @@
 #pragma once
 
-#include "nvn_Cpp.h"
-#include "nvn_CppMethods.h"
-#include "types.h"
+#include "nvn/nvn_Cpp.h"
+#include "nvn/nvn_CppMethods.h"
+#include "nn/types.h"
 
 class MemoryBuffer {
 public:

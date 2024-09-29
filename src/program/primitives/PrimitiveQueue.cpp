@@ -1,9 +1,13 @@
 #include "PrimitiveQueue.h"
 
+#include "agl/common/aglDrawContext.h"
+#include "sead/gfx/seadCamera.h"
 #include "sead/heap/seadDisposer.h"
 #include "sead/gfx/seadPrimitiveRenderer.h"
 
 #include "helpers/GetHelper.h"
+#include "al/util/GraphicsUtil.h"
+#include "al/util/CameraUtil.h"
 
 PrimitiveQueue::PrimitiveQueue(sead::Heap* heap)
 {
@@ -31,12 +35,12 @@ void PrimitiveQueue::render()
         return;
     }
 
-    agl::DrawContext* drawContext = seq->getDrawInfo()->mDrawContext;
+    agl::DrawContext* drawContext = seq->getDrawInfo()->drawContext;
     sead::PrimitiveRenderer* renderer = sead::PrimitiveRenderer::instance();
     const sead::LookAtCamera* cam = al::getLookAtCamera(curScene, 0);
     const sead::Projection* proj = al::getProjectionSead(curScene, 0);
 
-    renderer->setDrawContext(drawContext);
+    renderer->mDrawer.setDrawContext(drawContext);
     renderer->setCamera(*cam);
     renderer->setProjection(*proj);
     renderer->setModelMatrix(sead::Matrix34f::ident);

@@ -3,7 +3,7 @@
 
 #include "al/util.hpp"
 
-#include "game/GameData/GameDataFunction.h"
+#include "game/System/GameDataFunction.h"
 #include "game/Player/PlayerFunction.h"
 
 #include "helpers/GetHelper.h"
@@ -43,12 +43,12 @@ void HomeMenuWorlds::updateMenuDisplay()
     if(addMenu("Sub-Areas")) {
         ImGui::BeginChild("Sub-Area Child", ImVec2(525, 325), false, ImGuiWindowFlags_NoBackground);
 
-        for (auto &dbEntry: worldEntry->mStageNames) {
+        for (auto &dbEntry: worldEntry->stageNames) {
 //            Logger::log("Stage name: %s\n", dbEntry.mStageName.cstr());
-            bool isDemo = al::isEqualString(dbEntry.mStageCategory, "Demo");
+            bool isDemo = al::isEqualString(dbEntry.stageCategory, "Demo");
 
-            if(ImGui::MenuItem(dbEntry.mStageName.cstr(), dbEntry.mStageCategory.cstr(), false, !isDemo))
-                warpToStage(holder, dbEntry.mStageName.cstr(), dbEntry.mUseScenario);
+            if(ImGui::MenuItem(dbEntry.stageName.cstr(), dbEntry.stageCategory.cstr(), false, !isDemo))
+                warpToStage(holder, dbEntry.stageName.cstr(), dbEntry.useScenario);
         }
 
         ImGui::EndChild();
@@ -63,8 +63,8 @@ inline void HomeMenuWorlds::drawKingdomPicker(const char* worldName, StageScene*
         ImGui::SetWindowFontScale(1.66f);
 
         for (auto &entry: getWorldList(holder)->mWorldList) {
-            if(ImGui::Selectable(entry.mWorldDevelopName, false)) {
-                warpToStage(holder, entry.mMainStageName, -1);
+            if(ImGui::Selectable(entry.worldDevelopName, false)) {
+                warpToStage(holder, entry.mainStageName, -1);
             }
         }
 
@@ -87,16 +87,16 @@ inline void HomeMenuWorlds::drawScenarioPicker(WorldListEntry& entry, StageScene
 
     ImGui::SameLine();
     if(ImGui::Button(" Load "))
-        warpToStage(holder, entry.mMainStageName, mScenarioPicker);
+        warpToStage(holder, entry.mainStageName, mScenarioPicker);
 }
 
 inline const char* HomeMenuWorlds::getScenarioType(WorldListEntry& entry, int scenario)
 {
-    if(scenario == entry.mClearMainScenario)
+    if(scenario == entry.clearMainScenario)
         return "Peace";
-    if(scenario == entry.mEndingScenario)
+    if(scenario == entry.endingScenario)
         return "Post-game";
-    if(scenario == entry.mMoonRockScenario)
+    if(scenario == entry.moonRockScenario)
         return "Moon Rock";
 
     return "Unknown";

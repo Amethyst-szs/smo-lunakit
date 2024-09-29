@@ -1,9 +1,9 @@
 #pragma once
 
 #include "InputFrame.h"
-#include "al/nerve/NerveExecutor.h"
-#include "al/scene/Scene.h"
-#include "fs/fs_types.hpp"
+#include "Library/Nerve/NerveExecutor.h"
+#include "Library/Scene/Scene.h"
+#include "nn/fs/fs_types.h"
 #include "heap/seadDisposer.h"
 
 #define TAS_SCRIPTPATH "sd:/smo/tas/scripts"
@@ -25,7 +25,7 @@ public:
     void setScene(al::Scene* scene) { mScene = scene; };
     void setScript(nn::fs::DirectoryEntry entry) { mLoadedEntry = entry; };
     al::Scene* getScene() const { return mScene; };
-    const char* getScriptName() const { return mLoadedEntry.m_Name; };
+    const char* getScriptName() const { return mLoadedEntry.mName; };
     nn::fs::DirectoryEntry* getScripts() const { return mEntries; };
     s64 getEntryCount() const { return mEntryCount; };
     u32 getFrameIndex() const { return mFrameIndex; };

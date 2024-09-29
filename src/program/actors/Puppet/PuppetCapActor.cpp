@@ -1,5 +1,7 @@
 #include "PuppetCapActor.h"
 #include "al/util/MathUtil.h"
+#include "Library/LiveActor/ActorPoseKeeper.h"
+#include "Library/LiveActor/SubActorKeeper.h"
 
 PuppetCapActor::PuppetCapActor(const char *name) : al::LiveActor(name) {}
 
@@ -49,7 +51,7 @@ void PuppetCapActor::movement() {
 }
 
 void PuppetCapActor::control() {
-    al::setScale(mModelCap, *al::getScale(this));
+    al::setScale(mModelCap, al::getScale(this));
     al::copyPose(this, mModelCap);
 }
 

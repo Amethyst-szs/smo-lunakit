@@ -2,6 +2,7 @@
 #include "WindowFPS.h"
 
 #include "game/System/Application.h"
+#include "game/System/GameFrameWorkNx.h"
 #include "nn/oe.h"
 
 #include "imgui.h"
@@ -26,7 +27,7 @@ bool WindowFPS::tryUpdateWinDisplay()
     ImGui::SetWindowPos(pos);
     ImGui::SetWindowSize(ImVec2(150.f, 30.f));
 
-    float curFPS = Application::instance()->mFramework->calcFps();
+    float curFPS = Application::instance()->mGameFramework->calcFps();
     
     if (mRefreshTime == 0.0)
         mRefreshTime = ImGui::GetTime();

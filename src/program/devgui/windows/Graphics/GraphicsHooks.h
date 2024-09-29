@@ -4,12 +4,12 @@
 
 #include <gfx/seadGraphicsContext.h>
 #include <agl/TextureSampler.h>
-#include <agl/DevTools.h>
+#include <agl/utility/aglDevTools.h>
 
 #include "al/graphics/GraphicsPresetDirector.h"
 
-#include "al/LiveActor/LiveActor.h"
-#include "al/scene/Scene.h"
+#include "Library/LiveActor/LiveActor.h"
+#include "Library/Scene/Scene.h"
 
 #include "al/util/LiveActorUtil.h"
 #include <gfx/seadViewport.h>

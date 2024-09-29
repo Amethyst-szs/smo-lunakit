@@ -3,7 +3,7 @@
 #include "cstages/CustomStage.h"
 #include "cstages/CustomStageManager.h"
 
-#include "game/GameData/GameDataHolderAccessor.h"
+#include "game/System/GameDataHolderAccessor.h"
 
 #include "devgui/homemenu/HomeMenuBase.h"
 

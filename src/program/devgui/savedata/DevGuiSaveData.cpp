@@ -4,13 +4,13 @@
 #include "devgui/settings/DevGuiSettings.h"
 #include "devgui/settings/PrimMenuSettings.h"
 
-#include "al/byaml/ByamlIter.h"
-#include "al/byaml/writer/ByamlWriter.h"
+#include "Library/Yaml/ByamlIter.h"
+#include "Library/Yaml/Writer/ByamlWriter.h"
 #include "al/util.hpp"
 
-#include "nn/fs/fs_directories.hpp"
-#include "nn/fs/fs_files.hpp"
-#include "nn/fs/fs_types.hpp"
+#include "nn/fs/fs_directories.h"
+#include "nn/fs/fs_files.h"
+#include "nn/fs/fs_types.h"
 
 #include "helpers/fsHelper.h"
 #include "helpers/DataStream.h"
@@ -123,7 +123,7 @@ bool DevGuiSaveData::trySave()
         mSaveTimer += -0.017f; // FIX THIS, THIS SHOULD BE DElTA TIME SO IT IGNORES LAG!!
         if(mSaveTimer < 0.f) {
             mIsQueueSave = false;
-            return write().isSuccess();
+            return write().IsSuccess();
         }
     }
 

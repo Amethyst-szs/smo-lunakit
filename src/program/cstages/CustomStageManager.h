@@ -19,7 +19,7 @@
 
 #define CUSTOMSTAGEPATH "sd:/LunaKit/LKData/CustomStages/"
 
-#include "nn/fs/fs_directories.hpp"
+#include "nn/fs/fs_directories.h"
 
 #include "CustomStage.h"
 
@@ -53,7 +53,7 @@ public:
 
     // Access info about the custom stage directory
     nn::fs::DirectoryEntry getFile(int idx) const { return mEntries[idx]; }
-    const char* getFileName(int idx) const { return mEntries[idx].m_Name; }
+    const char* getFileName(int idx) const { return mEntries[idx].mName; }
     s64 getFileCount() const { return mEntryCount; }
 
 private:

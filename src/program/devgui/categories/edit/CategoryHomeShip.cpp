@@ -1,7 +1,8 @@
 #include "program/devgui/categories/edit/CategoryHomeShip.h"
 
 #include "helpers/GetHelper.h"
-#include "helpers.h"
+#include "helpers/helpers.h"
+#include "game/System/GameDataFile.h"
 
 #include "imgui.h"
 

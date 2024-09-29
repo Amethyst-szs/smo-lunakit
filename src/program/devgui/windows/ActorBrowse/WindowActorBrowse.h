@@ -13,6 +13,8 @@
 
 #include "devgui/windows/WindowBase.h"
 #include "al/actor/ActorCameraTarget.h"
+#include "Library/Scene/Scene.h"
+#include "Library/LiveActor/LiveActorGroup.h"
 #include "primitives/PrimitiveTypes.h"
 
 enum ActorBrowseFilterType_ {
